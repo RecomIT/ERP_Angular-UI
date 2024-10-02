@@ -1,0 +1,176 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-2">Employee Salary Hold</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Salary</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Salary Hold</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-4 col-sm-6 text-x-small">
+        <div class="title-action">
+            <button type="button" class="btn btn-sm btn-secondary btn-outline ml-1 btn-rounded pull-right"
+                (click)="openUploadModal()"> <i class="fa fa-upload"></i> | Upload
+            </button>
+            <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded pull-right"
+                (click)="openHoldModal(0)"> <i class="icofont-plus"></i> | Hold
+            </button>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight pt-3" id="page-container">
+    <div class="row mt-0">
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="ibox-content pb-3 text-x-small text-dark font-bold">
+                    <form [formGroup]="searchForm">
+                        <div class="form-row">
+                            <div class="form-group mb-0 col-md-4 col-sm-12">
+                                <label for="employeeId" class="control-label text-uppercase">SEARCH BY Employee</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width:80%">
+                                        <ng-select2 [data]="ddlEmployees" name="employeeId" id="employeeId"
+                                            [placeholder]="'Select Employee...'" [options]="select2Options"
+                                            formControlName="employeeId" [allowClear]="true">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0 col-md-4 col-sm-12">
+                                <label for="" class="control-label text-uppercase">SEARCH BY Month & Year</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="icofont-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <select name="month" id="month" class="form-control form-control-sm"
+                                        formControlName="salaryMonth">
+                                        <option [value]="0" selected>---Select Month ---</option>
+                                        <option [value]="item.monthNo" *ngFor="let item of months">{{item.month}}
+                                        </option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <select name="years" id="years" class="form-control form-control-sm"
+                                            formControlName="salaryYear">
+                                            <option [value]="0" selected>---Select Year ---</option>
+                                            <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0 col-md-4 col-sm-12">
+                                <label for="" class="control-label text-uppercase">SEARCH BY Status</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                    </div>
+                                    <select name="status" id="status" class="form-control form-control-sm"
+                                        formControlName="stateStatus">
+                                        <option [value]="''" selected>---Select Status---</option>
+                                        <option [value]="item" *ngFor="let item of statusList">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content text-x-small">
+                    <table class="table table-sm table-striped table-hover table-responsive-lg" id="tbl">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#SL</th>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Hold Reason</th>
+                                <th>Month & Year</th>
+                                <th class="text-center">Hold From ~ To</th>
+                                <th class="text-center">With Salary</th>
+                                <th class="text-center">PF Continue</th>
+                                <th class="text-center">GF Continue</th>
+                                <th class="text-center">Unhold Date</th>
+                                <th class="text-center">Unhold Reason</th>
+                                <th class="text-center">StateStatus</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of listOfSalaryHolds ;let i =index">
+                                <td class="text-center font-bold">{{i+1}}</td>
+                                <td>{{item.employeeCode}}</td>
+                                <td>{{item.employeeName}}</td>
+                                <td>{{item.holdReason}}</td>
+                                <td>{{item.monthName}}-{{item.year}}</td>
+                                <td class="text-center">{{item.holdFrom | date:"dd MMM yyyy"}}-{{item.holdTo | date:"dd
+                                    MMM yyyy"}}</td>
+                                <td class="text-center">
+                                    <span
+                                        [class]="item.withSalary == null ? '' : (item.withSalary ? 'label label-primary':'label label-danger')">
+                                        {{item.withSalary == null ? 'N/A' : (item.withSalary ? 'Yes':'No')}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span
+                                        [class]="item.pfContinue == null ? '' : (item.pfContinue ? 'label label-primary':'label label-danger')">
+                                        {{item.pfContinue == null ? 'N/A' : (item.pfContinue ? 'Yes':'No')}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span
+                                        [class]="item.gfContinue == null ? '' : (item.gfContinue ? 'label label-primary':'label label-danger')">
+                                        {{item.gfContinue == null ? 'N/A' : (item.gfContinue ? 'Yes':'No')}}</span>
+                                </td>
+                                <td class="text-center">{{item.unholdDate | date: "dd MMM yyyy"}}</td>
+                                <td class="text-center">{{item.unholdReason}}</td>
+                                <td class="text-center">
+                                    <span class="label label-warning"
+                                        *ngIf="item.stateStatus=='Pending'">{{item.stateStatus + '...'}}</span>
+                                    <span class="label label-primary" *ngIf="item.stateStatus=='Approved'"> <i
+                                            class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                    <span class="label label-danger" *ngIf="item.stateStatus=='Cancelled'"><i
+                                            class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                    <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                            class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-xs" (click)="openHoldModal(item.salaryHoldId)">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showHoldInsertUpdateModal == true">
+    <app-payroll-employee-salary-hold-modal [id]="holdId"
+        (closeModalEvent)="closeHoldModal($event)"></app-payroll-employee-salary-hold-modal>
+</ng-container>
+
+<ng-container *ngIf="showUploadModal == true">
+    <app-payroll-upload-employee-salary-hold (closeModalEvent)="closeUploadModal($event)"></app-payroll-upload-employee-salary-hold>
+</ng-container>

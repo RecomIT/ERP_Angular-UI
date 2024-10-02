@@ -1,0 +1,156 @@
+<ng-template #employeeConfirmationModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-file-document pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="confirmationForm" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="probationary_employee" class="control-label font-bold">Probationary
+                            Employee <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </div>
+                            <div style="width: 80%;">
+                                <ng-select2 [data]="ddlEmployees" name="probationary_employee"
+                                    id="probationary_employee" [placeholder]="'Select Employee...'"
+                                    [options]="select2Options" [allowClear]="true" formControlName="employeeId"
+                                    required>
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="confirmation_date" class="control-label font-bold">Confirmation
+                            Date<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="confirmation_date" id="confirmation_date" autocomplete="off"
+                                formControlName="confirmationDate" bsDatepicker [bsConfig]="datePickerConfig"
+                                class="form-control form-control-sm bg-white" placeholder="Enter Confirmation Date" />
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="this.confirmationForm.get('confirmationDate').value != null"
+                                (click)="this.confirmationForm.get('confirmationDate').setValue(null);">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="effective_date" class="control-label font-bold">Effective Date
+                            <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="effective_date" id="effective_date" autocomplete="off"
+                                formControlName="effectiveDate" bsDatepicker [bsConfig]="datePickerConfig"
+                                class="form-control form-control-sm bg-white" placeholder="Enter Effective Date" />
+
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="this.confirmationForm.get('effectiveDate').value != null"
+                                (click)="this.confirmationForm.get('effectiveDate').setValue(null);">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="appraiser_comment" class="control-label font-bold">Appraiser Comment
+                            <!-- <span class="text-danger">*</span> -->
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="appraiser_comment" id="appraiser_comment" autocomplete="off"
+                                formControlName="appraiserComment" class="form-control form-control-sm"
+                                placeholder="Type Comment" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="withPFActivation" class="control-label hidden">
+                            With PF Activation <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-question" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon my-input-group-addon-padding">
+                                    <input type="checkbox" name="withPFActivation" id="withPFActivation"
+                                        formControlName="withPFActivation" />
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm text-small font-bold">
+                                With PF Activation?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="confirmationForm.get('withPFActivation').value ==true">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="pf_effective_date" class="control-label font-bold">PF Effective Date
+                            <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="pf_effective_date" id="pf_effective_date" autocomplete="off"
+                                formControlName="pfEffectiveDate" bsDatepicker [bsConfig]="datePickerConfig"
+                                class="form-control form-control-sm bg-white" placeholder="Enter PF effective date" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="pf_activation_date" class="control-label font-bold">PF Activation Date
+                            <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="pf_activation_date" id="pf_activation_date" autocomplete="off"
+                                formControlName="pfActivationDate" bsDatepicker [bsConfig]="datePickerConfig"
+                                class="form-control form-control-sm bg-white" placeholder="Enter PF activation date" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2 text-x-small">
+                <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary"
+                    [disabled]="this.confirmationForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | {{this.id > 0 ? 'Update': 'Submit'}}
+                </button>
+                <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                    (click)="closeModal('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

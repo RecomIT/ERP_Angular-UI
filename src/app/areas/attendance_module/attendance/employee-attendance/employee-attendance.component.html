@@ -1,0 +1,291 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Employee Attendance</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Attendance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Daily Attendance</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 text-x-small pl-0 pr-0 mb-4">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#employeeSummery" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-list"></i> | Attendance Summery
+                        </a></li>
+                    <li>
+                        <a href="#employeeAttendance" data-toggle="tab" class="nav-link"><i class="fa fa-clock-o"></i> |
+                            Daily Attendance</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="employeeSummery" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 80%;">
+                                            <ng-select2 [(ngModel)]="searchBySummeryEmployee"
+                                                [data]="ddlEmployees" name="searchByEmployee"
+                                                id="searchByEmployee" [placeholder]="'Select Employee...'"
+                                                [options]="select2Options" [allowClear]="true"
+                                                (ngModelChange)="summeryEmployeeChanged()"
+                                                #searchByEmployeeRef="ngModel">
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar-times-o"></i>
+                                            </span>
+                                        </div>
+                                        <select name="month" id="month" #searchByMonthRef="ngModel"
+                                            [(ngModel)]="searchByMonth" class="form-control form-control-sm"
+                                            (change)="getEmployeeAttendanceSummery(1)">
+                                            <option [value]="0" selected>---Select Month---</option>
+                                            <option [value]="1">January</option>
+                                            <option [value]="2">February</option>
+                                            <option [value]="3">March</option>
+                                            <option [value]="4">April</option>
+                                            <option [value]="5">May</option>
+                                            <option [value]="6">June</option>
+                                            <option [value]="7">July</option>
+                                            <option [value]="8">August</option>
+                                            <option [value]="9">September</option>
+                                            <option [value]="10">October</option>
+                                            <option [value]="11">November</option>
+                                            <option [value]="12">December</option>
+                                        </select>
+                                        <div class="input-group-prepend">
+                                            <select name="year" id="year" #searchByYearRef="ngModel"
+                                                [(ngModel)]="searchByYear" class="form-control form-control-sm"
+                                                (change)="getEmployeeAttendanceSummery(1)">
+                                                <option [value]="0" selected>---Select Year---</option>
+                                                <option [value]="y" *ngFor="let y of years">{{y}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                    id="tblAttendanceSummery">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Code</th>
+                                            <th>Employee</th>
+                                            <th class="text-center">Month</th>
+                                            <th class="text-center">Total Working Day</th>
+                                            <th class="text-center">Present Qty</th>
+                                            <th class="text-center">Absent Qty</th>
+                                            <th class="text-center">Holiday Qty</th>
+                                            <th class="text-center">Late Qty</th>
+                                            <th class="text-center">Weekend Qty</th>
+                                            <th class="text-center">Full-Day Leave</th>
+                                            <th class="text-center">Half-Day Leave</th>
+                                            <th class="text-center">Work At Holiday</th>
+                                            <th class="text-center">Work Qty At Leave</th>
+                                            <th class="text-center">Work Qty At Weekend</th>
+                                            <th class="text-center">Total Leave Qty</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of listOfAttendanceSummery| paginate: attnSummeryPageConfig; let i = index">
+                                            <td class="text-center font-bold">{{i+1 +
+                                                (attnSummeryPageSize*(attnSummeryPageNo-1))}}
+                                            </td>
+                                            <td class="text-center">{{item.employeeCode}}</td>
+                                            <td>{{item.employeeName}}</td>
+                                            <td class="text-center">{{item.monthName +'-'+ item.year.toString()}}
+                                            </td>
+                                            <td class="text-center">{{item.totalWokingDay}}</td>
+                                            <td class="text-center">{{item.presentQty}}</td>
+                                            <td class="text-center">{{item.absentQty}}</td>
+                                            <td class="text-center">{{item.holidayQty}}</td>
+                                            <td class="text-center">{{item.lateQty}}</td>
+                                            <td class="text-center">{{item.weekendQty}}</td>
+                                            <td class="text-center">{{item.fullDayLeaveQty == null ? 0 :
+                                                item.fullDayLeaveQty}}</td>
+                                            <td class="text-center">{{item.halfDayLeaveQty}}</td>
+                                            <td class="text-center">{{item.workQtyAtHoliday}}</td>
+                                            <td class="text-center">{{item.workQtyAtLeave}}</td>
+                                            <td class="text-center">{{item.workQtyAtWeekend}}</td>
+                                            <td class="text-center">{{item.totalLeaveQty}}</td>
+                                            <td class="text-center">
+                                                <button type="button" *ngIf="pagePrivilege?.report"
+                                                    class="btn btn-xs btn-rounded btn-info faa-parent animated-hover"
+                                                    title="Daily Attendance"
+                                                    (click)="downloadEmployeeDailyAttendanceReport(item.employeeId,item.month,item.year)">
+                                                    <i class="fa fa-file-pdf-o faa-pulse"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfAttendanceSummery.length ==0 && summeryAttendanceDTLabel == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfAttendanceSummery.length ==0 && summeryAttendanceDTLabel != null">
+                                            <td colspan="20" class="text-center font-bold">
+                                                {{summeryAttendanceDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="attendanceSummeryPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="attnSummeryData"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="employeeAttendance" class="tab-pane">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="searchByFromDate" id="searchByDate"
+                                            #searchByFromDateRef="ngModel" [(ngModel)]="searchByDate"
+                                            class="form-control form-control-sm bg-white" placeholder="Enter From Date"
+                                            bsDaterangepicker [bsConfig]="datePickerConfig" readonly
+                                            (ngModelChange)="getEmployeeDailyAttendance(1)">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            [hidden]="this.searchByDate.length == 0"
+                                            (click)="[this.searchByDate =[],getEmployeeDailyAttendance(1)]">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 80%;">
+                                            <ng-select2 [(ngModel)]="searchByAttnEmployee"
+                                                [data]="ddlEmployees" name="searchByAttnEmployee"
+                                                id="searchByAttnEmployee" [placeholder]="'Select Employee...'"
+                                                [options]="select2Options" [allowClear]="true"
+                                                (ngModelChange)="dailyEmployeeChanged()"
+                                                #searchByAttnEmployeeRef="ngModel">
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <button type="button" class="btn btn-sm btn-primary" (click)="downloadDailyAttendanceReport()">
+                                        <i class="fa fa-file-pdf-o"></i> | Attendance Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                id="tblAttendanceSummery">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#SL</th>
+                                        <th class="text-center">Code</th>
+                                        <th>Employee</th>
+                                        <th class="text-center">Date</th>
+                                        <th class="text-center">Day-Name</th>
+                                        <th class="text-center">Shift Time</th>
+                                        <th class="text-center">Max In-Time</th>
+                                        <th class="text-center">In-Time</th>
+                                        <th class="text-center">Out-Time</th>
+                                        <th class="text-center">Total Late-Time</th>
+                                        <th class="text-center">Total Working Hour</th>
+                                        <th class="text-center">Is From Machine</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let item of listOfDailyAttendance | paginate: dailyAttnPageConfig; let i = index">
+                                        <td class="text-center font-bold">{{i+1 +
+                                            (dailyAttnPageSize*(dailyAttnPageNo-1))}}
+                                        </td>
+                                        <td class="text-center">{{item.employeeCode}}</td>
+                                        <td>{{item.employeeName}}</td>
+                                        <td class="text-center">{{item.transactionDate | date:"dd MMMM yyyy"}}</td>
+                                        <td class="text-center">{{item.dayName}}</td>
+                                        <td class="text-center">{{item.startTime}} - {{item.endTime}}</td>
+                                        <td class="text-center">{{item.maxInTime}}</td>
+                                        <td class="text-center">{{item.inTime}}</td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.outTime != null">{{item.outTime}}</span>
+                                            <span *ngIf="item.inTime != null && item.outTime== null" class="text-danger">Outtime Missed</span>
+                                        </td>
+                                        <td class="text-center">{{item.totalLateTime}}</td>
+                                        <td class="text-center">{{item.totalWorkingHours}}</td>
+                                        <td class="text-center">
+                                            {{(item.inTime == null && item.outTime == null) ? '' :(item.isFromMachine?
+                                            'Yes' : 'No')}}
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.status =='Absent'" class="label label-danger">{{item.status}}</span>
+                                            <span *ngIf="item.status !='Absent'">{{item.status}}</span>
+                                            
+
+                                        </td>
+                                        <td class="text-center">{{item.remarks}}</td>
+                                    </tr>
+                                    <tr *ngIf=" listOfDailyAttendance.length ==0 && dailyAttendanceDTLabel == null">
+                                        <td colspan="16" class="text-center">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf=" listOfDailyAttendance.length ==0 && dailyAttendanceDTLabel != null">
+                                        <td colspan="16" class="text-center font-bold">
+                                            {{dailyAttendanceDTLabel}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="dailyAttendancePageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="dailyAttnData"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

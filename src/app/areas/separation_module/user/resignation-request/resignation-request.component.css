@@ -1,0 +1,59 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(243, 243, 243, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+
+.ibox-content {
+    padding: 0 15px 15px 15px 
+}
+
+
+.title {
+    flex-grow: 1; 
+}
+
+
+.toggle-icon{
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+
+.toggle-icon:hover .fa {
+    color: blue; 
+}
+
+
+
+.animated {
+    animation-duration: 1s; 
+    animation-fill-mode: both;
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fadeInRight {
+    animation-name: fadeInRight;
+}
+
+
+  
+
+
+
+
+
+

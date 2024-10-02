@@ -1,0 +1,130 @@
+
+
+<ng-template  #editLastWorkingDateModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      <i class="fa fa-pencil-square-o btn btn-sm btn-success btn-circle" aria-hidden="true"></i> Edit Last Working Date
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeEditLastWorkingDateModal('close click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  
+  <div class="modal-body">
+
+      <div *ngFor="let res of resignationRequestList">
+
+        <form [formGroup]="resignationForm" (ngSubmit)="submit()">
+        
+          <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1 text-x-small">
+              <div class="form-row">
+                  <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1 p-0">
+                    <label for="AcceptedLastWorkingDate" class="control-label font-bold">
+                        Accepted Last Working Date<span class="text-danger">*</span>
+                    </label>
+
+
+                    <div class="form-group">
+                        
+                      <div class="custom-control custom-switch pl-0" style="vertical-align: middle;">
+
+                        <input type="checkbox" class="custom-control-input" formControlName="IsAcceptedLastWorkingDate" (change)="toggleAcceptLastWorkingDate()" id="IsAcceptedLastWorkingDate">
+                      
+                        <label for="IsAcceptedLastWorkingDate" class="custom-switch-lable  pull-left mb-0 mt-2">
+                          <strong>Set Accepted Working Date to Requested Last Working Date</strong>
+                        </label>
+
+                        <label for="IsAcceptedLastWorkingDate" class="custom-control-label custom-switch-lable pull-right mb-0 mt-2">
+                          {{ showAcceptedLastWorkingDate ? 'Yes' : 'No' }}
+                        </label>
+
+                      </div>
+
+                    </div>
+                        
+                    <div class="input-group" *ngIf="!resignationForm.get('IsAcceptedLastWorkingDate').value">
+                      <div class="input-group-prepend">
+                          <span class="input-group-addon">
+                              <i class="fa fa-calendar-check-o"></i>
+                          </span>
+                      </div>
+                      <input type="text" formControlName="AcceptedLastWorkingDate" id="AcceptedLastWorkingDate"
+                          class="form-control form-control-sm bg-white" readonly
+                          placeholder="Select Accepted Last Working Date .." title="Selected Last Working Date" bsDatepicker
+                          [bsConfig]="datePickerConfig">
+                      <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date"
+                          [hidden]="!resignationForm.get('AcceptedLastWorkingDate').value"
+                          (click)="clearAcceptedLastWorkingDate()">
+      
+                          <span class="input-group-addon text-danger">
+                              <i class="fa fa-times"></i>
+                          </span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12 mb-2">
+                      <div *ngIf="resignationForm.get('NoticeDate').value && resignationForm.get('AcceptedLastWorkingDate').value">
+
+                      <span style="display: inline-block; margin-right: 10px;">
+                      <strong> Date differences: {{ calculateShortfallByApprovedLWD().differenceInDays }} days</strong>
+                      </span>
+
+                      <span *ngIf="calculateShortfallByApprovedLWD().shortfall > 0" class="text-danger" style="display: inline-block;">
+                      <strong>
+                          Actual Shortfall: {{ calculateShortfallByApprovedLWD().shortfall }} days
+                      </strong>
+                      </span>
+
+                      </div>
+                    </div>
+                      
+                    <div class="form-row p-1">
+                      <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                          <div class="label"><strong>Notice Date</strong></div>
+                      </div>
+                      <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                          <div class="value">{{ stringToDate(res.noticeDate) }}</div>
+                      </div>
+                    </div>
+
+                    <div class="form-row p-1" *ngIf="resignationForm.get('IsAcceptedLastWorkingDate').value">
+                      <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                          <div class="label"><strong>Requested Last Working Date</strong></div>
+                      </div>
+                      <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                          <div class="value">{{ stringToDate(res.requestLastWorkingDate) }}</div>
+                      </div>
+                    </div>
+
+                  </div>
+              </div>
+          </div>
+
+          <div class="form-row mt-2">
+
+            <div class="col-12">
+
+              <button class="btn btn-xs btn-primary  p-1 shadow mr-2" type="submit" [disabled]="resignationForm.invalid">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i> | Submit
+              </button>
+  
+            </div>
+          </div>
+
+
+        </form>
+                      
+      </div>
+
+  </div>
+  
+  <div class="modal-footer">
+    <button class="btn btn-xs btn-danger btn-rounded shadow-lg" type="button" (click)="closeEditLastWorkingDateModal('Close Click')">
+        <i class="fa fa-times"></i> | Cancel
+    </button>
+  </div>
+</ng-template>
+
+
+  
+

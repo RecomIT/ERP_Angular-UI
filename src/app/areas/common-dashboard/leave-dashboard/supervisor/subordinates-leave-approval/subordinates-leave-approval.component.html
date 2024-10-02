@@ -1,0 +1,229 @@
+
+
+<div class="col-12 col-lg-12 col-md-12 col-sm-12 p-0">
+  <div class="ibox">
+
+    <div class="row">
+
+      <div class="col-12">
+          <div class="border-section">
+              <div class="border-label">Search By Team Members
+              </div>
+
+              <div class="row">
+                <div class="col-12 col-lg-12 col-md-12 col-sm-12 text-x-small" >
+                  <ng-select2 
+                    [(ngModel)]="searchBySubordinatesId"
+                    [data]="subordiantesEmployeeList"
+                    name="searchBySubordinatesId"
+                    id="searchBySubordinatesId"
+                    [placeholder]="'Select A Team Member ...'"
+                    [options]="employeeSelect2Options"
+                    [allowClear]="true"
+                    #searchBySubordinatesIdRef="ngModel"
+                    (ngModelChange)="onEmployeeSelectionChange($event)"
+                  >
+                  </ng-select2>
+                </div>
+        
+                </div>
+              
+          </div>
+      </div>
+
+    </div>
+
+          
+    <ng-container *ngIf="teamMembersLeaveList.length > 0; else noRequest"  >
+
+      <div class="row text-x-small custom-scroll">
+      
+
+        <div class="col-12">
+          <table class="table table-sm table-hover table-responsive-sm table-bordered">
+            <thead>
+              <tr>
+                <th class="text-center align-middle">
+                  <input type="checkbox" (change)="selectAllEmployees($event)" [checked]="selectAllChecked">
+                </th> <!-- Checkbox for select all -->
+                <th class="text-center align-middle">Name</th>
+                <th class="text-center align-middle">Leave Type</th>
+                <th class="text-center align-middle">Dates</th>
+                <th class="text-center align-middle">Total Days</th>
+                <th class="text-center align-middle">Status</th>
+                <th class="text-center align-middle">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of teamMembersLeaveList | paginate: teamMemberPageConfig">
+  
+  
+                <td class="text-center align-middle">
+                  <input type="checkbox" (change)="checkBoxChange($event, employee)" [checked]="isSelected(employee)">
+                </td>
+  
+                <td class="text-center align-middle">{{ employee.name }}</td>
+                <td class="text-center align-middle">{{ employee.title }}</td>
+              
+  
+                <td class="text-center align-middle">
+                  <ng-container>
+                    <span *ngIf="employee.appliedFromDate !== employee.appliedToDate">
+                      {{ employee.appliedFromDate | date:'dd MMM, yyyy' }} To {{ employee.appliedToDate | date:'dd MMM, yyyy' }}
+                    </span>
+                    <span *ngIf="employee.appliedFromDate === employee.appliedToDate">
+                      {{ employee.appliedFromDate | date:'dd MMM, yyyy' }}
+                    </span>
+                  </ng-container>
+                </td>
+                              
+                <td class="text-center align-middle">{{ employee.appliedTotalDays }}</td>
+  
+                <td class="text-center align-middle">
+                  <span *ngIf="employee.stateStatus == 'Pending'" class="label label-warning">{{ employee.stateStatus }}</span>
+                  <span *ngIf="employee.stateStatus == 'Recommended'" class="label label-success">{{ employee.stateStatus }}</span>
+                </td>
+        
+                <td class="text-center align-middle">
+                  <!-- <button class="btn btn-xs text-success" type="button" title="Edit">
+                    <i class="fa fa-pencil-square-o"></i>
+                  </button> -->
+
+                  <button *ngIf="employee.fileName != null && employee.filePath != null" type="button" class="btn btn-xs text-danger" title="Details" (click)="downloadFile(employee.fileName, employee.filePath)">
+                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                  </button>
+        
+                  <button type="button" class="btn btn-xs text-info" title="Details" (click)="openApprovalDetailsModal(employee)">
+                    <i class="fa fa-eye"></i>
+                  </button>
+  
+                  <button *ngIf="selectedEmployees.length === 0" type="button" class="btn btn-xs text-info" title="Approve" (click)="openApproveModal(employee)"> 
+                    <i class="fa fa-check"></i>
+                  </button>
+  
+  
+                  <button *ngIf="selectedEmployees.length > 0" type="button" class="btn btn-xs text-info" title="Approve" [disabled]="selectedEmployees.length > 0">
+                    <i class="fa fa-check"></i>
+                  </button>
+        
+                  <button *ngIf="selectedEmployees.length === 0" class="btn btn-xs text-danger" title="Reject" type="button" (click)="openRejectModal(employee)">
+                    <i class="fa fa-times"></i>
+                  </button>
+  
+                  <button *ngIf="selectedEmployees.length > 0" class="btn btn-xs text-danger" title="Reject" type="button" [disabled]="selectedEmployees.length > 0">
+                    <i class="fa fa-times"></i>
+                  </button>
+  
+  
+  
+                  <button type="button" class="btn btn-xs text-dark-blue" title="Activity log" (click)="openActivityLogModal(employee)">
+                    <i class="icofont-settings"></i>
+                  </button>
+  
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      
+
+      </div>
+      
+
+    </ng-container>
+      
+    
+    <ng-template #noRequest>
+      <div class="text-center bg-light" style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">
+          <h5 style="color: #555; font-size: 24px; font-weight: bold;">No Data Found</h5>
+      </div>
+    </ng-template>
+
+
+
+
+
+
+
+    
+    <div class="form-row text-x-small" *ngIf="teamMembersLeaveList != null && teamMembersLeaveList.length > 0">
+
+      <div class="col-12 col-lg-6 col-md-6 col-sm-12 d-flex justify-content-start align-items-center">
+        <button *ngIf="selectedEmployees.length === 0" type="button" class="btn btn-primary btn-sm mr-2" [disabled]="selectedEmployees.length === 0" >Approve All Selected</button>
+        <button *ngIf="selectedEmployees.length > 0" type="button" class="btn btn-primary btn-sm mr-2"  (click)="approveAll()">Approve All Selected
+
+        </button>
+
+
+        <button *ngIf="selectedEmployees.length === 0" type="button" class="btn btn-danger btn-sm" [disabled]="selectedEmployees.length === 0" >Reject All Selected</button>
+        <button *ngIf="selectedEmployees.length > 0" type="button" class="btn btn-danger btn-sm"  (click)="rejectAll()">Reject All Selected
+
+        </button>
+      </div>
+
+      <div class="col-12 col-lg-6 col-md-6 col-sm-12 d-flex justify-content-end align-items-center">
+      <div *ngIf="teamMembersLeaveList != null && teamMembersLeaveList.length > 0">
+        <span class="mr-1">Page Size:</span>
+        <select [(ngModel)]="pageSize" (change)="onPageSizeChange()" class="form-control-sm">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+        <pagination-controls (pageChange)="approvalPageChanged($event)" [responsive]="true" id="teamMemberList"></pagination-controls>
+      </div>
+    </div>
+
+
+          
+  </div>
+</div>
+
+
+
+<!-- ------------------------- Child Components
+------------------------------------------- -->
+
+  <!-- ------------------------- Child Components
+  ------------------------------------------- -->
+  
+  <ng-container *ngIf="showApprovalDetailsModal">
+    <app-leave-details
+      [employeeDetails]="selectedEmployeeDetails"
+      (closeModalEvent)="closeApprovalDetailsModal($event)">
+    </app-leave-details>
+  </ng-container>
+  
+  
+  
+  <ng-container *ngIf="showApproveModal">
+    <app-leave-approve
+      [employeeDetails]="approveEmployeeDetails"
+      (closeModalEvent)="closeApproveModal($event)"
+    >
+    </app-leave-approve>
+  </ng-container>
+
+
+
+  <ng-container *ngIf="showRejectModal">
+    <app-leave-reject
+      [employeeDetails]="rejectEmployeeDetails"
+      (closeModalEvent)="closeRejectModal($event)"
+    >
+    </app-leave-reject>
+  </ng-container>
+
+
+  
+  
+  <ng-container *ngIf="showActivityModal">
+    <app-activity-log
+      [activityLogDetails]="activityLogDetails"
+      (closeModalEvent)="closeActivityLogModal($event)"
+    >
+    </app-activity-log>
+  </ng-container>
+
+

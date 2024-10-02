@@ -1,0 +1,99 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Leave Encashment</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Leave</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Leave Encashment Process</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="p-2" id="payroll-container">
+    <div class="ibox">
+        <div class="font-bold">
+            <form id="payrollForm" class="mb-3">
+                <div class="col-md-10 m-auto p-4 shadow-lg">
+                    <h2 class="text-center">Leave Encashment Process</h2>
+
+                    <div class="form-row text-x-small">
+                        <div class="col-md-8 m-auto p-4">
+                            <div class="form-row align-items-center mb-2">
+                                <div class="col-md-6">
+                                    <label for="payrollMonth">Payroll Month</label>
+                                    <select class="form-control" id="payrollMonth" name="payrollMonth">
+                                      
+                                        <option value="January" selected>January</option>
+                                        <option value="February">February</option>
+                                      
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="payrollYear">Payroll Year</label>
+                                    <select class="form-control" id="payrollYear" name="payrollYear">
+                                        
+                                        <option value="2023" selected>2023</option>
+                                        <option value="2024">2024</option>
+                                      
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row align-items-center mb-2">
+                                <div class="col-md-12 mb-2">
+
+                                    <label for="payrollYear">Select Employee Individual or All</label>
+                                    <div class="input-group w-100">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div class="w-50">
+                                            <ng-select2 [data]="ddlEmployees" name="employeeId" 
+                                                id="employeeId" [placeholder]="'Select Employee...'" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                        <div class="input-group-append">
+                          
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="selectAllEmployees()">Select All</button>
+                                     
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <div class="form-row mb-2">
+                                <div class="col-md-6 mb-2">
+                                    <label for="paymentDate">Payment Date</label>
+                                    <input type="date" class="form-control" id="paymentDate" name="paymentDate" value="2023-01-01">
+                                </div>
+                            </div>
+
+                            <div class="form-row mb-2">
+                                <div class="col-md-6 mb-2">
+                                    <label for="withSalary">With Salary</label>
+                                    <select class="form-control" id="withSalary" name="withSalary">
+                                        <option value="yes" selected>Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

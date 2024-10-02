@@ -1,0 +1,304 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Bonus Process</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Bonus</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Bonus Process</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-4 col-md-4 col-sm-4">
+        <div class="title-action">
+            <button type="button" class="btn btn-success btn-outline btn-rounded" (click)="showHide()"
+                *ngIf="showProcessView == false" title="Bonus Process"><i class="fa fa-cogs"></i>| Bonus
+                Process</button>
+            <button type="button" class="btn btn-primary btn-outline btn-rounded" (click)="showHide()"
+                *ngIf="showProcessView == true" title="Bonus Process List"><i class="fa fa-arrow-left"></i>| Back To
+                List</button>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showProcessView == false">
+    <div class="wrapper wrapper-content pt-3">
+        <div class="row m-t-sm mt-0">
+            <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li>
+                            <a href="#bonusProcessInfo" data-toggle="tab" class="nav-link active">
+                                <i class="fa fa-info"></i> | Bonus Process Info
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#bonusProcessDetail" data-toggle="tab" class="nav-link">
+                                <i class="fa fa-list"></i> | | Bonus Process Details
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="bonusProcessInfo" class="tab-pane active">
+                            <div class="ibox shadow-sm">
+                                <form [formGroup]="bonusProcessSearchForm">
+                                    <div class="ibox-content border-radius-5 pb-2 text-x-small font-bold">
+                                        <div class="form-row">
+                                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                                <label for="searchByBonusId" class="control-label text-uppercase">Search
+                                                    By Bonus</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon text-dark text-white">
+                                                            <i class="fa fa-dot-circle-o"></i>
+                                                        </span>
+                                                    </div>
+                                                    <select type="text" class="form-control form-control-sm font-bold"
+                                                        placeholder="SEARCH BY NAME" id="searchByBonusId"
+                                                        name="searchByBonusId" formControlName="bonusId">
+                                                        <option [value]="0">---Search By Bonus---</option>
+                                                        <option [value]="item.id" *ngFor="let item of ddlBonus">
+                                                            {{item.text}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                                <label for="searchByFiscalYear"
+                                                    class="control-label text-uppercase">Search By Fiscal Year</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon text-dark text-white">
+                                                            <i class="fa fa-dot-circle-o"></i>
+                                                        </span>
+                                                    </div>
+                                                    <select type="text" class="form-control form-control-sm font-bold"
+                                                        placeholder="SEARCH BY FISCAL YEAR" id="searchByFiscalYear"
+                                                        name="searchByFiscalYear" formControlName="fiscalYearId">
+                                                        <option [value]="0">---Search By Fiscal Year---</option>
+                                                        <option [value]="item.id" *ngFor="let item of ddlFiscalYear">
+                                                            {{item.text}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                                <label for="searchByBatchNo" class="control-label text-uppercase">SEARCH BY Batch No</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon text-dark text-white">
+                                                            <i class="fa fa-dot-circle-o"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        id="searchByBatchNo" name="searchByBatchNo" placeholder="ENTER BATCH NO"
+                                                        formControlName="batchNo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="ibox shadow-sm">
+                                <div class="ibox-content border-radius-5 text-x-small">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-striped table-hover table-responsive-lg"
+                                            id="tbl">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center font-bold">#SL</th>
+                                                    <th>Batch No</th>
+                                                    <th>Bonus Name</th>
+                                                    <th>Bonus Config Code</th>
+                                                    <th>Fiscal Year</th>
+                                                    <th class="text-center">Total Employee</th>
+                                                    <th class="text-center">Total Amount</th>
+                                                    <th class="text-center">Total Tax</th>
+                                                    <th>Month</th>
+                                                    <th>Cutoff Date</th>
+                                                    <th class="text-center">Is Disbursed</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr
+                                                    *ngFor="let item of listOfBonusProcessInfo | paginate: bonusProcess_pager;let i =index">
+                                                    <td class="text-center font-bold">{{i+1}}</td>
+                                                    <td>{{item.batchNo??''}}</td>
+                                                    <td>{{item.bonusName}}</td>
+                                                    <td>{{item.bonusConfigCode}}</td>
+                                                    <td>{{item.fiscalYearRange}}</td>
+                                                    <td class="text-center">{{item.totalEmployees}}</td>
+                                                    <td class="text-center">{{item.totalAmount}}</td>
+                                                    <td class="text-center">{{item.totalTax}}</td>
+                                                    <td>{{item.bonusMonthName}}-{{item.bonusYear}}</td>
+                                                    <td>{{item.processDate | date: "dd MMM yyyy"}}</td>
+                                                    <td class="text-center">
+                                                        <ng-container *ngIf="item.isDisbursed == true">
+                                                            <span class="label label-primary">Yes</span>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item.isDisbursed == false">
+                                                            <span class="label label-danger">No</span>
+                                                        </ng-container>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-xs text-info" type="button"
+                                                            title="Disbursed" (click)="openDisbursedModal(item.bonusProcessId)" *ngIf="item.isDisbursed == false">
+                                                            <i class="icofont-money"></i>
+                                                        </button>
+                                                        <button class="btn btn-xs text-danger" type="button"
+                                                            title="Undo" (click)="openUndoModal(item.bonusProcessId)" *ngIf="item.isDisbursed == false">
+                                                            <i class="icofont-undo"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="d-flex justify-content-end">
+                                            <pagination-controls (pageChange)="bonusProcess_pager_changed($event)"
+                                                [responsive]="true" [autoHide]="true"
+                                                id="bonusProcess_pager"></pagination-controls>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="bonusProcessDetail" class="tab-pane">
+                            <div class="ibox shadow-sm">
+                                <form [formGroup]="bonusProcessDetailSearchForm">
+                                    <div class="ibox-content border-radius-5 pb-2 text-x-small font-bold">
+                                        <div class="form-row">
+                                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                                <label for="searchByBonusId" class="control-label text-uppercase">Search
+                                                    By Bonus</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon text-dark text-white">
+                                                            <i class="fa fa-dot-circle-o"></i>
+                                                        </span>
+                                                    </div>
+                                                    <select type="text" class="form-control form-control-sm font-bold"
+                                                        placeholder="SEARCH BY NAME" id="searchByBonusId"
+                                                        name="searchByBonusId" formControlName="bonusId">
+                                                        <option [value]="0">---Search By Bonus---</option>
+                                                        <option [value]="item.id" *ngFor="let item of ddlBonus">
+                                                            {{item.text}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                                <label for="searchByFiscalYear"
+                                                    class="control-label text-uppercase">Search By Fiscal Year</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon text-dark text-white">
+                                                            <i class="fa fa-dot-circle-o"></i>
+                                                        </span>
+                                                    </div>
+                                                    <select type="text" class="form-control form-control-sm font-bold"
+                                                        placeholder="SEARCH BY FISCAL YEAR" id="searchByFiscalYear"
+                                                        name="searchByFiscalYear" formControlName="fiscalYearId">
+                                                        <option [value]="0">---Search By Fiscal Year---</option>
+                                                        <option [value]="item.id" *ngFor="let item of ddlFiscalYear">
+                                                            {{item.text}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                                <label for="searchByBatchNo" class="control-label text-uppercase">SEARCH BY Batch No</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon text-dark text-white">
+                                                            <i class="fa fa-dot-circle-o"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        id="searchByBatchNo" name="searchByBatchNo" placeholder="ENTER BATCH NO"
+                                                        formControlName="batchNo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="ibox shadow-sm">
+                                <div class="ibox-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-striped table-hover table-responsive-lg"
+                                            id="tblDetail">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center font-bold">#SL</th>
+                                                    <th>Batch No</th>
+                                                    <th>Employee ID</th>
+                                                    <th>Employee Name</th>
+                                                    <th>Bonus Name</th>
+                                                    <th>Bonus Config Code</th>
+                                                    <th>Fiscal Year</th>
+                                                    <th class="text-center">Amount</th>
+                                                    <th class="text-center">Tax</th>
+                                                    <th>Month</th>
+                                                    <th>Cutoff Date</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr
+                                                    *ngFor="let item of listOfBonusProcessDetail | paginate: bonusProcessdetail_pager;let i =index">
+                                                    <td class="text-center font-bold">{{i+1}}</td>
+                                                    <td>{{item.batchNo??''}}</td>
+                                                    <td>{{item.employeeCode??''}}</td>
+                                                    <td>{{item.employeeName??''}}</td>
+                                                    <td>{{item.bonusName}}</td>
+                                                    <td>{{item.bonusConfigCode}}</td>
+                                                    <td>{{item.fiscalYearRange}}</td>
+                                                    <td class="text-center">{{item.amount}}</td>
+                                                    <td class="text-center">{{item.onceOffTax}}</td>
+                                                    <td>{{item.bonusMonthName}}-{{item.bonusYear}}</td>
+                                                    <td>{{item.processDate | date: "dd MMM yyyy"}}</td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-xs text-info" type="button"
+                                                            title="View Detail" (click)="1==1">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
+                                                        <button class="btn btn-xs text-danger" type="button"
+                                                            title="Undo" (click)="openEmployeeBonusUndoModal(item.bonusProcessDetailId)" *ngIf="item.isDisbursed == false">
+                                                            <i class="icofont-undo"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="d-flex justify-content-end">
+                                            <pagination-controls (pageChange)="bonusProcessdetail_pager_changed($event)"
+                                                [responsive]="true" [autoHide]="true"
+                                                id="bonusProcessdetail_pager"></pagination-controls>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ng-container>
+<ng-container *ngIf="showProcessView == true">
+    <app-payroll-bonus-process-execution></app-payroll-bonus-process-execution>
+</ng-container>
+
+<ng-container *ngIf="showDisbursedModal == true && disbursedableItem != null">
+    <app-payroll-bonus-disbursed-modal [data]="disbursedableItem" (closeModalEvent)="closeDisbursedModal($event)"></app-payroll-bonus-disbursed-modal>
+</ng-container>
+
+<ng-container *ngIf="showUndoModal == true && undoItem != null">
+    <app-payroll-bonus-undo-modal [data]="undoItem" (closeModalEvent)="closeDisbursedModal($event)"></app-payroll-bonus-undo-modal>
+</ng-container>
+
+<ng-container *ngIf="showEmployeeBonusUndo == true && undoEmployeeBonus != null">
+    <app-payroll-employee-bonus-undo-modal [data]="undoEmployeeBonus" (closeModalEvent)="closeDisbursedModal($event)"></app-payroll-employee-bonus-undo-modal>
+</ng-container>

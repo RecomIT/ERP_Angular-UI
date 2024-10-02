@@ -1,0 +1,232 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-6 col-sm-6">
+        <h2 @slideInUp class="mt-2">PF Activation</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Employee PF Activation</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-6 col-sm-6">
+        <div class="title-action">         
+            <div class="clearfix pull-right text-x-small">             
+                <button type="button" class="btn btn-info btn-rounded btn-sm" (click)="openUploadExcelFileModal()"><i
+                        class="fa fa-arrow-up"></i> | Click To Upload Excel</button>
+                <button type="button" class="btn btn-success btn-rounded btn-sm ml-1"
+                    (click)="openPFActivationModal(0)">
+                    <i class="fa fa-plus"></i> | Create
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#empPFActivation" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Employee PF Activation
+                        </a></li>                
+                </ul>
+                <div class="tab-content">
+                    <div id="empPFActivation" class="tab-pane active">
+                        <div class="panel-body bg-white pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width:80%">                                        
+                                            <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                #ddlSearchByEmployeeRef="ngModel" [(ngModel)]="searchByEmployee"
+                                                id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                (ngModelChange)="onEmployeeChanged()" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>                               
+
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-money"></i>
+                                            </span>
+                                        </div>                                 
+                                      
+                                        <select name="ddlSearchByPFBasedAmount" id="ddlSearchByPFBasedAmount"
+                                            class="form-control form-control-sm"
+                                            (change)="getEmployeePFActivation(1)"
+                                            #ddlSearchByPFBasedAmountRef="ngModel" [(ngModel)]="searchByBasedAmount">
+                                            <option [value]="''">---Search By Based Amount---</option>
+                                            <option [value]="'Basic'">Basic</option>
+                                            <option [value]="'Gross'">Gross</option>
+                                            <!-- <option [value]="item.text" *ngFor="let item of ddlSearchByPFBasedAmount">
+                                                {{item.text}}
+                                            </option> -->
+                                        </select>
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="searchByDate" id="searchByDate"
+                                            class="form-control form-control-sm bg-white" placeholder="Search By Effective Date"
+                                            #searchByDateRef="ngModel" [(ngModel)]="searchByDate"
+                                            (ngModelChange)="getEmployeePFActivation(1)" bsDaterangepicker
+                                            autocomplete="off" readonly [bsConfig]="datePickerConfig">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="[searchByDate=[], getEmployeePFActivation(1)]"
+                                            [hidden]="searchByDate.length ==0">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-2 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-money"></i>
+                                            </span>
+                                        </div>                                 
+                                      
+                                        <select name="ddlSearchByStatus" id="ddlSearchByStatus"
+                                            class="form-control form-control-sm"
+                                            (change)="getEmployeePFActivation(1)"
+                                            #ddlSearchByStatusRef="ngModel" [(ngModel)]="searchByStatus">
+                                            <option [value]="''">---Search By Status---</option>
+                                            <option [value]="'Pending'">Pending</option>    
+                                            <option [value]="'Approved'">Approved</option>                                                                                 
+                                            <option [value]="'Recheck'">Recheck</option>
+                                            <option [value]="'Cancelled'">Cancelled</option>                                           
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Employee Code</th>
+                                            <th class="text-center">Employee Name</th>
+                                            <th class="text-center">Based Amount</th>                                
+                                            <th class="text-center">Percentage (%)</th>
+                                            <th class="text-center">Effective Date</th>
+                                            <th class="text-center">Activation Date</th>
+                                            <th class="text-center">Remarks</th>
+                                            <th class="text-center">Status</th> 
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listOfEmployeePFActivation | paginate: employeePFActivationPageConfig, let i =index">
+                                                <td class="text-center font-bold">{{i+1 + (employeePFActivationPageSize
+                                                    *(employeePFActivationPageNo-1))}}</td>                                              
+                                                <td class="text-center">{{item.employeeCode}}</td>                             
+                                                <td class="text-center">{{item.employeeName}}</td>
+                                                <td class="text-center">{{item.pfBasedAmount}}</td>
+                                                <td class="text-center">{{item.pfPercentage}}</td>
+                                                <td class="text-center">{{item.pfEffectiveDate | date:"dd-MMMM-yyyy"}}</td>
+                                                <td class="text-center">{{item.pfActivationDate | date:"dd-MMMM-yyyy"}}</td>
+                                                <td class="text-center">{{item.remarks}}</td>
+                                                <td class="text-center">
+                                                    <span class="label label-warning"
+                                                        *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                        + '...'}}</span>
+                                                    <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                        <i class="fa fa-check"></i> {{item.stateStatus}}
+                                                    </span>
+                                                    <span class="label label-danger"
+                                                        *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                        {{item.stateStatus}}
+                                                    </span>
+                                                    <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                            class="fa fa-backward"></i> {{item.stateStatus}}
+                                                    </span>
+                                                </td> 
+                                                <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                                <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-xs"
+                                                    (click)="openPFActivationModal(item?.pfActivationId)" title="Edit" *ngIf="item.stateStatus != 'Approved'">
+                                                    <i class="fa fa-pencil-square-o"></i> 
+                                                    </button>                                                  
+                                                    <button type="button" class="btn btn-xs text-info"
+                                                    (click)="openApprovalPFActivationModal(item?.pfActivationId)"
+                                                    title="Check" *ngIf="item.stateStatus == 'Pending'"><i
+                                                        class="fa fa-check"></i>
+                                                    </button>
+                                                </td>                                               
+                                        </tr>
+                                        
+                                        <tr
+                                            *ngIf="listOfEmployeePFActivation.length ==0 && employeePFActivationDTLabel == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf="listOfEmployeePFActivation.length ==0 && employeePFActivationDTLabel != null">
+                                            <td colspan="20" class="text-center font-bold">
+                                                {{employeePFActivationDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="employeePFActivationPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="employeePFActivationData">
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+         </div>
+     </div>
+  </div>
+</div>
+
+
+<ng-container *ngIf="showPFActivationModal">
+    <app-hr-add-employee-pf-activation-modal [pfActivationId]="pfActivationId" (closeModalEvent)="closePFActivationModal($event)"></app-hr-add-employee-pf-activation-modal>
+</ng-container>
+
+<ng-container *ngIf="showUploadPFActivationModal">
+    <app-hr-upload-employee-pf-activation-modal [pfActivationId]="0" (closeModalEvent)="closeUploadExcelFileModal($event)">
+    </app-hr-upload-employee-pf-activation-modal>
+</ng-container> 
+
+<ng-container *ngIf="showApprovalPFActivationModal">
+    <app-hr-approval-employee-pf-activation-modal [pfActivationId]="pfActivationId" [approvalData]="approvalData" (closeModalEvent)="closeApprovalPFActivationModal($event)">
+    </app-hr-approval-employee-pf-activation-modal>
+</ng-container> 
+

@@ -1,0 +1,121 @@
+.employee-info-card {
+    width: 100%;
+    /* background-color: #f0f4fc; */
+    /* padding: 15px; */
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.header {
+    border-bottom: 2px solid #007bff;
+    /* background-color: #c3daf7; */
+    padding: 5px;
+    border-radius: 8px 8px 0 0;
+    /* font-size: 12px; */
+    font-weight: bold;
+    font-size: 1rem;
+    color: #007bff;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+}
+
+.profile-pic img {
+    width: 60px;
+    height: 60px;
+    border-radius: 20%;
+    border: 2px solid #ddd;
+}
+
+.details,
+.contact {
+    flex-grow: 1;
+    padding-left: 15px;
+}
+
+.details>div,
+.contact>div {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.details i,
+.contact i {
+    margin-right: 10px;
+    color: #333;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+}
+
+.contractual-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #00a676;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+
+
+
+
+
+
+
+/* styles.css or component-specific stylesheet */
+.request-info-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    /* padding: 16px; */
+    /* background-color: #f9f9f9; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+
+/* .table-responsive {
+    margin-top: 5px;
+} */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: center;
+}
+
+/* .table th {
+    background-color: #d8e2d8;
+    color: #fff;
+} */
+
+/* .table tr:nth-child(even) {
+    background-color: #f2f2f2;
+} */
+
+/* .table tr:hover {
+    background-color: #eaeaea;
+} */
+
+.table td {
+    vertical-align: middle;
+}
+
+.table-sm td, .table-sm th {
+    padding: 5px;
+}

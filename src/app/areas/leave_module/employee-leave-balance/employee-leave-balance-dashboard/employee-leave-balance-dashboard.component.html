@@ -1,0 +1,136 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-md-12 col-sm-12">
+    <h2 class="mt-2">Employee Leave Balance</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <strong>Leave</strong>
+      </li>
+      <li class="breadcrumb-item active">
+        <strong>Employee Leave Balance</strong>
+      </li>
+    </ol>
+  </div>
+</div>
+
+<div class="pt-3 animated fadeInRight pt-sm-1">
+  <div class="ibox ibox-content  mb-5">
+    <div class="rounded">
+
+
+      <div class="d-flex justify-content-between mb-2">
+
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="border-section">
+            <div class="border-label">Search By Employee</div>
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 text-x-small">
+              <ng-select2 [(ngModel)]="searchByEmployeeId" [data]="listOfEmployee" name="searchByEmployeeId"
+                id="searchByEmployeeId" [placeholder]="'Select An Employee ...'"
+                [options]="employeeContactSelect2Options" [allowClear]="true" #searchByEmployeeIdRef="ngModel"
+                (ngModelChange)="onEmployeeSelectionChange($event)"></ng-select2>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-primary btn-sm m-1 shadow" (click)="openAddEmployeeLeaveBalanceModal()">
+              <i class="fa fa-plus" aria-hidden="true"></i> Add Leave Balance
+            </button>
+
+            <button (click)="downloadExcel()" class="btn btn-outline-primary btn-sm m-1">Download Excel <i
+                class="fa fa-file-pdf-o"></i></button>
+
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="form-row card-container p-1">
+
+
+        <div *ngFor="let employee of listOfLeaveBalance?.items;" class="col-12 col-lg-4 col-sm-12 col-md-4 mt-2">
+          <div class="p-3 bg-white rounded shadow">
+            <div class="mat-card-header d-flex justify-content-between">
+              <h4>{{ employee?.employeeName }}</h4>
+
+              <button class="btn btn-xs text-success" type="button" title="Edit "
+                (click)="openEditEmployeeLeaveBalanceModal(employee)">
+                <i class="fa fa-pencil-square-o"></i>
+              </button>
+            </div>
+
+            <div>
+              <p class="font-bold">Leave Period: {{ employee.leaveBalances[0]?.leavePeriodStart | date: 'dd MMM, yyyy'
+                }} to {{ employee.leaveBalances[0]?.leavePeriodEnd | date: 'dd MMM, yyyy' }}</p>
+            </div>
+
+            <div class="card-container mt-2">
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr class="text-center">
+                    <th>Leave Type</th>
+                    <th>Allocated</th>
+                    <th>Applied</th>
+                    <th>Balance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let leave of employee?.leaveBalances">
+                    <td>{{ leave?.leaveTypeName }}</td>
+                    <td class="text-center">{{ leave?.balance }}</td>
+                    <td class="text-center">{{ leave?.applied }}</td>
+                    <td class="text-center">{{ (leave?.balance??0)-(leave?.applied??0) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12" style="float:right;text-align: right">
+          <app-leave-pagination [items]="items" [totalPages]="totalPage" [currentPage]="pageNumber"
+            [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [minPagesToShow]="minPagesToShow"
+            [minCurrentPage]="minCurrentPage" (pageChange)="goToPage($event)" (pageSizeChange)="changePageSize($event)">
+          </app-leave-pagination>
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<ng-container *ngIf="showAddEmployeeLeaveBalanceModal">
+  <app-add-employee-leave-balance [isEditMode]="false" (closeModalEvent)="closeAddEmployeeLeaveBalanceModal($event)">
+  </app-add-employee-leave-balance>
+</ng-container>
+
+
+<ng-container *ngIf="showEditEmployeeLeaveBalanceModal">
+  <app-add-employee-leave-balance [isEditMode]="true" [currentEmployee]="selectedEmployeeForEdit"
+    (closeModalEvent)="closeEditEmployeeLeaveBalanceModal($event)">
+  </app-add-employee-leave-balance>
+</ng-container>

@@ -1,0 +1,60 @@
+
+
+.icon {
+  font-size: 2em; 
+  margin-bottom: 0.625em; 
+  color: rgb(130, 130, 252);
+}
+
+.icon-color {
+  color: inherit;
+}
+
+.value > div {
+    display: inline-block;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 5px; 
+    margin: 2px;
+}
+
+
+
+
+.dashboard-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    height: 80px;
+  }
+  
+  .icon-container {
+    margin-right: 10px; 
+  }
+  
+  .text-container {
+    flex-grow: 1; 
+    text-align: center;
+  }
+  
+  .title {
+    margin-bottom: 5px; 
+  }
+  
+  .value {
+    font-weight: bold; 
+  }
+  
+
+
+
+  .size{
+    height: 236px;
+    max-height: 310px;
+    overflow-y: auto;
+  }
+
+
+  

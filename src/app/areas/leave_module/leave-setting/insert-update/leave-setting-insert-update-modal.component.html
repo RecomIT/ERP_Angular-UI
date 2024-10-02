@@ -1,0 +1,738 @@
+<ng-template #leaveSettingModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="icofont-ui-settings btn btn-sm btn-outline-secondary btn-circle"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')
+    "><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form [formGroup]="form" (submit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+
+
+                <!-- leaveTypeId 
+                -- Start
+                -->
+
+                <div class="form-group rounded col-sm-6 col-md-3" *ngIf="form.get('leaveSettingId').value <= 0">
+                    <label for="leaveTypeId" class="control-label"  [ngClass]="{'label-error': form.get('leaveTypeId').value === null}">
+                        <strong>Leave Type </strong><span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <select name="leaveTypeId" id="leaveTypeId" class="form-control form-control-sm font-bold rounded" formControlName="leaveTypeId">
+                            <option [value]="null" disabled [selected]="!form.get('leaveTypeId').value">-- Select A Leave Type --</option>
+                            <option [value]="lt.id" class="font-bold" *ngFor="let lt of ddlleaveTypes | async">{{lt.text}}</option>
+                        </select>
+                    </div>
+                
+                    <div *ngIf="form.get('leaveSettingId').value <= 0 && (form.get('leaveTypeId').invalid && (form.get('leaveTypeId').dirty || form.get('leaveTypeId').touched))" class="text-danger small">
+                        <div *ngIf="form.get('leaveTypeId').errors?.required">Leave Type is required.</div>
+                    </div>
+                </div>
+                
+                <!-- leaveTypeId 
+                -- End
+                -->
+                
+                
+
+                <!-- Mandatory No. of Days 
+                -- Start
+                -->
+
+                <div class="form-group rounded col-sm-6 col-md-3">
+                    <label class="control-label"><strong>Has Mandatory Yearly Balance?</strong></label>
+                    
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="mandatoryNumberOfDays" id="mandatoryNumberOfDays" 
+                                    formControlName="mandatoryNumberOfDays" />
+                            </div>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('mandatoryNumberOfDays').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="form.get('mandatoryNumberOfDays').value">
+                    <label for="noOfDays" class="control-label" [ngClass]="{'label-error': form.get('noOfDays').value === null}">
+                        <strong>Number of Days for Balance </strong><span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group rounded">
+                        <input type="number" name="noOfDays" id="noOfDays"
+                            class="form-control form-control-sm font-bold rounded" formControlName="noOfDays" placeholder="No. Of Day(s)" />
+                    </div>
+                    <div *ngIf="form.get('noOfDays').invalid || (form.get('noOfDays').value === null && form.get('noOfDays').dirty)"
+                        class="text-danger small">
+                        <div *ngIf="form.get('noOfDays').errors.required">
+                            Number of Days for Balance is required.
+                        </div>       
+                    </div>
+                </div>
+                
+                <!-- Mandatory No. of Days 
+                -- End
+                -->
+
+
+                <!-- Is Prorated Leave Balance Applicable 
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">  
+                    <label class="control-label"><strong>Is Prorated Leave Balance Applicable?</strong></label>       
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isProratedLeaveBalanceApplicable" id="isProratedLeaveBalanceApplicable"
+                                    formControlName="isProratedLeaveBalanceApplicable" />
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isProratedLeaveBalanceApplicable').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Is Prorated Leave Balance Applicable 
+                -- End
+                -->
+
+
+                <!-- Is Minimum Service Peroid?
+                -- Start
+                -->
+                
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label"><strong> Is Minimum Service Peroid?</strong></label> 
+                    <div class="input-group">
+                        
+                        <div class="input-group-prepend">
+                            <div class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isMinimumServicePeroid" id="isMinimumServicePeroid"
+                                    formControlName="isMinimumServicePeroid" />
+                            </div>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isMinimumServicePeroid').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-6 col-md-3" *ngIf="this.form.get('isMinimumServicePeroid').value == true">
+                    <label for="minimumServicePeroid" class="control-label" [ngClass]="{'label-error': form.get('minimumServicePeroid').value === null}">
+                        <strong>Minimum Service Peroid Days</strong><span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <input type="number" name="minimumServicePeroid" id="minimumServicePeroid"
+                            class="form-control form-control-sm rounded" formControlName="minimumServicePeroid" placeholder="No. Of Days"
+                            [ngClass]="{'input-error': form.get('minimumServicePeroid').value === null && (form.get('minimumServicePeroid').dirty || form.get('minimumServicePeroid').touched)}" />
+                    </div>
+                    <div *ngIf="form.get('minimumServicePeroid').invalid || (form.get('minimumServicePeroid').value === null && form.get('minimumServicePeroid').dirty)"
+                        class="text-danger small">
+                        <div *ngIf="form.get('minimumServicePeroid').errors.required">
+                            Minimum Service Peroid is required.
+                        </div>       
+                    </div>
+                </div>
+                
+                <!-- Is Minimum Service Peroid?
+                -- End
+                -->
+
+
+                <!-- Max. No. of days leave taken at a time 
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label for="maxDaysLeaveAtATime" class="control-label"><strong>Max. No. of days leave taken at a time</strong></label>
+                    <div class="input-group">
+                        <input type="number" name="maxDaysLeaveAtATime" id="maxDaysLeaveAtATime"
+                            class="form-control form-control-sm rounded" formControlName="maxDaysLeaveAtATime"
+                            placeholder="No. of Leave day(s)" />
+                    </div>
+                </div>
+
+                <!-- Max. No. of days leave taken at a time 
+                -- End
+                -->
+                
+
+                <!-- Hide -->
+                <div class="form-group col-sm-6 col-md-4 hide">
+                    <label for="effectiveFromTo" class="control-label">
+                        Effectivity From~To<span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon ">
+                                <i class="fa fa-arrows-h" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="effectiveDateFromTo" id="effectiveDateFromTo"
+                            formControlName="effectiveDateFromTo" readonly placeholder="Enter Date Range..."
+                            class="form-control form-control-sm bg-white font-bold" bsDaterangepicker
+                            autocomplete="off" [bsConfig]="datePickerConfig">
+                    </div>
+                </div>
+
+
+                <!-- Is Confirmation Required?
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label"><strong>Is Confirmation Required?</strong></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isConfirmationRequired" id="isConfirmationRequired"
+                                    formControlName="isConfirmationRequired" />
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isConfirmationRequired').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Is Confirmation Required?
+                -- End
+                -->
+
+
+                <!-- Is Holiday Included?
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label"><strong>Is Holiday Included?</strong></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isHolidayIncluded" id="isHolidayIncluded"
+                                    formControlName="isHolidayIncluded" />
+                            </div>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isHolidayIncluded').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Is Holiday Included?
+                -- End
+                -->
+
+
+                <!-- Is Day Off Included?
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label"><strong>Is Day Off Included?</strong></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isDayOffIncluded" id="isDayOffIncluded"
+                                    formControlName="isDayOffIncluded" />
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isDayOffIncluded').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Is Day Off Included?
+                -- End
+                -->
+
+
+                <!-- Maternity Leave
+                -- Start
+                -->
+
+                <!-- <div class="form-group col-sm-6 col-md-3" [@fade] *ngIf="form.get('leaveTypeId').value == 5">
+                    <label for="estimatedDeliveryDate" class="control-label" [ngClass]="{'label-error': form.get('estimatedDeliveryDate').value === null}">
+                        Estimated Delivery Date<span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-addon">
+                            <i class="fa fa-calendar-check-o"></i>
+                          </span>
+                        </div>
+                        <input type="text" formControlName="estimatedDeliveryDate" id="estimatedDeliveryDate" 
+                              class="form-control form-control-sm bg-white rounded"
+                              readonly
+                              placeholder="Select Delivery Date.." title="Estimated Delivery Date" bsDatepicker
+                              [bsConfig]="datePickerConfig">
+                        <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date" 
+                          [hidden]="!form.get('estimatedDeliveryDate').value"
+                          (click)="clearEstimatedDeliveryDate()">
+                    
+                          <span class="input-group-addon text-danger">
+                            <i class="fa fa-times"></i>
+                          </span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="form.get('leaveTypeId').value == 5 && (this.form.get('estimatedDeliveryDate').invalid || (this.form.get('estimatedDeliveryDate').value === null && this.form.get('estimatedDeliveryDate').dirty))"
+                            class="text-danger small">
+                        <div *ngIf="this.form.get('estimatedDeliveryDate').errors?.required">
+                            Delivery Date is required.
+                        </div>
+                    </div>
+
+                </div> -->
+
+
+
+
+
+                <div class="form-group rounded col-sm-6 col-md-3" [@fade] *ngIf="form.get('leaveTypeId').value == 5">
+                    <label class="control-label"><strong>Is Required Estimated Delivery Date</strong></label>
+                    
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isRequiredEstimatedDeliveryDate" id="isRequiredEstimatedDeliveryDate" 
+                                    formControlName="isRequiredEstimatedDeliveryDate" />
+                            </div>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isRequiredEstimatedDeliveryDate').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group rounded col-sm-6 col-md-3" [@fade] *ngIf="form.get('leaveTypeId').value == 5">
+                    <label class="control-label"><strong>Is Required To Apply Minimum Days Before EDD?</strong></label>
+                    
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isRequiredToApplyMinimumDaysBeforeEDD" id="isRequiredToApplyMinimumDaysBeforeEDD" 
+                                    formControlName="isRequiredToApplyMinimumDaysBeforeEDD" />
+                            </div>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isRequiredToApplyMinimumDaysBeforeEDD').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="form.get('isRequiredToApplyMinimumDaysBeforeEDD').value" >
+                    <label for="noOfDays" class="control-label" [ngClass]="{'label-error': form.get('requiredDaysBeforeEDD').value === null}"><strong>Required Days Before EDD</strong><span class="text-danger">*</span></label>
+                    <div class="input-group rounded">
+                        <input type="number" name="requiredDaysBeforeEDD" id="requiredDaysBeforeEDD"
+                            class="form-control form-control-sm font-bold rounded" formControlName="requiredDaysBeforeEDD" placeholder="No. Of Day(s)" />
+                    </div>
+                    <div *ngIf="form.get('requiredDaysBeforeEDD').invalid || (form.get('requiredDaysBeforeEDD').value === null && form.get('requiredDaysBeforeEDD').dirty)"
+                        class="text-danger small">
+                        <div *ngIf="form.get('requiredDaysBeforeEDD').errors.required">
+                            Required Days Before EDD is required.
+                        </div>       
+                    </div>
+                </div>
+
+                
+
+                <!-- Maternity Leave
+                -- End
+                -->
+
+
+
+
+                <!-- Leave Encashable 
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">  
+                    <label class="control-label"><strong>Is Leave Encashable?</strong></label>       
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isLeaveEncashable" id="isLeaveEncashable"
+                                    formControlName="isLeaveEncashable" />
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isLeaveEncashable').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="this.form.get('isLeaveEncashable').value == true">
+                    <label for="minEncashablePercentage" class="control-label"><strong>Min Encashable (Percentage %)</strong></label>
+                    <div class="input-group">
+                        <input type="number" name="minEncashablePercentage" id="minEncashablePercentage"
+                            class="form-control form-control-sm rounded" formControlName="minEncashablePercentage" placeholder="No. of (Percentage %)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="this.form.get('minEncashablePercentage').value !== null">
+                    <label for="maxEncashablePercentage" class="control-label" [ngClass]="{'label-error': form.get('maxEncashablePercentage').value === null}"><strong>Max Encashable (Percentage %)</strong><span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input type="number" name="maxEncashablePercentage" id="maxEncashablePercentage"
+                            class="form-control form-control-sm rounded" formControlName="maxEncashablePercentage" placeholder="No. of (Percentage %)" />
+                    </div>
+                    <div *ngIf="form.get('maxEncashablePercentage').invalid || (form.get('maxEncashablePercentage').value === null && form.get('maxEncashablePercentage').dirty)"
+                            class="text-danger small">
+                        <div *ngIf="form.get('maxEncashablePercentage').errors?.required">
+                            Max Encashable (Percentage %) is required.
+                        </div>       
+                    </div>
+                </div>                  
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="this.form.get('isLeaveEncashable').value == true">
+                    <label class="control-label" [ngClass]="{'label-error': form.get('calculateBalanceBasedOn').value === ''}"><strong>Calculate Balance Based On<span class="text-danger">*</span></strong></label> 
+                    <div class="input-group">                 
+                        <select name="calculateBalanceBasedOn" id="calculateBalanceBasedOn"
+                            formControlName="calculateBalanceBasedOn" class="form-control form-control-sm rounded">
+                            <option [value]="''" selected disabled>---Select Calculate Balance Based On---</option>
+                            <option value="Gross">Gross</option>
+                            <option value="Basic">Basic</option>
+                        </select>
+                    </div>
+                    <div *ngIf="this.form.get('isLeaveEncashable').value && (this.form.get('calculateBalanceBasedOn').invalid || (this.form.get('calculateBalanceBasedOn').value === null && this.form.get('calculateBalanceBasedOn').dirty))"
+                            class="text-danger small">
+                        <div *ngIf="this.form.get('calculateBalanceBasedOn').errors?.required">
+                            Calculate Balance Based On is required.
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="form.get('mandatoryNumberOfDays').value == false && this.form.get('isLeaveEncashable').value == true">
+                    <label class="control-label" [ngClass]="{'label-error': form.get('daysPerCycle').value === null}"><strong>Days Per Cycle</strong></label> 
+                    <div class="input-group">
+                        <input type="number" name="daysPerCycle" id="daysPerCycle" formControlName="daysPerCycle"
+                            class="form-control form-control-sm rounded"
+                            placeholder="No. of days"
+                            >
+                    </div>
+                    <div *ngIf="(this.form.get('daysPerCycle').invalid || (this.form.get('daysPerCycle').value === null && this.form.get('daysPerCycle').dirty))"
+                            class="text-danger small">
+                    <div *ngIf="this.form.get('daysPerCycle').errors?.required">
+                        Days Per Cycle is required.
+                    </div>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="form.get('mandatoryNumberOfDays').value == false && this.form.get('isLeaveEncashable').value == true">
+                    <label class="control-label" [ngClass]="{'label-error': form.get('gainDaysPerCycle').value === null}"><strong>Gain Days Per Cycle</strong></label> 
+                    <div class="input-group">
+                        <input type="number" name="gainDaysPerCycle" id="gainDaysPerCycle"
+                            formControlName="gainDaysPerCycle" class="form-control form-control-sm rounded"
+                            placeholder="No. of days"
+                            >
+                    </div>
+                    <div *ngIf="(this.form.get('gainDaysPerCycle').invalid || (this.form.get('gainDaysPerCycle').value === null && this.form.get('gainDaysPerCycle').dirty))"
+                            class="text-danger small">
+                        <div *ngIf="this.form.get('gainDaysPerCycle').errors?.required">
+                            Gain Days Per Cycle is required.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leave Encashable 
+                -- End
+                -->
+                
+
+                <!-- Carry Forward 
+                -- Start
+                -->
+                <div class="form-group col-sm-6 col-md-3">                  
+                    <label class="control-label"><strong>Is Carry Forward?</strong></label>
+                    <div class="input-group">                        
+                        <div class="input-group-prepend">
+                            <div class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isCarryForward" id="isCarryForward" formControlName="isCarryForward" />
+                            </div>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isCarryForward').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="this.form.get('isCarryForward').value == true">
+                    <label for="maxDaysCarryForward" class="control-label" [ngClass]="{'label-error': form.get('maxDaysCarryForward').value === null}"><strong>Max Days Carry Forward </strong><span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input type="number" name="maxDaysCarryForward" id="maxDaysCarryForward"
+                            class="form-control form-control-sm rounded" formControlName="maxDaysCarryForward" placeholder="No. of Days" />
+                    </div>
+                    <div *ngIf="form.get('maxDaysCarryForward').invalid || (form.get('maxDaysCarryForward').value === null && form.get('maxDaysCarryForward').dirty)"
+                        class="text-danger small">
+                        <div *ngIf="form.get('maxDaysCarryForward').errors.required">
+                            Max Days Carry Forward is required.
+                        </div>       
+                    </div>
+                </div>
+
+                <!-- Carry Forward 
+                -- End
+                -->
+
+
+                <!-- Document Attached Option
+                -- Start
+                -->
+
+                <!-- <div class="form-group col-sm-6 col-md-3">     
+                    <label class="control-label"><strong>Document Attached Option?</strong></label> 
+                    <div class="input-group">
+                        
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="fileAttachedOptionOnOff" id="fileAttachedOptionOnOff"
+                                    formControlName="fileAttachedOptionOnOff" />
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('fileAttachedOptionOnOff').value ? 'On' : 'Off' }}
+                        </div>
+                    </div>
+                </div> -->
+
+
+                
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label" [ngClass]="{'label-error': form.get('fileAttachedOption').value === ''}"><strong>File Attached Option <span class="text-danger">*</span></strong></label> 
+                    <div class="input-group">
+                        <select name="fileAttachedOption" id="fileAttachedOption"
+                                formControlName="fileAttachedOption" class="form-control form-control-sm rounded">
+                            <option [value]="''" selected disabled>-- Select A File Attached Option --</option>
+                            <option value="Optional">Optional</option>
+                            <option value="Mandatory">Mandatory</option>
+                            <option value="None">None</option>
+                        </select>
+                    </div>
+                    <div *ngIf="form.get('fileAttachedOption').invalid && (form.get('fileAttachedOption').value === null && form.get('fileAttachedOption').dirty || form.get('fileAttachedOption').touched)"
+                        class="text-danger small">
+                        <div *ngIf="form.get('fileAttachedOption').errors.required">
+                            File Attached Option is required.
+                        </div>       
+                    </div>
+                
+                </div>
+
+
+                <!-- <div class="form-group col-sm-6 col-md-3" *ngIf="form.get('fileAttachedOption').value === 'Optional' || form.get('fileAttachedOption').value === 'Mandatory'" [@slideInOut] >
+                    <label class="control-label"><strong>Is Document required?</strong></label> 
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isLeaveFileAttached" id="isLeaveFileAttached"
+                                    formControlName="isLeaveFileAttached" />
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isLeaveFileAttached').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="form-group col-sm-6 col-md-3" *ngIf="form.get('fileAttachedOption').value === 'Optional' || form.get('fileAttachedOption').value === 'Mandatory'" [@slideInOut] >
+                    <label class="control-label"><strong>Is Minimum Days required for Document Attached?</strong></label> 
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isMinimumDaysRequiredForFileAttached" id="isMinimumDaysRequiredForFileAttached"
+                                    formControlName="isMinimumDaysRequiredForFileAttached" />
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isMinimumDaysRequiredForFileAttached').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="form.get('isMinimumDaysRequiredForFileAttached').value"> 
+                    <label for="requiredDaysForFileAttached" class="control-label" [ngClass]="{'label-error': form.get('requiredDaysForFileAttached').value === null}"><strong>Required Days for Document Attached </strong><span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input type="number" name="requiredDaysForFileAttached" id="requiredDaysForFileAttached"
+                            class="form-control form-control-sm rounded" formControlName="requiredDaysForFileAttached" placeholder="No. of Days" />
+                    </div>
+                    <div *ngIf="form.get('requiredDaysForFileAttached').invalid || (form.get('requiredDaysForFileAttached').value === null && form.get('requiredDaysForFileAttached').dirty)"
+                        class="text-danger small">
+                        <div *ngIf="form.get('requiredDaysForFileAttached').errors.required">
+                            Required Days for File Attached is required.
+                        </div>       
+                    </div>
+                </div>
+                
+                <!-- Document Attached Option
+                -- End
+                -->
+
+
+
+                
+                <!-- Is Acquired By Off Day Work?
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label"><strong>Is Acquired By Off Day Work?</strong></label> 
+                    <div class="input-group">                  
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="acquiredViaOffDayWork" id="acquiredViaOffDayWork"
+                                    formControlName="acquiredViaOffDayWork" />
+                            </span>
+                        </div>
+
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('acquiredViaOffDayWork').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-6 col-md-3" [@slideInOut] *ngIf="form.get('acquiredViaOffDayWork').value"> 
+                    <label for="deadlineForUtilizationLeave" class="control-label" [ngClass]="{'label-error': form.get('deadlineForUtilizationLeave').value === null}"><strong>Deadline For Utilization Leave</strong><span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input type="number" name="deadlineForUtilizationLeave" id="deadlineForUtilizationLeave"
+                            class="form-control form-control-sm rounded" formControlName="deadlineForUtilizationLeave" placeholder="No. of Days" />
+                    </div>
+                    <div *ngIf="form.get('deadlineForUtilizationLeave').invalid || (form.get('deadlineForUtilizationLeave').value === null && form.get('deadlineForUtilizationLeave').dirty)"
+                    class="text-danger small">
+                    <div *ngIf="form.get('deadlineForUtilizationLeave').errors.required">
+                        Max Days Carry Forward is required.
+                    </div>       
+                    </div>
+                </div>
+
+                <!-- Is Acquired By Off Day Work?
+                -- End
+                -->
+
+
+
+                <!-- Request Days Before Taking Leave
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label"><strong>Request Days Before Taking Leave</strong></label> 
+                    <div class="input-group">                      
+                        <input type="number" name="requestDaysBeforeTakingLeave" id="requestDaysBeforeTakingLeave"
+                            formControlName="requestDaysBeforeTakingLeave" class="form-control form-control-sm rounded"
+                            placeholder="No. of days"
+                            >
+                    </div>
+                </div>
+
+                <!-- Request Days Before Taking Leave
+                -- End
+                -->
+
+
+                <!-- Maximum Times In Service Period
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label"><strong>Maximum Times In Service Period</strong></label> 
+                    <div class="input-group">
+                        <input type="number" name="maximumTimesInServicePeriod" id="maximumTimesInServicePeriod"
+                            formControlName="maximumTimesInServicePeriod" class="form-control form-control-sm rounded"
+                            placeholder="No. of times"
+                            >
+                    </div>
+                </div>
+
+                <!-- Maximum Times In Service Period
+                -- End
+                -->
+
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label" [ngClass]="{'label-error': form.get('leaveApplicableFor').value === ''}"><strong>Leave Applicable For <span class="text-danger">*</span></strong></label> 
+                    <div class="input-group">
+                        <select name="leaveApplicableFor" id="leaveApplicableFor"
+                                formControlName="leaveApplicableFor" class="form-control form-control-sm rounded">
+                            <option [value]="''" selected disabled>---Select Applicable For---</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Both">Both</option>
+                        </select>
+                    </div>
+                    <div *ngIf="form.get('leaveApplicableFor').invalid && (form.get('leaveApplicableFor').dirty || form.get('leaveApplicableFor').touched)"
+                            class="text-danger small">
+                        <div *ngIf="form.get('leaveApplicableFor').errors?.required">
+                            Leave Applicable For is required.
+                        </div>
+                    </div>
+                </div>
+                
+            
+
+                <!-- Want to show full calender?
+                -- Start
+                -->
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label"><strong>Want to show full calender?</strong></label> 
+                    <div class="input-group">
+                        
+                        <div class="input-group-prepend">
+                            <div class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="showFullCalender" id="showFullCalender"
+                                    formControlName="showFullCalender" />
+                            </div>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('showFullCalender').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Want to show full calender?
+                -- End
+                -->
+
+
+                <div class="form-group col-sm-6 col-md-3">
+                    <label class="control-label"><strong>Is Active?</strong></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isActive" id="isActive" formControlName="isActive" />
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold rounded">
+                            {{ form.get('isActive').value ? 'Yes' : 'No' }}
+                        </div>
+                    </div>
+                </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary" [disabled]="form.invalid || btnSubmit">
+                    <i class="fa fa-paper-plane"></i> | {{this.form.get('leaveSettingId').value == 0? 'Submit':'Update'
+                    }}
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="closeModal('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

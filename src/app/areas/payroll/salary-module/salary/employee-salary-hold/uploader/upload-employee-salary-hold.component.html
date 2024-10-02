@@ -1,0 +1,60 @@
+<ng-template #uploadEmployeeSalaryHolde let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-default btn-circle icofont-stop" aria-hidden="true"></i>| Upload Hold Salary
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark text-x-small">
+        <form [formGroup]="uploadForm" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                        <label for="salaryMonth" class="control-label font-bold text-dark">Month & Year <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="month" id="month" class="form-control form-control-sm"
+                                formControlName="salaryMonth">
+                                <option [value]="0" selected>---Month---</option>
+                                <option [value]="item.monthNo" *ngFor="let item of months">{{item.month}}</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <select name="years" id="years" class="form-control form-control-sm"
+                                    formControlName="salaryYear">
+                                    <option [value]="0" selected>---Year---</option>
+                                    <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                        <label for="uploadFile" class="control-label font-bold text-dark">Only Excel File<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input id="excelFileUpload" type="file" class="custom-file-input" (change)="excelFileUpload($event)" accept=".xls,.xlsx">
+                                <label class="custom-file-label" for="excelFileUpload">
+                                    {{excelFileName}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Close Click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="this.uploadForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

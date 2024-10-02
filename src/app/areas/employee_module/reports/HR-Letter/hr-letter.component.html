@@ -1,0 +1,211 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">HR Letters</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Info</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>HR Letters</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight pt-3" id="page-container">
+    <div class="row mt-0">
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="ibox-content pb-2 text-x-small font-bold">
+                    <form [formGroup]="form" (ngSubmit)="download()">
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label for="searchByEmployee" class="control-label">Select Employee <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width: 85%;">
+                                        <ng-select2 [data]="ddlEmployees" name="employees" id="searchByEmployee"
+                                            formControlName="employeeId" [placeholder]="'Employee...'"
+                                            [options]="select2Config" [allowClear]="true">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <label for="issueDate" class="control-label">Issue Date <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" formControlName="issueDate"
+                                        id="issueDate" name="issueDate" bsDatepicker [bsConfig]="datePickerConfig" />
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <label for="reportName" class="control-label">Letter Type <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <select id="reportName" name="reportName" formControlName="reportName"
+                                        class="form-control form-control-sm">
+                                        <option [value]="''" selected>--Select Letter</option>
+                                        <option [value]="item" *ngFor="let item of letters">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2 col-sm-12">
+                                <label for="" class="control-label hidden">Report Download</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-file"></i>
+                                        </span>
+                                    </div>
+                                    <select id="format" name="format" formControlName="format"
+                                        class="form-control form-control-sm">
+                                        <option [value]="item.extension" *ngFor="let item of fileFormat">{{item.type}}</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <button type="submit"
+                                            class="btn btn-sm btn-rounded btn-outline-secondary pull-right"> <i
+                                                class="fa fa-download"></i> | Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-4 col-sm-12 mb-4">
+            <div class="ibox" *ngIf="employeeInfo != null">
+                <div class="ibox-content border-bottom">
+                    <ng-container *ngIf="profile_image != null">
+                        <app-employee-module-profile-image [data]="profile_image"></app-employee-module-profile-image>
+                    </ng-container>
+                    <div class="profile-info">
+                        <div>
+                            <div class="align-middle">
+                                <h2 class="mt-2 mb-1">
+                                    {{employeeInfo?.employeeName}}
+                                </h2>
+                                <h4>{{employeeInfo?.designation}}</h4>
+                                <small>
+                                    <span *ngIf="employeeInfo?.isActive == true"><i class="fa fa-circle text-navy"></i>
+                                        Active
+                                    </span>
+                                    <span *ngIf="(employeeInfo?.isActive ?? false) == false"><i
+                                            class="fa fa-circle text-danger"></i>
+                                        Inactive
+                                    </span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="activity-stream">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-bold">
+                                    <p class="mb-0">
+                                        ID
+                                    </p>
+                                </div>
+                                {{employeeInfo?.employeeCode}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-bold">
+                                    <p class="mb-0">
+                                        Company/Branch/Location
+                                    </p>
+                                </div>
+                                {{employeeInfo?.branchName}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-bold">
+                                    <p class="mb-0">
+                                        Email
+                                    </p>
+                                </div>
+                                {{employeeInfo?.officeEmail}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-bold">
+                                    <p class="mb-0">
+                                        Designation
+                                    </p>
+                                </div>
+                                {{employeeInfo?.designation}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-bold">
+                                    <p class="mb-0">
+                                        Department
+                                    </p>
+                                </div>
+                                {{employeeInfo?.department}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-bold">
+                                    <p class="mb-0">
+                                        Joining Date
+                                    </p>
+                                </div>
+                                {{employeeInfo?.dateOfJoining | date:"dd MMM yyyy"}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-12 mb-4" *ngIf="employeeInfo != null">
+            <app-employee-module-personal-info
+                [employeeId]="employeeInfo?.employeeId"></app-employee-module-personal-info>
+        </div>
+    </div>
+</div>

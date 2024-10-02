@@ -1,0 +1,70 @@
+<ng-template #actualTaxDeductionApprovalModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-default btn-circle icofont-stop" aria-hidden="true"></i>| Approval Of Actual Tax Deduction
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark text-x-small">
+        <form [formGroup]="approvalForm" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                        <label for="salaryMonth" class="control-label font-bold text-dark">Salary Month & Year
+                            <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="salaryMonth" id="salaryMonth" class="form-control form-control-sm"
+                                formControlName="salaryMonth">
+                                <option [value]="0" selected>---Select Month ---</option>
+                                <option [value]="item.monthNo" *ngFor="let item of months">{{item.month}}</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <select name="salaryYear" id="salaryYear" class="form-control form-control-sm"
+                                    formControlName="salaryYear">
+                                    <option [value]="0" selected>---Select Year ---</option>
+                                    <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg" id="tbl">
+                            <thead>
+                                <tr>
+                                    <th>#SL</th>
+                                    <th>Employee ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list; let i =index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.employeeCode}}</td>
+                                    <td>{{item.employeeName}}</td>
+                                    <td>{{item.actualTaxAmount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Close Click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="this.approvalForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

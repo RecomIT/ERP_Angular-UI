@@ -1,0 +1,43 @@
+<ng-template #contractualEmployeeInsertupdate let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-file-document pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="modal-body text-x-small text-dark">
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="employees" class="control-label">Select Employee</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                        </div>
+                        <div style="width: 80%;">
+                            <ng-select2 [data]="ddlEmployees" name="employees" id="searchByEmployee"
+                                formControlName="employeeId" [placeholder]="'Employee...'" [options]="select2Config"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12"></div>
+                <div class="form-group col-md-6 col-sm-12"></div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" [disabled]="this.form.invalid">
+                <i class="fa fa-paper-plane"></i> | {{this.contractId > 0 ? 'Update': 'Submit'}}
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                (click)="closeModal('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>

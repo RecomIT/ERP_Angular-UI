@@ -1,0 +1,336 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Income Tax Slab</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Tax</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Income Tax Slab</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-2 pl-0 pr-0">
+            <div class="ibox">
+                <div class="ibox-content shadow-lg text-x-small">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="searchByFiscalYear" class="control-label font-bold">SEARCH BY FISCAL
+                                YEAR</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span
+                                        class="input-group-addon bg-dark-blue text-white">
+                                        <i class="fa fa-calendar"></i>
+                                    </span></div>
+                                <select name="searchByFiscalYear" id="searchByFiscalYear"
+                                    class="form-control form-control-sm" #searchByFiscalYearRef="ngModel" [(ngModel)]="searchByFiscalYear" (change)="getIncomeTaxes()">
+                                    <option [value]="0">---Select One---</option>
+                                    <option [value]="item.id" *ngFor="let item of ddlFiscalYearInFilter">{{item.text}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="searchByImplied" class="control-label font-bold">SEARCH BY IMPLIED
+                                CONDITION</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span
+                                        class="input-group-addon bg-dark-blue text-white">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                    </span></div>
+                                <select name="searchByImplied" id="searchByImplied" #searchByImpliedConditionRef="ngModel" [(ngModel)]="searchByImpliedCondition"
+                                    class="form-control form-control-sm" (change)="getIncomeTaxes()">
+                                    <option [value]="''">---Select One---</option>
+                                    <option [value]="item" *ngFor="let item of ddlImpliedConditionInFilter">{{item}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="" class="hidden">Create Slab</label>
+                            <div class="clearfix">
+                                <button type="button" class="btn btn-success btn-sm btn-rounded pull-right"
+                                    (click)="openInsertModal()">
+                                    <i class="fa fa-plus"></i> | Create Slab
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="list != null && list.length > 0">
+                <div class="col-md-3 mb-2" *ngFor="let item of list" @fadeIn>
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5 class="text-medium mt-0 font-weight-light">{{item.impliedCondition}}</h5><span
+                                class="label label-primary">{{item.fiscalYearRange}}</span>
+                            <p class="mb-1">Assessment Year: {{item.assesmentYear}}</p>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped text-center table-responsive-md mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Min</th>
+                                            <th>Max</th>
+                                            <th class="text-center">Per(%)</th>
+                                            <th class="text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let i of item.taxSlabAmounts">
+                                            <td>{{i.slabMininumAmount}}</td>
+                                            <td>{{i.slabMaximumAmount}}</td>
+                                            <td class="text-center"> {{i.slabPercentage}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs" 
+                                                (click)="openUpdateModal(item.fiscalYearId,i.incomeTaxSlabId,item.impliedCondition)">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="list == null">
+                <div class="col-md-12 col-sm-12">
+                    <div class="ibox-content p-2 text-center">
+                       <strong>No record(s) found.</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #IncomeTaxSlabInsertModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-th-list" aria-hidden="true"></i>| New Income-Tax Slab
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="incomeTaxSlabInsertFrom" (ngSubmit)="submitTaxSlab()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="ddlFiscalYearId" class="control-label">FISCAL YEAR <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="ddlFiscalYearId" id="ddlFiscalYearId" formControlName="fiscalYearId"
+                                class="form-control form-control-sm" [ngClass]="{'is-invalid':formErrors.fiscalYearId}">
+                                <option [value]="0">---Select One---</option>
+                                <option [value]="item.id" *ngFor="let item of ddlFiscalYearInEntry">{{item.text}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="ddlImpliedCondition" class="control-label">IMPLIED CONDITION <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="ddlImpliedCondition" id="ddlImpliedCondition"
+                                formControlName="impliedCondition" class="form-control form-control-sm"
+                                [ngClass]="{'is-invalid':formErrors.impliedCondition}">
+                                <option [value]="''">---Select One---</option>
+                                <option [value]="item" *ngFor="let item of ddlImpliedConditionInEntry">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div formArrayName="slabs" *ngFor="let slab of formArray; let i = index">
+                    <div [formGroupName]="i" class="form-row">
+                        <div class="form-group col-md-4 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon bg-dark-blue text-white">
+                                        <i>&#2547;</i>
+                                    </span>
+                                </div>
+                                <input type="number" name="txtslabMininumAmount" id="txtslabMininumAmount"
+                                    [ngClass]="{'is-invalid':formErrors.slabMininumAmount}"
+                                    formControlName="slabMininumAmount" class="form-control form-control-sm font-bold"
+                                    placeholder="ENTER MIN AMOUNT">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon bg-dark-blue text-white">
+                                        <i>&#2547;</i>
+                                    </span>
+                                </div>
+                                <input type="number" name="txtslabMaximumAmount" id="txtslabMaximumAmount"
+                                    [ngClass]="{'is-invalid':formErrors.slabMaximumAmount}"
+                                    formControlName="slabMaximumAmount" class="form-control form-control-sm font-bold"
+                                    placeholder="ENTER MAX AMOUNT">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon bg-dark-blue text-white">
+                                        <i>%</i>
+                                    </span>
+                                </div>
+                                <input type="number" name="txtslabPercentage" id="txtslabPercentage"
+                                    formControlName="slabPercentage" class="form-control form-control-sm font-bold"
+                                    placeholder="ENTER PERCENTAGE">
+                                <div class="input-group-prepend cursor-pointer" (click)="addNewSlabClick()">
+                                    <span class="input-group-addon text-primary">
+                                        <i class="fa fa-plus"></i></span>
+                                </div>
+                                <div class="input-group-prepend cursor-pointer" (click)="removeSlabButtonClick(i)">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-trash"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="incomeTaxSlabInsertFrom.invalid || btnInsertSlab">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnInsertSlab" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #IncomeTaxSlabEditModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-pencil" aria-hidden="true"></i>| Update Income-Tax Slab
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="incomeTaxSlabUpdateForm" (ngSubmit)="submitUpdate()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="ddlFiscalYearUpdateId" class="control-label">FISCAL YEAR <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="ddlFiscalYearUpdateId" id="ddlFiscalYearUpdateId"
+                                formControlName="fiscalYearId" class="form-control form-control-sm"
+                                [ngClass]="{'is-invalid':formErrors.fiscalYearId}">
+                                <option [value]="0">---Select One---</option>
+                                <option [value]="item.id" *ngFor="let item of ddlFiscalYearInEntry">{{item.text}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="ddlImpliedConditionUpdate" class="control-label">IMPLIED CONDITION <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="ddlImpliedConditionUpdate" id="ddlImpliedConditionUpdate"
+                                formControlName="impliedCondition" class="form-control form-control-sm"
+                                [ngClass]="{'is-invalid':formErrors.impliedCondition}">
+                                <option [value]="''">---Select One---</option>
+                                <option [value]="item" *ngFor="let item of ddlImpliedConditionInEntry">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtSlabMin" class="control-label">SLAB MIN AMT<span
+                            class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon bg-dark-blue text-white">
+                                    <i>&#2547;</i>
+                                </span>
+                            </div>
+                            <input type="number" class="form-control form-control-sm" id="txtSlabMin" name="txtSlabMin"
+                            formControlName="slabMininumAmount">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtSlabMax" class="control-label">SLAB MAX AMT<span
+                            class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon bg-dark-blue text-white">
+                                    <i>&#2547;</i>
+                                </span>
+                            </div>
+                            <input type="number" class="form-control form-control-sm" id="txtSlabMax" name="txtSlabMax"
+                            formControlName="slabMaximumAmount">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtSlabPer" class="control-label">SLAB PER(%)<span
+                            class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon bg-dark-blue text-white">
+                                    <i>%</i>
+                                </span>
+                            </div>
+                            <input type="number" class="form-control form-control-sm" id="txtSlabPer" name="txtSlabPer"
+                            formControlName="slabPercentage">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="incomeTaxSlabUpdateForm.invalid || btnInsertSlab">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnInsertSlab" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

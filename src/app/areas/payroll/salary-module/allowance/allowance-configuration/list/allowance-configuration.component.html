@@ -1,0 +1,586 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Allowance Configuration</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Allowance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Allowance Configuration</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content text-x-small font-bold">
+                    <div class="form-row">
+                        <div class="form-group mb-1 col-sm-12 col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-money"></i>
+                                    </span>
+                                </div>
+                                <div style="width: 90%;">
+                                    <ng-select2 name="as" id="as" [data]="ddlAllowanceNamesSearch"
+                                        [placeholder]="'Search By Allowance...'" [(ngModel)]="searchByAllowance"
+                                        #searchByAllowanceRef="ngModel" [options]="select2Options" [allowClear]="true"
+                                        (ngModelChange)="searchByAllowanceChanged()">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="searchByActivationDate" id="searchByActivationDate"
+                                    class="form-control form-control-sm bg-white" placeholder="Search By Activation Date"
+                                    #searchByDateRef="ngModel" [(ngModel)]="searchByActivationDate"
+                                    (ngModelChange)="getAllowanceConfigs(1)" bsDaterangepicker autocomplete="off" readonly
+                                    [bsConfig]="datePickerConfig">
+                                <div class="input-group-prepend cursor-pointer"
+                                    (click)="[searchByActivationDate=[],getAllowanceConfigs(1)]"
+                                    [hidden]="searchByActivationDate.length ==0">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="searchByDeactivationDate" id="searchByDeactivationDate"
+                                    class="form-control form-control-sm bg-white" placeholder="Search By Deactivate Date"
+                                    #searchByDate2Ref="ngModel" [(ngModel)]="searchByDeactivationDate"
+                                    (ngModelChange)="getAllowanceConfigs(1)" bsDaterangepicker autocomplete="off" readonly
+                                    [bsConfig]="datePickerConfig">
+                                <div class="input-group-prepend cursor-pointer"
+                                    (click)="[searchByDeactivationDate=[],getAllowanceConfigs(1)]"
+                                    [hidden]="searchByDeactivationDate.length ==0">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-arrow-up"></i>
+                                    </span>
+                                </div>
+                                <select name="searchByStatus" id="searchByStatus" class="form-control form-control-sm"
+                                    #searchByStatusRef="ngModel" [(ngModel)]="searchByStatus"
+                                    (change)="getAllowanceConfigs(1)">
+                                    <option [value]="''">---Select Status---</option>
+                                    <option [value]="'Pending'">Pending</option>
+                                    <option [value]="'Approved'">Approved</option>
+                                    <option [value]="'Recheck'">Recheck</option>
+                                    <option [value]="'Cancelled'">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-8">
+                            <button type="button" class="btn btn-sm btn-success float-right btn-rounded"
+                                (click)="openAllowanceConfigModal()"><i class="fa fa-plus"></i> | Create</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-content text-x-small font-bold">
+                    <div class="table-responsive">
+                        <table class="table tables-sm table-hover table-striped table-responsive-xl" id="tblConfiguration">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th>Allowance Name</th>
+                                    <th class="text-center">Activation Date</th>
+                                    <th class="text-center">Deactivation Date</th>
+                                    <th class="text-center">Is Active</th>
+                                    <th class="text-center">Is Monthly</th>
+                                    <th class="text-center">Is Individual</th>
+                                    <th>Gender</th>
+                                    <th class="text-center">Is Confirmation Required</th>
+                                    <th class="text-center">Depands On Working Hour</th>
+                                    <th class="text-center">Is Taxable</th>
+                                    <th class="text-center">Is Project Rest Year</th>
+                                    <th class="text-center">Is Once Off Tax</th>
+                                    <th class="text-center">Is Once Off Deduction</th>
+                                    <th>Fixed Amount</th>
+                                    <th>Percentage Of Salary</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Entry Date</th>
+                                    <th class="text-center">Updated Date</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let item of listOfAllowanceConfigs | paginate: allowanceConfigPageConfig, let i =index">
+                                    <td class="text-center">{{i+1 + (allowanceConfigPageSize
+                                        *(allowanceConfigPageNo-1))}}</td>
+                                    <td>{{item.allowanceName}}</td>
+                                    <td class="text-center">{{item.activationDate | date:"dd-MMMM-yyyy"}}</td>
+                                    <td class="text-center">{{item.deactivationDate | date:"dd-MMMM-yyyy"}}</td>
+                                    <td class="text-center">
+                                        <span
+                                            [class]="item.isActive == null ? '' : (item.isActive ? 'label label-primary':'label label-danger')">
+                                            {{item.isActive == null ? 'N/A' : (item.isActive ? 'Yes':'No')}}</span>
+                                    </td>
+                                    <td class="text-center"> <span
+                                            [class]="item.isMonthly == null ? '' : (item.isMonthly ? 'label label-primary':'label label-danger')">
+                                            {{item.isActive == null ? 'N/A' : (item.isMonthly ? 'Yes':'No')}}</span></td>
+                                    <td class="text-center"> <span
+                                            [class]="item.isIndividual == null ? '' : (item.isIndividual ? 'label label-primary':'label label-danger')">
+                                            {{item.isActive == null ? 'N/A' : (item.isIndividual ? 'Yes':'No')}}</span></td>
+                                    <td>{{item.Gender}}</td>
+                                    <td class="text-center"><span
+                                            [class]="item.isConfirmationRequired == null ? '' : (item.isConfirmationRequired ? 'label label-primary':'label label-danger')">
+                                            {{item.isActive == null ? 'N/A' : (item.isConfirmationRequired ?
+                                            'Yes':'No')}}</span></td>
+                                    <td class="text-center"> <span
+                                            [class]="item.depandsOnWorkingHour == null ? '' : (item.depandsOnWorkingHour ? 'label label-primary':'label label-danger')">
+                                            {{item.isActive == null ? 'N/A' : (item.depandsOnWorkingHour ?
+                                            'Yes':'No')}}</span>
+                                    </td>
+                                    <td class="text-center"> <span
+                                            [class]="item.isTaxable == null ? '' : (item.isTaxable ? 'label label-primary':'label label-danger')">
+                                            {{item.isActive == null ? 'N/A' : (item.isTaxable ? 'Yes':'No')}}</span></td>
+                                    <td class="text-center"><span
+                                            [class]="item.projectRestYear == null ? '' : (item.projectRestYear ? 'label label-primary':'label label-danger')">
+                                            {{item.projectRestYear == null ? 'N/A' : (item.projectRestYear ?
+                                            'Yes':'No')}}</span></td>
+                                    <td class="text-center"><span
+                                            [class]="item.isOnceOffTax == null ? '' : (item.isOnceOffTax ? 'label label-primary':'label label-danger')">
+                                            {{item.isOnceOffTax == null ? 'N/A' : (item.isOnceOffTax ? 'Yes':'No')}}</span>
+                                    </td>
+                                    <td class="text-center"><span
+                                            [class]="item.onceOffDeduction == null ? '' : (item.onceOffDeduction ? 'label label-primary':'label label-danger')">
+                                            {{item.onceOffDeduction == null ? 'N/A' : (item.onceOffDeduction ?
+                                            'Yes':'No')}}</span></td>
+                                    <td>{{item.flatAmount}}</td>
+                                    <td>{{item.percentageAmount}}</td>
+                                    <td class="text-center">
+                                        <span class="label label-warning"
+                                            *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                            + '...'}}</span>
+                                        <span class="label label-primary" *ngIf="item.stateStatus=='Approved'"> <i
+                                                class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-danger" *ngIf="item.stateStatus=='Cancelled'"><i
+                                                class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                    </td>
+                                    <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                    <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-xs"
+                                            *ngIf="item.stateStatus =='Pending' || item.stateStatus =='Recheck'"
+                                            (click)="loadAllowanceConfigForEdit(item.configId, item.allowanceNameId)">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-xs text-info"
+                                            *ngIf="item.stateStatus =='Pending'"
+                                            (click)="openAllowanceConfigDetailAndApprovalView('approval',item.configId)">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-xs text-primary"
+                                            (click)="openAllowanceConfigDetailAndApprovalView('View',item.configId)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf=" listOfAllowanceConfigs.length ==0 && allowanceConfigDTLabel == null">
+                                    <td colspan="20" class="text-center">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </td>
+                                </tr>
+                                <tr *ngIf=" listOfAllowanceConfigs.length ==0 && allowanceConfigDTLabel != null">
+                                    <td colspan="20" class="text-center font-bold">
+                                        {{allowanceConfigDTLabel}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <pagination-controls (pageChange)="allowanceConfigsPageChanged($event)" [responsive]="true"
+                            [autoHide]="true" id="allowanceData"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<ng-template #allowanceConfigModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>| Setting Allowance Config
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="allowanceConfigForm" (ngSubmit)="submitAllowanceConfig()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="allowanceNameId" class="control-label">Allowance Name
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <div style="width: 90%;">
+                                <ng-select2 formControlName="allowanceNameId" [data]="ddlAllowanceNames"
+                                    name="allowanceNameId" id="allowanceNameId"
+                                    (ngModelChange)="dataByAllowanceChanged()" [placeholder]="'Search By Allowance...'"
+                                    [options]="select2Options" [allowClear]="true">
+                                </ng-select2>
+                            </div>
+                        </div>
+                        <div *ngIf="(allowanceConfigForm.get('allowanceNameId').touched || allowanceConfigForm.get('allowanceNameId').dirty) && allowanceConfigForm.get('allowanceNameId').errors"
+                            class="text-danger">
+                            <span>Field is required</span>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="activationDate" class="control-label">
+                            Activate Date <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="activationDate" class="form-control form-control-sm bg-white"
+                                formControlName="activationDate" placeholder="Choose a date from picker" bsDatepicker
+                                [bsConfig]="datePickerConfig" readonly
+                                [ngClass]="{'is-invalid':((allowanceConfigForm.get('activationDate').touched ||
+                                allowanceConfigForm.get('activationDate').dirty) && allowanceConfigForm.get('activationDate').errors)}"
+                                [class.is-valid]="allowanceConfigForm.get('activationDate').valid">
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="this.allowanceConfigForm.get('activationDate').value != null && this.allowanceConfigForm.get('activationDate').value !=''"
+                                (click)="this.allowanceConfigForm.get('activationDate').setValue(null)">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="((allowanceConfigForm.get('activationDate').touched ||
+                        allowanceConfigForm.get('activationDate').dirty) && allowanceConfigForm.get('activationDate').errors)"
+                            class="text-danger">
+                            <span>Field is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="deactivationDate" class="control-label">
+                            Deactivate Date <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-calendar-times-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="deactivationDate" class="form-control form-control-sm bg-white"
+                                formControlName="deactivationDate" placeholder="Choose a date from picker" bsDatepicker
+                                [ngClass]="{'is-invalid':((allowanceConfigForm.get('deactivationDate').touched ||
+                                allowanceConfigForm.get('deactivationDate').dirty) && allowanceConfigForm.get('deactivationDate').errors)}"
+                                [class.is-valid]="allowanceConfigForm.get('deactivationDate').valid"
+                                [bsConfig]="datePickerConfig" readonly autocomplete="off">
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="this.allowanceConfigForm.get('deactivationDate').value != null && this.allowanceConfigForm.get('deactivationDate').value !=''"
+                                (click)="this.allowanceConfigForm.get('deactivationDate').setValue(null)">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="((allowanceConfigForm.get('deactivationDate').touched ||
+                        allowanceConfigForm.get('deactivationDate').dirty) && allowanceConfigForm.get('deactivationDate').errors)"
+                            class="text-danger">
+                            <span>Field is required</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3 col-sm-6">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="this.allowanceConfigForm.get('isMonthly').setValue(!this.allowanceConfigForm.get('isMonthly').value)">
+                                <input type="checkbox" formControlName="isMonthly"> Monthly
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="this.allowanceConfigForm.get('isConfirmationRequired').setValue(!this.allowanceConfigForm.get('isConfirmationRequired').value)">
+                                <input type="checkbox" formControlName="isConfirmationRequired"> Confirmation Required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="[this.allowanceConfigForm.get('isTaxable').setValue(!this.allowanceConfigForm.get('isTaxable').value),]">
+                                <input type="checkbox" formControlName="isTaxable"> Taxable
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-md-3 col-sm-6"
+                        [hidden]="this.allowanceConfigForm.get('isTaxable').value == false || this.allowanceConfigForm.get('isTaxable').value == null">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="[this.allowanceConfigForm.get('isOnceOffTax').setValue(!this.allowanceConfigForm.get('isOnceOffTax').value),onceOffTax_projectRestYear_changed('isOnceOffTax')]">
+                                <input type="checkbox" formControlName="isOnceOffTax"
+                                    (change)="onceOffTax_projectRestYear_changed('isOnceOffTax')"> Is Once Off Tax?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6"
+                        [hidden]="this.allowanceConfigForm.get('isTaxable').value == false || this.allowanceConfigForm.get('isTaxable').value == null">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="[this.allowanceConfigForm.get('projectRestYear').setValue(!this.allowanceConfigForm.get('projectRestYear').value),onceOffTax_projectRestYear_changed('projectRestYear')]">
+                                <input type="checkbox" formControlName="projectRestYear" class="mb-0"
+                                    (change)="onceOffTax_projectRestYear_changed('projectRestYear')">
+                                Project Rest Year
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="this.allowanceConfigForm.get('isActive').setValue(!this.allowanceConfigForm.get('isActive').value)">
+                                <input type="checkbox" formControlName="isActive"> Active
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <h3>Applied As:</h3>
+                <hr>
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="flatAmount" class="control-label">Fixed Amount</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    &#2547;
+                                </span>
+                            </div>
+                            <input type="number" name="flatAmount" formControlName="flatAmount" id="flatAmount"
+                                class="form-control form-control-sm" placeholder="Enter Fixed Amount &#2547; "
+                                [ngClass]="{'is-invalid':((allowanceConfigForm.get('flatAmount').touched ||
+                            allowanceConfigForm.get('flatAmount').dirty) && allowanceConfigForm.get('flatAmount').errors)}"
+                                [class.is-valid]="allowanceConfigForm.get('flatAmount').valid"
+                                (input)="allowanceConfigForm.get('flatAmount').value > 0? allowanceConfigForm.get('percentageAmount').setValue(0):0">
+                        </div>
+                        <div *ngIf="(allowanceConfigForm.get('flatAmount').touched ||
+                        allowanceConfigForm.get('flatAmount').dirty) && allowanceConfigForm.get('flatAmount').errors"
+                            class="text-danger">
+                            <span>Min Amount is 0</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="percentageAmount" class="control-label">Percentage Of Gross Salary</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    %
+                                </span>
+                            </div>
+                            <input type="number" name="percentageAmount" id="percentageAmount"
+                                placeholder="Enter % of Gross Salary" class="form-control form-control-sm"
+                                formControlName="percentageAmount"
+                                [ngClass]="{'is-invalid':((allowanceConfigForm.get('percentageAmount').touched ||
+                            allowanceConfigForm.get('percentageAmount').dirty) && allowanceConfigForm.get('percentageAmount').errors)}"
+                                [class.is-valid]="allowanceConfigForm.get('percentageAmount').valid"
+                                (input)="allowanceConfigForm.get('percentageAmount').value > 0? allowanceConfigForm.get('flatAmount').setValue(0):0">
+                        </div>
+                        <div *ngIf="(allowanceConfigForm.get('percentageAmount').touched ||
+                        allowanceConfigForm.get('percentageAmount').dirty) && allowanceConfigForm.get('percentageAmount').errors"
+                            class="text-danger">
+                            <span>Value Must be >= 0 / =< 100 </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!--  -->
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="allowanceConfigForm.invalid || btnSubmitAllowanceConfig">
+                    <i class="fa fa-paper-plane"></i> | {{allowanceConfigForm.get('configId').value > 0 ?
+                    'Update':'Submit'}}
+                    <span [hidden]="!btnSubmitAllowanceConfig" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnSubmitAllowanceConfig"
+                    (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #allowanceConfigViewAndApprovalModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-check-circle" aria-hidden="true"></i>| {{isApproavlView ?
+            "Allowance Config Checking" :"Allowance Config Details View"}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="config">
+                <tr>
+                    <td>Allowance Name</td>
+                    <td>{{allowanceConfigData.allowanceName}}</td>
+                    <td>Activity</td>
+                    <td colspan="3">{{allowanceConfigData.activationDate | date:"dd MMM yyyy"}} -
+                        {{allowanceConfigData.deactivationDate | date:"dd MMM yyyy"}}</td>
+                    <td>Is Active</td>
+                    <td>
+                        <span [class]="allowanceConfigData.isActive ? 'label label-primary':'label label-danger'">
+                            {{allowanceConfigData.isActive}}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Confirmation Required</td>
+                    <td>
+                        <span
+                            [class]="allowanceConfigData.isConfirmationRequired == null ? 'label label-info':(allowanceConfigData.isConfirmationRequired ? 'label label-primary':'label label-danger')">
+                            {{allowanceConfigData.isConfirmationRequired == null ? 'N/A' :
+                            allowanceConfigData.isConfirmationRequired}}
+                        </span>
+                    </td>
+                    <td>Depands On Working Hour</td>
+                    <td>
+                        <span
+                            [class]="allowanceConfigData.depandsOnWorkingHour == null ? 'label label-info':(allowanceConfigData.depandsOnWorkingHour ? 'label label-primary':'label label-danger')">
+                            {{allowanceConfigData.depandsOnWorkingHour == null ? 'N/A':
+                            allowanceConfigData.depandsOnWorkingHour}}
+                        </span>
+                    </td>
+                    <td>Is Texable</td>
+                    <td>
+                        <span
+                            [class]="allowanceConfigData.isTaxable == null ? 'label label-info':(allowanceConfigData.isTaxable ? 'label label-primary':'label label-danger')">
+                            {{allowanceConfigData.isTaxable == null ? 'N/A' : allowanceConfigData.isTaxable}}
+                        </span>
+                    </td>
+                    <td>Is Monthly</td>
+                    <td>
+                        <span
+                            [class]="allowanceConfigData.isMonthly == null ? 'label label-info':(allowanceConfigData.isMonthly ? 'label label-primary':'label label-danger')">
+                            {{allowanceConfigData.isMonthly == null ? 'N/A' : allowanceConfigData.isMonthly}}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Is Project Rest Year</td>
+                    <td>
+                        <span
+                            [class]="allowanceConfigData.projectRestYear == null ? 'label label-info':(allowanceConfigData.projectRestYear ? 'label label-primary':'label label-danger')">
+                            {{allowanceConfigData.projectRestYear == null ? 'N/A' :
+                            allowanceConfigData.projectRestYear}}
+                        </span>
+                    </td>
+                    <td>Is Once Off Tax</td>
+                    <td>
+                        <span
+                            [class]="allowanceConfigData.isOnceOffTax == null ? 'label label-info':(allowanceConfigData.isOnceOffTax ? 'label label-primary':'label label-danger')">
+                            {{allowanceConfigData.isOnceOffTax == null ? 'N/A' : allowanceConfigData.isOnceOffTax}}
+                        </span>
+                    </td>
+                    <td>Is Once off Deduction</td>
+                    <td>
+                        <span
+                            [class]="allowanceConfigData.onceOffDeduction == null ? 'label label-info':(allowanceConfigData.onceOffDeduction ? 'label label-primary':'label label-danger')">
+                            {{allowanceConfigData.onceOffDeduction == null ? 'N/A' :
+                            allowanceConfigData.onceOffDeduction}}
+                        </span>
+                    </td>
+                    <td>Status</td>
+                    <td>
+                        <span class="label label-warning"
+                            *ngIf="allowanceConfigData.stateStatus=='Pending'">{{allowanceConfigData.stateStatus +
+                            '...'}}</span>
+                        <span class="label label-primary" *ngIf="allowanceConfigData.stateStatus=='Approved'"> <i
+                                class="fa fa-check"></i>
+                            {{allowanceConfigData.stateStatus}}</span>
+                        <span class="label label-danger" *ngIf="allowanceConfigData.stateStatus=='Cancelled'"><i
+                                class="fa fa-times"></i>
+                            {{allowanceConfigData.stateStatus}}</span>
+                        <span class="label label-info" *ngIf="allowanceConfigData.stateStatus=='Recheck'"><i
+                                class="fa fa-backward"></i> {{allowanceConfigData.stateStatus}}</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-body pt-0 text-x-small font-bold text-dark" *ngIf="isApproavlView">
+        <form #allowanceConfigApprovalForm="ngForm"
+            (ngSubmit)="submitAllowanceConfigStatus(allowanceConfigApprovalForm,remarks.value,checkStatus.value)">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                    <div class="input-group">
+                        <input type="text" name="checkRemarks" #remarks id="checkRemarks" required
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="checkStatus" #checkStatus id="checkStatus"
+                                class="form-control form-control-sm" required>
+                                <option value="Approved">Approved</option>
+                                <option value="Recheck">Recheck</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                                [disabled]="allowanceConfigApprovalForm.invalid || btnSubmitAllowanceConfig">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnSubmitAllowanceConfig" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

@@ -1,0 +1,105 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 @slideInUp class="mt-2">Employee PF Card</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+         
+            <li class="breadcrumb-item active">
+                <strong>Employee PF Card</strong>
+            </li>
+        </ol>
+    </div>
+  
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+        <div class="row m-t-sm mt-0">
+            <div class="col-md-6 mb-4 text-x-small">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li><a href="#empPFSummary" data-toggle="tab" class="nav-link active">
+                                <i class="fa fa-money" aria-hidden="true"></i> | Employee PF Card
+                            </a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="empPFSummary" class="tab-pane active">
+                            <div class="panel-body bg-white pb-1">
+                                    <form [formGroup]="pfSummaryForm">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12 col-sm-12">
+                                                <label for="employeesSearchRef" class="control-label font-bold">
+                                                    Employee <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            <i class="icofont-ui-user-group"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="d-inline" style="width: 90%;">
+                                                        <ng-select2 [data]="ddlSearchByEmployee" name="employeesSearchRef" formControlName="employeeId"
+                                                            id="employeesSearchRef" [placeholder]="'Search Employee...'" [options]="select2Options"
+                                                            [allowClear]="true" required>
+                                                        </ng-select2>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">                                            
+                                            <div class="form-group col-md-6 col-sm-12">
+                                                <label for="pfSummaryFromDate" class="control-label font-bold">
+                                                    From Date <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            <i class="icofont-ui-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" name="pfSummaryFromDate" id="pfSummaryFromDate" readonly
+                                                        [bsConfig]="datePickerConfig" class="form-control form-control-sm bg-white"
+                                                        formControlName="pfSummaryFromDate" bsDatepicker autocomplete="off">
+                                                </div>
+                                            </div>    
+                                        </div>
+                                        <div class="form-row">                                          
+                                            <div class="form-group col-md-6 col-sm-12">
+                                                <label for="pfSummaryToDate" class="control-label font-bold">
+                                                    To Date <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            <i class="icofont-ui-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" name="pfSummaryToDate" id="pfSummaryToDate" readonly
+                                                        [bsConfig]="datePickerConfig" class="form-control form-control-sm bg-white"
+                                                        formControlName="pfSummaryToDate" bsDatepicker autocomplete="off">
+                                                </div>
+                                            </div>   
+                                        </div>
+                                        <div class="modal-footer p-2 text-x-small d-flex justify-content-start">
+                                            <button type="submit" class="btn btn-sm btn-rounded btn-info"
+                                                [disabled]="!this.pfSummaryForm.valid" (click)="getPFSummary()">
+                                                <i class="fa fa-eye"></i> | Summary 
+                                            </button>
+                                                                                       
+                                            <button type="button" class="btn btn-sm btn-rounded btn-success"
+                                                [disabled]="!this.pfSummaryForm.valid" (click)=" getPFCardLetter()">
+                                                <i class="icofont-letter"></i> | Letter
+                                            </button>
+                                        </div>
+                                    </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+             </div>
+         </div>
+      </div>
+</div>
+

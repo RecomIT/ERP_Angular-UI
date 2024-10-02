@@ -1,0 +1,87 @@
+
+ <div class="center-container">
+    <div *ngIf="status === 1" class="circle" [@fadeIn]="animationState" (click)="startAnimation()">
+        <i class="fa fa-check" style="font-size: 72px; color: #28a745;"></i>
+        <p class="mt-3" style="font-size: 20px;">Approved</p>
+    </div>
+    <div *ngIf="status === 0" class="circle" [@fadeIn]="animationState" (click)="startAnimation()">
+        <i class="fa fa-times" style="font-size: 72px; color: #dc3545;"></i>
+        <p class="mt-3" style="font-size: 20px;">Failed</p>
+    </div>
+</div>
+
+
+
+
+
+
+   <ng-template  #approveModal let-modal>
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          <i class="fa fa-check btn btn-sm btn-success btn-circle" aria-hidden="true"></i> Approve Leave Request
+        </h4>
+       
+        <button type="button" class="close" aria-label="Close" (click)="closeApprovalModal('close click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+
+ 
+
+    
+    <div class="modal-body text-x-small font-bold text-dark">
+
+        <div class="ibox ibox-content">
+
+
+        
+
+            <div class="container-fluid mt-2">
+
+             
+                <form #leaveRequestApproavalForm="ngForm"
+                (submit)="submitLeaveRequestApproval(leaveRequestApproavalForm,remarks.value)">
+                
+                <div class="form-row">
+                    <div class="col-12 col-lg-12 col-md-12 col-sm-12 text-x-small">
+                        <label  for="checkRemarks" class="control-label font-bold">
+                        <strong>Approval Remarks:</strong>
+                        </label>
+
+                        <input name="checkRemarks" #remarks id="checkRemarks"
+                        class="form-control rounded"  placeholder="Write Comments Here..">
+
+                    </div>
+                </div>
+
+                <!-- <button type="submit" class="btn btn-primary mt-1">Submit</button> -->
+
+                <div class="input-group-prepend mt-1">
+                    <button type="submit" class="btn btn-sm btn-primary"
+                       >
+                        <i class="fa fa-paper-plane"></i> | Submit
+                       
+                    </button>
+                </div>
+       
+            </form>
+
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="modal-footer">
+
+        
+      <button class="btn btn-xs btn-danger btn-rounded shadow" type="button" (click)="closeApprovalModal('Close Click')">
+          <i class="fa fa-times"></i> | Cancel
+      </button>
+    </div>
+  </ng-template>
+  
+  
+    
+  
+  

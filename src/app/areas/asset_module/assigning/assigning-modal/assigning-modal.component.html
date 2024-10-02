@@ -1,0 +1,420 @@
+<ng-template #assigninModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-diamond"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <div class="ibox">                       
+                        <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark">
+                            <form [formGroup]="assigningForm" (submit)="submit()">
+                                <div class="modal-body">
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-12 col-md-6 col-sm-6">
+                                            <label for="searchByEmployee" class="control-label ">Employee</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark">
+                                                        <i class="fa fa-users"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 87%;">
+                                                    <ng-select2 [data]="ddlEmployees" name="searchByEmployee" 
+                                                        [placeholder]="'Select Employee...'" [options]="select2Options"
+                                                        [allowClear]="true" formControlName="employeeId">
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6 col-sm-6">
+                                            <label for="transactionDate" class="control-label">
+                                                Transaction Date <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark">
+                                                        <i class="fa fa-calendar-times-o"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" id="transactionDate"
+                                                    class="form-control form-control-sm bg-white" formControlName="transactionDate"
+                                                    placeholder="Choose a date from picker" bsDatepicker
+                                                    [ngClass]="{'is-invalid':((assigningForm.get('transactionDate').touched ||
+                                            assigningForm.get('transactionDate').dirty) && assigningForm.get('transactionDate').errors)}"
+                                                    [class.is-valid]="assigningForm.get('transactionDate').valid"
+                                                    [bsConfig]="datePickerConfig" readonly autocomplete="off">
+                                                <div class="input-group-prepend cursor-pointer"
+                                                    *ngIf="this.assigningForm.get('transactionDate').value != null && this.assigningForm.get('transactionDate').value !=''"
+                                                    (click)="this.assigningForm.get('transactionDate').setValue(null)">
+                                                    <span class="input-group-addon text-danger">
+                                                        <i class="fa fa-times"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="((assigningForm.get('transactionDate').touched ||
+                                                                                                   assigningForm.get('transactionDate').dirty) && assigningForm.get('transactionDate').errors)"
+                                                class="text-danger">
+                                                <span>Field is required</span>
+                                            </div>
+                                        </div> 
+                                    </div>  
+                                    <div class="form-row text-x-small">                                         
+                                        <div class="form-group col-12 col-md-6 col-sm-6">
+                                            <label for="productId" class="control-label">Product ID
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-product-hunt" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm"                                                
+                                                 id="productId" name="productId" formControlName="productId" [attr.disabled]="true">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-primary" [disabled]="this.approved == true" type="button" (click)="openSearchProductModal()">
+                                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                            </div>                                          
+                                        </div>                                      
+                                        <div class="form-group col-12 col-md-6 col-sm-6">
+                                            <label for="remarks" class="control-label">Remarks</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-text-height" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="remarks" name="remarks"
+                                                    formControlName="remarks">
+                                            </div>
+                                        </div>                                 
+                                    </div>   
+                                </div>                                
+                            </form>                        
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            <div class="row" [hidden]="isRowHidden">
+                <div class="col-12 col-md-8">
+                    <label for="lblRight" class="control-label"
+                        style="font-family: Arial, sans-serif; font-size: 12px; color: #333; font-weight: bold; text-transform: uppercase;">
+                        Select Product
+                    </label>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-sm-12 text-x-small">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark">
+                                {{list_Product_loading_label}}
+                                <div class="table-responsive" *ngIf="downloadFormat == 'Serial'">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Product ID</th>
+                                                <th>Number</th>
+                                                <th class="text-center">Condition</th>
+                                                <th class="text-center" *ngIf="!approved">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let item of listProduct; let i = index">
+                                                <tr>
+                                                    <td class="text-center">{{i + 1}}</td>
+                                                    <td>
+                                                        {{item.productId}}
+                                                    </td>
+                                                    <td>
+                                                        {{item.number}}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span class="label label-warning" *ngIf="item.condition == false">Second-Hand</span>
+                                                        <span class="label label-info" *ngIf="item.condition==true">New</span>
+                                                    </td>
+                                                    <td class="text-center" *ngIf="!approved">
+                                                        <input type="checkbox" [checked]="isSelected(item)"
+                                                            (change)="toggleSelection(item)">
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-responsive" *ngIf="downloadFormat == 'SIM'">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Product ID</th>
+                                                <th>Number</th>
+                                                <th class="text-center">Condition</th>
+                                                <th class="text-center" *ngIf="!approved">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let item of listProduct; let i = index">
+                                                <tr>
+                                                    <td class="text-center">{{i + 1}}</td>
+                                                    <td>
+                                                        {{item.productId}}
+                                                    </td>
+                                                    <td>
+                                                        {{item.number}}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span class="label label-warning" *ngIf="item.condition == false">Second-Hand</span>
+                                                        <span class="label label-info" *ngIf="item.condition==true">New</span>
+                                                    </td>
+                                                    <td class="text-center" *ngIf="!approved">
+                                                        <input type="checkbox" [checked]="isSelected(item)"
+                                                            (change)="toggleSelection(item)">
+                                                    </td>
+                                                </tr>
+                                               
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-responsive" *ngIf="downloadFormat == 'Phone'">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">                                        
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Product ID</th>
+                                                <th>IMEI 1</th>
+                                                <th>IMEI 2</th>
+                                                <th class="text-center">Condition</th>
+                                                <th class="text-center" *ngIf="!approved">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let item of listProduct; let i = index">
+                                                <tr>
+                                                    <td class="text-center">{{i + 1}}</td>
+                                                    <td>
+                                                        {{item.productId}}
+                                                    </td>
+                                                    <td>
+                                                        {{item.imeI1}}
+                                                    </td>
+                                                    <td>
+                                                        {{item.imeI2}}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span class="label label-warning" *ngIf="item.condition == false">Second-Hand</span>
+                                                        <span class="label label-info" *ngIf="item.condition==true">New</span>
+                                                    </td>
+                                                    <td class="text-center" *ngIf="!approved">
+                                                        <input type="checkbox" [checked]="isSelected(item)"
+                                                            (change)="toggleSelection(item)">
+                                                    </td>
+                                                </tr>                                                
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-responsive" *ngIf="downloadFormat == 'ProductID'">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Product ID</th>
+                                                <th class="text-center">Condition</th>
+                                                <th class="text-center" *ngIf="!approved">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let item of listProduct; let i = index">
+                                                <tr>
+                                                    <td class="text-center">{{i + 1}}</td>
+                                                    <td>
+                                                        {{item.productId}}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span class="label label-warning" *ngIf="item.condition == false">Second-Hand</span>
+                                                        <span class="label label-info" *ngIf="item.condition==true">New</span>
+                                                    </td>
+                                                    <td class="text-center" *ngIf="!approved">
+                                                        <input type="checkbox" [checked]="isSelected(item)"
+                                                            (change)="toggleSelection(item)">
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>                                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="lblRight" class="control-label"
+                        style="font-family: Arial, sans-serif; font-size: 12px; color: #333; font-weight: bold; text-transform: uppercase;">
+                        Product Details
+                    </label>                
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-sm-12 text-x-small">
+                            <div *ngFor="let item of listOfAssetDetails;">
+                                <div class="form-row">
+                                    <div class="col-md-12 mt-0">
+                                        <ul class="list-group">
+                                            <li class="list-group-item"><strong class="float-left">Product Name:</strong> <span
+                                                    class="float-right">{{item.assetName}}</span></li>
+                                            <li class="list-group-item"><strong class="float-left">Brand:</strong> <span
+                                                    class="float-right">{{item.brand}}</span></li>
+                
+                                            <li class="list-group-item"><strong class="float-left">Depreciation:</strong> <span
+                                                    class="label label-warning float-right"
+                                                    *ngIf="item.depreciation == false">Non-Depreciable</span>
+                                                <span class="label label-info float-right"
+                                                    *ngIf="item.depreciation==true">Depreciable</span>
+                                            </li>
+                                            <li class="list-group-item"><strong class="float-left">Condition:</strong> <span
+                                                    class="label label-warning float-right"
+                                                    *ngIf="item.condition == false">Second-Hand</span>
+                                                <span class="label label-info float-right" *ngIf="item.condition==true">New</span>
+                                            </li>
+                                            <li class="list-group-item"><strong class="float-left">IT Access:</strong> <span
+                                                    class="label label-warning float-right"
+                                                    *ngIf="item.itAccess == false">Inaccessible</span>
+                                                <span class="label label-info float-right" *ngIf="item.itAccess==true">Accessible</span>
+                                            </li>
+                                            <li class="list-group-item"><strong class="float-left">Warranty Date:</strong> <span
+                                                    class="float-right">{{item.warrantyDate | date: "dd-MMM-yyyy"}}</span></li>
+                
+                                            <li class="list-group-item"><strong class="float-left">Amount:</strong> <span
+                                                    class="float-right">{{item.amount}}</span></li>
+                
+                                            <li class="list-group-item"><strong class="float-left">Duration Days:</strong> <span
+                                                    class="float-right">{{item.durationDays}}</span></li>
+                                            <li class="list-group-item" *ngIf="item.depreciation"><strong class="float-left">Depreciable
+                                                    Cost:</strong> <span class="float-right">{{item.depreciableAmount}}</span></li>
+                
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-x-small pb-2">                  
+            <button class="btn btn-sm btn-primary btn-rounded btn-outline pull-right" type="submit" [disabled]="this.assigningForm.invalid || this.approved == true" (click)="submit()">
+                <i class="fa fa-cogs"></i> | Save
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button" (click)="closeModal('Cancel click')" [disabled]="btnSubmit">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+<ng-template #assetSearchModal let-modal>
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-diamond"></i>| {{searchTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row m-t-sm mt-0">
+                <div class="col-md-12 mb-4">
+                    <div class="ibox">
+                        <div
+                            class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark">
+                            <form [formGroup]="assetSearchForm">
+                                <div class="form-row text-x-small">
+                                    <div class="form-group mb-1 col-md-8 col-sm-12">
+                                        <div class="input-group">
+                                            <input type="text" name="searchByAnything" id="searchByAnything"
+                                                onkeyup="tableFilter('#tbl tbody tr',this)"
+                                                class="form-control form-control-sm" autofocus
+                                                placeholder="Search by anything..." />
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon  text-dark">
+                                                    <i class="icofont-search-2"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-sm mt-0">
+                <div class="col-md-12 mb-4">
+                    <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                        <div class="table-responsive">
+                            <table
+                                class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg"
+                                id="tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#SL</th>
+                                        <th>Name</th>
+                                        <th>Vendor</th>
+                                        <th>Store</th>
+                                        <th>Category</th>
+                                        <th>Sub Category</th>
+                                        <th>Brand</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-right">Amount</th>
+                                        <th>Remarks</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of list | paginate: list_pager; let i=index">
+                                        <td class="text-center font-bold">{{i+1+(pageSize*(pageNumber-1))}}</td>
+                                        <td>{{item.assetName}}</td>
+                                        <td>{{item.vendor}}</td>
+                                        <td>{{item.store}}</td>
+                                        <td>{{item.category}}</td>
+                                        <td>{{item.subCategory}}</td>
+                                        <td>{{item.brand}}</td>
+                                        <td class="text-center">{{item.quantity}}</td>
+                                        <td class="text-right">{{item.amount}}</td>
+                                        <td>{{item.remarks}}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm"
+                                                (click)="showSearchItem(item.assetId,'Create')">
+                                                <i class="fa fa-hand-pointer-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>                                    
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="list_pageChanged($event)" [responsive]="true"
+                                    [autoHide]="true" id="list_pager"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer text-x-small pb-2">
+        <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button"
+        (click)="modal.dismiss('Cross click')">
+            <i class="fa fa-times"></i> | Cancel
+        </button>
+    </div>
+
+</ng-template>

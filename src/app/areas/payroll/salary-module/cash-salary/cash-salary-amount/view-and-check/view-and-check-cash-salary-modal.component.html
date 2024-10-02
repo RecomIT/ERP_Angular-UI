@@ -1,0 +1,76 @@
+<ng-template #ViewAndCheckCashSalaryModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-users-alt-4 pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="info">
+            <tbody>
+                <tr>
+                    <td class="font-bold">Employee ID</td>
+                    <td>{{approvalData?.employeeCode}}</td>
+                    <td class="font-bold">Employee Name</td>
+                    <td>{{approvalData?.employeeName}}</td>
+                    <td class="font-bold">Salary Head</td>
+                    <td>{{approvalData?.cashSalaryHeadName}}</td>
+                    <td class="font-bold">Salary Month & Year</td>
+                    <td>{{approvalData?.salaryMonthName}} {{approvalData?.salaryYear}}</td>
+                </tr>
+                <tr>
+                    <td class="font-bold">Amount</td>
+                    <td>{{approvalData.amount}}</td>
+                    <td class="font-bold">Status</td>
+                    <td>
+                        <span class="label label-warning" *ngIf="approvalData?.stateStatus=='Pending'">
+                            {{approvalData?.stateStatus
+                            + '...'}}</span>
+                        <span class="label label-primary" *ngIf="approvalData?.stateStatus=='Approved'">
+                            <i class="fa fa-check"></i> {{approvalData?.stateStatus}}</span>
+                        <span class="label label-danger"
+                            *ngIf="approvalData?.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                            {{approvalData?.stateStatus}}</span>
+                        <span class="label label-info" *ngIf="approvalData?.stateStatus=='Recheck'"><i
+                                class="fa fa-backward"></i> {{approvalData?.stateStatus}}</span>
+                    </td>
+                    <td class="font-bold">Entry Date</td>
+                    <td>{{approvalData?.createdDate | date:"dd-MMMM-yyyy"}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-body pt-0 text-x-small font-bold text-dark" *ngIf="checkModalFlag =='Approval'">
+           <form [formGroup]="ViewAndCheckCashSalaryForm" (ngSubmit)="submitUploadCashSalaryApproval()">
+        <div class="modal-body text-x-small">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">   
+                    <div class="input-group">
+                        <input type="text" name="remarks" id="remarks" formControlName="remarks"
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="stateStatus" id="stateStatus" formControlName="stateStatus"
+                                class="form-control form-control-sm">                                                   
+                                <option [value]="'Approved'" selected>Approved</option>
+                                <option [value]="'Recheck'">Recheck</option>
+                                <option [value]="'Cancelled'">Cancelled</option>
+                            </select>
+                           
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                            [disabled]="ViewAndCheckCashSalaryForm.invalid || btnApproval">
+                            <i class="fa fa-paper-plane"></i> | Submit
+                            <span [hidden]="!btnApproval" class="spinner-border spinner-border-sm"
+                                role="status" aria-hidden="true"></span>                           
+                        </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form> 
+    </div>
+ 
+</ng-template>

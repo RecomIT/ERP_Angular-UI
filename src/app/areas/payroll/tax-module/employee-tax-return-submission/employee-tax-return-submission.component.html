@@ -1,0 +1,104 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 @slideInUp class="mt-2">Employee Tax Return Submission</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Tax</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Employee Tax Return</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-8 col-sm-6 text-x-small">
+        <div class="title-action">
+            <button type="button" class="btn btn-success btn-outline btn-rounded" (click)="showTaxModal(0)">
+                <i class="fa fa-plus"></i> | Return Submission
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#empTaxReturnList" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Employee Tax Return
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="empTaxReturnList" class="tab-pane active">
+                        <div class="panel-body bg-white pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm" name="searchByAnything"
+                                            placeholder="Search By Anything" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th>#SL</th>
+                                            <th>Employee Code</th>
+                                            <th>Employee Name</th>
+                                            <th>Fiscal Year Range</th>
+                                            <th>Registration No</th>
+                                            <th>Tax Zone</th>
+                                            <th>Tax Circle</th>
+                                            <th>Paid Amount</th>
+                                            <th>Tax Payable</th>
+                                            <th>Submission Date</th>
+                                            <th>File</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr *ngFor="let item of list; let i=index">
+                                            <td class="font-bold">{{i+1}}</td>
+                                            <td>{{item.employeeCode}}</td>
+                                            <td>{{ item.employeeName }}</td>
+                                            <td>{{item.fiscalYearRange}}</td>
+                                            <td>{{item.registrationNo}}</td>
+                                            <td>{{item.taxZone}}</td>
+                                            <td>{{item.taxCircle}}</td>
+                                            <td>{{item.paidAmount}}</td>
+                                            <td>{{item.taxPayable}}</td>
+                                            <td>{{item.submissionDate | date:"dd MMM yyyy"}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-xs btn-warning"
+                                                    (click)="downloadFile(item.filePath)">
+                                                    <i class="fa fa-file"></i> Download File
+                                                </button>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showTaxReturnInsertModal == true">
+    <app-payroll-tax-return-submission-modal [id]="0"
+        (closeModalEvent)="closeModal($event)"></app-payroll-tax-return-submission-modal>
+</ng-container>

@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-12 col-md-12 col-sm-12 font-weight-light">
+        <div class="activity-stream">
+            <div class="stream pb-0">
+                <div class="stream-badge">
+                    <i class="icofont-user-suited"></i>
+                </div>
+                <div class="stream-panel">
+                    <div class="stream-info font-bold">
+                        <p class="mb-0">
+                            Supervisor
+                        </p>
+                    </div>
+                    {{this.data?.supervisorName ??"N/A"}} {{'('+this.data?.supervisorCode+')'}}
+                </div>
+            </div>
+            <div class="stream pb-0">
+                <div class="stream-badge">
+                    <i class="icofont-user-suited"></i>
+                </div>
+                <div class="stream-panel">
+                    <div class="stream-info font-bold">
+                        <p class="mb-0">
+                            Final Approver
+                        </p>
+                    </div>
+                    {{this.data?.headOfDepartmentName ?? 'N/A'}} {{'('+this.data?.headOfDepartmentCode+')'}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

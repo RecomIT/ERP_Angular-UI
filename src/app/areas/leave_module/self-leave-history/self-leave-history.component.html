@@ -1,0 +1,170 @@
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-1"><i class="fa fa-history"></i>|Self Leave History</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Self Service</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Self Leave History</strong>
+            </li>
+        </ol>
+    </div>
+
+</div>
+<div class="wrapper wrapper-content animated pt-2 fadeInRight">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small font-bold text-dark">
+                    <div class="form-row pt-3">
+
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="searchByleaveTypeId" class="control-label font-bold">Search By Date</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="searchByDate" id="searchByDate"
+                                    class="form-control form-control-sm bg-white" placeholder="--- Select Date ---"
+                                    #searchByDateRef="ngModel" [(ngModel)]="searchByDate"
+                                    (ngModelChange)="getEmployeeLeaveRequests(1)" bsDaterangepicker
+                                    autocomplete="off" readonly [bsConfig]="datePickerConfig">
+                                <div class="input-group-prepend cursor-pointer"
+                                    (click)="[searchByDate=[],getEmployeeLeaveRequests(1)]"
+                                    [hidden]="searchByDate.length ==0">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="searchByleaveTypeId" class="control-label font-bold">Search By Leave
+                                Type</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon  text-dark">
+                                        <i class="icofont-beach"></i>
+                                    </span>
+                                </div>
+                                <select name="searchByleaveTypeId" id="searchByleaveTypeId"
+                                    class="form-control form-control-sm" [(ngModel)]="searchByLeaveType"
+                                    #searchByLeaveTypeRef="ngModel" (change)="getEmployeeLeaveRequests(1)">
+                                    <option [value]="0">---Select Leave Type---</option>
+                                    <option [value]="item.id" *ngFor="let item of ddlEmployeeLeaveTypes">{{item.text}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                   
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="searchByLeaveStatus" class="control-label font-bold">Search By Leave
+                                Status</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon  text-dark">
+                                        <i class="icofont icofont-opposite"></i>
+                                    </span>
+                                </div>
+                                <select name="searchByStatus" id="searchByStatus" #searchByStatusRef="ngModel"
+                                    [(ngModel)]="searchByStatus" class="form-control form-control-sm"
+                                    (change)="getEmployeeLeaveRequests(1)">
+                                    <option [value]="''">---Select Status---</option>
+                                    <option [value]="'Pending'">Pending</option>
+                                    <option [value]="'Approved'">Approved</option>
+                                    <option [value]="'Rejected'">Rejected</option>
+                                    <option [value]="'Cancelled'">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group col-md-2 col-sm-12">
+                           
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>                    
+                                    <th>Leave Type</th>
+                                    <th class="text-center">Day Leave Type</th>
+                                    <th class="text-center">Applied Date</th>                                    
+                                    <th>Leave Purpose</th>
+                                    <th>Emergency Phone No</th>
+                                    <th>Address During Leave</th>
+                                    <th class="text-center">Status</th>                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let item of listEmployeeLeaveRequests | paginate:employeeLeaveTypePageConfig; let i=index">
+                                    <td class="text-center font-bold">{{i+1 +
+                                        (employeeLeaveTypePageSize*(employeeLeaveTypePageNo-1))}}</td>                             
+                                    <td>{{item.leaveTypeName}}</td>
+                                    <td class="text-center">
+                                        <span class="label label-info" [hidden]="item.dayLeaveType == 'Half-Day'">
+                                            <i class="fa fa-star text-dark" aria-hidden="true"></i>
+                                            {{item.dayLeaveType}}
+                                        </span>
+                                        <span class="label label-warning" [hidden]="item.dayLeaveType == 'Full-Day'">
+                                            <i class="fa fa-star-half text-dark" aria-hidden="true"></i>
+                                            {{item.dayLeaveType}}
+                                            <i
+                                                [class]="item.halfDayType == 'First Portion'? 'fa fa-hourglass-start text-dark':'fa fa-hourglass-end text-dark'"></i>
+                                            {{item.halfDayType}}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">{{item.leaveDate | date:"dd MMM yyyy"}}</td>                              
+                                    <td>{{item.leavePurpose}}</td>
+                                    <td>{{item.emergencyPhoneNo}}</td>
+                                    <td>{{item.addressDuringLeave}}</td>
+                                    <td class="text-center">
+                                        <span class="label label-warning"
+                                            *ngIf="item.stateStatus=='Pending'">{{item.stateStatus + '...'}}</span>
+                                        <span class="label label-primary" *ngIf="item.stateStatus=='Approved'"> <i
+                                                class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-inverse" *ngIf="item.stateStatus=='Cancelled'"><i
+                                                class="fa fa-eraser"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-danger" *ngIf="item.stateStatus=='Rejected'"><i
+                                                class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                    </td>                              
+                                </tr>
+                                <tr
+                                    *ngIf=" listEmployeeLeaveRequests.length ==0 && employeeLeaveRequestsDTLabel == null">
+                                    <td colspan="15" class="text-center">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </td>
+                                </tr>
+                                <tr
+                                    *ngIf=" listEmployeeLeaveRequests.length ==0 && employeeLeaveRequestsDTLabel != null">
+                                    <td colspan="15" class="text-center font-bold">
+                                        {{employeeLeaveRequestsDTLabel}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <pagination-controls (pageChange)="employeeLeaveRequestPageChanged($event)" [responsive]="true"
+                            [autoHide]="true" id="employeeLeaveType"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

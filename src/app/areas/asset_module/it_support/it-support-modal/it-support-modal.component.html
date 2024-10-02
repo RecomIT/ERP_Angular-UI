@@ -1,0 +1,92 @@
+<ng-template #itSupportModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-list"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="itSupportForm" (submit)="submit()">
+            <div class="modal-body">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="lanmac" class="control-label"> Lan Mac Address
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="lanmac" name="lanmac" 
+                            formControlName="lanmac">
+                        </div>
+                        <div  class="text-danger">
+                            <span *ngIf="server_errors != null">{{server_errors?.exist}}</span>
+                        </div>
+                    </div>                    
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="lanip" class="control-label">Lan IP Address</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="lanip"
+                                name="lanip" formControlName="lanip">
+                        </div>  
+                        <div  class="text-danger">                      
+                            <span *ngIf="server_errors != null">{{server_errors?.exist}}</span>
+                        </div>
+                    </div>
+                </div>   
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="wifimac" class="control-label"> WiFi Mac Address
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="wifimac" name="wifimac" 
+                            formControlName="wifimac">
+                        </div>
+                        <div  class="text-danger">                      
+                            <span *ngIf="server_errors != null">{{server_errors?.exist}}</span>
+                        </div>
+                    </div>                    
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="wifiip" class="control-label"> WiFi IP Address</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="wifiip"
+                                name="wifiip" formControlName="wifiip">
+                        </div>
+                        <div  class="text-danger">                      
+                            <span *ngIf="server_errors != null">{{server_errors?.exist}}</span>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="itSupportForm.invalid || btnSubmit">
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

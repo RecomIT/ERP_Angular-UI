@@ -1,0 +1,657 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12">
+        <h2 class="mt-2">HR Resignation Request Management</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Resignation</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>HR Resignation Request Management</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3 animated fadeInRight pt-sm-1">
+    
+    <div class="ibox">
+        <div class="ibox-content rounded">
+
+
+            <div class="row py-2">
+                <div class="col-12 m-auto">
+                  <div class="border-section">
+                    <div class="border-label">Select A Employee <span class="text-danger">*</span></div>
+        
+                    <div class="form-row">
+                        <div class="col-12">
+                         
+        
+                          <ng-select2 
+                              [(ngModel)]="searchBySubordinatesId"
+                              [data]="subordiantesEmployeeList"
+                              name="searchBySubordinatesId"
+                              id="searchBySubordinatesId"
+                              [placeholder]="'Select A Team Member ...'"
+                              [options]="employeeSelect2Options"
+                              [allowClear]="true"
+                              #searchBySubordinatesIdRef="ngModel"
+                              (ngModelChange)="onEmployeeSelectionChange($event)"
+                              style="width: 1000px;"
+                            >
+                            </ng-select2>
+        
+        
+                        </div>
+                      </div>
+                      
+        
+                  </div>
+                </div>
+            </div>
+
+        
+                         
+        <mat-accordion>
+            <mat-expansion-panel *ngFor="let res of resignationRequestList | paginate: resignationRequestsApprovalPageConfig">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <span>{{ res.fullName }}</span> 
+                </mat-panel-title>
+                
+                <mat-panel-description class="text-x-small">
+                    <div>
+                        <span>
+                            <strong>Status: </strong> 
+                            <span class="status-chip" [ngClass]="{
+                                'bg-warning': res.stateStatus === 'Pending',
+                                'bg-primary': res.stateStatus === 'Approved',
+                                'bg-danger': res.stateStatus === 'Rejected',
+                                'bg-secondary': res.stateStatus === 'Cancel'
+                                }">
+                                <strong>{{ res.stateStatus }}</strong> 
+                            </span>
+                        </span>
+                
+                        <span *ngIf="res.stateStatus !== 'Cancel'">
+                            <strong>Supervisor Status: </strong>
+                            <span class="status-chip" [ngClass]="{
+                                'bg-warning': res.supervisorStatus === 'Pending',
+                                'bg-primary': res.supervisorStatus === 'Approved',
+                                'bg-danger': res.supervisorStatus === 'Rejected',
+                                'bg-secondary': res.supervisorStatus === 'Cancel'
+                                }">
+                                <strong>{{ res.supervisorStatus }}</strong> 
+                            </span>
+                        </span>
+        
+        
+                        <span *ngIf="res.stateStatus !== 'Cancel'">
+                            <strong>Admin Status: </strong>
+                            <span class="status-chip" [ngClass]="{
+                                'bg-warning': res.hrStatus === 'Pending',
+                                'bg-primary': res.hrStatus === 'Approved',
+                                'bg-danger': res.hrStatus === 'Rejected',
+                                'bg-secondary': res.hrStatus === 'Cancel'
+                                }">
+                                <strong>{{ res.hrStatus }}</strong> 
+                            </span>
+                        </span>
+        
+        
+                    </div>
+                </mat-panel-description>
+                
+            </mat-expansion-panel-header>
+
+            <div class="p-3">
+            
+            <div class="mt-2">
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Employee Info                                
+                            </mat-panel-title>
+                            <mat-panel-description>
+                            
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+
+                        <div class="col-md-12 text-x-small">
+                            <div class="row p-2">
+                                <div class="col-12 col-lg-3 col-md-3 col-sm-12 d-flex justify-content-center align-items-center mb-2">
+                                    <img [src]="photoPath" (error)="setDefaultPhoto()" alt="Photo" class="profile-image">
+                                </div>
+                        
+                                <div class="col-12 col-lg-9 col-md-9 col-sm-12">
+                                    <ng-container *ngIf="res">
+                                        <div id="res" class="mt-2">
+                                            <div class="row text-center">
+                                                <div class="col-12 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center mb-2">
+                                                    <div class="">
+                                                        <h4><strong>Grade: </strong>{{ res.gradeName }}</h4>
+                                                        <h4><strong>Branch: </strong>{{ res.branchName }}</h4>
+                                                        <h4><strong>Department: </strong>{{ res.departmentName }}</h4>
+                                                    </div>
+                                                </div>
+                        
+                                                <div class="col-12 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center mb-2">
+                                                    <div class="">
+                                                        <h4><strong>Employee Code: </strong>{{ res.employeeCode }}</h4>
+                                                        <h4><strong>Name: </strong>{{ res.fullName }}</h4>
+                                                        <h4><strong>Designation: </strong>{{ res.designationName }}</h4>
+                                                        <h4><strong>Service Length: </strong>{{ serviceLength }}</h4>
+                                                        <small>
+                                                            <span *ngIf="res.isActive"><i class="fa fa-circle text-navy mr-1"></i>{{ res.jobType }}</span>
+                                                            <span *ngIf="!res.isActive"><i class="fa fa-circle text-danger mr-1"></i> Inactive</span>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                        
+                                                <div class="col-12 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center mb-2">
+                                                    <div class="">
+                                                        <h4><strong>Office Phone: </strong>{{ res.officeMobile }}</h4>
+                                                        <h4><strong>Office Email: </strong>{{ res.officeEmail }}</h4>
+                                                        <h4><strong>Personal Phone: </strong>{{ res.personalMobileNo }}</h4>
+                                                        <h4><strong>Personal Email: </strong>{{ res.personalEmailAddress }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+
+            <div class="mt-2">
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Employee Job Life Cycle
+                            </mat-panel-title>
+                            <mat-panel-description>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+
+                        <app-employee-job-life-cycle></app-employee-job-life-cycle>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+
+
+            <div class="mt-2">
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Resignation Request Details
+                            </mat-panel-title>
+                            <mat-panel-description>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+
+                        <div class="form-row text-x-small mt-2-1 p-2">
+                            <div class="col-md-12">
+    
+                            <div class="form-row p-1 border-bottom">
+    
+                                <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+    
+    
+                                    <div class="form-row  ">
+                                        <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                                            <div class="label"><strong>Resignation Category:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                                            <div class="value">{{ res.categoryName }}</div>
+                                        </div>
+                                    </div>
+    
+    
+                                </div>
+    
+                                <div class="col-12 col-lg-6 col-md-6 col-sm-12 mb-1">
+    
+                                    <div class="form-row  ">
+                                        <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                                        <div class="label"><strong>Resignation Subcategory:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                                            <div class="value">{{ res.subCategoryName }}</div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+    
+                                <div class="col-12 col-lg-2 col-md-2 col-sm-12 mb-1">
+    
+                                <div class="form-row">
+                                    <div class="col-12 col-md-5 col-lg-5 col-sm-12">
+                                        <div class="label"><strong>Notice Period:</strong></div>
+                                    </div>
+                                    <div class="col-12 col-md-7 col-lg-7 col-sm-12">
+                                        <div class="value"><strong>{{ res.noticePeriod }} Days</strong></div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+    
+                            </div>
+    
+                            <div class="form-row p-1">
+    
+                                <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1">
+    
+    
+                                    <div class="form-row  ">
+                                        <div class="col-12 col-md-2 col-lg-2 col-sm-12">
+                                            <div class="label"><strong>Resignation Reason:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-10 col-lg-10 col-sm-12">
+                                            <div class="value">{{ res.resignationReason }}</div>
+                                        </div>
+                                    </div>
+    
+    
+                                </div>
+    
+                            </div>
+    
+                            <div class="form-row p-1">
+    
+                                <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1">
+                                    <div class="form-row  ">
+                                        <div class="col-12 col-md-2 col-lg-2 col-sm-12">
+                                            <div class="label"><strong>Secondary Reason:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-10 col-lg-10 col-sm-12">
+                                            <div class="value">{{ res.secondaryReason }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+    
+                            <div class="form-row p-1">
+    
+                                <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1">
+                                    <div class="form-row  ">
+                                        <div class="col-12 col-md-2 col-lg-2 col-sm-12">
+                                            <div class="label"><strong>Employee Comment:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-10 col-lg-10 col-sm-12">
+                                            <div class="value">{{ res.employeeComment }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+    
+                            <div class="form-row p-1">
+    
+                                <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                                    <div class="form-row p-1">
+                                        <div class="col-12 col-md-6 col-lg-6 col-sm-12">
+                                            <div class="label"><strong>Notice Date:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-6 col-lg-6 col-sm-12">
+                                            <div class="value">{{ res.noticeDate | date:'dd MMM, yyyy' }}</div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="form-row p-1">
+                                        <div class="col-12 col-md-6 col-lg-6 col-sm-12">
+                                            <div class="label"><strong>Last Working Date:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-6 col-lg-6 col-sm-12">
+                                        <div class="value">{{ res.requestLastWorkingDate | date:'dd MMM, yyyy' }}</div>
+                                    </div>
+                                    </div>
+    
+                                </div>
+    
+                                <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+    
+                                    <div class="form-row p-1">
+                                        <div class="col-12 col-md-6 col-lg-6 col-sm-12">
+                                            <div class="label"><strong>Shortfall:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-6 col-lg-6 col-sm-12">
+                                            <div class="value">{{ res.createdShortfall }} Days</div>
+                                        </div>
+                                    </div>
+    
+                                    
+    
+                                
+    
+                                </div>
+    
+                                <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                                    
+                                    
+                                    <div class="form-row p-1">
+    
+                                        <div class="col-12 col-md-7 col-lg-7 col-sm-12">
+                                            <div class="label"><strong>Accepted Last Working Date:</strong>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-12 col-md-5 col-lg-5 col-sm-12">
+                                            <div class="value">
+                                                <!-- {{ res.RequestLastWorkingDate | date:'dd MMM, yyyy' }} -->
+    
+                                                <ng-container *ngIf="res.acceptedLastWorkingDate; else showRequestLastWorkingDate">
+                                                    {{ res.acceptedLastWorkingDate | date:'dd MMM, yyyy' }}
+                                                </ng-container>
+                                                <ng-template #showRequestLastWorkingDate>
+                                                    {{ res.requestLastWorkingDate | date:'dd MMM, yyyy' }}
+                                                </ng-template>
+                                            
+    
+                                                <button class="btn btn-xs text-success" type="button" title="Edit " (click)="openEditLastWorkingDateModal(res?.resignationRequestId
+                                                )">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+    
+                                            </div>
+                                        </div>
+    
+                                    </div>
+    
+    
+    
+                                    <div class="form-row p-1">
+                                        <div class="col-12 col-md-7 col-lg-7 col-sm-12">
+                                            <div class="label"><strong>Exit Interview Date:</strong>
+                                            </div>
+                                        </div>
+    
+    
+                                        <div class="col-12 col-md-5 col-lg-5 col-sm-12">
+    
+                                            <div class="value">
+                                                <ng-container *ngIf="res.hrExitInterviewDate; else showEmployeeExitInterviewDate">
+                                                    {{ res.hrExitInterviewDate | date:'dd MMM, yyyy' }}
+                                                </ng-container>
+                                                <ng-template #showEmployeeExitInterviewDate>
+                                                    {{ res.employeeExitInterviewDate | date:'dd MMM, yyyy' }}
+                                                </ng-template>
+    
+    
+                                                <button *ngIf="!res.isInterviewDoneBySupervisor" class="btn btn-xs text-success" type="button" title="Edit " (click)="openEditInterviewDateModal(res?.resignationRequestId
+                                                )">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+    
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                
+    
+    
+                                </div>
+    
+                            </div>
+    
+                            <div class="form-row p-1">
+    
+                                <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                                    
+                                    <div class="form-row p-1">
+                                        <div class="col-12 col-md-7 col-lg-7 col-sm-12">
+                                            <div class="label"><strong>Interview Done By Supervisor:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-5 col-lg-5 col-sm-12">
+                                            <div class="value badge badge-pill {{ res.isInterviewDoneBySupervisor ? 'badge-success' : 'badge-danger' }}">{{ res.isInterviewDoneBySupervisor ? 'Yes' : 'No' }}</div>
+    
+                                        </div>
+                                    </div>
+    
+                                </div>
+    
+    
+                                <div class="col-12 col-lg-8 col-md-8 col-sm-12 mb-1">
+    
+                                <div *ngIf="res.IsInterviewDoneBySupervisor">
+    
+                                <div class="form-row p-1">
+                                    <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                                    <div class="label"><strong>Supervisor Employee Code:</strong></div>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                                    <div class="value">{{ res.supervisorEmployeeCode }}</div>
+                                    </div>
+                                </div>
+    
+    
+                                <div class="form-row p-1">
+                                    <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                                    <div class="label"><strong>Supervisor Name:</strong></div>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                                    <div class="value">{{ res.supervisorName }}</div>
+                                    </div>
+                                </div>
+    
+    
+                                <div class="form-row p-1">
+                                    <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                                    <div class="label"><strong>Supervisor Exit Interview Date:</strong></div>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                                    <div class="value">{{ res.supervisorExitInterviewDate | date:'dd MMM, yyyy' }}</div>
+                                    </div>
+                                </div>
+    
+                                <div class="form-row p-1">
+                                    <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                                    <div class="label"><strong>Supervisor Interview Remarks:</strong></div>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                                    <div class="value">{{ res.supervisorInterviewRemarks }}</div>
+                                    </div>
+                                </div>
+                                </div>
+    
+    
+                                </div>
+
+    
+                            </div>
+                            
+                            <div class="col-md-12 col-sm-12 p-1 text-x-small d-flex align-items-center">
+                                <div class="form-row m-0">
+                                    <div class="col-12 col-md-5 col-lg-5 col-sm-12">
+                                        <div class="label"> <strong>File: </strong>{{ res.actualFileName || 'No file uploaded' }}</div>
+                                    </div>
+                                    <div class="col-12 col-md-7 col-lg-7 col-sm-12" *ngIf="res.isResignationLetterUpload">
+                                        <div class="value text-right">
+                                            <a (click)="downloadFile(res.fileName, res.filePath)">
+                                            <i class="fa fa-file-pdf-o text-danger" aria-hidden="true"></i><strong> Download PDF</strong>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+
+
+                            <!-- <div class="form-row p-1">
+    
+                                <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+
+                                    <div class="d-flex justify-content-end hover">
+                                        <button class="btn btn-sm text-success border mr-1" type="button" title="Approve" (click)="openApproveResignationRequestModal(res)">
+                                            <i class="fa fa-check shadow" aria-hidden="true"></i>
+                                        </button>
+                                    
+                                        <button class="btn btn-sm text-danger border" title="Reject" type="button">
+                                            <i class="fa fa-times shadow" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            </div> -->
+                            
+    
+
+                            <div class="form-row">
+                                <div class="col-12 p-1">
+                                    <div class="d-flex justify-content-end  align-items-center mt-2">
+                        
+                                        <button *ngIf="res.hrStatus !== 'Approved'" class="btn btn-sm btn-outline-success shadow mr-2"
+                                                title="Approved"
+                                                type="button"
+                                                (click)="openApproveResignationRequestModal(res?.resignationRequestId)">
+                                            <i class="fa fa-check"></i> {{ res.hrStatus === 'Approved' ? 'Approved' : 'Approve' }}
+                                        </button>
+                        
+                                        <!-- Approve Fake Button -->
+                        
+                                        <button *ngIf="res.hrStatus !== 'Pending'" class="btn btn-sm btn-outline-success shadow mr-2"
+                                            type="button"
+                        
+                                            [disabled]="res.hrStatus !== 'Pending'">
+                                        <i class="fa fa-check"></i> {{ res.hrStatus === 'Approved' ? 'Approved' : 'Approve' }}
+                                        </button>
+                                
+                        
+                        
+                        
+                        
+                                        <button *ngIf="res.hrStatus === 'Pending'" class="btn btn-sm btn-outline-danger shadow" title="Reject Request" 
+                                        type="button"
+                                        (click)="openRejectResignationRequestModal(res?.resignationRequestId)"
+                                        >
+                                            <i class="fa fa-times"></i> {{ res.hrStatus === 'Rejected' ? 'Rejected' : 'Reject' }}
+                                        </button>
+                        
+                        
+                                        <!-- Reject Fake Button -->
+                                        <button *ngIf="res.hrStatus !== 'Pending'" class="btn btn-sm btn-outline-danger shadow" 
+                                        type="button"
+                                        [disabled]="res.hrStatus !== 'Pending'"
+                                        >
+                                            <i class="fa fa-times"></i> {{ res.hrStatus === 'Rejected' ? 'Rejected' : 'Reject' }}
+                                        </button>
+                        
+                                        
+                                
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>  
+                        
+                        
+
+
+                        </div>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+    
+            </div>
+            
+
+            </mat-expansion-panel>
+        </mat-accordion>
+                            
+    
+        <div *ngIf="resignationRequestList.length === 0">
+            <div class="text-center bg-light" style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">
+                <h5 style="color: #555; font-size: 24px; font-weight: bold;">No Request</h5>
+                <p style="color: #777; font-size: 16px;">There are no resignation requests at the moment.</p>
+            </div>
+        </div>
+
+
+        <div class="col-12 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-end align-items-center text-x-small">
+            <div>
+                <span class="mr-1">Page Size:</span>
+                <select [(ngModel)]="pageSize" (change)="onPageSizeChange()" class="form-control-sm">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                </select>
+            </div>
+            <pagination-controls (pageChange)="approvalPageChanged($event)" [responsive]="true" id="ResignationRequest"></pagination-controls>
+        </div>
+        </div>
+    </div>  
+      
+
+
+       
+    
+</div>
+    
+    
+    
+<ng-container *ngIf="showEditLastWorkingDateModal">
+    <app-edit-last-working-date
+    [resignationRequestId]="resignationRequestId" 
+    (closeModalEvent)="closeEditLastWorkingDateModal($event)"
+    (acceptedLastWorkingDateChanged)="onAcceptedLastWorkingDateChanged($event)"
+    >
+    </app-edit-last-working-date>
+</ng-container>
+
+
+  
+<ng-container *ngIf="showEditInterviewDateModal">
+    <app-edit-interview-date
+    [resignationRequestId]="resignationRequestId" 
+    (closeModalEvent)="closeEditInterviewDateModal($event)"
+    (exitInterviewDateChanged)="onInterviewDateChanged($event)"
+    >
+    </app-edit-interview-date>
+</ng-container>
+  
+
+
+
+<!-- <ng-container *ngIf="showApproveResignationRequestModal">
+    <app-approve-resignation-by-admin 
+    [resignationRequestToApprove]="resignationRequestToApprove" 
+    (closeModalEvent)="closeApproveResignationRequestModal($event)"
+    (statusChanged)="onStatusChanged($event)"
+    >
+    </app-approve-resignation-by-admin>
+</ng-container> -->
+
+
+<ng-container *ngIf="showApproveResignationRequestModal">
+    <app-approve-resignation-by-admin 
+    [resignationRequestId]="resignationRequestId" 
+    (closeModalEvent)="closeApproveResignationRequestModal($event)"
+    (statusChanged)="onStatusChanged($event)"
+    >
+    </app-approve-resignation-by-admin>
+</ng-container>
+
+
+
+
+
+<ng-container *ngIf="showRejectResignationRequestModal">
+    <app-reject-resignation-request
+    [resignationRequestId]="resignationRequestId" 
+    (closeModalEvent)="closeRejectResignationRequestModal($event)"
+    (statusChanged)="onRejectStatusChanged($event)"
+    >
+    </app-reject-resignation-request>
+</ng-container>

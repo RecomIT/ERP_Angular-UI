@@ -1,0 +1,578 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Deduction Configuration</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Deduction</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Deduction Configuration</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12">
+            <div class="ibox-content text-x-small font-bold">
+                <div class="form-row">
+                    <div class="form-group mb-1 col-sm-12 col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <div style="width: 90%;">
+                                <ng-select2 name="as" id="as" [data]="ddlDeductionNamesSearch"
+                                    [placeholder]="'Search By Deduction...'" [(ngModel)]="searchByDeduction"
+                                    #searchByDeductionRef="ngModel" [options]="select2Options" [allowClear]="true"
+                                    (ngModelChange)="searchByDeductionChanged()">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-1 col-sm-12 col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="searchByActivationDate" id="searchByActivationDate"
+                                class="form-control form-control-sm bg-white" placeholder="Search By Activation Date"
+                                #searchByDateRef="ngModel" [(ngModel)]="searchByActivationDate"
+                                (ngModelChange)="getDeductionConfigs(1)" bsDaterangepicker autocomplete="off" readonly
+                                [bsConfig]="datePickerConfig">
+                            <div class="input-group-prepend cursor-pointer"
+                                (click)="[searchByActivationDate=[],getDeductionConfigs(1)]"
+                                [hidden]="searchByActivationDate.length ==0">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-1 col-sm-12 col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="searchByDeactivationDate" id="searchByDeactivationDate"
+                                class="form-control form-control-sm bg-white" placeholder="Search By Deactivate Date"
+                                #searchByDate2Ref="ngModel" [(ngModel)]="searchByDeactivationDate"
+                                (ngModelChange)="getDeductionConfigs(1)" bsDaterangepicker autocomplete="off" readonly
+                                [bsConfig]="datePickerConfig">
+                            <div class="input-group-prepend cursor-pointer"
+                                (click)="[searchByDeactivationDate=[],getDeductionConfigs(1)]"
+                                [hidden]="searchByDeactivationDate.length ==0">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-1 col-sm-12 col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-arrow-up"></i>
+                                </span>
+                            </div>
+                            <select name="searchByStatus" id="searchByStatus" class="form-control form-control-sm"
+                                #searchByStatusRef="ngModel" [(ngModel)]="searchByStatus"
+                                (change)="getDeductionConfigs(1)">
+                                <option [value]="''">---Select Status---</option>
+                                <option [value]="'Pending'">Pending</option>
+                                <option [value]="'Approved'">Approved</option>
+                                <option [value]="'Recheck'">Recheck</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group mb-1 col-sm-12 col-md-8">
+                        <button type="button" class="btn btn-sm btn-success float-right btn-rounded"
+                            (click)="openDeductionConfigModal()"><i class="fa fa-plus"></i> | Create</button>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content text-x-small font-bold">
+                <div class="table-responsive">
+                    <table class="table tables-sm table-hover table-striped table-responsive-xl" id="tblConfiguration">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#SL</th>
+                                <th>Deduction Name</th>
+                                <th class="text-center">Activation Date</th>
+                                <th class="text-center">Deactivation Date</th>
+                                <th class="text-center">Is Active</th>
+                                <th class="text-center">Is Monthly</th>
+                                <th class="text-center">Is Individual</th>
+                                <th>Gender</th>
+                                <th class="text-center">Is Confirmation Required</th>
+                                <th class="text-center">Depands On Working Hour</th>
+                                <th class="text-center">Is Taxable</th>
+                                <th class="text-center">Is Project Rest Year</th>
+                                <th class="text-center">Is Once Off Tax</th>
+                                <th class="text-center">Is Once Off Deduction</th>
+                                <th>Fixed Amount</th>
+                                <th>Percentage Of Salary</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Entry Date</th>
+                                <th class="text-center">Updated Date</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let item of listOfDeductionConfigs | paginate: deductionConfigPageConfig, let i =index">
+                                <td class="text-center">{{i+1 + (deductionConfigPageSize
+                                    *(deductionConfigPageNo-1))}}</td>
+                                <td>{{item.deductionName}}</td>
+                                <td class="text-center">{{item.activationDate | date:"dd-MMMM-yyyy"}}</td>
+                                <td class="text-center">{{item.deactivationDate | date:"dd-MMMM-yyyy"}}</td>
+                                <td class="text-center">
+                                    <span
+                                        [class]="item.isActive == null ? '' : (item.isActive ? 'label label-primary':'label label-danger')">
+                                        {{item.isActive == null ? 'N/A' : (item.isActive ? 'Yes':'No')}}</span>
+                                </td>
+                                <td class="text-center"> <span
+                                        [class]="item.isMonthly == null ? '' : (item.isMonthly ? 'label label-primary':'label label-danger')">
+                                        {{item.isActive == null ? 'N/A' : (item.isMonthly ? 'Yes':'No')}}</span></td>
+                                <td class="text-center"> <span
+                                        [class]="item.isIndividual == null ? '' : (item.isIndividual ? 'label label-primary':'label label-danger')">
+                                        {{item.isActive == null ? 'N/A' : (item.isIndividual ? 'Yes':'No')}}</span></td>
+                                <td>{{item.Gender}}</td>
+                                <td class="text-center"><span
+                                        [class]="item.isConfirmationRequired == null ? '' : (item.isConfirmationRequired ? 'label label-primary':'label label-danger')">
+                                        {{item.isActive == null ? 'N/A' : (item.isConfirmationRequired ?
+                                        'Yes':'No')}}</span></td>
+                                <td class="text-center"> <span
+                                        [class]="item.depandsOnWorkingHour == null ? '' : (item.depandsOnWorkingHour ? 'label label-primary':'label label-danger')">
+                                        {{item.isActive == null ? 'N/A' : (item.depandsOnWorkingHour ?
+                                        'Yes':'No')}}</span>
+                                </td>
+                                <td class="text-center"> <span
+                                        [class]="item.isTaxable == null ? '' : (item.isTaxable ? 'label label-primary':'label label-danger')">
+                                        {{item.isActive == null ? 'N/A' : (item.isTaxable ? 'Yes':'No')}}</span></td>
+                                <td class="text-center"><span
+                                        [class]="item.projectRestYear == null ? '' : (item.projectRestYear ? 'label label-primary':'label label-danger')">
+                                        {{item.projectRestYear == null ? 'N/A' : (item.projectRestYear ?
+                                        'Yes':'No')}}</span></td>
+                                <td class="text-center"><span
+                                        [class]="item.isOnceOffTax == null ? '' : (item.isOnceOffTax ? 'label label-primary':'label label-danger')">
+                                        {{item.isOnceOffTax == null ? 'N/A' : (item.isOnceOffTax ? 'Yes':'No')}}</span>
+                                </td>
+                                <td class="text-center"><span
+                                        [class]="item.onceOffDeduction == null ? '' : (item.onceOffDeduction ? 'label label-primary':'label label-danger')">
+                                        {{item.onceOffDeduction == null ? 'N/A' : (item.onceOffDeduction ?
+                                        'Yes':'No')}}</span></td>
+                                <td>{{item.flatAmount}}</td>
+                                <td>{{item.percentageAmount}}</td>
+                                <td class="text-center">
+                                    <span class="label label-warning"
+                                        *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                        + '...'}}</span>
+                                    <span class="label label-primary" *ngIf="item.stateStatus=='Approved'"> <i
+                                            class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                    <span class="label label-danger" *ngIf="item.stateStatus=='Cancelled'"><i
+                                            class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                    <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                            class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                </td>
+                                <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-xs"
+                                        (click)="loadDeductionConfigForEdit(item.configId, item.deductionNameId)"
+                                        *ngIf="item.stateStatus =='Pending' || item.stateStatus =='Recheck'">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-xs text-info"
+                                        *ngIf="item.stateStatus =='Pending'"
+                                        (click)="openDeductionConfigDetailAndApprovalView('approval',item.configId)">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-xs text-primary"
+                                        (click)="openDeductionConfigDetailAndApprovalView('view',item.configId)">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngIf=" listOfDeductionConfigs.length ==0 && deductionConfigDTLabel == null">
+                                <td colspan="20" class="text-center">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </td>
+                            </tr>
+                            <tr *ngIf=" listOfDeductionConfigs.length ==0 && deductionConfigDTLabel != null">
+                                <td colspan="20" class="text-center font-bold">
+                                    {{deductionConfigDTLabel}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <pagination-controls (pageChange)="deductionConfigsPageChanged($event)" [responsive]="true"
+                        [autoHide]="true" id="deductionData"></pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #deductionConfigModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>| Setting Deduction Config
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="deductionConfigForm" (ngSubmit)="submitDeductionConfig()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="deductionNameId" class="control-label">Deduction Name
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <div style="width: 90%;">
+                                <ng-select2 formControlName="deductionNameId" [data]="ddlDeductionNames"
+                                    name="deductionNameId" id="deductionNameId"
+                                    (ngModelChange)="dataByDeductionChanged()" [placeholder]="'Search By Deduction...'"
+                                    [options]="select2Options" [allowClear]="true">
+                                </ng-select2>
+                            </div>
+                        </div>
+                        <div *ngIf="(deductionConfigForm.get('deductionNameId').touched || deductionConfigForm.get('deductionNameId').dirty) && deductionConfigForm.get('deductionNameId').errors"
+                            class="text-danger">
+                            <span>Field is required</span>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="activationDate" class="control-label">
+                            Activate Date <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="activationDate" class="form-control form-control-sm bg-white"
+                                formControlName="activationDate" placeholder="Choose a date from picker" bsDatepicker
+                                [bsConfig]="datePickerConfig" readonly
+                                [ngClass]="{'is-invalid':((deductionConfigForm.get('activationDate').touched ||
+                                deductionConfigForm.get('activationDate').dirty) && deductionConfigForm.get('activationDate').errors)}"
+                                [class.is-valid]="deductionConfigForm.get('activationDate').valid">
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="this.deductionConfigForm.get('activationDate').value != null && this.deductionConfigForm.get('activationDate').value !=''"
+                                (click)="this.deductionConfigForm.get('activationDate').setValue(null)">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="((deductionConfigForm.get('activationDate').touched ||
+                        deductionConfigForm.get('activationDate').dirty) && deductionConfigForm.get('activationDate').errors)"
+                            class="text-danger">
+                            <span>Field is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="deactivationDate" class="control-label">
+                            Deactivate Date <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-times-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="deactivationDate" class="form-control form-control-sm bg-white"
+                                formControlName="deactivationDate" placeholder="Choose a date from picker" bsDatepicker
+                                [ngClass]="{'is-invalid':((deductionConfigForm.get('deactivationDate').touched ||
+                                deductionConfigForm.get('deactivationDate').dirty) && deductionConfigForm.get('deactivationDate').errors)}"
+                                [class.is-valid]="deductionConfigForm.get('deactivationDate').valid"
+                                [bsConfig]="datePickerConfig" readonly autocomplete="off">
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="this.deductionConfigForm.get('deactivationDate').value != null && this.deductionConfigForm.get('deactivationDate').value !=''"
+                                (click)="this.deductionConfigForm.get('deactivationDate').setValue(null)">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="((deductionConfigForm.get('deactivationDate').touched ||
+                        deductionConfigForm.get('deactivationDate').dirty) && deductionConfigForm.get('deactivationDate').errors)"
+                            class="text-danger">
+                            <span>Field is required</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3 col-sm-6">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="this.deductionConfigForm.get('isMonthly').setValue(!this.deductionConfigForm.get('isMonthly').value)">
+                                <input type="checkbox" formControlName="isMonthly"> Monthly
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="this.deductionConfigForm.get('isConfirmationRequired').setValue(!this.deductionConfigForm.get('isConfirmationRequired').value)">
+                                <input type="checkbox" formControlName="isConfirmationRequired"> Confirmation Required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="[this.deductionConfigForm.get('isTaxable').setValue(!this.deductionConfigForm.get('isTaxable').value),]">
+                                <input type="checkbox" formControlName="isTaxable"> Taxable
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6"
+                        [hidden]="this.deductionConfigForm.get('isTaxable').value == false || this.deductionConfigForm.get('isTaxable').value == null">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="[this.deductionConfigForm.get('isOnceOffTax').setValue(!this.deductionConfigForm.get('isOnceOffTax').value),onceOffTax_projectRestYear_changed('isOnceOffTax')]">
+                                <input type="checkbox" formControlName="isOnceOffTax"
+                                    (change)="onceOffTax_projectRestYear_changed('isOnceOffTax')"> Is Once Off Tax?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6"
+                        [hidden]="this.deductionConfigForm.get('isTaxable').value == false || this.deductionConfigForm.get('isTaxable').value == null">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="[this.deductionConfigForm.get('projectRestYear').setValue(!this.deductionConfigForm.get('projectRestYear').value),onceOffTax_projectRestYear_changed('projectRestYear')]">
+                                <input type="checkbox" formControlName="projectRestYear" class="mb-0"
+                                    (change)="onceOffTax_projectRestYear_changed('projectRestYear')">
+                                Project Rest Year
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <div class="input-group">
+                            <div class="form-control form-control-sm font-bold cursor-pointer"
+                                (click)="this.deductionConfigForm.get('isActive').setValue(!this.deductionConfigForm.get('isActive').value)">
+                                <input type="checkbox" formControlName="isActive"> Active
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <h3>Applied As:</h3>
+                <hr>
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="flatAmount" class="control-label">Fixed Amount</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    &#2547;
+                                </span>
+                            </div>
+                            <input type="number" name="flatAmount" formControlName="flatAmount" id="flatAmount"
+                                class="form-control form-control-sm" placeholder="Enter Fixed Amount &#2547; "
+                                [ngClass]="{'is-invalid':((deductionConfigForm.get('flatAmount').touched ||
+                            deductionConfigForm.get('flatAmount').dirty) && deductionConfigForm.get('flatAmount').errors)}"
+                                [class.is-valid]="deductionConfigForm.get('flatAmount').valid"
+                                (input)="deductionConfigForm.get('flatAmount').value > 0? deductionConfigForm.get('percentageAmount').setValue(0):0">
+                        </div>
+                        <div *ngIf="(deductionConfigForm.get('flatAmount').touched ||
+                        deductionConfigForm.get('flatAmount').dirty) && deductionConfigForm.get('flatAmount').errors"
+                            class="text-danger">
+                            <span>Min Amount is 0</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="percentageAmount" class="control-label">Percentage Of Gross Salary</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    %
+                                </span>
+                            </div>
+                            <input type="number" name="percentageAmount" id="percentageAmount"
+                                placeholder="Enter % of Gross Salary" class="form-control form-control-sm"
+                                formControlName="percentageAmount"
+                                [ngClass]="{'is-invalid':((deductionConfigForm.get('percentageAmount').touched ||
+                            deductionConfigForm.get('percentageAmount').dirty) && deductionConfigForm.get('percentageAmount').errors)}"
+                                [class.is-valid]="deductionConfigForm.get('percentageAmount').valid"
+                                (input)="deductionConfigForm.get('percentageAmount').value > 0? deductionConfigForm.get('flatAmount').setValue(0):0">
+                        </div>
+                        <div *ngIf="(deductionConfigForm.get('percentageAmount').touched ||
+                        deductionConfigForm.get('percentageAmount').dirty) && deductionConfigForm.get('percentageAmount').errors"
+                            class="text-danger">
+                            <span>Value Must be >= 0 / =< 100 </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <!--  -->
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="deductionConfigForm.invalid || btnSubmitDeductionConfig">
+                    <i class="fa fa-paper-plane"></i> | {{deductionConfigForm.get('configId').value > 0 ?
+                    'Update':'Submit'}}
+                    <span [hidden]="!btnSubmitDeductionConfig" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button"
+                    [disabled]="btnSubmitDeductionConfig" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #deductionConfigViewAndApprovalModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-check-circle" aria-hidden="true"></i>| {{isApprovalView ?
+            "Deduction Config Checking" :"Deduction Config Details View"}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="config">
+                <tr>
+                    <td class="bg-dark-blue text-white">Deduction Name</td>
+                    <td>{{deductionConfigData.deductionName}}</td>
+                    <td class="bg-dark-blue text-white">Activity</td>
+                    <td colspan="3">{{deductionConfigData.activationDate | date:"dd MMM yyyy"}} -
+                        {{deductionConfigData.deactivationDate | date:"dd MMM yyyy"}}</td>
+                    <td class="bg-dark-blue text-white">Is Active</td>
+                    <td>
+                        <span [class]="deductionConfigData.isActive ? 'label label-primary':'label label-danger'">
+                            {{deductionConfigData.isActive}}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bg-dark-blue text-white">Confirmation Required</td>
+                    <td>
+                        <span
+                            [class]="deductionConfigData.isConfirmationRequired == null ? 'label label-info':(deductionConfigData.isConfirmationRequired ? 'label label-primary':'label label-danger')">
+                            {{deductionConfigData.isConfirmationRequired == null ? 'N/A' :
+                            deductionConfigData.isConfirmationRequired}}
+                        </span>
+                    </td>
+                    <td class="bg-dark-blue text-white">Depands On Working Hour</td>
+                    <td>
+                        <span
+                            [class]="deductionConfigData.depandsOnWorkingHour == null ? 'label label-info':(deductionConfigData.depandsOnWorkingHour ? 'label label-primary':'label label-danger')">
+                            {{deductionConfigData.depandsOnWorkingHour == null ? 'N/A':
+                            deductionConfigData.depandsOnWorkingHour}}
+                        </span>
+                    </td>
+                    <td class="bg-dark-blue text-white">Is Texable</td>
+                    <td>
+                        <span
+                            [class]="deductionConfigData.isTaxable == null ? 'label label-info':(deductionConfigData.isTaxable ? 'label label-primary':'label label-danger')">
+                            {{deductionConfigData.isTaxable == null ? 'N/A' : deductionConfigData.isTaxable}}
+                        </span>
+                    </td>
+                    <td class="bg-dark-blue text-white">Is Monthly</td>
+                    <td>
+                        <span
+                            [class]="deductionConfigData.isMonthly == null ? 'label label-info':(deductionConfigData.isMonthly ? 'label label-primary':'label label-danger')">
+                            {{deductionConfigData.isMonthly == null ? 'N/A' : deductionConfigData.isMonthly}}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bg-dark-blue text-white">Is Project Rest Year</td>
+                    <td>
+                        <span
+                            [class]="deductionConfigData.projectRestYear == null ? 'label label-info':(deductionConfigData.projectRestYear ? 'label label-primary':'label label-danger')">
+                            {{deductionConfigData.projectRestYear == null ? 'N/A' :
+                            deductionConfigData.projectRestYear}}
+                        </span>
+                    </td>
+                    <td class="bg-dark-blue text-white">Is Once Off Tax</td>
+                    <td>
+                        <span
+                            [class]="deductionConfigData.isOnceOffTax == null ? 'label label-info':(deductionConfigData.isOnceOffTax ? 'label label-primary':'label label-danger')">
+                            {{deductionConfigData.isOnceOffTax == null ? 'N/A' : deductionConfigData.isOnceOffTax}}
+                        </span>
+                    </td>
+                    <td class="bg-dark-blue text-white">Is Once off Deduction</td>
+                    <td>
+                        <span
+                            [class]="deductionConfigData.onceOffDeduction == null ? 'label label-info':(deductionConfigData.onceOffDeduction ? 'label label-primary':'label label-danger')">
+                            {{deductionConfigData.onceOffDeduction == null ? 'N/A' :
+                            deductionConfigData.onceOffDeduction}}
+                        </span>
+                    </td>
+                    <td class="bg-dark-blue text-white">Status</td>
+                    <td>
+                        <span class="label label-warning"
+                            *ngIf="deductionConfigData.stateStatus=='Pending'">{{deductionConfigData.stateStatus +
+                            '...'}}</span>
+                        <span class="label label-primary" *ngIf="deductionConfigData.stateStatus=='Approved'"> <i
+                                class="fa fa-check"></i>
+                            {{deductionConfigData.stateStatus}}</span>
+                        <span class="label label-danger" *ngIf="deductionConfigData.stateStatus=='Cancelled'"><i
+                                class="fa fa-times"></i>
+                            {{deductionConfigData.stateStatus}}</span>
+                        <span class="label label-info" *ngIf="deductionConfigData.stateStatus=='Recheck'"><i
+                                class="fa fa-backward"></i> {{deductionConfigData.stateStatus}}</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-body pt-0 text-x-small font-bold text-dark" *ngIf="isApprovalView">
+        <form #deductionConfigApprovalForm="ngForm"
+            (ngSubmit)="submitDeductionConfigStatus(deductionConfigApprovalForm,remarks.value,checkStatus.value)">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                    <div class="input-group">
+                        <input type="text" name="checkRemarks" #remarks id="checkRemarks" required
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="checkStatus" #checkStatus id="checkStatus"
+                                class="form-control form-control-sm" required>
+                                <option value="Approved">Approved</option>
+                                <option value="Recheck">Recheck</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                                [disabled]="deductionConfigApprovalForm.invalid || btnSubmitDeductionConfig">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnSubmitDeductionConfig" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

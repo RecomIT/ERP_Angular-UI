@@ -1,0 +1,358 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2"> <i class="fa fa-diamond"></i> | Asset Approval</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Asset</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Asset Approval</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#assetCreateApproval" data-toggle="tab" class="nav-link" [ngClass]="{'active': activeTab === 'assetCreateApproval'}">
+                            <i class="fa fa-asterisk"></i> | Asset Create Approval
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#assetAssigningApproval" data-toggle="tab" class="nav-link" [ngClass]="{'active': activeTab === 'assetAssigningApproval'}">
+                            <i class="fa fa-check-square"></i> | Asset Assigning Approval
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="assetCreateApproval" class="tab-pane" [ngClass]="{'active': activeTab === 'assetCreateApproval'}">
+                        <div class="ibox shadow-sm">
+                            <form [formGroup]="assetCreateSearchForm">
+                                <div class="ibox-content font-bold pb-1 shadow-sm border-radius-5 text-x-small">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <label for="searchByAnything" class="control-label font-bold">Search By Anything</label>
+                                            <div class="input-group">
+                                                <input type="text" name="searchByAnything" id="searchByAnything"
+                                                    onkeyup="tableFilter('#tblAssetCreate tbody tr',this)" class="form-control form-control-sm" autofocus
+                                                    placeholder="Type here..." />
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon  text-dark">
+                                                        <i class="icofont-search-2"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <label for="" class="control-label">Search By Date</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark text-white">
+                                                        <i class="fa fa-dot-circle-o"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="transactionDate" id="transactionDate" formControlName="transactionDate"
+                                                    class="form-control form-control-sm bg-white" placeholder="Enter Date Range" bsDaterangepicker
+                                                    [bsConfig]="datePickerConfig" readonly>
+                                                <div class="input-group-prepend cursor-pointer" *ngIf="this.assetCreateSearchForm.get('transactionDate').value != null"
+                                                    (click)="this.assetCreateSearchForm.get('transactionDate').setValue(null)">
+                                                    <span class="input-group-addon text-dark text-danger">
+                                                        <i class="fa fa-times"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <label for="status" class="control-label">Search By Status</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark text-white">
+                                                        <i class="fa fa-dot-circle-o"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="status" id="status" class="form-control form-control-sm"
+                                                    formControlName="status">
+                                                    <option [value]="''" selected>---Select Status---</option>
+                                                    <option [value]="item" *ngFor="let item of ddlStatus">{{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>                                 
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content pb-1 shadow-sm border-radius-5 text-x-small">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                        id="tblAssetCreate">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th class="text-center">Transaction Date</th>
+                                                <th>Name</th>
+                                                <th>Vendor</th>
+                                                <th>Store</th>
+                                                <th>Category</th>
+                                                <th>Sub Category</th>
+                                                <th>Brand</th>
+                                                <!-- <th class="text-center">Depreciation</th>
+                                                <th class="text-center">Depreciable Amount</th>
+                                                <th class="text-center">Condition</th>
+                                                <th class="text-center">IT Access</th>
+                                                <th class="text-center">Warranty Date</th>
+                                                <th class="text-center">Total Quantity</th>
+                                                <th class="text-right">Amount</th>
+                                                <th class="text-right">Total Amount</th> -->
+                                                <th class="text-center">Status</th>
+                                                <th>Remarks</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of assetCreateList | paginate: list_pager; let i=index">
+                                                <td class="text-center font-bold">{{i+1+(pageSize*(pageNumber-1))}}</td>
+                                                <td class="text-center">{{item.transactionDate | date: "dd-MMM-yyyy"}}</td>
+                                                <td>{{item.assetName}}</td>
+                                                <td>{{item.vendor}}</td>
+                                                <td>{{item.store}}</td>
+                                                <td>{{item.category}}</td>
+                                                <td>{{item.subCategory}}</td>
+                                                <td>{{item.brand}}</td>
+                                                <!-- <td class="text-center">
+                                                    <span class="label label-warning"
+                                                        *ngIf="item.depreciation == false">Non-Depreciable</span>
+                                                    <span class="label label-primary" *ngIf="item.depreciation==true">Depreciable</span>
+                                                </td>
+                                                <td class="text-center">{{item.depreciableAmount}}</td>
+                                                <td class="text-center">
+                                                    <span class="label label-warning" *ngIf="item.condition == false">Second-Hand</span>
+                                                    <span class="label label-primary" *ngIf="item.condition==true">New</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="label label-warning" *ngIf="item.itAccess == false">Inaccessible</span>
+                                                    <span class="label label-primary" *ngIf="item.itAccess==true">Accessible</span>
+                                                </td> -->
+                                                <!-- <td class="text-center">{{item.warrantyDate | date: "dd-MMM-yyyy"}}</td> -->
+                                                <!-- <td class="text-center">{{item.quantity}}</td>
+                                                <td class="text-right">{{item.amount}}</td>
+                                                <td class="text-right">{{item.totalAmount}}</td> -->
+                                                <td class="text-center">
+                                                    <span class="label label-danger" *ngIf="item.approved == false">Pending</span>
+                                                    <span class="label label-primary" *ngIf="item.approved==true">Approved</span>
+                                                </td>
+                                                <td>{{item.remarks}}</td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-sm" title="View Details" (click)="showModal(item.assetId,0,0,'assetCreateApproval','Approved')">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>                                      
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf=" assetCreateList.length == 0 && list_loading_label == null">
+                                                <td colspan="15" class="text-center">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="assetCreateList.length == 0 && list_loading_label == ''">
+                                                <td colspan="15" class="text-center font-bold">
+                                                    {{list_loading_label}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-end">
+                                        <pagination-controls (pageChange)="list_pageChanged($event)" [responsive]="true"
+                                            [autoHide]="true" id="list_pager"></pagination-controls>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="assetAssigningApproval" class="tab-pane" [ngClass]="{'active': activeTab === 'assetAssigningApproval'}">
+                        <div class="ibox shadow-sm">
+                            <form [formGroup]="assetAssigningSearchForm">
+                                <div class="ibox-content font-bold pb-1 shadow-lg text-x-small">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="searchByAnything" class="control-label font-bold">Search By Anything</label>
+                                            <div class="input-group">
+                                                <input type="text" name="searchByAnything" id="searchByAnything" onkeyup="tableFilter('#tblAssetAssigning tbody tr',this)"
+                                                    class="form-control form-control-sm" autofocus placeholder="Type here..." />
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon  text-dark">
+                                                        <i class="icofont-search-2"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="searchByEmployee" class="control-label ">Search By
+                                                Employee</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark">
+                                                        <i class="fa fa-users"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 87%;">
+                                                    <ng-select2 [data]="ddlEmployees" name="searchByEmployee"
+                                                        [placeholder]="'Select Employee...'" [options]="select2Options"
+                                                        [allowClear]="true" formControlName="employeeId">
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="" class="control-label">Search By Date</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark text-white">
+                                                        <i class="fa fa-dot-circle-o"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="transactionDate" id="transactionDate"
+                                                    formControlName="transactionDate" class="form-control form-control-sm bg-white"
+                                                    placeholder="Enter Date Range" bsDaterangepicker [bsConfig]="datePickerConfig"
+                                                    readonly>
+                                                <div class="input-group-prepend cursor-pointer"
+                                                    *ngIf="this.assetAssigningSearchForm.get('transactionDate').value != null"
+                                                    (click)="this.assetAssigningSearchForm.get('transactionDate').setValue(null)">
+                                                    <span class="input-group-addon text-dark text-danger">
+                                                        <i class="fa fa-times"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="status" class="control-label">Search By Status</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark text-white">
+                                                        <i class="fa fa-dot-circle-o"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="status" id="status" class="form-control form-control-sm"
+                                                    formControlName="status">
+                                                    <option [value]="''" selected>---Select Status---</option>
+                                                    <option [value]="item" *ngFor="let item of ddlStatus">{{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content pb-1 shadow-sm border-radius-5 text-x-small">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                        id="tblAssetAssigning">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th class="text-center">Employee ID</th>
+                                                <th>Employee Name</th>
+                                                <th>Designation</th>
+                                                <th>Grade</th>
+                                                <th>Department</th>
+                                                <th class="text-center">Assigned Date</th>
+                                                <th>Product Name</th>
+                                                <!-- <th>Vendor</th> -->
+                                                <!-- <th>Store</th>
+                                                <th>Category</th>
+                                                <th>Sub Category</th>
+                                                <th>Brand</th> -->
+                                                <!-- <th class="text-center">Depreciation</th> -->
+                                                <th class="text-center">Condition</th>
+                                                <!-- <th class="text-center">IT Access</th> -->
+                                                <th class="text-center">Warranty Date</th>         
+                                                <th class="text-center">Status</th>
+                                                <th>Remarks</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of assetAssigningList | paginate: list_pager; let i=index">
+                                                <td class="text-center font-bold">{{i+1+(pageSize*(pageNumber-1))}}</td>
+                                                <td>{{item.employeeCode}}</td>
+                                                <td>{{item.employeeName}}</td>
+                                                <td>{{item.designationName}}</td>
+                                                <td>{{item.gradeName}}</td>
+                                                <td>{{item.departmentName}}</td>
+                                                <td class="text-center">{{item.transactionDate | date: "dd-MMM-yyyy"}}</td>
+                                                <td>{{item.assetName}}</td>
+                                                <!-- <td>{{item.vendor}}</td> -->
+                                                <!-- <td>{{item.store}}</td>
+                                                <td>{{item.category}}</td>
+                                                <td>{{item.subCategory}}</td>
+                                                <td>{{item.brand}}</td> -->
+                                                <!-- <td class="text-center">
+                                                    <span class="label label-warning"
+                                                        *ngIf="item.depreciation == false">Non-Depreciable</span>
+                                                    <span class="label label-primary" *ngIf="item.depreciation==true">Depreciable</span>
+                                                </td> -->
+                                                <td class="text-center">
+                                                    <span class="label label-warning" *ngIf="item.condition == false">Second-Hand</span>
+                                                    <span class="label label-primary" *ngIf="item.condition==true">New</span>
+                                                </td>
+                                                <!-- <td class="text-center">
+                                                    <span class="label label-warning" *ngIf="item.itAccess == false">Inaccessible</span>
+                                                    <span class="label label-primary" *ngIf="item.itAccess==true">Accessible</span>
+                                                </td> -->
+                                                <td class="text-center">{{item.warrantyDate | date: "dd-MMM-yyyy"}}</td>                                   
+                                                <td class="text-center">
+                                                    <span class="label label-danger" *ngIf="item.approved == false">Pending</span>
+                                                    <span class="label label-primary" *ngIf="item.approved == true">Approved</span>
+                                                </td>
+                                                <td>{{item.remarks}}</td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-sm" title="View Details" (click)="showModal(item.assetId, item.assigningId,item.employeeId, 'assetAssigningApproval','Assigning')">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf=" assetAssigningList.length == 0 && list_loading_label == null">
+                                                <td colspan="15" class="text-center">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="assetAssigningList.length == 0 && list_loading_label == ''">
+                                                <td colspan="15" class="text-center font-bold">
+                                                    {{list_loading_label}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-end">
+                                        <pagination-controls (pageChange)="list_pageChanged($event)" [responsive]="true"
+                                            [autoHide]="true" id="list_pager"></pagination-controls>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>          
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showingModal == true">
+    <asset-module-approval-modal [assetId]="assetId" [assigningId]="assigningId" [employeeId]="employeeId" [activeTab]="activeTab" [type]="type" (closeModalEvent)="closeModal($event)">
+    </asset-module-approval-modal>
+</ng-container>
+
+
+
+<style>
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+</style>

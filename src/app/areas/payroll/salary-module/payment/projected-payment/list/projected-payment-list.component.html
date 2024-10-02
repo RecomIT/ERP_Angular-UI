@@ -1,0 +1,426 @@
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-1"><i class="icofont-money"></i> | Individual Projected Payment</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Allowance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Individual Projected Payment</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-4 col-md-4 col-sm-4">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-sm btn-outline-primary btn-rounded pull-right"
+                (click)="showUploadModal()" tooltip="Upload">
+                <i class="icofont-upload"></i> | Bulk Upload
+            </button>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#projectedPaymentAmount" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-info"></i> | Individual Allowances
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#projectedPaymentProcess" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-list"></i> | Process
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="projectedPaymentAmount" class="tab-pane active">
+                        <div class="ibox shadow-sm">
+                            <form [formGroup]="paymentSearchForm">
+                                <div
+                                    class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark">
+                                    <div class="form-row mt-2">
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="searchByEmployee" class="control-label font-bold">Search By
+                                                Employee</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 80%;">
+                                                    <ng-select2 [data]="ddlEmployees" name="employees"
+                                                        id="searchByEmployee" formControlName="employeeId"
+                                                        [placeholder]="'Enter Employee...'" [options]="select2Config"
+                                                        [allowClear]="true" required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="searchByAllowance" class="control-label font-bold">Search By
+                                                Allowance</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 80%;">
+                                                    <ng-select2 [data]="ddlAllowances" name="allowanceNameId"
+                                                        id="searchByAllowance" formControlName="allowanceNameId"
+                                                        [placeholder]="'Enter Allowance...'" [options]="select2Config"
+                                                        [allowClear]="true" required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="searchByFiscalYear" class="control-label font-bold">Search By
+                                                Fiscal-Year</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="searchByFiscalYear" id="searchByFiscalYear"
+                                                    formControlName="fiscalYearId" class="form-control form-control-sm">
+                                                    <option [value]="0" selected>--Select Fiscal-Year--</option>
+                                                    <option [value]="item.id"
+                                                        *ngFor="let item of ddlFiscalYearDropdown">{{item.text}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12 mt-sm-4 mt-4">
+                                            <div class="clearfix">
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-secondary btn-rounded pull-right mr-1"
+                                                    (click)="showProjectPaymentModal(0)" tooltip="Add">
+                                                    <i class="icofont-plus"></i> | Add Bonus
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th>#SL</th>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Allowance</th>
+                                                <th>Reason</th>
+                                                <th>Year</th>
+                                                <th>Income Year</th>
+                                                <th>Base Of Payment</th>
+                                                <th>Amount/Percentage</th>
+                                                <th class="hide">Once Off tax</th>
+                                                <th>Payable Amount</th>
+                                                <th>Disbursed Amount</th>
+                                                <th>Payment ID</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center"
+                                            *ngIf="list_of_project_payment != null && list_of_project_payment.length > 0">
+                                            <tr
+                                                *ngFor="let item of list_of_project_payment | paginate:project_payment_page_config;let i=index">
+                                                <td class="font-bold">{{i+1
+                                                    +(project_payment_page_size*(project_payment_page_nubmer-1))}}</td>
+                                                <td>{{item.employeeCode}}</td>
+                                                <td>{{item.employeeName}}</td>
+                                                <td>{{item.allowanceName}}</td>
+                                                <td>{{item.allowanceReason}}</td>
+                                                <td>{{item.payableYear}}</td>
+                                                <td>{{item.fiscalYearRange}}</td>
+                                                <td>
+                                                    <span *ngIf="item.baseOfPayment =='Flat'" class="label label-info">
+                                                        {{item.baseOfPayment}}
+                                                    </span>
+                                                    <span *ngIf="item.baseOfPayment =='Basic'"
+                                                        class="label label-primary">
+                                                        {{item.baseOfPayment}}
+                                                    </span>
+                                                    <span *ngIf="item.baseOfPayment =='Gross'"
+                                                        class="label label-success">
+                                                        {{item.baseOfPayment}}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span *ngIf="item.baseOfPayment =='Flat'" class="label label-info">
+                                                        &#2547; {{item.amount|number}}
+                                                    </span>
+                                                    <span *ngIf="item.baseOfPayment =='Basic'"
+                                                        class="label label-primary">
+                                                        {{item.percentage}}%
+                                                    </span>
+                                                    <span *ngIf="item.baseOfPayment =='Gross'"
+                                                        class="label label-success">
+                                                        {{item.percentage}}%
+                                                    </span>
+                                                </td>
+                                                <td class="hide">{{item.onceOffAmount | number}}</td>
+                                                <td>{{item.payableAmount | number}}</td>
+                                                <td>{{item.disbursedAmount | number}}</td>
+                                                <td>...</td>
+                                                <td>
+                                                    <span class="label label-warning"
+                                                        *ngIf="item.stateStatus=='Pending'">{{item.stateStatus +
+                                                        '...'}}</span>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.stateStatus=='Approved'">{{item.stateStatus}}</span>
+                                                    <span class="label label-success"
+                                                        *ngIf="item.stateStatus=='Processed'"> <i
+                                                            class="fa fa-cogs"></i> {{item.stateStatus}}</span>
+                                                    <span class="label label-danger"
+                                                        *ngIf="item.stateStatus=='Cancelled'"> <i
+                                                            class="fa fa-cogs"></i> {{item.stateStatus}}</span>
+                                                    <span class="label label-info"
+                                                        *ngIf="item.stateStatus=='Disbursed'"> <i
+                                                            class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-xs"
+                                                        (click)="openUpdateModal(item.projectedAllowanceId)"><i
+                                                            class="fa fa-edit"></i></button>
+                                                    <button type="button" class="btn btn-xs text-info"
+                                                        (click)="openApprovalModal(item.projectedAllowanceId)" *ngIf="item.stateStatus=='Pending'"><i
+                                                            class="fa fa-check"></i></button>
+                                                    <button type="button" class="btn btn-xs text-danger"
+                                                        title="Delete Pending One"
+                                                        (click)="openPendingProjectedAllowanceDeleteModal(item.projectedAllowanceId)"
+                                                        *ngIf="item.stateStatus=='Pending'">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-xs text-danger"
+                                                        title="Delete Pending One"
+                                                        (click)="openApprovedProjectedAllowanceDeleteModal(item.projectedAllowanceId)"
+                                                        *ngIf="item.stateStatus=='Approved'">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody class="text-center"
+                                            *ngIf="list_of_project_payment != null && list_of_project_payment.length > 0">
+
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-end">
+                                        <pagination-controls (pageChange)="project_payment_page_changed($event)"
+                                            [responsive]="true" [autoHide]="true"
+                                            id="project_payment_list"></pagination-controls>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="projectedPaymentProcess" class="tab-pane">
+                        <div class="ibox shadow-sm">
+                            <div
+                                class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark">
+                                <form [formGroup]="processSearchForm">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="searchByFiscalYear" class="control-label font-bold">Search By
+                                                Fiscal-Year</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="searchByFiscalYearInProcess"
+                                                    id="searchByFiscalYearInProcess" formControlName="fiscalYearId"
+                                                    class="form-control form-control-sm">
+                                                    <option [value]="0" selected>--Select Fiscal-Year--</option>
+                                                    <option [value]="item.id"
+                                                        *ngFor="let item of ddlFiscalYearDropdown">{{item.text}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="searchByMonthInProcess" class="control-label font-bold">Search
+                                                By Month &
+                                                Year</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="icofont-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="searchByMonthInProcess" id="searchByMonthInProcess"
+                                                    class="form-control form-control-sm" formControlName="paymentMonth">
+                                                    <option [value]="0" selected>--Month--</option>
+                                                    <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                        {{item.month}}</option>
+                                                </select>
+                                                <div class="input-group-prepend">
+                                                    <select name="searchByYearInProcess" id="searchByYearInProcess"
+                                                        class="form-control form-control-sm"
+                                                        formControlName="paymentYear">
+                                                        <option [value]="0" selected>--Year--</option>
+                                                        <option [value]="item" *ngFor="let item of ddlYears">{{item}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <label for="searchByStatusInProcess" class="control-label font-bold">Search
+                                                By Status</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="icofont-opposite"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="searchByStatusInProcess" id="searchByStatusInProcess"
+                                                    class="form-control form-control-sm" formControlName="stateStatus">
+                                                    <option [value]="''" selected>--Status--</option>
+                                                    <option [value]="item" *ngFor="let item of list_of_status">{{item}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12 mt-sm-4 mt-4">
+                                            <div class="clearfix">
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-primary btn-rounded pull-right"
+                                                    (click)="openProcessModal()" tooltip="Process">
+                                                    <i class="fa fa-cogs"></i> | Run Process
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th>#SL</th>
+                                                <th>ID</th>
+                                                <th>Payment Month</th>
+                                                <th>Payment Year</th>
+                                                <th>Total Employee</th>
+                                                <th>Fiscal Year</th>
+                                                <th>Payable Amount</th>
+                                                <th>Disbursable Amount</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center">
+                                            <tr *ngFor="let item of listOfProjectedPaymentInfos; let i= index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.processCode}}</td>
+                                                <td>{{this.utilityService.getMonthNameFull(item.paymentMonth)}}</td>
+                                                <td>{{item.paymentYear}}</td>
+                                                <td class="font-bold">
+                                                    <span
+                                                        class="btn btn-xs btn-rounded btn-info">{{item.headCount}}</span>
+                                                </td>
+                                                <td>{{item.fiscalYearRange}}</td>
+                                                <td>{{item.totalPayableAmount | number}}</td>
+                                                <td>{{item.totalDisbursedAmount | number}}</td>
+                                                <td>
+                                                    <span class="label label-warning"
+                                                        *ngIf="item.stateStatus=='Pending'">{{item.stateStatus +
+                                                        '...'}}</span>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.stateStatus=='Approved'">{{item.stateStatus}}</span>
+                                                    <span class="label label-success"
+                                                        *ngIf="item.stateStatus=='Processed'"> <i
+                                                            class="fa fa-cogs"></i> {{item.stateStatus}}</span>
+                                                    <span class="label label-info"
+                                                        *ngIf="item.stateStatus=='Disbursed'"> <i
+                                                            class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-xs" (click)="1==1">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-xs text-info faa-parent animated-hover"
+                                                        (click)="downloadProjectedPaymentSheet(item.processCode,item.projectedAllowanceProcessInfoId, item.fiscalYearId, item.paymentMonth, item.paymentYear, 'xlsx')"
+                                                        tooltip="Payment Sheet">
+                                                        <i class="fa fa-file-excel-o fa-3x"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-end">
+                                        <pagination-controls (pageChange)="project_payment_info_page_changed($event)"
+                                            [responsive]="true" [autoHide]="true"
+                                            id="project_payment_info_list"></pagination-controls>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showProjectPaymentInsertUpdateModal">
+    <app-payroll-projected-payment-insert-modal
+        (closeModalEvent)="hideProjectPaymentModal($event)"></app-payroll-projected-payment-insert-modal>
+</ng-container>
+
+<ng-container *ngIf="showDataUploadModal">
+    <app-payroll-upload-projected-payment-modal
+        (closeModalEvent)="hideUploadModal($event)"></app-payroll-upload-projected-payment-modal>
+</ng-container>
+
+<ng-container *ngIf="showProcessModal">
+    <salary-module-projected-payment-process-modal (closeModalEvent)="closeProcessModal($event)">
+    </salary-module-projected-payment-process-modal>
+</ng-container>
+
+<ng-container *ngIf="showApprovalModal">
+    <app-payroll-approval-projected-allowance [id]="payment_id_in_approval_modal"
+        (closeModalEvent)="closeApprovalModal($event)">
+    </app-payroll-approval-projected-allowance>
+</ng-container>
+
+
+<ng-container *ngIf="showUpdateModal">
+    <app-payroll-update-projected-payment [id]="payment_id_in_update_modal"
+        (closeModalEvent)="closeUpdateModal($event)">
+    </app-payroll-update-projected-payment>
+</ng-container>
+
+<ng-container *ngIf="showPendingProjectedAllowanceDeleteModal">
+    <app-payroll-delete-pending-projected-allowance [id]="pendingAllowanceItemId"
+        (closeModalEvent)="closePendingProjectedAllowanceDeleteModal($event)">
+    </app-payroll-delete-pending-projected-allowance>
+</ng-container>
+
+<ng-container *ngIf="showApprovedProjectedAllowanceDeleteModal">
+    <app-payroll-approved-pending-projected-allowance [id]="approvedAllowanceItemId"
+        (closeModalEvent)="closeApprovedProjectedAllowanceDeleteModal($event)">
+    </app-payroll-approved-pending-projected-allowance>
+</ng-container>

@@ -1,0 +1,1077 @@
+<ng-template #createModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-diamond"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-lg-12">
+                    <div class="text-x-small font-bold text-dark">
+                        <form [formGroup]="createForm">
+                            <div class="modal-body">
+                                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="transactionDate" class="control-label">
+                                                Transaction Date <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark">
+                                                        <i class="fa fa-calendar-times-o"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" id="transactionDate" class="form-control form-control-sm bg-white"
+                                                    formControlName="transactionDate" placeholder="Choose a date from picker" bsDatepicker
+                                                    [ngClass]="{'is-invalid':((createForm.get('transactionDate').touched ||
+                                                                                                                                createForm.get('transactionDate').dirty) && createForm.get('transactionDate').errors)}"
+                                                    [class.is-valid]="createForm.get('transactionDate').valid"
+                                                    [bsConfig]="datePickerConfig" readonly autocomplete="off">
+                                                <div class="input-group-prepend cursor-pointer"
+                                                    *ngIf="this.createForm.get('transactionDate').value != null && this.createForm.get('transactionDate').value !=''"
+                                                    (click)="this.createForm.get('transactionDate').setValue(null)">
+                                                    <span class="input-group-addon text-danger">
+                                                        <i class="fa fa-times"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="((createForm.get('transactionDate').touched ||
+                                                                                                                        createForm.get('transactionDate').dirty) && createForm.get('transactionDate').errors)"
+                                                class="text-danger">
+                                                <span>Field is required</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="assetName" class="control-label">Asset Name
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-text-height" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" (blur)="logFormErrors()"
+                                                    (input)="logFormErrors()" autofocus="true" autocomplete="off" id="assetName"
+                                                    name="assetName" formControlName="assetName">
+                                            </div>
+                                            <div class="text-danger">
+                                                <span *ngIf="formErrors?.assetName">{{formErrors?.assetName}}</span>
+                                                <span *ngIf="server_errors != null">{{server_errors?.exist}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="vendorId" class="control-label"> Vendor Name
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 87%;">
+                                                    <ng-select2 [data]="ddlVendor" name="vendorId" id="vendorId" formControlName="vendorId"
+                                                        [placeholder]="'--Select Vendor--'" [options]="select2Options" [allowClear]="true"
+                                                        required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="storeId" class="control-label">Store Name
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 87%;">
+                                                    <ng-select2 [data]="ddlStore" name="storeId" id="storeId" formControlName="storeId"
+                                                        [placeholder]="'--Select Store--'" [options]="select2Options" [allowClear]="true"
+                                                        required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="categoryName" class="control-label"> Category
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 87%;">
+                                                    <ng-select2 [data]="ddlCategory" name="categoryId" id="categoryId"
+                                                        formControlName="categoryId" [placeholder]="'--Select Category--'"
+                                                        [options]="select2Options" [allowClear]="true" required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="text-danger">
+                                                                                                                            <span *ngIf="formErrors?.categoryId">{{formErrors?.categoryId}}</span>
+                                                                                                                        </div> -->
+                                        </div>
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="subCategoryId" class="control-label">Sub Category
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 87%;">
+                                                    <ng-select2 [data]="ddlSubCategory" name="subCategoryId" id="subCategoryId"
+                                                        formControlName="subCategoryId" [placeholder]="'--Select Sub Category--'"
+                                                        [options]="select2Options" [allowClear]="true" required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="brandId" class="control-label"> Brand Name
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 87%;">
+                                                    <ng-select2 [data]="ddlBrand" name="brandId" id="brandId" formControlName="brandId"
+                                                        [placeholder]="'--Select Brand--'" [options]="select2Options" [allowClear]="true"
+                                                        required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="depreciation" class="control-label"> Depreciation
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon my-input-group-addon-padding">
+                                                        <input type="checkbox" name="depreciation" id="depreciation"
+                                                            formControlName="depreciation" />
+                                                    </span>
+                                                </div>
+                                                <div class="form-control form-control-sm text-small font-bold">
+                                                    {{ this.createForm.get('depreciation').value ? 'Depreciable' :
+                                                    'Non-Depreciable' }}
+                                                </div>
+                                            </div>
+                        
+                                        </div>
+                                    </div>
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="condition" class="control-label"> Condition
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon my-input-group-addon-padding">
+                                                        <input type="checkbox" name="condition" id="condition" formControlName="condition" />
+                                                    </span>
+                                                </div>
+                                                <div class="form-control form-control-sm text-small font-bold">
+                                                    {{ this.createForm.get('condition').value ? 'New' :
+                                                    'Second-Hand'}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="itAccess" class="control-label"> IT Access
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon my-input-group-addon-padding">
+                                                        <input type="checkbox" name="itAccess" id="itAccess" formControlName="itAccess" />
+                                                    </span>
+                                                </div>
+                                                <div class="form-control form-control-sm text-small font-bold">
+                                                    {{ this.createForm.get('itAccess').value ? 'Accessible' :
+                                                    'Inaccessible' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="warrantyDate" class="control-label">Warranty Date</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="warrantyDate" name="warrantyDate"
+                                                    formControlName="warrantyDate" [attr.disabled]="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-2 col-sm-12">
+                                            <label for="wDay" class="control-label">Day</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-sun-o" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="wDay" name="wDay"
+                                                    formControlName="wDay" inputmode="numeric"
+                                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                    (input)="onDayChange($event)">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-2 col-sm-12">
+                                            <label for="wMonth" class="control-label">Month</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-moon-o" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="wMonth" name="wMonth"
+                                                    formControlName="wMonth" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                    (input)="onMonthChange($event)">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-2 col-sm-12">
+                                            <label for="wYear" class="control-label">Year</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-y-combinator" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="wYear" name="wYear"
+                                                    formControlName="wYear" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                    (input)="onYearChange($event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="durationDays" class="control-label">Duration Days</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-text-height" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="durationDays" name="durationDays"
+                                                    formControlName="durationDays" [attr.disabled]="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6 col-sm-12">
+                                            <label for="remarks" class="control-label">Remarks</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-text-height" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="remarks" name="remarks"
+                                                    formControlName="remarks">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox"></div>
+                                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                    <div class="input-group-prepend d-flex justify-content-between" *ngIf="!isEditClick">
+                                        <button class="btn btn-outline-primary" type="submit" (click)="openProductDetailModal()">
+                                            <i class="fa fa-plus"></i> | Product's Add
+                                        </button>
+                                        <div class="col-md-4 d-flex justify-content-center">
+                                            <label for="durationDays" class="control-label"
+                                                style="font-weight: bold; color: #c00808; font-family: Arial, sans-serif; font-size: 45px;">Or</label>
+                                        </div>
+                                        <button class="btn btn-outline-info" type="submit" (click)="openUploadModal()">
+                                            <i class="fa fa-upload"></i> | Product's Upload
+                                        </button>
+                                    </div>                                    
+                                    <div class="font-bold text-dark" [hidden]="isProductEdit">
+                                        <form [formGroup]="uploadForm">                                    
+                                            <div class="form-row">
+                                                <div class="table-responsive" *ngIf="this.uploadForm.controls.downloadFormat.value == 'Serial'">
+                                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">#SL</th>
+                                                                <th>Product ID</th>
+                                                                <th>Serial Number</th>
+                                                                <!-- <th class="text-center" *ngIf="!approved">Action</th> -->
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <ng-container *ngFor="let item of list; let i = index">
+                                                                <tr>
+                                                                    <td class="text-center">{{i + 1}}</td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.productId}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [value]="item.productId" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.number}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [value]="item.number" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <!-- <td class="text-center" *ngIf="!approved">
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            <i class="fa fa-pencil cursor-pointer ml-2" (click)="toggleEditMode(item)"
+                                                                                style="color: rgba(7, 75, 7, 0.856);"></i>                                                                            
+                                                                        </ng-container>
+                                        
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <i class="fa fa-check cursor-pointer ml-2" (click)="saveChanges(item)"
+                                                                                style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                                            <span style="margin-left: 10px;"></span>
+                                                                            <i class="fa fa-times text-danger cursor-pointer" (click)="cancelEdit(item)"></i>
+                                                                        </ng-container>
+                                                                    </td> -->
+                                                                </tr>
+                                                            </ng-container>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="table-responsive" *ngIf="this.uploadForm.controls.downloadFormat.value == 'SIM'">
+                                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">#SL</th>
+                                                                <th>Product ID</th>
+                                                                <th>Number</th>
+                                                                <th>PIN</th>
+                                                                <th>PUK</th>
+                                                                <!-- <th class="text-center" *ngIf="!approved">Action</th> -->
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <ng-container *ngFor="let item of list; let i = index">
+                                                                <tr>
+                                                                    <td class="text-center">{{i + 1}}</td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.productId}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [value]="item.productId" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.number}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [value]="item.number" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.pin}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [(ngModel)]="item.pin" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.puk}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [value]="item.puk"/>
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <!-- <td class="text-center" *ngIf="!approved">
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            <i class="fa fa-pencil cursor-pointer ml-2" (click)="toggleEditMode(item)"
+                                                                                style="color: rgba(7, 75, 7, 0.856);"></i>                                                                          
+                                                                        </ng-container>
+                                        
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <i class="fa fa-check cursor-pointer ml-2" (click)="saveChanges(item)"
+                                                                                style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                                            <span style="margin-left: 10px;"></span>
+                                                                            <i class="fa fa-times text-danger cursor-pointer" (click)="cancelEdit(item)"></i>
+                                                                        </ng-container>
+                                                                    </td> -->
+                                                                </tr>
+                                                            </ng-container>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="table-responsive" *ngIf="this.uploadForm.controls.downloadFormat.value == 'Phone'">
+                                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">#SL</th>
+                                                                <th>Product ID</th>
+                                                                <th>Number</th>
+                                                                <th>IMEI 1</th>
+                                                                <th>IMEI 2</th>
+                                                                <!-- <th class="text-center" *ngIf="!approved">Action</th> -->
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <ng-container *ngFor="let item of list; let i = index">
+                                                                <tr>
+                                                                    <td class="text-center">{{i + 1}}</td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.productId}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="productId" [value]="item.productId"
+                                                                                [value]="item.productId.toString()" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.number}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [value]="item.number" [value]="item.number.toString()" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.imei1}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [value]="item.imei1" [value]="item.imei1.toString()" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.imei2}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [value]="item.imei2" [value]="item.imei2.toString()" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <!-- <td class="text-center" *ngIf="!approved">
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            <i class="fa fa-pencil cursor-pointer ml-2" (click)="toggleEditMode(item)"
+                                                                                style="color: rgba(7, 75, 7, 0.856);"></i>                                                                            
+                                                                        </ng-container>
+                                        
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <i class="fa fa-check cursor-pointer ml-2" (click)="saveChanges(item)"
+                                                                                style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                                            <span style="margin-left: 10px;"></span>
+                                                                            <i class="fa fa-times text-danger cursor-pointer" (click)="cancelEdit(item)"></i>
+                                                                        </ng-container>
+                                                                    </td> -->
+                                                                </tr>
+                                                            </ng-container>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="table-responsive" *ngIf="this.uploadForm.controls.downloadFormat.value == 'Product ID'">
+                                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">#SL</th>
+                                                                <th>Product ID</th>
+                                                                <!-- <th class="text-center" *ngIf="!approved">Action</th> -->
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <ng-container *ngFor="let item of list; let i = index">
+                                                                <tr>
+                                                                    <td class="text-center">{{i + 1}}</td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            {{item.productId}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <input type="text" [value]="item.productId" [value]="item.productId.toString()" />
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <!-- <td class="text-center" *ngIf="!approved">
+                                                                        <ng-container *ngIf="!item.isEdit">
+                                                                            <i class="fa fa-pencil cursor-pointer ml-2" (click)="toggleEditMode(item)"
+                                                                                style="color: rgba(7, 75, 7, 0.856);"></i>                                                                           
+                                                                        </ng-container>
+                                        
+                                                                        <ng-container *ngIf="item.isEdit">
+                                                                            <i class="fa fa-check cursor-pointer ml-2" (click)="saveChanges(item)"
+                                                                                style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                                            <span style="margin-left: 10px;"></span>
+                                                                            <i class="fa fa-times text-danger cursor-pointer" (click)="cancelEdit(item)"></i>
+                                                                        </ng-container>
+                                                                    </td> -->
+                                                                </tr>
+                                                            </ng-container>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>                                    
+                                        </form>
+                                    </div>                                    
+                                    <hr />
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-12 col-md-4 col-sm-12">
+                                            <label for="quantity" class="control-label">Quantity</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-quora" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="quantity" required name="quantity"
+                                                    formControlName="quantity" inputmode="numeric"
+                                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57" [attr.disabled]="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-4 col-sm-12">
+                                            <label for="amount" class="control-label">Amount</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="amount" required name="amount"
+                                                    formControlName="amount" inputmode="numeric"
+                                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-4 col-sm-12">
+                                            <label for="totalAmount" class="control-label">Total Amount</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-addon">
+                                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="totalAmount" [attr.disabled]="true"
+                                                    name="totalAmount" formControlName="totalAmount" inputmode="numeric"
+                                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer text-x-small pb-2">
+            <button class="btn btn-sm btn-primary btn-rounded btn-outline pull-right" type="submit"
+                [disabled]="this.createForm.invalid || this.approved == true" (click)="submitAsset()">
+                <i class="fa fa-cogs"></i> | Submit
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button"
+                (click)="closeModal('Cancel click')" [disabled]="btnSubmit">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #uploadModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-cloud-upload"></i>| Upload Product's
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="uploadForm">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-12 col-md-7 col-sm-12 text-x-small">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark text-white">
+                                    <i class="fa fa-dot-circle-o"></i>
+                                </span>
+                            </div>
+                            <select name="downloadFormat" id="downloadFormat" class="form-control form-control-sm"
+                                formControlName="downloadFormat">
+                                <option [value]="''" selected>---Select Format---</option>
+                                <option [value]="item" *ngFor="let item of ddlFormat">{{item}}
+                                </option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-5 col-sm-12 text-x-small text-right">
+                        <button type="button" class="btn btn-primary btn-rounded btn-outline"
+                            (click)="downloadExcelFile(this.uploadForm.controls.downloadFormat.value)"
+                            [disabled]="this.uploadForm.controls.downloadFormat.value === ''"><i
+                                class="icofont-download"></i> |
+                            Download Format</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-12 col-md-7 col-sm-12 text-x-small">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input id="excelFileUpload" type="file" class="custom-file-input"
+                                    (change)="excelFileUpload($event)" accept=".xls,.xlsx"
+                                    [disabled]="this.uploadForm.controls.downloadFormat.value === ''">
+                                <label class="custom-file-label" for="excelFileUpload">
+                                    {{excelFileName}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-5 col-sm-12 text-x-small text-right">
+                        <button type="button" class="btn btn-success btn-rounded btn-sm btn-outline"
+                            (click)="UploadExcelFile()" [disabled]="excelFileName === 'Choose Your excel file'"><i
+                                class="fa fa-arrow-up"></i> | Upload File
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox" [hidden]="isRowHidden">
+                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark">
+                    <div class="table-responsive" *ngIf="this.uploadForm.controls.downloadFormat.value == 'Serial'">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th>Product ID</th>
+                                    <th>Serial Number</th>
+                                    <!-- <th class="text-center">Action</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of list; let i = index">
+                                    <tr>
+                                        <td class="text-center">{{i + 1}}</td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.productId}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.productId" />
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.number}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.number" />
+                                            </ng-container>
+                                        </td>
+                                        <!-- <td class="text-center">
+                                            <ng-container *ngIf="!item.isEdit">
+                                                <i class="fa fa-pencil cursor-pointer ml-2" (click)="toggleEditMode(item)"
+                                                    style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                <span style="margin-left: 10px;"></span>
+                                                <i class="fa fa-trash text-danger cursor-pointer" (click)="removeItem(i)"></i>
+                                            </ng-container>
+                
+                                            <ng-container *ngIf="item.isEdit">
+                                                <i class="fa fa-check cursor-pointer ml-2" (click)="saveChanges(item)"
+                                                    style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                <span style="margin-left: 10px;"></span>
+                                                <i class="fa fa-times text-danger cursor-pointer" (click)="cancelEdit(item)"></i>
+                                            </ng-container>
+                                        </td> -->
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive" *ngIf="this.uploadForm.controls.downloadFormat.value == 'SIM'">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th>Product ID</th>
+                                    <th>Number</th>
+                                    <th>PIN</th>
+                                    <th>PUK</th>
+                                    <!-- <th class="text-center">Action</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of list; let i = index">
+                                    <tr>
+                                        <td class="text-center">{{i + 1}}</td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.productId}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.productId" />
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.number}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.number" />
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.pin}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.pin" />
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.puk}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.puk" />
+                                            </ng-container>
+                                        </td>
+                                        <!-- <td class="text-center">
+                                            <ng-container *ngIf="!item.isEdit">
+                                                <i class="fa fa-pencil cursor-pointer ml-2" (click)="toggleEditMode(item)"
+                                                    style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                <span style="margin-left: 10px;"></span>
+                                                <i class="fa fa-trash text-danger cursor-pointer" (click)="removeItem(i)"></i>
+                                            </ng-container>
+                
+                                            <ng-container *ngIf="item.isEdit">
+                                                <i class="fa fa-check cursor-pointer ml-2" (click)="saveChanges(item)"
+                                                    style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                <span style="margin-left: 10px;"></span>
+                                                <i class="fa fa-times text-danger cursor-pointer" (click)="cancelEdit(item)"></i>
+                                            </ng-container>
+                                        </td> -->
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive" *ngIf="this.uploadForm.controls.downloadFormat.value == 'Phone'">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th>Product ID</th>
+                                    <th>Number</th>
+                                    <th>IMEI 1</th>
+                                    <th>IMEI 2</th>
+                                    <!-- <th class="text-center">Action</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of list; let i = index">
+                                    <tr>
+                                        <td class="text-center">{{i + 1}}</td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.productId}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="productId" [value]="item.productId" [value]="item.productId.toString()" />
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.number}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.number" [value]="item.number.toString()" />
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.imeI1}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.imei1" [value]="item.imei1.toString()" />
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.imeI2}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.imei2" [value]="item.imei2.toString()" />
+                                            </ng-container>
+                                        </td>
+                                        <!-- <td class="text-center">
+                                            <ng-container *ngIf="!item.isEdit">
+                                                <i class="fa fa-pencil cursor-pointer ml-2" (click)="toggleEditMode(item)"
+                                                    style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                <span style="margin-left: 10px;"></span>
+                                                <i class="fa fa-trash text-danger cursor-pointer" (click)="removeItem(i)"></i>
+                                            </ng-container>
+                
+                                            <ng-container *ngIf="item.isEdit">
+                                                <i class="fa fa-check cursor-pointer ml-2" (click)="saveChanges(item)"
+                                                    style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                <span style="margin-left: 10px;"></span>
+                                                <i class="fa fa-times text-danger cursor-pointer" (click)="cancelEdit(item)"></i>
+                                            </ng-container>
+                                        </td> -->
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive" *ngIf="this.uploadForm.controls.downloadFormat.value == 'Product ID'">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th>Product ID</th>
+                                    <!-- <th class="text-center">Action</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of list; let i = index">
+                                    <tr>
+                                        <td class="text-center">{{i + 1}}</td>
+                                        <td>
+                                            <ng-container *ngIf="!item.isEdit">
+                                                {{item.productId}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.isEdit">
+                                                <input type="text" [value]="item.productId" [value]="item.productId.toString()" />
+                                            </ng-container>
+                                        </td>
+                                        <!-- <td class="text-center">
+                                            <ng-container *ngIf="!item.isEdit">
+                                                <i class="fa fa-pencil cursor-pointer ml-2" (click)="toggleEditMode(item)"
+                                                    style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                <span style="margin-left: 10px;"></span>
+                                                <i class="fa fa-trash text-danger cursor-pointer" (click)="removeItem(i)"></i>
+                                            </ng-container>
+                
+                                            <ng-container *ngIf="item.isEdit">
+                                                <i class="fa fa-check cursor-pointer ml-2" (click)="saveChanges(item)"
+                                                    style="color: rgba(7, 75, 7, 0.856);"></i>
+                                                <span style="margin-left: 10px;"></span>
+                                                <i class="fa fa-times text-danger cursor-pointer" (click)="cancelEdit(item)"></i>
+                                            </ng-container>
+                                        </td> -->
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="alert alert-danger" role="alert" *ngIf="server_errors != null">
+            <span>{{ server_errors }}</span>
+        </div>
+        <div class="modal-footer text-x-small pb-2">
+            <button class="btn btn-sm btn-primary btn-rounded btn-outline pull-right" type="submit"
+                [disabled]="this.list.length === 0" (click)="checkProductValidation()">
+                <i class="fa fa-cogs"></i> | Submit
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button"
+                (click)="resetQuantityFormControl(); modal.dismiss('Cross click')" [disabled]="btnSubmit">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #productDetailModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-plus-circle"></i>| Add Product's
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="productDetailForm">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-12 col-md-12 col-sm-12 text-x-small">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark text-white">
+                                    <i class="fa fa-dot-circle-o"></i>
+                                </span>
+                            </div>
+                            <select name="downloadFormat" id="downloadFormat" class="form-control form-control-sm"
+                                formControlName="downloadFormat">
+                                <option [value]="''" selected>---Select Format---</option>
+                                <option [value]="item" *ngFor="let item of ddlFormat">{{item}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="this.productDetailForm.controls.downloadFormat.value != ''">
+                    <div class="form-group col-12 col-md-12 text-x-small">
+                        <div class="ibox-content">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-md-3">
+                                    <label>Product ID</label>
+                                </div>
+                                <div class="form-group col-12 col-md-3">
+                                    <label>Number</label>
+                                </div>
+                                <div class="form-group col-12 col-md-2"
+                                    *ngIf="this.productDetailForm.controls.downloadFormat.value == 'Phone'">
+                                    <label>IMEI</label>
+                                </div>
+                                <div class="form-group col-12 col-md-2"
+                                    *ngIf="this.productDetailForm.controls.downloadFormat.value == 'Phone'">
+                                    <label>IME2</label>
+                                </div>
+                                <div class="form-group col-12 col-md-2"
+                                    *ngIf="this.productDetailForm.controls.downloadFormat.value == 'SIM'">
+                                    <label>PIN</label>
+                                </div>
+                                <div class="form-group col-12 col-md-2"
+                                    *ngIf="this.productDetailForm.controls.downloadFormat.value == 'SIM'">
+                                    <label>PUK</label>
+                                </div>
+                                <div class="form-group col-1 col-md-2">
+                                    <label>Action</label>
+                                </div>
+                            </div>
+                            <div formArrayName="product" *ngFor="let product of formArray; let i = index">
+                                <div [formGroupName]="i" class="form-row">
+                                    <div class="form-group col-12 col-md-3"
+                                        *ngIf="this.productDetailForm.controls.downloadFormat.value != ''">
+                                        <div class="input-group">
+                                            <span class="input-group-addon text-dark font-bold">{{i + 1}}</span>
+                                            <input type="text" formControlName="productId" class="form-control form-control-sm"
+                                                name="productId">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-3" *ngIf="this.productDetailForm.controls.downloadFormat.value == 'Phone' 
+                                                || this.productDetailForm.controls.downloadFormat.value == 'SIM'
+                                                || this.productDetailForm.controls.downloadFormat.value == 'Serial'">
+                                        <div class="input-group">
+                                            <input type="text" formControlName="number" class="form-control form-control-sm"
+                                                name="number">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-2"
+                                        *ngIf="this.productDetailForm.controls.downloadFormat.value == 'Phone'">
+                                        <div class="input-group">
+                                            <input type="text" formControlName="imei1" class="form-control form-control-sm"
+                                                name="imei1">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-2"
+                                        *ngIf="this.productDetailForm.controls.downloadFormat.value == 'Phone'">
+                                        <div class="input-group">
+                                            <input type="text" formControlName="imei2" class="form-control form-control-sm"
+                                                name="imei2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-2"
+                                        *ngIf="this.productDetailForm.controls.downloadFormat.value == 'SIM'">
+                                        <div class="input-group">
+                                            <input type="text" formControlName="pin" class="form-control form-control-sm" name="pin">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-2"
+                                        *ngIf="this.productDetailForm.controls.downloadFormat.value == 'SIM'">
+                                        <div class="input-group">
+                                            <input type="text" formControlName="puk" class="form-control form-control-sm" name="puk">
+                                        </div>
+                                    </div>
+                
+                                    <div class="form-group col-12 col-md-2"
+                                        *ngIf="this.productDetailForm.controls.downloadFormat.value != ''">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-prepend cursor-pointer text-small" (click)="addClick()">
+                                                <span class="input-group-addon text-primary"><i class="fa fa-plus"></i></span>
+                                            </div>
+                                            <div class="input-group-prepend cursor-pointer text-small" (click)="removeClick(i)">
+                                                <span class="input-group-addon text-danger"><i class="fa fa-trash"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="alert alert-danger" role="alert" *ngIf="server_errors != null">
+            <span>{{ server_errors }}</span>
+        </div>
+        <div class="modal-footer text-x-small">
+            <button class="btn btn-sm btn-primary btn-rounded btn-outline pull-right" type="submit"
+                [disabled]="this.productDetailForm.invalid" (click)="checkProductValidation()">
+                <i class="fa fa-cogs"></i> | Submit
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button"
+            (click)="resetQuantityFormControl(); modal.dismiss('Cross click')" [disabled]="btnSubmit">
+            <i class="fa fa-times"></i> | Cancel
+        </button>
+        </div>
+    </div>
+</ng-template>
+
+<style>
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+    /* animation: blink 5s infinite; */
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+</style>

@@ -1,0 +1,351 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Self Payroll Reports</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Salary</strong>
+            </li>
+            <li class="breadcrumb-item active"> 
+                <!-- Aga Khan External Report -->
+                <strong>Payslip , TaxCard & Other Report</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#salarypayslip" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-info"></i> | Salary Payslip
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#bonuspayslip" data-toggle="tab" class="nav-link hide">
+                            <i class="fa fa-list"></i> | Bonus Payslip
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#taxCard" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-list"></i> | Tax Card
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="salarypayslip" class="tab-pane active">
+                        <div class="ibox">
+                            <div class="ibox-content shadow-sm bg-white">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 mb-0">
+                                        <label for="" class="control-label font-bold text-uppercase">Select Salary Month & Year</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon  text-dark">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="paySlipMonth" id="paySlipMonth" class="form-control form-control-sm"
+                                                title="Month" [(ngModel)]="paySlipMonth" #paySlipMonthRef="ngModel" required>
+                                                <option [value]="1">January</option>
+                                                <option [value]="2">February</option>
+                                                <option [value]="3">March</option>
+                                                <option [value]="4">April</option>
+                                                <option [value]="5">May</option>
+                                                <option [value]="6">June</option>
+                                                <option [value]="7">July</option>
+                                                <option [value]="8">August</option>
+                                                <option [value]="9">September</option>
+                                                <option [value]="10">October</option>
+                                                <option [value]="11">November</option>
+                                                <option [value]="12">December</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <select name="paySlipYear" id="paySlipYear" #paySlipYearRef="ngModel" required
+                                                    class="form-control form-control-sm" title="Year" [(ngModel)]="paySlipYear">
+                                                    <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <div class="form-group col-md-3 mb-0 hide">
+                                        <label for="" class="control-label font-bold text-uppercas" style="visibility: hidden;">Action</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon  text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width: 80%;">
+                                                <ng-select2 [data]="ddlPaySlipEmployee" name="paySlipEmployeeId"
+                                                    #paySlipEmployeeIdRef="ngModel" id="paySlipEmployeeId"
+                                                    [placeholder]="'Select Employee...'" [options]="select2Options"
+                                                    [allowClear]="true" [(ngModel)]="paySlipEmployeeId" required>
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 mb-0">
+                                        <label for="" class="control-label font-bold text-uppercas" style="visibility: hidden;">Action</label>
+                                        <div class="clearfix">
+                                            <button type="button" class="btn btn-sm btn-primary btn-rounded pull-right ml-1"
+                                                (click)="downloadSalaryPayslip()">
+                                                <i class="fa fa-file-pdf-o"></i> | Download Salary Payslip 
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-info btn-rounded pull-right hide"
+                                                (click)="viewReport()">
+                                                <i class="fa fa-eye"></i> | View Payslip
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox" *ngIf="payslipData != null" @fadeIn>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <div class="table-responsive font-bold">
+                                    <table class="table table-sm table-striped table-bordered table-hover table-responsive-xl mb-0">
+                                        <tbody>
+                                            <tr class="bg-dark-blue">
+                                                <td colspan="2" class="text-white font-bold">Employee Details</td>
+                                                <td colspan="2" class="text-white font-bold text-right">Payslip -
+                                                    {{payslipData?.monthName}}'{{payslipData?.salaryYear}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">Employee No.</td>
+                                                <td class="text-left">{{payslipData?.employeeCode}}</td>
+                                                <td class="text-left">Employee Name</td>
+                                                <td class="text-left">{{payslipData?.employeeName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">Date Of Joining</td>
+                                                <td class="text-left">{{payslipData?.dateofJoining | date:"dd MMM yyyy"}}</td>
+                                                <td class="text-left">Designation</td>
+                                                <td class="text-left">{{payslipData?.designationName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">Working Days</td>
+                                                <td class="text-left">{{payslipData?.workingDays}}</td>
+                                                <td class="text-left">Department</td>
+                                                <td class="text-left">{{payslipData?.departmentName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">Location</td>
+                                                <td class="text-left">{{payslipData?.location}}</td>
+                                                <td class="text-left">TIN</td>
+                                                <td class="text-left">{{payslipData?.tin}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <h5>Salary Details (Component-wise Breakdown)</h5>
+                                <div class="table-responsive">
+                                    <table
+                                        class="table table-sm table-striped table-hover table-responsive-xl text-x-small mb-0 font-bold">
+                                        <thead class="bg-light-blue text-white">
+                                            <tr>
+                                                <th class="text-center font-bold">#SL</th>
+                                                <th class="text-left">Allowance</th>
+                                                <th class="text-right">Amount</th>
+                                                <th class="text-right border-right">Arrear</th>
+                                                <th class="text-left">Deduction</th>
+                                                <th class="text-right">Amount</th>
+                                                <th class="text-right border-right">Arrear</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of payslipData?.payslipDetails; let i = index">
+                                                <td class="text-center">{{i+1}}</td>
+                                                <td class="text-left">{{item.allowanceName}}</td>
+                                                <td class="text-right">{{item.allowanceAmount}}</td>
+                                                <td class="text-right border-right">{{item.allowanceArrearAmount > 0 ?
+                                                    item.allowanceArrearAmount : ''}}</td>
+                                                <td class="text-left">{{item.deductionName}}</td>
+                                                <td class="text-right">{{item.deductionAmount > 0 ? item.deductionAmount : ''}}</td>
+                                                <td class="text-right border-right">{{item.deductionArrearAmount > 0 ?
+                                                    item.deductionArrearAmount : ''}}</td>
+            
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class=" text-dark  font-bold">
+                                                <td colspan="2" class="text-left">Total</td>
+                                                <td class="text-right">{{payslipData?.totalAllowance > 0 ?
+                                                    payslipData?.totalAllowance : 0.00}}</td>
+                                                <td class="text-right border-right">{{payslipData?.totalArrearAllowance > 0 ?
+                                                    payslipData?.totalArrearAllowance : 0.00}}</td>
+                                                <td class="text-left">Total Deduction</td>
+                                                <td class="text-right">{{payslipData?.totalDeduction > 0 ?
+                                                    payslipData?.totalDeduction : 0.00}}</td>
+                                                <td class="text-right">{{payslipData?.totalArrearDeduction > 0 ?
+                                                    payslipData?.totalArrearDeduction : 0.00}}</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered table-responsive-xl mb-0 font-bold">
+                                        <tr>
+                                            <td colspan="2" class="text-right">Net Payable</td>
+                                            <td colspan="2" class="text-right">{{payslipData?.netPay}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-borderless table-responsive-xl mb-0 font-bold">
+                                        <tr>
+                                            <td colspan="4" class="text-left">In Words: {{payslipData?.amountInWord}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-left">[N.B : Confidential Report. Please Do Not Share with
+                                                Anyone]</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <h5>Payment Methods:</h5>
+                                <div class="table-responsive">
+                                    <table
+                                        class="table table-sm table-striped table-hover table-responsive-xl text-x-small font-bold text-center">
+                                        <thead class="bg-light-blue text-white">
+                                            <tr>
+                                                <th>Payment Type</th>
+                                                <th>Bank/Wallet Name</th>
+                                                <th>Account/Wallet Number</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Bank Transfer</td>
+                                                <td>{{payslipData?.bankName}}</td>
+                                                <td>{{payslipData?.bankAccNo}}</td>
+                                                <td>{{payslipData?.netPay}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="bonuspayslip" class="tab-pane hide">
+                        <div class="ibox">
+                            <div class="ibox-content shadow-sm bg-white">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 mb-0">
+                                        <label for="" class="control-label font-bold text-uppercase">Select Bonus Month & Year</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon  text-dark">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="bonuspaySlipMonth" id="bonuspaySlipMonth" class="form-control form-control-sm"
+                                                title="Month" [(ngModel)]="bonuspaySlipMonth" #bonuspaySlipMonthRef="ngModel" required>
+                                                <option [value]="1">January</option>
+                                                <option [value]="2">February</option>
+                                                <option [value]="3">March</option>
+                                                <option [value]="4">April</option>
+                                                <option [value]="5">May</option>
+                                                <option [value]="6">June</option>
+                                                <option [value]="7">July</option>
+                                                <option [value]="8">August</option>
+                                                <option [value]="9">September</option>
+                                                <option [value]="10">October</option>
+                                                <option [value]="11">November</option>
+                                                <option [value]="12">December</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <select name="bonuspaySlipYear" id="bonuspaySlipYear" #bonuspaySlipYearRef="ngModel" required
+                                                    class="form-control form-control-sm" title="Year" [(ngModel)]="bonuspaySlipYear">
+                                                    <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 mb-0">
+                                        <label for="" class="control-label font-bold text-uppercas" style="visibility: hidden;">Action</label>
+                                        <div class="clearfix">
+                                            <button type="button" class="btn btn-sm btn-success btn-rounded pull-right ml-1"
+                                                (click)="downloadBonusPayslip()">
+                                                <i class="fa fa-file-pdf-o"></i> | Download Bonus Payslip
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-info btn-rounded pull-right hide"
+                                                (click)="viewReport()">
+                                                <i class="fa fa-eye"></i> | View Payslip
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="taxCard" class="tab-pane">
+                        <div class="ibox">
+                            <div class="ibox-content shadow-sm bg-white">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 mb-0">
+                                        <label for="" class="control-label font-bold text-uppercase">Select Bonus Month & Year</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon  text-dark">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="taxCardMonth" id="taxCardMonth" class="form-control form-control-sm"
+                                                title="Month" [(ngModel)]="taxCardMonth" #taxCardMonthRef="ngModel" required>
+                                                <option [value]="1">January</option>
+                                                <option [value]="2">February</option>
+                                                <option [value]="3">March</option>
+                                                <option [value]="4">April</option>
+                                                <option [value]="5">May</option>
+                                                <option [value]="6">June</option>
+                                                <option [value]="7">July</option>
+                                                <option [value]="8">August</option>
+                                                <option [value]="9">September</option>
+                                                <option [value]="10">October</option>
+                                                <option [value]="11">November</option>
+                                                <option [value]="12">December</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <select name="taxCardYear" id="taxCardYear" #taxCardYearRef="ngModel" required
+                                                    class="form-control form-control-sm" title="Year" [(ngModel)]="taxCardYear">
+                                                    <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 mb-0">
+                                        <label for="" class="control-label font-bold text-uppercas" style="visibility: hidden;">Action</label>
+                                        <div class="clearfix">
+                                            <button type="button" class="btn btn-sm btn-success btn-rounded pull-right ml-1"
+                                                (click)="downloadTaxCard()">
+                                                <i class="fa fa-file-pdf-o"></i> | Download Tax Certificate
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-info btn-rounded pull-right hide"
+                                                (click)="viewReport()">
+                                                <i class="fa fa-eye"></i> | View Payslip
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>

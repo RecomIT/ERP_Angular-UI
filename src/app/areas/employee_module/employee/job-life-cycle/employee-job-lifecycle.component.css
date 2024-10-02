@@ -1,0 +1,149 @@
+/* Your component's style (you can include this in your component's CSS file) */
+.circle-row {
+    position: relative;
+    align-items: center;
+    
+  }
+  
+  .background {
+    background-color: #e74c3c; /* Set the background color of the middle */
+    height: 100%; /* Full height of the circle row */
+    width: 100%; /* Adjust the width of the background */
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .circle {
+    position: relative;
+    display: inline-block;
+    background-color: #3498db;
+    border-radius: 50%;
+    margin: 5px;
+    text-align: center;
+    color: white; 
+  }
+  
+  .fa-arrow-down {
+    position: absolute;
+    bottom: -20px; /* Adjust the distance between the circle and the arrow */
+    left: 50%;
+    transform: translateX(-50%);
+    color: #3498db; /* Set the color of the arrow */
+    width: 100px;
+  }
+  
+  .circle-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .circle-date {
+    font-size: 12px; 
+  }
+  
+  
+  
+  .profile-image {
+    width: 100%; 
+    height: auto; 
+    border-radius: 50%; 
+    
+  }
+  
+  
+  
+  
+  
+  
+  .stream .stream-badge:before {
+    content: '';
+    width: 1px;
+    background-color: #e7eaec;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 30px;
+  }
+  
+  .stream:last-child .stream-badge:before {
+    height: 95px;
+  }
+  
+  .stream:first-child .stream-badge:before {
+    top: 70px;
+  }
+  
+  .stream .stream-badge {
+    width: 60px;
+    height: 60px; 
+    padding: 10px;
+    background-color: #3498db;
+    color: #ffffff;
+    border-radius: 65px; 
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  
+  .stream .stream-badge i {
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .stream .stream-badge span {
+    display: block;
+    font-size: 12px;
+    font-weight: normal;
+  }
+  
+  
+  .stream .stream-badge i {
+    border-radius: 50%;
+    padding: 6px;
+    color: #808486;
+    position: absolute;
+    background-color: #ffffff;
+    left: 8px;
+    top: 16px;
+  }
+  
+  
+  
+  .stream .stream-panel {
+    margin-left: 55px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 5px 10px 5px 50px;
+    
+  }
+  
+  .stream .stream-info {
+    margin-bottom: 10px;
+  }
+  
+  .stream .stream-info a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .stream .stream-info a:hover {
+    text-decoration: underline;
+  }
+  
+  .stream .font-italic {
+    font-style: italic;
+    color: #7f8c8d;
+  }
+  

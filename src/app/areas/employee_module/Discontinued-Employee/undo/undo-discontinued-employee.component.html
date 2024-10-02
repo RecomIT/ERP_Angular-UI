@@ -1,0 +1,26 @@
+<ng-template #deleteModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="icofont-cut"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body text-center">
+        <h5>
+            Are you sure? <br /> You want to undo <span class="text-info"></span> {{item.employeeName + '['+item.employeeCode+']'}} <span
+                class="text-danger">
+            </span>
+            <br />
+            discontinuation from the system.
+        </h5>
+    </div>
+    <div class="modal-footer p-2">
+        <button type="button" class="btn btn-xs btn-outline-danger" (click)="closeModal('Cancel click')">
+            <i class="fa fa-times"></i> | Cancel</button>
+        <button type="submit" class="btn btn-xs btn-outline-warning" (click)="confirm()">
+            <i class="fa fa-check"></i> | Ok <span class="spinner-border spinner-border-sm hide" role="status"
+                aria-hidden="true"></span>
+        </button>
+    </div>
+</ng-template>

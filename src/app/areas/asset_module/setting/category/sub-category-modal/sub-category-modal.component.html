@@ -1,0 +1,112 @@
+<ng-template #subCategoryModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-list"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="subCategoryForm" (submit)="submit()">
+            <div class="modal-body">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="categoryName" class="control-label"> Category
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div style="width: 90%;">
+                                <ng-select2 [data]="ddlCategory" name="categoryId" id="categoryId" formControlName="categoryId"
+                                    [placeholder]="'--Select Category--'" [options]="select2Options" [allowClear]="true" required >
+                                </ng-select2>                                
+                            </div>
+                        </div>
+                        <!-- <div class="text-danger">
+                            <span *ngIf="formErrors?.categoryId">{{formErrors?.categoryId}}</span>
+                        </div> -->
+                    </div>
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="subCategoryName" class="control-label">Sub Category
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" (blur)="logFormErrors()" (input)="logFormErrors()"
+                            autofocus="true" autocomplete="off" id="subCategoryName" name="subCategoryName" formControlName="name">
+                        </div>
+                        <div  class="text-danger">
+                            <span *ngIf="formErrors?.name">{{formErrors?.name}}</span>
+                            <span *ngIf="server_errors != null">{{server_errors?.exist}}</span>
+                        </div>                     
+                    </div>                     
+                </div>    
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="subCategoryInBengali" class="control-label">Sub Category In-Bengali</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm"  id="subCategoryInBengali"
+                                name="subCategoryInBengali" formControlName="nameInBengali">
+                        </div>                        
+                    </div>
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="subCategoryIsActive" class="control-label"> Is Active                       
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-check-square" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon my-input-group-addon-padding">
+                                    <input type="checkbox" name="subCategoryIsActive" id="subCategoryIsActive" formControlName="isActive" />
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm text-small font-bold">
+                                Active ?
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <label for="subCategoryRemarks" class="control-label">Remarks</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="subCategoryRemarks"
+                                name="subCategoryRemarks" formControlName="remarks">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="subCategoryForm.invalid || btnSubmit">
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

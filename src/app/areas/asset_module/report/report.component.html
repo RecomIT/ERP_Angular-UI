@@ -1,0 +1,289 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-2">Asset Report</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Asset</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Asset Report</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3 animated fadeInRight">
+    <div class="row">
+        <div class="col-md-12 text-x-small">
+            <form [formGroup]="reportsForm">
+                <div class="ibox-content">
+                    <div class="form-row text-x-small">
+                        <div class="form-group mb-1 col-md-6 col-sm-12">
+                            <label for="reportsName" class="control-label">Report Name</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select class="form-control form-control-sm" name="reportsName" id="reportsName"
+                                    formControlName="reportsName">
+                                    <option [value]="''" selected>---Select Report---</option>
+                                    <option [value]="item" *ngFor="let item of ddlReportsName">
+                                        {{ item }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-md-6 col-sm-12">
+                            <div class="clearfix">
+                                <button type="button"
+                                    class="btn btn-sm btn-success btn-rounded btn-outline mr-1 pull-right ml-1 mt-4"
+                                    (click)="downloadReports()" [disabled]="isButtonDisabled">
+                                    <i class="fa fa-download"></i> | Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-12 text-x-small font-bold" *ngIf="reportsForm.controls.reportsName?.value">
+            <form [formGroup]="reportsFilterForm">
+                <div class="ibox-content">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 col-sm-12" *ngIf="reportsForm.controls.reportsName?.value != 'Stock Report'">
+                            <label for="date" class="control-label">Date Range <span
+                                    class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                                <input type="text" formControlName="searchByDate" id="searchByDate"
+                                    class="form-control form-control-sm bg-white" placeholder="From Date - To Date"
+                                    bsDaterangepicker autocomplete="off" readonly [bsConfig]="datePickerConfig">
+                                <div class="input-group-prepend cursor-pointer" (click)="clearSearchByDate()"                                    
+                                    [hidden]="!reportsFilterForm.get('searchByDate').value.length">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>                  
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="reportsType" class="control-label">Report Type <span
+                                    class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select class="form-control form-control-sm" name="reportsType" id="reportsType"
+                                    formControlName="reportsType">
+                                    <option [value]="''" selected>---Select Type---</option>
+                                    <option [value]="item" *ngFor="let item of ddlReportsType">
+                                        {{ item }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-x-small" *ngIf="reportsFilterForm.controls.reportsType?.value">
+                            <div class="form-row" *ngIf="reportsFilterForm.controls.reportsType?.value == 'Category Wise'">
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <label for="assetId" class="control-label"> Asset Name                                        
+                                    </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 87%;">
+                                            <ng-select2 [data]="ddlAssetName" name="assetId" id="assetId"
+                                                formControlName="assetId" [placeholder]="'--Select Asset--'"
+                                                [options]="select2Options" [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12" *ngIf="reportsForm.controls.reportsName?.value != 'Stock Report'">
+                                    <label for="productId" class="control-label"> Product ID                                        
+                                    </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 87%;">
+                                            <ng-select2 [data]="ddlProduct" name="productId" id="productId"
+                                                formControlName="productId" [placeholder]="'--Select Product--'"
+                                                [options]="select2Options" [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12" *ngIf="reportsForm.controls.reportsName?.value != 'Stock Report' 
+                                && reportsForm.controls.reportsName?.value != 'Assigning Report'
+                                && reportsForm.controls.reportsName?.value != 'Handover Report'
+                                && reportsForm.controls.reportsName?.value != 'Replacement Report'">
+                                    <label for="vendorId" class="control-label"> Vendor Name                                        
+                                    </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 87%;">
+                                            <ng-select2 [data]="ddlVendor" name="vendorId" id="vendorId"
+                                                formControlName="vendorId" [placeholder]="'--Select Vendor--'"
+                                                [options]="select2Options" [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12" *ngIf="reportsForm.controls.reportsName?.value != 'Stock Report' 
+                                && reportsForm.controls.reportsName?.value != 'Assigning Report'
+                                && reportsForm.controls.reportsName?.value != 'Servicing Report'
+                                && reportsForm.controls.reportsName?.value != 'Handover Report'
+                                && reportsForm.controls.reportsName?.value != 'Replacement Report'
+                                && reportsForm.controls.reportsName?.value != 'Repaired Report'">
+                                    <label for="categoryId" class="control-label"> Category                                 
+                                    </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 87%;">
+                                            <ng-select2 [data]="ddlCategory" name="categoryId" id="categoryId"
+                                                formControlName="categoryId" [placeholder]="'--Select Category--'"
+                                                [options]="select2Options" [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12" *ngIf="reportsForm.controls.reportsName?.value != 'Stock Report' 
+                                && reportsForm.controls.reportsName?.value != 'Assigning Report'
+                                && reportsForm.controls.reportsName?.value != 'Servicing Report'
+                                && reportsForm.controls.reportsName?.value != 'Handover Report'
+                                && reportsForm.controls.reportsName?.value != 'Replacement Report'
+                                && reportsForm.controls.reportsName?.value != 'Repaired Report'">
+                                    <label for="unit" class="control-label">Sub Category</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-building"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 87%;">
+                                            <ng-select2 [data]="ddlSubCategory" name="subCategoryId" id="subCategoryId"
+                                                formControlName="subCategoryId"
+                                                [placeholder]="'--Select Sub Category--'" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12" *ngIf="reportsForm.controls.reportsName?.value != 'Stock Report' 
+                                && reportsForm.controls.reportsName?.value != 'Assigning Report'
+                                && reportsForm.controls.reportsName?.value != 'Servicing Report'
+                                && reportsForm.controls.reportsName?.value != 'Handover Report'
+                                && reportsForm.controls.reportsName?.value != 'Replacement Report'
+                                && reportsForm.controls.reportsName?.value != 'Repaired Report'">
+                                    <label for="brandId" class="control-label"> Brand Name                                 
+                                    </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-caret-square-o-down" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 87%;">
+                                            <ng-select2 [data]="ddlBrand" name="brandId" id="brandId"
+                                                formControlName="brandId" [placeholder]="'--Select Brand--'"
+                                                [options]="select2Options" [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12"
+                                    *ngIf="reportsForm.controls.reportsName?.value == 'Assigning Report'">
+                                    <label for="employeeWise" class="control-label">Employee Wise</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-bars" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <select class="form-control form-control-sm" name="employeeWise"
+                                            id="employeeWise" formControlName="employeeWise">
+                                            <option [value]="''" selected>---Select Type---</option>
+                                            <option [value]="item" *ngFor="let item of ddlEmployeeWise">
+                                                {{ item }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-x-small" *ngIf="reportsFilterForm.controls.employeeWise?.value">
+                            <div *ngIf="reportsFilterForm.controls.employeeWise?.value == 'Selected Employees'">
+                                <div class="ibox-content border-radius-5 pb-2 font-bold">                                  
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label for="employee" class="control-label font-bold">Select Employee Singly</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-user-circle-o"></i>
+                                                </span>
+                                            </div>                           
+                                            <input type="text" formControlName="employee" class="form-control form-control-sm" [typeahead]="employees"
+                                                typeaheadOptionField="text" [isAnimated]="false" placeholder="Type Employee Name Here..."
+                                                (typeaheadOnSelect)="employeeOnSelect($event)" autocomplete="off" [typeaheadMinLength]="0"
+                                                [typeaheadScrollable]="true">
+                                            <div class="input-group-prepend cursor-pointer" *ngIf="selectedEmployee !=null && selectedEmployee!= ''"
+                                                (click)="selectedEmployee=null">
+                                                <span class="input-group-addon  text-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row" *ngIf="reportsFilterForm.controls.employeeWise?.value == 'Selected Employees'">
+                                        <div class="form-group col-md-12 col-sm-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover table-responsive-xl">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">#SL</th>
+                                                            <th>Employee</th>
+                                                            <th class="text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of employeesList; let i=index">
+                                                            <td class="text-center font-bold">{{i+1}}</td>
+                                                            <td>{{item.text}}</td>
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-xs btn-danger"
+                                                                    (click)="deleteEmployee(item.id)">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

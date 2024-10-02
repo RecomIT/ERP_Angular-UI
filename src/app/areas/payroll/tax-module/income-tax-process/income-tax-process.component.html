@@ -1,0 +1,798 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Tax Process & Detail</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Tax</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Tax Process & Detail</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#taxProcessInfo" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-info"></i> | Tax Process Information
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#taxProcessDetail" data-toggle="tab" class="nav-link hide">
+                            <i class="fa fa-info"></i> | Tax Process Detail
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#finalTaxCard" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-info"></i> | Prepare Final Tax Card
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="taxProcessInfo" class="tab-pane active">
+                        <div class="ibox shadow-sm">
+                            <div class="row m-t-sm mt-0">
+                                <div class="col-md-12">
+                                    <div class="ibox mb-0">
+                                        <div class="ibox-content pb-1 shadow-lg text-x-small">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4 col-sm-12">
+                                                    <label for="searchByFiscalYear"
+                                                        class="control-label font-bold">Search By Fiscal Year</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-addon faa-parent animated-hover">
+                                                                <i class="fa fa-calendar faa-pulse"></i>
+                                                            </span>
+                                                        </div>
+                                                        <select name="searchByFiscalYear" id="searchByFiscalYear"
+                                                            class="form-control form-control-sm"
+                                                            #searchByFiscalYearIdRef="ngModel"
+                                                            (change)="getTaxProcessSummeryInfos()"
+                                                            [(ngModel)]="searchByFiscalYearId">
+                                                            <option [value]="0" selected>---Select Fiscal Year---
+                                                            </option>
+                                                            <option [value]="item.id"
+                                                                *ngFor="let item of ddlFiscalYears">{{item.text}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-4 col-sm-12">
+                                                    <label for="searchByFiscalYear"
+                                                        class="control-label font-bold">Search By Month & Year</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-addon faa-parent animated-hover">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </span>
+                                                        </div>
+                                                        <select class="form-control form-control-sm" id="searchByMonth"
+                                                            name="searchByMonth" #searchByMonthRef="ngModel"
+                                                            [(ngModel)]="searchByMonth"
+                                                            (change)="getTaxProcessSummeryInfos()">
+                                                            <option [value]="0" selected>---Select Month---</option>
+                                                            <option [value]="m.monthNo" *ngFor="let m of months">
+                                                                {{m.month}}
+                                                            </option>
+                                                        </select>
+                                                        <div class="input-group-prepend">
+                                                            <select class="form-control form-control-sm"
+                                                                id="searchByYear" name="searchByYear"
+                                                                (change)="getTaxProcessSummeryInfos()"
+                                                                #searchByYearRef="ngModel" [(ngModel)]="searchByYear">
+                                                                <option [value]="0" selected>---Select Year---</option>
+                                                                <option [value]="y" *ngFor="let y of years">{{y}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-4 col-sm-12">
+                                                    <label class="control-label hidden">Tax Process</label>
+                                                    <div class="clearfix">
+                                                        <button type="button"
+                                                            class="btn btn-success btn-sm btn-rounded pull-right faa-parent animated-hover hide"
+                                                            (click)="showPage()">
+                                                            <i class="fa fa-cog faa-spin"></i> | Tax Process
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-outline-primary btn-sm btn-rounded pull-right faa-parent animated-hover mr-1"
+                                                            (click)="openTaxProcessModal()"
+                                                            tooltip="Process Salary Tax">
+                                                            <i class="fa fa-cog faa-spin"></i> | Tax Process
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn hide btn-sm btn-rounded pull-right btn-primary mr-1"
+                                                            (Click)="DownloadTaxSheet('.xlsx')">
+                                                            <i class="fa fa-file-excel-o"></i> | xlsx
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content pb-1 shadow-lg text-x-small">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-sm table-striped table-hover table-responsive-xl">
+                                                    <thead>
+                                                        <tr class="text-center">
+                                                            <th>#SL</th>
+                                                            <th>Branch</th>
+                                                            <th>Batch No</th>
+                                                            <th>Fiscal Year</th>
+                                                            <th>Month & Year</th>
+                                                            <th class="text-center">Head Count</th>
+                                                            <th>Yearly Taxable Income</th>
+                                                            <th>Tax Payable</th>
+                                                            <th>AIT</th>
+                                                            <th>Refund Amount</th>
+                                                            <th>Yearly Tax</th>
+                                                            <th>Paid Tax</th>
+                                                            <th>Projection Amount</th>
+                                                            <th>OnceOff Amount</th>
+                                                            <th>Projection Tax</th>
+                                                            <th>OnceOff Tax</th>
+                                                            <th>Monthly Tax</th>
+                                                            <th>Tax Deducted</th>
+                                                            <th>Status</th>
+                                                            <th class="text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of listOfTaxProcessSummery; let i = index"
+                                                            class="text-center">
+                                                            <td class="font-bold">{{i+1}}</td>
+                                                            <td>{{item.branchName}}</td>
+                                                            <td>{{item.batchNo}}</td>
+                                                            <td>{{item.fiscalYearRange}}</td>
+                                                            <td>{{item.salaryMonthYear}}</td>
+                                                            <td class="font-bold">
+                                                                <span
+                                                                    class="btn btn-xs btn-rounded btn-primary">{{item.headCount}}</span>
+                                                            </td>
+                                                            <td>{{item.yearlyTaxableIncome | number}}</td>
+                                                            <td>{{item.totalTaxPayable | number}}</td>
+                                                            <td>{{item.aitAmount | number}}</td>
+                                                            <td>{{item.excessTaxPaidRefundAmount | number}}</td>
+                                                            <td>{{item.yearlyTax | number}}</td>
+                                                            <td>{{item.paidTotalTax | number}}</td>
+                                                            <td>{{item.projectionAmount | number}}</td>
+                                                            <td>{{item.onceOffAmount | number}}</td>
+                                                            <td>{{item.projectionTax | number}}</td>
+                                                            <td>{{item.onceOffTax | number}}</td>
+                                                            <td>{{item.monthlyTax | number}}</td>
+                                                            <td>{{item.actualTaxDeductionAmount | number}}</td>
+                                                            <td>
+                                                                <span class="label label-primary"
+                                                                    *ngIf="item.isDisbursed"><i
+                                                                        class="fa fa-check"></i>{{'Disbursed'}}</span>
+                                                                <span class="label label-warning"
+                                                                    *ngIf="!item.isDisbursed">
+                                                                    {{'Undisbursed'}}</span>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <button type="button"
+                                                                    class="btn btn-xs text-info faa-parent animated-hover"
+                                                                    (click)="openEmployeeTaxProcessDetailInfosModal(item.fiscalYearId, item.salaryProcessId,item.salaryMonth,item.salaryYear)">
+                                                                    <i class="fa fa-eye faa-pulse" title="Check"></i>
+                                                                </button>
+
+                                                                <button type="button"
+                                                                    class="btn btn-xs text-info faa-parent animated-hover"
+                                                                    (click)="downloadTaxSheetDetailsExcel(item.fiscalYearId, item.salaryMonth, item.salaryYear, 'xlsx')">
+                                                                    <i class="fa fa-file-excel-o fa-3x"
+                                                                        title="Download Sheet"></i>
+                                                                </button>
+
+                                                                <button type="button"
+                                                                    class="btn btn-xs text-warning hide" (click)="1==1"
+                                                                    title="Disbursed/Undo">
+                                                                    <i class="fa fa-hand-pointer-o"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-xs text-primary"
+                                                                    (click)="bulkTaxCardDownload(item.salaryProcessId,item.salaryMonth,item.salaryYear)"
+                                                                    title="Download ZIP">
+                                                                    <i class="icofont-file-zip"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-xs text-primary"
+                                                                    (click)="openBulkTaxChallanModal(item.fiscalYearId,item.salaryProcessId,item.salaryMonth,item.salaryYear)"
+                                                                    title="Upload Challan">
+                                                                    <i class="icofont-bill"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-xs text-navy"
+                                                                    *ngIf="item.isDisbursed == false"
+                                                                    (click)="openActaulTaxDeductedModal(item.fiscalYearId,item.salaryProcessId,item.salaryMonth,item.salaryYear)"
+                                                                    title="Upload Actual Tax Deducted Amount">
+                                                                    <i class="icofont-money"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-xs text-danger"
+                                                                    *ngIf="item.isDisbursed == false"
+                                                                    (click)="showDeleteModal(item.fiscalYearId, item.salaryProcessId, item.batchNo,item.salaryMonth,item.salaryYear)"
+                                                                    title="Delete All">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr
+                                                            *ngIf="listOfTaxProcessSummery.length ==0 && listOfTaxProcessSummeryDTLabel == null">
+                                                            <td colspan="20" class="text-center">
+                                                                <span class="spinner-border spinner-border-sm"
+                                                                    role="status" aria-hidden="true"></span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr
+                                                            *ngIf=" listOfTaxProcessSummery.length ==0 && listOfTaxProcessSummeryDTLabel != null">
+                                                            <td colspan="20" class="text-center font-bold">
+                                                                {{listOfTaxProcessSummeryDTLabel}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="taxProcessDetail" class="tab-pane hide">
+                        <div class="ibox shadow-sm">
+                            <div class="ibox shadow-sm">
+                                <form [formGroup]="taxSheetDetailsForm" (ngSubmit)="1==1">
+                                    <div class="ibox-content font-bold pb-1 shadow-lg text-x-small">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4 col-sm-12">
+                                                <label for="searchByMonthNoInSalaryInfo"
+                                                    class="control-label text-uppercase">Search By Month & Year</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon animated-hover">
+                                                            <i class="fa fa-calendar faa-pulse"></i>
+                                                        </span>
+                                                    </div>
+                                                    <select name="searchBySalaryProcessMonth"
+                                                        id="searchBySalaryProcessMonth"
+                                                        class="form-control form-control-sm"
+                                                        formControlName="salaryMonth">
+                                                        <option [value]="0" selected>---Select Month---</option>
+                                                        <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                            {{item.month}}</option>
+                                                    </select>
+                                                    <div class="input-group-prepend">
+                                                        <select name="searchBySalaryProcessYear"
+                                                            id="searchBySalaryProcessYear"
+                                                            class="form-control form-control-sm"
+                                                            formControlName="salaryYear">
+                                                            <option [value]="0" selected>---Select Year---</option>
+                                                            <option [value]="item" *ngFor="let item of ddlYears">
+                                                                {{item}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4 col-sm-12 mt-lg-4 mt-sm-4">
+                                                <div class="clearfix">
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-primary btn-rounded mr-1"
+                                                        (click)="downloadTaxSheetDetailsExcel(1, 0, 0, 'xlsx')"><i
+                                                            class="fa fa-file-excel-o fa-3x"></i> | Dynamic Sheet .xlsx
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-success btn-rounded"
+                                                        (click)="downloadTaxSheetDetailsExcel(1, 0, 0, 'xls')"><i
+                                                            class="fa fa-file-excel-o fa-3x"></i> | Dynamic Sheet .xls
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="ibox shadow-sm">
+                                <div class="ibox-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                            id="tblSalarySheet">
+                                            <thead>
+                                                <tr>
+                                                    <th *ngFor="let key of jsonKeys">
+                                                        {{key}}
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of listOfTaxSheetDetailsInfo">
+                                                    <td *ngFor="let key of jsonKeys; let i =index">
+                                                        <ng-container *ngIf="i <= 3">
+                                                            {{item[key]}}
+                                                        </ng-container>
+                                                        <ng-container *ngIf="i > 3">
+                                                            {{item[key] | number}}
+                                                        </ng-container>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="finalTaxCard" class="tab-pane">
+                        <div class="ibox shadow-sm">
+                            <div class="row m-t-sm mt-0">
+                                <div class="col-md-12">
+                                    <div class="ibox mb-0">
+                                        <div class="ibox-content pb-1 shadow-lg text-x-small">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4 col-sm-12">
+                                                    <label for="searchByFiscalYear_in_final_tax_process"
+                                                        class="control-label font-bold">Search By Fiscal Year</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-addon faa-parent animated-hover">
+                                                                <i class="fa fa-calendar faa-pulse"></i>
+                                                            </span>
+                                                        </div>
+                                                        <select name="searchByFiscalYear_in_final_tax_process"
+                                                            id="searchByFiscalYear_in_final_tax_process"
+                                                            class="form-control form-control-sm"
+                                                            #searchByFiscalYearId_in_final_tax_processRef="ngModel"
+                                                            (change)="getFinalTaxProcess()"
+                                                            [(ngModel)]="searchByFiscalYear_in_final_tax_process">
+                                                            <option [value]="0" selected>---Select Fiscal Year---
+                                                            </option>
+                                                            <option [value]="item.id"
+                                                                *ngFor="let item of ddlFiscalYears">{{item.text}}
+                                                            </option>
+                                                        </select>
+                                                        <div class="input-group-prepend">
+                                                            <span
+                                                                class="input-group-addon cursor-pointer bg-info faa-parent animated-hover"
+                                                                (click)="download108Report()"
+                                                                tooltip="Download 108 Report">
+                                                                <i class="fa fa-pdf"></i> 108 Report
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-4 col-sm-12">
+                                                    <label for="searchByBranch_in_final_tax_process"
+                                                        class="control-label font-bold">Search By Branch/Company</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-addon faa-parent animated-hover">
+                                                                <i class="fa fa-calendar faa-pulse"></i>
+                                                            </span>
+                                                        </div>
+                                                        <select name="searchByBranch_in_final_tax_process"
+                                                            id="searchByBranch_in_final_tax_process"
+                                                            class="form-control form-control-sm"
+                                                            (change)="getFinalTaxProcess()"
+                                                            #searchByBranch_in_final_tax_processRef="ngModel"
+                                                            [(ngModel)]="searchByBranch_in_final_tax_process">
+                                                            <option [value]="0" selected>---Select Branch---</option>
+                                                            <option [value]="item.id" *ngFor="let item of ddlBranch">
+                                                                {{item.text}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-4 col-sm-12">
+                                                    <label class="control-label hidden">Final Tax Process</label>
+                                                    <div class="clearfix">
+                                                        <button type="button"
+                                                            class="btn btn-outline-primary btn-sm btn-rounded pull-right faa-parent animated-hover mr-1"
+                                                            (click)="openFinalTaxProcessModal()"
+                                                            tooltip="Process Final Tax">
+                                                            <i class="icofont-settings"></i> | Final Tax Process
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content pb-1 shadow-lg text-x-small">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-sm table-striped table-hover table-responsive-xl">
+                                                    <thead>
+                                                        <tr class="text-center">
+                                                            <th>#SL</th>
+                                                            <th>Branch</th>
+                                                            <th>Fiscal Year</th>
+                                                            <th class="text-center">Head Count</th>
+                                                            <th>Yearly Taxable Income</th>
+                                                            <th>Tax Payable</th>
+                                                            <th>AIT</th>
+                                                            <th>Refund Amount</th>
+                                                            <th>Yearly Tax</th>
+                                                            <th>Paid Tax</th>
+                                                            <th>Projection Amount</th>
+                                                            <th>OnceOff Amount</th>
+                                                            <th>Projection Tax</th>
+                                                            <th>OnceOff Tax</th>
+                                                            <th>Monthly Tax</th>
+                                                            <th>Tax Deducted</th>
+                                                            <th class="text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of list_of_final_tax_summary; let i = index"
+                                                            class="text-center">
+                                                            <td class="font-bold">{{i+1}}</td>
+                                                            <td>{{item.branchName}}</td>
+                                                            <td>{{item.fiscalYearRange}}</td>
+                                                            <td class="font-bold">
+                                                                <span
+                                                                    class="btn btn-xs btn-rounded btn-primary">{{item.headCount}}</span>
+                                                            </td>
+                                                            <td>{{item.yearlyTaxableIncome | number}}</td>
+                                                            <td>{{item.totalTaxPayable | number}}</td>
+                                                            <td>{{item.aitAmount | number}}</td>
+                                                            <td>{{item.excessTaxPaidRefundAmount | number}}</td>
+                                                            <td>{{item.yearlyTax | number}}</td>
+                                                            <td>{{item.paidTotalTax | number}}</td>
+                                                            <td>{{item.projectionAmount | number}}</td>
+                                                            <td>{{item.onceOffAmount | number}}</td>
+                                                            <td>{{item.projectionTax | number}}</td>
+                                                            <td>{{item.onceOffTax | number}}</td>
+                                                            <td>{{item.monthlyTax | number}}</td>
+                                                            <td>{{item.actualTaxDeductionAmount | number}}</td>
+                                                            <td class="text-center">
+                                                                <button class="btn btn-xs"
+                                                                    (click)="openFinalTaxDetailModal(item.fiscalYearId,item.branchId,item.branchName, item.salaryYear)"
+                                                                    tooltip="View Detail">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr *ngIf="list_of_final_tax_summary == null">
+                                                            <td colspan="20" class="text-center">
+                                                                <span class="spinner-border spinner-border-sm"
+                                                                    role="status" aria-hidden="true"></span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr
+                                                            *ngIf="list_of_final_tax_summary != null && list_of_final_tax_summary.length == 0">
+                                                            <td colspan="20" class="text-center font-bold">
+                                                                No data found.
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<ng-container *ngIf="showHideDeleteModal">
+    <app-payroll-tax-delete-modal [month]="delete_salary_month" [year]="delete_salary_year"
+        [fiscalYearId]="delete_fiscalyear_id" [batchNo]="delete_salary_process_batch_no"
+        [salaryProcessId]="delete_salary_process_id"
+        (closeModalEvent)="hideDeleteModal($event)"></app-payroll-tax-delete-modal>
+</ng-container>
+
+<ng-container *ngIf="showTaxProcessModal">
+    <tax-module-tax-process-modal (closeModalEvent)="closeTaxProcessModal($event)"></tax-module-tax-process-modal>
+</ng-container>
+
+<!-- upload Tax Challan -->
+<ng-container *ngIf="showUploadTaxChallanModal">
+    <app-payroll-upload-income-tax-challan-modal [month]="tax_challan_salary_month" [year]="tax_challan_salary_year"
+        [fiscalYearId]="tax_challan_fiscalyear_id"
+        (closeModalEvent)="closeUploadTaxChallanModal($event)"></app-payroll-upload-income-tax-challan-modal>
+</ng-container>
+<!-- upload Tax Challan -->
+
+<!-- upload Tax Challan -->
+<ng-container *ngIf="showBulkTaxChallanModal">
+    <app-payroll-tax-challan-bulk-insert-modal [month]="tax_challan_salary_month" [year]="tax_challan_salary_year"
+        [fiscalYearId]="tax_challan_fiscalyear_id" (closeModalEvent)="closeBulkTaxChallanModal($event)"
+        [salaryProcessId]="tax_challan_salary_process_id"></app-payroll-tax-challan-bulk-insert-modal>
+</ng-container>
+<!-- upload Tax Challan -->
+
+<ng-container *ngIf="showFinalTaxProcessModal">
+    <app-payroll-final-tax-card-process-modal
+        (closeModalEvent)="closeFinalTaxProcessModal($event)"></app-payroll-final-tax-card-process-modal>
+</ng-container>
+
+<ng-container *ngIf="showFinalTaxDetailModal">
+    <app-payroll-final-tax-card-detail-modal [fiscalYearId]="fiscalYearId_finalTaxDetail"
+        [branchId]="branchId_finalTaxDetail" [year]="year_finalTaxDetail" [branchName]="branchName_finalTaxDetail"
+        (closeModalEvent)="closeFinalTaxDetailModal($event)"></app-payroll-final-tax-card-detail-modal>
+</ng-container>
+
+
+<ng-template #employeeIncomeTaxProcessInfoModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title faa-parent animated-hover" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline btn-circle fa fa-cog faa-spin" aria-hidden="true"></i>| Employee Income Tax
+            Info
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="ibox shadow-sm">
+                    <div class="ibox-content pb-1 text-x-small">
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon faa-parent animated-hover">
+                                            <i class="fa fa-user-circle faa-pulse"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width: 80%;">
+                                        <ng-select2 [(ngModel)]="searchByEmployeeId_taxdetail" [data]="employees"
+                                            name="searchByEmployeeIdIntaxdetail" id="searchByEmployeeIdIntaxdetail"
+                                            [placeholder]="'Search By Employee...'" [options]="select2Options"
+                                            [allowClear]="true" (ngModelChange)="employee_changed_in_tax_details()"
+                                            #searchByEmployeeIdIntaxdetailRef="ngModel">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-building" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <select type="text" class="form-control form-control-sm font-bold"
+                                        placeholder="Select Branch" id="searchByLocation" name="searchByLocation"
+                                        [(ngModel)]="searchByBranchId_taxdetail"
+                                        #searchByBranchId_taxdetailRef="ngModel"
+                                        (change)="employee_changed_in_tax_details()">
+                                        <option [value]="0">---Search By Branch---</option>
+                                        <option [value]="item.id" *ngFor="let item of ddlBranch">{{item.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12">
+                                <div class="clearfix">
+                                    <button type="button" class="btn btn-sm btn-rounded btn-primary mr-1"
+                                        (click)="downloadEmployeeTaxSheet('xlsx')">
+                                        <i class="fa fa-file-excel-o"></i> | xlsx
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-rounded btn-success mr-1 hide"
+                                        (click)="downloadEmployeeTaxSheet('xls')">
+                                        <i class="fa fa-file-excel-o"></i> | xls
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox shadow-sm">
+                    <div class="ibox-content pb-1 text-x-small">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped table-hover table-responsive-xl">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>#SL</th>
+                                        <th>Employee</th>
+                                        <th>Fiscal Year</th>
+                                        <th>Month & Year</th>
+                                        <th>Yearly Taxable Income</th>
+                                        <th>Tax Payable</th>
+                                        <th>AIT</th>
+                                        <th>Refund Amount</th>
+                                        <th>Projection Amount</th>
+                                        <th>OnceOff Amount</th>
+                                        <th>Yearly Tax</th>
+                                        <th>Paid Tax</th>
+                                        <th>Projection Tax</th>
+                                        <th>OnceOff Tax</th>
+                                        <th>Monthly Tax</th>
+                                        <th>Tax Deducted</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of listOfEmployeeTaxProcessDetailInfos; let i = index"
+                                        class="text-center">
+                                        <td class="font-bold">{{i+1}}</td>
+                                        <td>{{item.employeeName}}</td>
+                                        <td>{{item.fiscalYearRange}}</td>
+                                        <td>{{item.salaryMonthYear}}</td>
+                                        <td>{{item.yearlyTaxableIncome | number}}</td>
+                                        <td>{{item.totalTaxPayable | number}}</td>
+                                        <td>{{item.aitAmount | number}}</td>
+                                        <td>{{item.excessTaxPaidRefundAmount | number}}</td>
+                                        <td>{{item.projectionAmount | number}}</td>
+                                        <td>{{item.onceOffAmount | number}}</td>
+                                        <td>{{item.yearlyTax | number}}</td>
+                                        <td>{{item.paidTotalTax | number}}</td>
+                                        <td>{{item.projectionTax | number}}</td>
+                                        <td>{{item.onceOffTax | number}}</td>
+                                        <td>{{item.monthlyTax | number}}</td>
+                                        <td>{{item.actualTaxDeductionAmount | number}}</td>
+                                        <td class="text-center">
+                                            <button type="button" title="Download Tax Card"
+                                                class="btn btn-xs btn-rounded btn-danger faa-parent animated-hover"
+                                                (click)="downloadTaxCard(item.employeeId,item.taxProcessId,item.fiscalYearId,item.salaryMonth,item.salaryYear)">
+                                                <i class="fa fa-file-pdf-o faa-pulse"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #actaulTaxDeductedModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title faa-parent animated-hover" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-cog faa-spin" aria-hidden="true"></i>| Upload Employee Actual Tax
+            Deducted
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="ibox shadow-sm">
+                    <div class="ibox-content pb-1 shadow-sm text-x-small">
+                        <div class="form-row">
+                            <div class="form-group col-md-6 col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon faa-parent animated-hover">
+                                            <i class="fa fa-user-circle faa-pulse"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width: 80%;">
+                                        <ng-select2 [(ngModel)]="searchByEmployeeId_taxdetail" [data]="employees"
+                                            name="searchByEmployeeIdIntaxdetail" id="searchByEmployeeIdIntaxdetail"
+                                            [placeholder]="'Search By Employee...'" [options]="select2Options"
+                                            [allowClear]="true" (ngModelChange)="employee_changed_in_tax_details()"
+                                            #searchByEmployeeIdIntaxdetailRef="ngModel">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12 hide">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon faa-parent animated-hover">
+                                            <i class="fa fa-calendar faa-pulse"></i>
+                                        </span>
+                                    </div>
+                                    <select name="month" id="month" class="form-control form-control-sm"
+                                        [(ngModel)]="processMonth" #processMonthRef="ngModel"
+                                        (ngModelChange)="processType_monthYear_changed()">
+                                        <option value="">--Month--</option>
+                                        <option [value]="month.monthNo" *ngFor="let month of months">{{month.month}}
+                                        </option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <select name="year" id="year" class="form-control form-control-sm"
+                                            [(ngModel)]="processYear" #processYearRef="ngModel"
+                                            (ngModelChange)="processType_monthYear_changed()">
+                                            <option value="">--Year--</option>
+                                            <option [value]="y" *ngFor="let y of years">{{y}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12 pull-right">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input id="excelFileUpload" type="file" class="custom-file-input"
+                                            (change)="excelFileUpload($event)" accept=".xls,.xlsx">
+                                        <label class="custom-file-label" for="excelFileUpload">
+                                            {{excelFileName}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12 pull-right">
+                                <div class="input-group">
+                                    <button type="button"
+                                        class="btn btn-sm btn-secondary btn-outline ml-1 btn-rounded pull-right"
+                                        [disabled]="excelFileName ==='Choose Your excel file'"
+                                        (click)="uploadExcelFile()"> <i class="fa fa-upload"></i> | Upload
+                                    </button>
+
+                                    <button type="button"
+                                        class="btn btn-secondary btn-outline ml-2 btn-rounded pull-right"
+                                        (click)="downloadExcelFile()"><i class="icofont-download"></i> | Download
+                                        Format</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox shadow-sm">
+                    <div class="ibox-content pb-1 text-x-small">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped table-hover table-responsive-xl">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>#SL</th>
+                                        <th>Employee</th>
+                                        <th>Fiscal Year</th>
+                                        <th>Month & Year</th>
+                                        <th>Yearly Taxable Income</th>
+                                        <th>Tax Payable</th>
+                                        <th>AIT</th>
+                                        <th>Refund Amount</th>
+                                        <th>Projection Amount</th>
+                                        <th>OnceOff Amount</th>
+                                        <th>Yearly Tax</th>
+                                        <!-- <th>Payable Tax</th> -->
+                                        <th>Current Month Projection Tax</th>
+                                        <th>Current Month OnceOff Tax</th>
+                                        <th>Current Month Total Tax</th>
+                                        <th>Current Month Tax Deducted</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of listOfEmployeeTaxProcessDetailInfosInActualTaxDeductionUpload; let i = index"
+                                        class="text-center">
+                                        <td class="font-bold">{{i+1}}</td>
+                                        <td>{{item.employeeName}}</td>
+                                        <td>{{item.fiscalYearRange}}</td>
+                                        <td>{{item.salaryMonthYear}}</td>
+                                        <td>{{item.yearlyTaxableIncome | number}}</td>
+                                        <td>{{item.totalTaxPayable | number}}</td>
+                                        <td>{{item.aitAmount | number}}</td>
+                                        <td>{{item.excessTaxPaidRefundAmount | number}}</td>
+                                        <td>{{item.projectionAmount | number}}</td>
+                                        <td>{{item.onceOffAmount | number}}</td>
+                                        <td>{{item.yearlyTax | number}}</td>
+                                        <!-- <td>{{item.paidTotalTax | number}}</td>  -->
+                                        <td>{{item.projectionTax | number}}</td>
+                                        <td>{{item.onceOffTax | number}}</td>
+                                        <td>{{item.monthlyTax | number}}</td>
+                                        <td>{{item.actualTaxDeductionAmount | number}}</td>
+                                        <td class="text-center">
+                                            <button type="button" title="Download Tax Card"
+                                                class="btn btn-xs btn-rounded btn-danger faa-parent animated-hover"
+                                                (click)="downloadTaxCard(item.employeeId,item.taxProcessId,item.fiscalYearId,item.salaryMonth,item.salaryYear)">
+                                                <i class="fa fa-file-pdf-o faa-pulse"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

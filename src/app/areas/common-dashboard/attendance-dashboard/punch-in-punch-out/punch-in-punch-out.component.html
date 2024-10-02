@@ -1,0 +1,101 @@
+<ng-template #punchInPuncOutModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">
+        <i class="icofont-finger-print btn btn-sm btn-default btn-circle"></i> | {{ modalTitle }}
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="closePunchInPunchOutModal('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      
+      <form [formGroup]="attendanceForm" (submit)="submit()">
+        
+        <div class="form-group">
+          <div class="attendance-details">
+            <p class="detail"><span class="label"><i class="fa fa-calendar" aria-hidden="true"></i></span> <strong>{{ attendanceDetails?.attendanceDate | date: 'fullDate' }}</strong></p>
+            <p class="detail"><span class="label"><i class="fa fa-clock-o" aria-hidden="true"></i></span> <strong>{{ attendanceDetails?.attendanceTime | date: 'shortTime' }}</strong></p>
+            <p class="detail"><span class="label"><i class="fa fa-map-marker" aria-hidden="true"></i></span> {{ attendanceDetails?.attendanceLocation }}</p>
+          </div>
+        </div>
+
+        <div class="form-group my-1 text-x-small">
+          <div class="p-0">
+            <label class="font-bold">Attendance Type<span class="text-danger">*</span></label>
+          </div>
+          <div class="form-check form-check-inline font-bold" *ngFor="let type of attendanceTypeOptions">
+            <input class="form-check-input" type="radio" [id]="type" [value]="type" formControlName="attendanceType">
+            <label class="form-check-label" [for]="type">{{type}}</label>
+          </div>
+        </div>
+        
+
+        <div class="row" *ngIf="isSpecialTypeSelected()">
+          
+
+           <div class="col-12 text-x-small my-1 d-flex align-items-center">
+            <span class="font-bold mr-1">Add Employee?</span>
+            <input type="checkbox" [checked]="showAddEmployeeSection" (change)="handleCheckboxChange($event)">        
+          </div>
+          
+
+          <div class="col-12" *ngIf="showAddEmployeeSection">
+
+            <div class="row">
+              <div class="col-12 col-lg-12 col-md-12 col-sm-12 text-x-small">
+                <ng-select2 
+                [data]="employeeList"
+                formControlName="employeeId" 
+                id="employeeId"
+                [placeholder]="'Select An Employee...'"
+                [options]="employeeSelect2Options"
+                [allowClear]="true"
+              >
+              </ng-select2>
+              </div>
+    
+    
+              <div class="col-12 mt-2">
+                <div *ngFor="let selectedEmployee of selectedEmployees; let i = index" class="selected-employee">
+                  <span>{{ selectedEmployee.text }}</span> 
+                  <i class="fa fa-times" (click)="removeEmployee(i)"></i>
+                </div>
+              </div>
+            </div>
+
+          </div> 
+
+        </div>
+
+        
+        <div class="form-group mt-1 text-x-small">
+          <label class="font-bold">Remarks:</label>
+            <div class="input-group">             
+              <div class="input-group-prepend">
+                <span class="input-group-text text-dark">
+                  <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                </span>
+              </div>
+              <textarea cols="2" class="form-control form-control-sm rounded" id="remarks" formControlName="attendanceRemarks"></textarea>
+            </div>
+        
+        </div>
+
+
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <p class="font-bold m-1 text-dark text-center">Are You Sure?</p>
+      <div class="">
+          <button class="btn btn-xs btn-primary btn-rounded px-2 shadow mr-2" type="submit" [disabled]="attendanceForm.invalid" (click)="submit()">
+            <i class="fa fa-check"></i> | Yes
+          </button>
+          <button class="btn btn-xs btn-danger btn-rounded px-2 shadow" type="button" (click)="closePunchInPunchOutModal('Close Click')">
+            <i class="fa fa-times"></i> | No
+          </button>
+        </div>
+    </div>
+
+  </ng-template>
+  

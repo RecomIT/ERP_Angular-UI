@@ -1,0 +1,360 @@
+
+
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.type-card {
+    width: 100%;
+    max-width: 98%; 
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+.type-card:hover {
+transform: scale(1.01);
+}
+
+  
+
+  
+.leave-details-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  overflow: auto;
+}
+  
+
+.leave-chip {
+margin: 2px;
+}
+  
+.leave-chip-with-color {
+background-color: #618e94; 
+color: #fff; 
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+border-radius: 4px;
+padding: 2px;
+}
+  
+
+  .date-chip {
+    display: inline-block;
+    margin: 2px;
+    padding: 0px 1px;
+    background-color: #ffffff; 
+    border-radius: 4px;
+    color: #636363; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  }
+  
+  
+
+
+
+  .type-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .type-info h3 {
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .type-info p {
+    margin: 0;
+    font-size: 1em;
+    color: #666;
+  }
+
+
+
+
+
+
+.leave-type-chip {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.leave-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.label {
+    margin-right: 10px; 
+    background-color: #fff;
+}
+
+.value {
+    font-weight: bold;
+    color: blue;
+    margin-right: 10px;
+}
+
+
+.heading{
+    background-color: rgb(17, 114, 114);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+
+.month-heading{
+    display: inline-block;
+    background-color: rgb(83, 100, 100);
+    color: #fff;
+    padding: 2px 5px;
+    border-radius: 10px;
+    text-align: left;
+    margin-left: 10px;
+}
+
+
+.availed{
+    color: rgb(138, 0, 34);
+}
+
+
+
+
+
+
+
+
+
+
+/* ----------------------------------------
+------------------------------------------------------------
+ */
+
+
+ .popup-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255);
+    padding: 0px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0.3, 0.7);
+    z-index: 1000;
+    width: 50%;
+    height: auto;
+    overflow: hidden;
+    overflow-y: auto; 
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
+    border-radius: 10px;
+   
+  }
+  
+
+.popup-container::-webkit-scrollbar {
+  width: 0.5em; 
+}
+
+.popup-container::-webkit-scrollbar-thumb {
+  background-color: transparent; 
+}
+
+
+#popup-title {
+  text-align: center;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+}
+
+
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 5px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; 
+  background-color: #ffffff;
+  border-bottom: 2px dotted #249991;
+}
+  
+  
+.content-container {
+  max-height: 100%; 
+}
+
+
+.close-button {
+  
+  cursor: pointer;
+  color: #dd0303;
+  font-size: 20px;
+  border: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  background-color: white;
+  padding: 5px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+
+  
+.close-button:hover {
+  transform: scale(1.1);
+  font-weight: bold;
+  background-color: #dd0303;
+  color: #fff; 
+}
+
+  
+  
+  #close-popup .bi {
+    border: none;
+  }
+  
+  @keyframes slideInButton {
+    from {
+      right: -30px;
+    }
+    to {
+      right: 30px;
+    }
+  }
+  
+  
+
+
+  
+
+.popup-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+}
+
+.popup-label {
+  font-weight: 600;
+  flex: 0 0 auto;
+  font-size: 16px;
+  color: #ccc;
+}
+
+
+.value{
+font-size: 30px;
+}
+
+
+
+    
+.visible {
+  display: block;
+}
+
+
+
+
+
+
+
+
+
+  
+  /* -------------------------------------------- */
+  
+  .calender{
+    height: 550px;
+  }
+  
+  
+  .calendar-container {
+    width: 100%;
+    height: 100%;
+    max-width: 640px; 
+    max-height: 700px; 
+    margin: 0 auto;
+    background-color: #fff;
+    overflow: hidden;
+  }
+  
+
+  .left-section {
+    flex: 1;
+    padding-left: 60px;
+  }
+  
+  .right-section {
+    flex: 1;
+    text-align: right;
+    padding-right: 65px;
+  }
+  
+  li{
+    list-style: none;
+    font-size: 9px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  
+  .leaveHistoryCalender {
+    width: 100%;
+    height: 50%;
+    padding: 5px 30px;
+  }
+  
+  
+  .small-font {
+    font-size: 9px; 
+  }
+
+
+  .attendanceDoughnut {
+    width: 212px;
+    margin: auto;
+  }
+  
+
+  
+  
+  /* 
+  ------------ */
+  .type-details {
+    width: 150px;
+    height: 140px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 0 2px rgba(17, 114, 114, 0.5), /* Outer border color and width */
+        0 0 0 4px rgba(255, 0, 0, 0.5), /* Inner border color and width */
+        0 0 5px rgba(17, 114, 114, 0.5); /* Box shadow for a slight glow effect */
+    transition: transform 0.3s ease-in-out;
+}
+
+.type-details:hover {
+    transform: scale(1.05);
+}

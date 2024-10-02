@@ -1,0 +1,214 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Incentive Process</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Incentive</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Quarterly Incentive Process</strong>
+            </li>
+        </ol>
+    </div>  
+</div> 
+
+
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+
+    
+<div class="ibox">
+    <div class="ibox-content text-x-small">
+
+        <div class="form-row mb-3 shadow p-2">
+
+
+            <!-- <div class="col-md-2 col-sm-12" style="width: 100%;">
+                <ng-select2 [(ngModel)]="searchByBatchNo"
+                    [data]="listOfBatchNo"
+                    name="searchByBatchNo"
+                    id="searchByBatchNo"
+                    [placeholder]="'Select Batch No...'"
+                    [options]="batchNoSelect2Options"
+                    [allowClear]="true"
+                    #searchByBatchNoRef="ngModel"
+                    (ngModelChange)="onBatchSelectionChange($event)">
+                </ng-select2>
+            </div> -->
+
+
+
+            <div class="col-md-8">
+                <div class="form-row">
+
+
+                    <div class="col-md-8 col-sm-12 mt-2">
+                        <div class="border-section">
+                            <div class="border-label">Select <b>Incentive Year</b> / <b>Incentive Quarter</b>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12" style="width: 100%;">
+                                    <ng-select2 [(ngModel)]="searchByYear"
+                                        [data]="listOfYear"
+                                        name="searchByYear"
+                                        id="searchByYear"
+                                        [placeholder]="'Select Year...'"
+                                        [options]="yearSelect2Options"
+                                        [allowClear]="true"
+                                        #searchByYearRef="ngModel"
+                                        (ngModelChange)="onYearSelectionChange($event)">
+                                    </ng-select2>
+                                </div>
+                    
+                    
+                    
+                                <div class="col-md-6 col-sm-12" style="width: 100%;">
+                                    <ng-select2 [(ngModel)]="searchByQuarter"
+                                        [data]="listOfQuarter"
+                                        name="searchByQuarter"
+                                        id="searchByQuarter"
+                                        [placeholder]="'Select Quarter...'"
+                                        [options]="quarterSelect2Options"
+                                        [allowClear]="true"
+                                        #searchByQuarterRef="ngModel"
+                                        (ngModelChange)="onQuarterSelectionChange($event)"
+                                        >
+                                    </ng-select2>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </div>      
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-row text-right">                  
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6 col-sm-12 text-x-small">
+                        <div class="form-group mb-1">
+                            <div class="clearfix pull-right">
+                                <button type="button" class="btn btn-success btn-rounded btn-sm shadow btn-outline" 
+                                        (click)="openUploadExcelFileModal()">
+                                    <i class="fa fa-arrow-up"></i> | Upload
+                                </button>
+                                <button type="button" class="btn btn-sm btn-primary btn-rounded pull-right ml-1 shadow btn-outline"
+                                (click)="openReportModal()">
+                            <i class="fa fa-file-pdf-o"></i> | Generate Report
+                        </button>
+                            </div>
+                        </div>
+                    </div>                                 
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-responsive shadow-lg p-2">
+      
+            <table class="table table-sm table-hover table-striped table-responsive-xl" id="tblQuarterlyIncentive">
+                <thead>
+                  <tr class="text-center">
+                    <th>#SL</th>
+                    <th>Batch</th>
+                    <th>Quarter</th>
+                    <th>Year</th>
+                    <th>Disbursed</th>
+                    <th>Payment Date</th>
+                    <th>Process Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of listOfQuarterlyIncentive; let i = index">
+                    <td class="text-center font-bold" *ngIf="item.Status != 0">{{i+1}}</td>
+                    <td class="text-center">{{item.BatchNo}}</td>
+                    <td class="text-center">{{item.IncentiveQuarterNumber}}</td>
+                    <td class="text-center">{{item.IncentiveYear}}</td>
+                    <td class="text-center">
+                        <span class="label label-primary" *ngIf="item.IsDisbursed == 1 && item.Status != 0">Yes</span>
+                        <span class="label label-warning" *ngIf="item.IsDisbursed != 1 && item.Status != 0">No</span>
+                      </td>
+                    <td class="text-center">{{item.PaymentDate | date:"dd-MMMM-yyyy"}}</td>
+                    <td class="text-center">{{item.ProcessDate | date:"dd-MMMM-yyyy"}}</td>
+                   
+                    <td class="text-center">
+
+                        <button type="button" *ngIf="item.IsDisbursed != 1 && item.Status != 0" title="Undo" (click)="openQuarterlyIncentiveProcessUndoModal(item?.QuarterlyIncentiveProcessId)"
+                        class="btn btn-sm text-info">
+                        <i class="icofont-undo"></i>
+                        </button>
+
+                        <button *ngIf="item.Status != 0" type="button" title="Details" (click)="openQuarterlyIncentiveProcessDetailsModal(item?.QuarterlyIncentiveProcessId)"
+                        class="btn btn-sm text-info">
+                        <i class="fa fa-eye"></i>
+                        </button>
+                  
+                        <button type="button" title="Disbursed"  (click)="openQuarterlyIncentiveProcessDisbursedModal(item?.QuarterlyIncentiveProcessId)"
+                        class="btn btn-sm" *ngIf="item.IsDisbursed != 1 && item.Status != 0">
+                        <i class="icofont-ui-check"></i>
+                        </button>
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              
+        </div>
+    </div>
+</div>
+   
+</div>
+
+
+
+
+
+
+
+<ng-container *ngIf="showUploadTaxZoneModal">
+    <app-quarterly-incentive-process-excel-upload 
+    (closeModalEvent)="closeUploadExcelFileModal($event)"
+    (refresh)="refresh()"
+    >
+    </app-quarterly-incentive-process-excel-upload>
+</ng-container> 
+
+
+
+<ng-container *ngIf="showQuarterlyIncentiveProcessDetails">
+    <app-quarterly-incentive-process-details 
+    [quarterlyProcessId]="quarterlyProcessId"
+        (closeModalEvent)="closeQuarterlyIncentiveProcessDetailsModal($event)"
+        
+        >
+    </app-quarterly-incentive-process-details>
+</ng-container>
+
+
+<ng-container *ngIf="showQuarterlyIncentiveProcessUndoOrDisbursed">
+    <app-quarterly-incentive-process-undo-or-disversed 
+    [quarterlyProcessId]="quarterlyProcessId" 
+    [undoFlag]="undoFlag"
+    [disbursedFlag]="disbursedFlag"
+    (refresh)="refresh()"
+    (closeModalEvent)="closeQuarterlyIncentiveProcessUndoOrDisbursedModal($event)">
+    </app-quarterly-incentive-process-undo-or-disversed>
+</ng-container>
+
+
+
+
+
+<ng-container *ngIf="showReportModal">
+    <app-quarterly-incentive-process-report 
+    (closeModalEvent)="closeReportModal($event)"
+    >
+    </app-quarterly-incentive-process-report>
+</ng-container> 

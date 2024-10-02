@@ -1,0 +1,203 @@
+
+<div class="ibox">
+    <div class="">
+      <div class="row">
+
+        <div class="col-12">
+          <div class="border-section">
+              <div class="border-label">Search By Employees / Start Date / Start Date to End Date
+              </div>
+
+             <div class="row">
+              <div class="col-12 col-lg-4 col-md-4 col-sm-12 text-x-small" >
+
+                <ng-select2 
+                    [(ngModel)]="searchByEmployeeId"
+                    [data]="employeeList"
+                    name="searchByEmployeeId"
+                    id="searchByEmployeeId"
+                    [placeholder]="'Select Employee ...'"
+                    [options]="employeeSelect2Options"
+                    [allowClear]="true"
+                    #searchByEmployeeIdRef="ngModel"
+                    (ngModelChange)="onEmployeeSelectionChange($event)" 
+                    >
+                </ng-select2>
+
+
+              </div>
+      
+              <div class="col-12 col-lg-5 col-md-5 col-sm-12 text-x-small">
+              
+                  <div class="input-group">
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-addon text-dark">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </div>
+                
+                
+                <input type="text" name="searchByDate" id="searchByDate"
+                class="form-control form-control-sm bg-white" placeholder="Filter Subordinates Leave Details within A Date Range"
+                    #searchByDateRef="ngModel" [(ngModel)]="searchByDate"
+                    (ngModelChange)="onSearchByDateChange()" bsDaterangepicker
+                    autocomplete="off" readonly [bsConfig]="datePickerConfig">
+
+                <div class="input-group-prepend cursor-pointer"
+                   
+                    [hidden]="searchByDate === null">
+                    <span class="input-group-addon text-danger" (click)="clearSearchByDate()">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                </div>
+
+        
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-3 col-md-3 col-sm-12 text-x-small " *ngIf="employeesLeaveList.length > 0">
+
+                <h5 class="font-weight-bold mb-0 mr-2 text-center" style="display: inline-block;">Leave Days: <strong>{{ leaveDays }}</strong></h5>
+
+                <button (click)="downloadExcel()" class="btn btn-outline-primary btn-sm m-1">Download Excel <i class="fa fa-file-pdf-o"></i></button>
+              </div>
+
+            </div>
+                      
+          </div>
+        </div>
+
+      </div>
+
+
+        
+      <ng-container *ngIf="employeesLeaveList.length > 0; else noRequest">
+
+        <div class="row px-1" style="max-height: 235px; overflow-y: auto;">
+
+          <div class="d-flex justify-content-center align-items-center w-100">
+
+            <ng-container *ngIf="startDate === endDate; else dateRange">
+    
+              <p class="p-0 m-0"><strong style="color: #741919; font-size: 16px;">The selected date is: {{ searchByDate[0] | date }}</strong></p>
+            </ng-container>
+            
+            <ng-template #dateRange>
+              <p class="p-0 m-0"><strong style="color: #741919; font-size: 16px;">The selected date range is from {{ searchByDate[0] | date }} to {{ searchByDate[1] | date }}</strong></p>
+            </ng-template>
+
+          </div>
+
+
+          <div *ngFor="let employeeId of getUniqueEmployeeIds()" class="col-12 col-lg-4 col-md-6 col-sm-12 p-1 card-container">
+            
+            <mat-card class="employee-card text-x-small">
+        
+                  <div class="form-row">
+      
+                      <!-- <div class="col-2 p-0 d-flex align-items-center justify-content-center">
+                          <img [src]="getCombinedEmployeePhoto(employeeId)" alt="Photo" class="employee-photo">
+                      </div> -->
+
+
+                      <div class="col-2 p-0 d-flex align-items-center justify-content-center">
+                        <img [src]="getCombinedEmployeePhoto(employeeId)" (error)="setDefaultPhoto()" alt="Photo" class="employee-photo">
+                    </div>
+                    
+
+
+                  <div class="col-10 p-0">
+                      <div class="employee-info">
+                          <h3>{{ getEmployeeFullName(employeeId) }}</h3>
+                          <h4>Leave Availed: <strong>{{ getLeaveDetailsByEmployeeId(employeeId)[0].totalLeaveCountPerEmployee }}</strong></h4>
+                        </div>
+                  </div>
+
+                  </div>
+                
+                <mat-card-content>
+
+                  <div class="leave-details-container">
+                
+                    <ng-container *ngFor="let leaveDetail of getLeaveDetailsByEmployeeId(employeeId) | paginate: employeeLeaveHistoryPageConfig">
+                      <mat-chip class="leave-chip">
+                        <strong [ngClass]="{ 'leave-chip-with-color': leaveDetail.leaveCount > 0 }">{{ leaveDetail.shortName }}: ({{leaveDetail.leaveCount}})</strong>
+
+                      </mat-chip>
+                    </ng-container>
+                  </div>
+
+                  <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                      <mat-panel-title>More Info</mat-panel-title>
+                      </mat-expansion-panel-header>
+  
+                      <div class="leave-details-container">
+                
+                          <ng-container *ngFor="let leaveDetail of getLeaveDetailsByEmployeeId(employeeId)">
+                            <div class="leave-chip">
+                              <strong [ngClass]="{ 'leave-chip-with-color': leaveDetail.leaveCount > 0 }">{{ leaveDetail.title }}: ({{leaveDetail.leaveCount}})</strong>
+                              <ng-container *ngFor="let date of leaveDetail.leaveDates.split(',')">
+                                <div class="date-chip">{{ date }}</div>
+                              </ng-container>
+                  
+                          </div>
+                          </ng-container>
+                        </div>
+
+                  </mat-expansion-panel>
+
+                </mat-card-content>
+
+            </mat-card> 
+          </div>
+
+        </div>
+
+      </ng-container>
+
+       <div class="form-row text-x-small p-0">
+        <div class="col-12 d-flex justify-content-end align-items-center">
+         
+          <div *ngIf="employeesLeaveList != null && employeesLeaveList.length > 0">
+            <span class="mr-1">Page Size:</span>
+            <select [(ngModel)]="pageSize" (change)="onPageSizeChange()" class="form-control-sm" >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+
+          <pagination-controls (pageChange)="historyPageChanged($event)" [responsive]="true" [autoHide]="true" id="historyData"></pagination-controls>
+        </div>
+      </div>
+
+      <ng-template #noRequest>
+
+
+
+        <div class="text-center bg-light" style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">
+
+          <div class="d-flex justify-content-center align-items-center w-100">
+            <ng-container *ngIf="startDate === endDate; else dateRange">
+              <!-- Display when start and end dates are the same -->
+              <p class="text-center" style="color: #741919; font-size: 16px; font-weight: bold;">The selected date is: {{ searchByDate[0] | date }}</p>
+            </ng-container>
+            
+            <!-- Display when start and end dates are different -->
+            <ng-template #dateRange>
+              <p class="text-center" style="color: #741919; font-size: 16px; font-weight: bold;">The selected date range is from {{ searchByDate[0] | date }} to {{ searchByDate[1] | date }}</p>
+            </ng-template>
+          </div>
+          
+
+            <h5 style="color: #555; font-size: 24px; font-weight: bold;">No Data Found</h5>
+
+        </div>
+      </ng-template>
+          
+    </div>
+  </div>
+

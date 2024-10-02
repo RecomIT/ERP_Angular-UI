@@ -1,0 +1,430 @@
+<ng-template #addConditionalAllowanceConfigModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-plus" aria-hidden="true"></i>|
+      {{modalTitle}}
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+        aria-hidden="true">×</span></button>
+  </div>
+  <div class="font-bold text-dark">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <div class="ibox">
+                <div class="ibox-title">
+                  <h5>Accured Payment</h5>
+                </div>
+                <div class="ibox-content shadow-sm pb-2 pt-2">
+                  <div class="form-row text-x-small">
+                    <div class="col-12 col-lg-5 col-md-5 col-sm-12 mb-1">
+                      <div class="fomr-group">
+                        <label for="allowanceNameId" class="control-label font-bold">
+                          Allowance Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-addon">
+                              <i class="icofont-money-bag"></i>
+                            </div>
+                          </div>
+                          <div style="width: 90%;">
+                            <ng-select2 formControlName="allowanceNameId" [data]="ddlAllowances" name="allowanceNameId"
+                              id="allowanceNameId" [placeholder]="'Select Allowance ...'"
+                              [options]="allowanceSelect2Options" [allowClear]="true" (blur)="logFormErrors()"
+                              (ngModelChange)="[onAllowanceSelectionChange($event),logFormErrors()]">
+                            </ng-select2>
+                          </div>
+                        </div>
+                        <div *ngIf="formErrors.allowanceNameId" class="text-danger">
+                          <span>{{formErrors.allowanceNameId}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      <div class="fomr-group mb-1">
+                        <label for="baseOfPayment" class="control-label font-bold">
+                          Based On<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-addon">
+                              <i class="icofont-pay"></i>
+                            </div>
+                          </div>
+                          <select class="form-control form-control-sm " id="baseOfPayment"
+                            formControlName="baseOfPayment" (blur)="logFormErrors()">
+                            <option [value]="'Flat'">Flat</option>
+                            <option [value]="'Basic'">Basic</option>
+                            <option [value]="'Gross'">Gross</option>
+                          </select>
+                          <ng-container *ngIf="form.get('baseOfPayment').value != 'Flat'">
+                            <input type="number" class="form-control form-control-sm " id="percentage"
+                              (blur)="logFormErrors()"
+                              [class]="formErrors.percentage != null && formErrors.percentage !='' ? 'border-danger':''"
+                              (input)="logFormErrors()" formControlName="percentage" placeholder="Enter Percentage">
+                          </ng-container>
+                          <ng-container *ngIf="form.get('baseOfPayment').value == 'Flat'">
+                            <input type="number" class="form-control form-control-sm " id="amount"
+                              formControlName="amount"
+                              [class]="formErrors.amount != null && formErrors.amount !='' ? 'border-danger':''"
+                              (blur)="logFormErrors()" (input)="logFormErrors()" placeholder="Enter Amount">
+                          </ng-container>
+
+                        </div>
+                        <div *ngIf="formErrors.baseOfPayment" class="text-danger">
+                          <span>{{formErrors.baseOfPayment}}</span>
+                        </div>
+                        <div *ngIf="formErrors.percentage" class="text-danger hide">
+                          <span>{{formErrors.percentage}}</span>
+                        </div>
+                        <div *ngIf="formErrors.amount" class="text-danger hide">
+                          <span>{{formErrors.amount}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-lg-3 col-md-3 col-sm-12 mb-1">
+                      <div class="fomr-group mb-1">
+                        <label for="depositType" class="control-label font-bold">
+                          Deposit Type<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-addon">
+                              <i class="fa fa-money"></i>
+                            </div>
+                          </div>
+                          <select class="form-control form-control-sm " id="depositType" formControlName="depositType"
+                            (blur)="logFormErrors()">
+                            <option [value]="'Monthly'" selected>Monthly</option>
+                            <option [value]="'Yearly'">Yearly</option>
+                          </select>
+                        </div>
+                        <div *ngIf="formErrors.depositType" class="text-danger">
+                          <span>{{formErrors.depositType}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+              <mat-expansion-panel class="shadow-sm p-2 border-left">
+                <mat-expansion-panel-header class="p-0">
+                  <mat-panel-title class="text-large text-info">Config Parameter(s)</mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="form-row text-x-small pl-2 pr-2 mt-2">
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                    <div class="fomr-group mb-1">
+                      <label for="serviceLength" class="control-label font-bold">
+                        Service Length & Unit <span class="text-danger"
+                          *ngIf="this.form.get('serviceLength').value > 0">*</span>
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-addon">
+                            <i class="icofont-calendar"></i>
+                          </div>
+                        </div>
+                        <input type="number" class="form-control form-control-sm " id="serviceLength"
+                          name="serviceLength" formControlName="serviceLength" placeholder="Enter Service Length"
+                          (blur)="logFormErrors()" (input)="logFormErrors()">
+                        <div class="input-group-prepend">
+                          <select class="form-control form-control-sm"
+                            [class]="formErrors.serviceLengthUnit !=''? 'border-danger':''" id="serviceLengthUnit"
+                            formControlName="serviceLengthUnit" name="serviceLengthUnit" (blur)="logFormErrors()">
+                            <option [value]="''" disabled selected>Service Length</option>
+                            <option [value]="'Year'">Year</option>
+                            <option [value]="'Month'">Month</option>
+                            <option [value]="'Day'">Day</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div *ngIf="formErrors.serviceLength" class="text-danger">
+                        <span>{{formErrors.serviceLength}}</span>
+                      </div>
+                      <div *ngIf="formErrors.serviceLengthUnit" class="text-danger">
+                        <span>{{formErrors.serviceLengthUnit}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                    <div class="fomr-group mb-1">
+                      <label for="jobType" class="control-label font-bold">
+                        Job Type
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-addon">
+                            <i class="fa fa-dot-circle-o"></i>
+                          </div>
+                        </div>
+                        <select class="form-control form-control-sm " id="jobType" formControlName="jobType"
+                          (blur)="logFormErrors()">
+                          <option [value]="''">N/A</option>
+                          <option [value]="'Permanent'">Permanent</option>
+                          <option [value]="'Contractual'">Contractual</option>
+                          <option [value]="'Probation'">Probation</option>
+                          <option [value]="'Intern'">Intern</option>
+                        </select>
+                      </div>
+                      <div *ngIf="formErrors.jobType" class="text-danger">
+                        <span>{{formErrors.jobType}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                    <div class="fomr-group mb-1">
+                      <label for="religion" class="control-label font-bold">
+                        Religion
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-addon">
+                            <i class="icofont-moon"></i>
+                          </div>
+                        </div>
+                        <select class="form-control form-control-sm " id="religion" formControlName="religion"
+                          (blur)="logFormErrors()">
+                          <option [value]="''">N/A</option>
+                          <option [value]="'Islam'">Islam</option>
+                          <option [value]="'Hindu'">Hindu</option>
+                          <option [value]="'Christian'">Christian</option>
+                          <option [value]="'Buddhist'">Buddhist</option>
+                        </select>
+                      </div>
+                      <div *ngIf="formErrors.religion" class="text-danger">
+                        <span>{{formErrors.religion}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                    <div class="fomr-group mb-1">
+                      <label for="maritalStatus" class="control-label font-bold">
+                        Marital Status
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-addon">
+                            <i class="icofont-diamond"></i>
+                          </div>
+                        </div>
+                        <select class="form-control form-control-sm " id="maritalStatus" formControlName="maritalStatus"
+                          (blur)="logFormErrors()">
+                          <option [value]="''">N/A</option>
+                          <option [value]="'Married'">Married</option>
+                          <option [value]="'Single'">Single</option>
+                        </select>
+                      </div>
+                      <div *ngIf="formErrors.maritalStatus" class="text-danger">
+                        <span>{{formErrors.maritalStatus}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                    <div class="fomr-group mb-1">
+                      <label for="citizen" class="control-label font-bold">
+                        Citizen
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-addon">
+                            <i class="icofont-location"></i>
+                          </div>
+                        </div>
+                        <select class="form-control form-control-sm " id="citizen" formControlName="citizen"
+                          (blur)="logFormErrors()">
+                          <option [value]="''">N/A</option>
+                          <option [value]="'Yes'">Yes</option>
+                          <option [value]="'No'">No</option>
+                        </select>
+                      </div>
+                      <div *ngIf="formErrors.citizen" class="text-danger">
+                        <span>{{formErrors.citizen}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                    <div class="fomr-group mb-1">
+                      <label for="gender" class="control-label font-bold">
+                        Gender
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-addon">
+                            <i class="fa fa-dot-circle-o"></i>
+                          </div>
+                        </div>
+                        <select class="form-control form-control-sm " id="gender" formControlName="gender"
+                          (blur)="logFormErrors()">
+                          <option [value]="''" selected>N/A</option>
+                          <option [value]="'Male'">Male</option>
+                          <option [value]="'Female'">Female</option>
+                        </select>
+                      </div>
+                      <div *ngIf="formErrors.gender" class="text-danger">
+                        <span>{{formErrors.gender}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                    <div class="fomr-group mb-1">
+                      <label for="physicalCondition" class="control-label font-bold">
+                        Physical Condition
+                      </label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-addon">
+                            <i class="fa fa-dot-circle-o"></i>
+                          </div>
+                        </div>
+                        <select class="form-control form-control-sm " id="physicalCondition"
+                          formControlName="physicalCondition" (blur)="logFormErrors()">
+                          <option [value]="''" selected>N/A</option>
+                          <option [value]="'Disabled'">Disabled</option>
+                          <option [value]="'Undisabled'">Undisabled</option>
+                        </select>
+                      </div>
+                      <div *ngIf="formErrors.physicalCondition" class="text-danger">
+                        <span>{{formErrors.physicalCondition}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 mt-2">
+              <div class="ibox">
+                <div class="ibox-title">
+                  <h5>Activation</h5>
+                </div>
+                <div class="ibox-content shadow-sm pb-2 pt-2">
+                  <div class="form-row text-x-small">
+                    <div class="col-12 col-lg-3 col-md-3 col-sm-12 mb-1">
+                      <div class="fomr-group">
+                        <label for="activationFrom" class="control-label font-bold">
+                          From <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group ">
+                          <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                              <i class="fa fa-calendar-check-o"></i>
+                            </span>
+                          </div>
+                          <input type="text" formControlName="activationFrom" id="activationFrom"
+                            class="form-control form-control-sm form-control form-control-sm-sm bg-white " readonly
+                            autocomplete="off" placeholder="Select Activation From .." title="Activation From"
+                            bsDatepicker (blur)="logFormErrors()"
+                            (change)="[this.form.get('activationFrom').markAsTouched(),logFormErrors()]"
+                            
+                            [bsConfig]="datePickerConfig">
+                          <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date"
+                            [hidden]="!form.get('activationFrom').value" (click)="clearActivationFrom()">
+                            <span class="input-group-addon text-danger">
+                              <i class="fa fa-times"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <div *ngIf="formErrors.activationFrom" class="text-danger">
+                          <span>{{formErrors.activationFrom}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-lg-3 col-md-3 col-sm-12 mb-1">
+                      <div class="fomr-group">
+                        <label for="activationTo" class="control-label font-bold">
+                          To <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group ">
+                          <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                              <i class="fa fa-calendar-check-o"></i>
+                            </span>
+                          </div>
+                          <input type="text" formControlName="activationTo" id="activationTo"
+                            class="form-control form-control-sm form-control form-control-sm-sm bg-white " readonly
+                            autocomplete="off" placeholder="Select Activation To .." title="Activation To" bsDatepicker
+                            (blur)="logFormErrors()" 
+                            
+                            [bsConfig]="datePickerConfig">
+                          <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date"
+                            [hidden]="!form.get('activationTo').value" (click)="clearActivationTo()">
+                            <span class="input-group-addon text-danger">
+                              <i class="fa fa-times"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <div *ngIf="formErrors.activationTo" class="text-danger">
+                          <span>{{formErrors.activationTo}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row hide">
+            <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+              <div class="fomr-group mb-1 form-inline">
+                <label class="mr-2" for="isVisibleInPayslipYes"><strong>Is Visible in Payslip</strong>
+                </label>
+                <div class="form-check mr-2">
+                  <input class="form-check-input" type="radio" id="isVisibleInPayslipYes" [value]="true"
+                    formControlName="isVisibleInPayslip">
+                  <label class="form-check-label" for="isVisibleInPayslipYes">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="isVisibleInPayslipNo" [value]="false"
+                    formControlName="isVisibleInPayslip">
+                  <label class="form-check-label" for="isVisibleInPayslipNo">No</label>
+                </div>
+                <div class="invalid-feedback ml-2" *ngIf="form.get('isVisibleInPayslip').hasError('required')">
+                  Please select if it is visible in payslip.
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+              <div class="fomr-group mb-1 form-inline">
+                <label class="mr-2" for="isVisibleInSalarySheetYes"><strong>Is Visible in Salary Sheet</strong>
+                </label>
+                <div class="form-check mr-2">
+                  <input class="form-check-input" type="radio" id="isVisibleInSalarySheetYes" value="Yes"
+                    formControlName="isVisibleInSalarySheet">
+                  <label class="form-check-label" for="isVisibleInSalarySheetYes">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="isVisibleInSalarySheetNo" value="No"
+                    formControlName="isVisibleInSalarySheet">
+                  <label class="form-check-label" for="isVisibleInSalarySheetNo">No</label>
+                </div>
+                <div class="invalid-feedback ml-2" *ngIf="form.get('isVisibleInSalarySheet').hasError('required')">
+                  Please select if it is visible in salary sheet.
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer text-x-small pb-2">
+        <button type="submit" class="btn btn-sm btn-primary btn-rounded" *ngIf="btnSubmit == false">
+          <i class="fa fa-paper-plane"></i> | {{btnText}}
+        </button>
+        <button type="button" class="btn btn-sm btn-primary btn-rounded" [disabled]="true" *ngIf="btnSubmit == true">
+          <i class="fa fa-paper-plane"></i> |
+          {{btnText}}
+          <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="btn btn-sm btn-danger btn-rounded pull-right" [disabled]="btnSubmit"
+          (click)="closeModal('Close click')">
+          <i class="fa fa-times"></i> | Close
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

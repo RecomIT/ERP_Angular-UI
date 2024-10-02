@@ -1,0 +1,440 @@
+<ng-template #personalModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-ui-user pr-1 fa-1x border-right"></i> Update Profile Information
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="personalForm" (ngSubmit)="submitForm()">
+        <div class="modal-body text-x-small text-dark">
+            <div class="form-row">
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="fatherName" class="control-label">Father's
+                        Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-male"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="fatherName" id="fatherName" class="form-control form-control-sm"
+                            formControlName="fatherName" (blur)="logFormErrors()" (input)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.fatherName" class="text-danger">
+                        <span>{{formErrors.fatherName}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="motherName" class="control-label">Mother's
+                        Name</ label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-female"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="motherName" id="motherName" class="form-control form-control-sm"
+                                formControlName="motherName" (blur)="logFormErrors()" (input)="logFormErrors()">
+                        </div>
+                        <div *ngIf="formErrors.motherName" class="text-danger">
+                            <span>{{formErrors.motherName}}</span>
+                        </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="dateOfBirth" class="control-label">Date Of Birth
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-baby"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="dateOfBirth" id="dateOfBirth" readonly [bsConfig]="datePickerConfig"
+                            class="form-control form-control-sm bg-white" formControlName="dateOfBirth" bsDatepicker
+                            autocomplete="off" (input)="logFormErrors()" (blur)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.dateOfBirth" class="text-danger">
+                        <span>{{formErrors.dateOfBirth}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="religion" class="control-label">Religion
+                        <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-moon-o" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="religion" id="religion" class="form-control form-control-sm"
+                            formControlName="religion" (blur)="logFormErrors()" (change)="logFormErrors()">
+                            <option [value]="''" selected>---Select Religion---</option>
+                            <option [value]="item" *ngFor="let item of ddlReligions">{{item}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.religion" class="text-danger">
+                        <span>{{formErrors.religion}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="maritalStatus" class="control-label">Marital
+                        Status</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-diamond" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="maritalStatus" id="maritalStatus" class="form-control form-control-sm"
+                            formControlName="maritalStatus" (blur)="logFormErrors()" (change)="logFormErrors()">
+                            <option [value]="'N/A'" selected>---Select Marital---</option>
+                            <option [value]="m" *ngFor="let m of maritals()">{{m}}</option>
+                        </select>
+                        <div *ngIf="formErrors.maritalStatus" class="text-danger">
+                            <span>{{formErrors.maritalStatus}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="spouseName" class="control-label">Spouse
+                        Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-venus-mars" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="spouseName" id="spouseName" class="form-control form-control-sm"
+                            formControlName="spouseName" (blur)="logFormErrors()" (input)="logFormErrors()">
+                        <div class="input-group-prepend">
+                            <input type="text" name="numberOfChild" id="numberOfChild"
+                                class="form-control form-control-sm" title="Nubmer Of Child"
+                                formControlName="numberOfChild" (blur)="logFormErrors()" (input)="logFormErrors()"
+                                placeholder="Nubmer Of Child.">
+                        </div>
+                    </div>
+                    <div *ngIf="formErrors.spouseName" class="text-danger">
+                        <span>{{formErrors.spouseName}}</span>
+                    </div>
+                    <div *ngIf="formErrors.numberOfChild" class="text-danger">
+                        <span>{{formErrors.numberOfChild}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+
+                <div class="form-group col-12 col-sm-12 col-md-6 hide">
+                    <label for="feet" class="control-label">Height in Feet</label>
+                    <div class="input-group">
+                        <select name="feet" id="feet" class="form-control form-control-sm" formControlName="feet"
+                            (blur)="logFormErrors()" (change)="logFormErrors()">
+                            <option [value]="'N/A'" selected>---Feet---</option>
+                            <option [value]="3">3</option>
+                            <option [value]="4">4</option>
+                            <option [value]="5">5</option>
+                            <option [value]="6">6</option>
+                            <option [value]="7">7</option>
+                        </select>
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-arrows-h" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="inch" id="inch" class="form-control form-control-sm" formControlName="inch"
+                            (blur)="logFormErrors()" (change)="logFormErrors()">
+                            <option [value]="'N/A'" selected>---Inch---</option>
+                            <option [value]="0">0</option>
+                            <option [value]="1">1</option>
+                            <option [value]="2">2</option>
+                            <option [value]="3">3</option>
+                            <option [value]="4">4</option>
+                            <option [value]="5">5</option>
+                            <option [value]="6">6</option>
+                            <option [value]="7">7</option>
+                            <option [value]="8">8</option>
+                            <option [value]="9">9</option>
+                            <option [value]="10">10</option>
+                            <option [value]="11">11</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="bloodGroup" class="control-label">Blood
+                        Group</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-tint" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="bloodGroup" id="bloodGroup" class="form-control form-control-sm"
+                            formControlName="bloodGroup" (blur)="logFormErrors()" (change)="logFormErrors()">
+                            <option [value]="''" selected>---Select Blood Group---</option>
+                            <option [value]="item" *ngFor="let item of ddlBloodGroups">{{item}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.bloodGroup" class="text-danger">
+                        <span>{{formErrors.bloodGroup}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="mobileNo" class="control-label">Mobile No(Personal)</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-sort-alpha-asc"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="mobileNo" id="mobileNo" class="form-control form-control-sm"
+                            formControlName="personalMobileNo" (blur)="logFormErrors()" (input)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.personalMobileNo" class="text-danger">
+                        <span>{{formErrors.personalMobileNo}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="email" class="control-label">Email ID
+                        (Personal) </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="email" id="email" class="form-control form-control-sm"
+                            formControlName="personalEmailAddress" (blur)="logFormErrors()" (input)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.personalEmailAddress" class="text-danger">
+                        <span>{{formErrors.personalEmailAddress}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-12 col-sm-12 col-md-6">
+                    <label for="presentAddress" class="control-label">Present
+                        Address</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-book"></i>
+                            </span>
+                        </div>
+                        <textarea type="text" name="presentAddress" id="presentAddress" rows="1"
+                            class="form-control form-control-sm" formControlName="presentAddress" autocomplete="off"
+                            (input)="logFormErrors()" (blur)="logFormErrors()"></textarea>
+                    </div>
+                    <div *ngIf="formErrors.presentAddress" class="text-danger">
+                        <span>{{formErrors.presentAddress}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-6">
+                    <label for="permanentAddress" class="control-label">Permanent Address<span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-card"></i>
+                            </span>
+                        </div>
+                        <textarea type="text" name="permanentAddress" id="permanentAddress" rows="1"
+                            (input)="logFormErrors()" class="form-control form-control-sm"
+                            formControlName="permanentAddress" autocomplete="off" (blur)="logFormErrors()"></textarea>
+                    </div>
+                    <div *ngIf="formErrors.permanentAddress" class="text-danger">
+                        <span>{{formErrors.permanentAddress}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="EmergencyContactPerson" class="control-label">Emergency Contact Person-1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user-secret"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactPersonName" id="emergencyContactPersonName"
+                            (input)="logFormErrors()" formControlName="emergencyContactPerson"
+                            class="form-control form-control-sm" (blur)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.emergencyContactPerson" class="text-danger">
+                        <span>{{formErrors.emergencyContactPerson}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="EmergencyRelation" class="control-label">Relation With Emergency Contact Person
+                        -1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-venus-mars"></i>
+                            </span>
+                        </div>
+                        <select type="text" name="EmergencyRelation" id="EmergencyRelation"
+                            class="form-control form-control-sm" formControlName="relationWithEmergencyContactPerson"
+                            (blur)="logFormErrors()" (change)="logFormErrors()">
+                            <option [value]="''" selected>---Select Relation---</option>
+                            <option [value]="item" *ngFor="let item of ddlRelations">{{item}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.relationWithEmergencyContactPerson" class="text-danger">
+                        <span>{{formErrors.relationWithEmergencyContactPerson}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="EmergencyContactNumber" class="control-label">Emergency Contact No-1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-phone"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="EmergencyContactNumber" id="EmergencyContactNumber"
+                            formControlName="emergencyContactNo" class="form-control form-control-sm"
+                            (input)="logFormErrors()" (blur)="logFormErrors()" />
+                    </div>
+                    <div *ngIf="formErrors.emergencyContactNo" class="text-danger">
+                        <span>{{formErrors.emergencyContactNo}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-12 col-sm-12 col-md-6">
+                    <label for="EmergencyAddress" class="control-label">Emergency Contact Address-1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-card-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="EmergencyAddress" id="EmergencyAddress"
+                            class="form-control form-control-sm" formControlName="emergencyContactAddress"
+                            (input)="logFormErrors()" (blur)="logFormErrors()" />
+                    </div>
+                    <div *ngIf="formErrors.emergencyContactAddress" class="text-danger">
+                        <span>{{formErrors.emergencyContactAddress}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-6">
+                    <label for="emergencyContactEmailAddress" class="control-label">Emergency Contact Email-1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactEmailAddress" id="emergencyContactEmailAddress"
+                            class="form-control form-control-sm" formControlName="emergencyContactEmailAddress"
+                            (blur)="logFormErrors()" (input)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.emergencyContactEmailAddress" class="text-danger">
+                        <span>{{formErrors.emergencyContactEmailAddress}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="EmergencyContactPerson2" class="control-label">Emergency Contact Person-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user-secret"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactPersonName2" id="emergencyContactPersonName2"
+                            (input)="logFormErrors()" formControlName="emergencyContactPerson2"
+                            class="form-control form-control-sm" (blur)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.emergencyContactPerson2" class="text-danger">
+                        <span>{{formErrors.emergencyContactPerson2}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="EmergencyRelation" class="control-label">Relation With Emergency Contact-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-venus-mars"></i>
+                            </span>
+                        </div>
+                        <select type="text" name="EmergencyRelation2" id="EmergencyRelation2"
+                            class="form-control form-control-sm" formControlName="relationWithEmergencyContactPerson2"
+                            (blur)="logFormErrors()" (change)="logFormErrors()">
+                            <option [value]="''" selected>---Select Relation---</option>
+                            <option [value]="item" *ngFor="let item of ddlRelations">{{item}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.relationWithEmergencyContactPerson2" class="text-danger">
+                        <span>{{formErrors.relationWithEmergencyContactPerson2}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-4">
+                    <label for="EmergencyContactNumber2" class="control-label">Emergency Contact No-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-phone"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="EmergencyContactNumber2" id="EmergencyContactNumber2"
+                            formControlName="emergencyContactNo2" class="form-control form-control-sm"
+                            (input)="logFormErrors()" (blur)="logFormErrors()" />
+                    </div>
+                    <div *ngIf="formErrors.emergencyContactNo2" class="text-danger">
+                        <span>{{formErrors.emergencyContactNo2}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-12 col-sm-12 col-md-6">
+                    <label for="EmergencyAddress2" class="control-label">Emergency Contact Address-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-card-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="EmergencyAddress2" id="EmergencyAddress2"
+                            class="form-control form-control-sm" formControlName="emergencyContactAddress2"
+                            (input)="logFormErrors()" (blur)="logFormErrors()" />
+                    </div>
+                    <div *ngIf="formErrors.emergencyContactAddress2" class="text-danger">
+                        <span>{{formErrors.emergencyContactAddress2}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-6">
+                    <label for="emergencyContactEmailAddress2" class="control-label">Emergency Contact Email-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactEmailAddress2" id="emergencyContactEmailAddress2"
+                            class="form-control form-control-sm" formControlName="emergencyContactEmailAddress2"
+                            (blur)="logFormErrors()" (input)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.emergencyContactEmailAddress2" class="text-danger">
+                        <span>{{formErrors.emergencyContactEmailAddress2}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary">
+                <i class="fa fa-paper-plane"></i> | Submit
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                (click)="closeModal('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>

@@ -1,0 +1,153 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle icofont-ui-settings"></i>| Final Tax Process
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+            <div class="ibox-content pb-1 shadow-sm text-x-small">
+                <div class="form-row">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="fiscalYear" class="control-label font-bold">Search by Income Year <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon faa-parent animated-hover">
+                                    <i class="fa fa-calendar faa-pulse"></i>
+                                </span>
+                            </div>
+                            <select name="fiscalYear" id="fiscalYear" class="form-control form-control-sm"
+                                formControlName="fiscalYear">
+                                <option [value]="0" selected>---Select Income Year---</option>
+                                <option [value]="item.id" *ngFor="let item of ddlFiscalYears">{{item.text}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="flag" class="control-label font-bold">Search by Employee(s) <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon faa-parent animated-hover">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </div>
+                            <select name="flag" id="flag" class="form-control form-control-sm" formControlName="flag">
+                                <option [value]="item" *ngFor="let item of flags">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="branchId" class="control-label font-bold">Search by Branch/Company</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon faa-parent animated-hover">
+                                    <i class="fa fa-building"></i>
+                                </span>
+                            </div>
+                            <select name="branchId" id="branchId" class="form-control form-control-sm"
+                                formControlName="branchId">
+                                <option [value]="0">---Select Branch---</option>
+                                <option [value]="item.id" *ngFor="let item of ddlBranch">{{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content pb-1 shadow-sm text-x-small">
+                <span class="label label-info pull-left" *ngIf="total_employees > 0">Total employees
+                    {{total_employees}}</span>
+                <span class="label label-primary pull-right" *ngIf="checkedItems > 0">Selected employees
+                    {{checkedItems}}</span>
+                <div class="table-responsive" *ngIf="list_of_data != null && list_of_data.length > 0"
+                    style="min-height: 400px;max-height: 400px;">
+                    <table
+                        class="table table-sm table-striped table-bordered table-responsive-sm table-responsive-md table-responsive-xl">
+                        <thead class="text-center">
+                            <tr class="text-x-small font-bold">
+                                <th>
+                                    <input type="checkbox" formControlName="isCheckedAll" (change)="checkAll($event)">
+                                </th>
+                                <th>#SL</th>
+                                <th>Name</th>
+                                <th>Branch/Company</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th class="hide">Section</th>
+                                <th class="hide">SubSection</th>
+                                <th>Gender</th>
+                                <th>Religion</th>
+                                <th>Citizen</th>
+                                <th>Last Salary Month</th>
+                                <th>Last Wroking date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr formArrayName="employees" *ngFor="let item of formArray; let i = index">
+                                <ng-container [formGroupName]="i">
+                                    <td>
+                                        <input type="checkbox" formControlName="isChecked"
+                                            (change)="item_Checked($event)">
+                                    </td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.get('fullName').value + " ["+item.get('employeeCode').value+"]"}}</td>
+                                    <td>{{item.get("branch").value}}</td>
+                                    <td>{{item.get("designation").value}}</td>
+                                    <td>{{item.get("department").value}}</td>
+                                    <td class="hide">{{item.get("section").value}}</td>
+                                    <td class="hide">{{item.get("subSection").value}}</td>
+                                    <td>{{item.get("gender").value}}</td>
+                                    <td>{{item.get("religion").value}}</td>
+                                    <td *ngIf="item.get('isResidential').value == true">
+                                        <span class="label label-primary">Yes</span>
+                                    </td>
+                                    <td *ngIf="item.get('isResidential').value == false">
+                                        <span class="label label-danger">No</span>
+                                    </td>
+                                    <td>
+                                        {{item.get("lastMonth").value | date:"MMM yyyy"}}
+                                    </td>
+                                    <td>
+                                        {{item.get("terminationDate").value | date:"dd MMM yyyy"}}
+                                    </td>
+                                    <td></td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer font-bold text-x-small">
+        <div class="clearfix">
+            <button class="btn btn-sm" class="btn btn-sm btn-rounded btn-outline-primary" (click)="process()" [disabled]="btnProcess" *ngIf="checkedItems > 0">
+                <i class="fa fa-cogs"></i> | Run Process
+                <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+</ng-template>
+<div class="spinner-div" *ngIf="btnProcess == true">
+    <div class="sk-spinner sk-spinner-cube-grid spinner text-success">
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+    </div>
+    <div class="col-md-12 col-sm-12 spinner-text">
+        <h4 class="text-center">Please wait...</h4>
+        <h5 class="">Final Tax is being proceed...</h5>
+    </div>
+</div>

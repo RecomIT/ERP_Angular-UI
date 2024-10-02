@@ -1,0 +1,201 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle" aria-hidden="true">&#2547;</i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body text-x-small">
+                <div class="ibox">
+                    <div class="ibox-content pb-1 shadow-sm border-radius-5">
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label for="allowanceName" class="control-label font-bold">
+                                    Allowance <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-money"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width:85%">
+                                        <ng-select2 [data]="ddlAllowances" name="allowanceNames"
+                                            formControlName="allowanceNameId" [placeholder]="'Allowance Name...'"
+                                            [options]="select2Options" [allowClear]="true" required>
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                                <div *ngIf="formErrors?.allowanceNameId" class="text-danger">
+                                    {{formErrors?.allowanceNameId}}
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12 hide">
+                                <label for="flag" class="control-label font-bold">
+                                    Flag <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-flag"></i>
+                                        </span>
+                                    </div>
+                                    <select name="flag" id="flag" class="form-control form-control-sm"
+                                        formControlName="flag">
+                                        <option [value]="''">--Flag--</option>
+                                        <option [value]="'Arrear'">Arrear</option>
+                                        <option [value]="'Adjustment'">Adjustment</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors?.flag" class="text-danger">
+                                    {{formErrors?.flag}}
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label for="year" class="control-label font-bold">
+                                    {{flag}} Month <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <select name="adjustmentMonth" id="adjustmentMonth"
+                                        class="form-control form-control-sm" formControlName="adjustmentMonth">
+                                        <option [value]="0">--Month--</option>
+                                        <option *ngFor="let m of ddlMonths" [value]="m.monthNo">{{m.month}}</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <select name="adjustmentYear" id="adjustmentYear"
+                                            class="form-control form-control-sm" formControlName="adjustmentYear">
+                                            <option [value]="0">--Year--</option>
+                                            <option *ngFor="let year of ddlYears">{{year}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div *ngIf="formErrors?.adjustmentMonth" class="text-danger">
+                                    {{formErrors?.adjustmentMonth}}
+                                </div>
+                                <div *ngIf="formErrors?.adjustmentYear" class="text-danger">
+                                    {{formErrors?.adjustmentYear}}
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label for="year" class="control-label font-bold">
+                                    Salary Month <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <select name="month" id="month" class="form-control form-control-sm"
+                                        formControlName="month">
+                                        <option [value]="0">--Month--</option>
+                                        <option *ngFor="let m of ddlMonths" [value]="m.monthNo">{{m.month}}</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <select name="year" id="year" class="form-control form-control-sm"
+                                            formControlName="year">
+                                            <option [value]="0">--Year--</option>
+                                            <option *ngFor="let year of ddlYears">{{year}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div *ngIf="formErrors?.month" class="text-danger">
+                                    {{formErrors?.month}}
+                                </div>
+                                <div *ngIf="formErrors?.year" class="text-danger">
+                                    {{formErrors?.year}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content border-radius-5 mt-1 pb-1 shadow-sm">
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <label for="selectEmployee" class="control-label">
+                            Select Employee(s) <span class="text-danger">*</span> &nbsp;
+                            <span class="label label-info" *ngIf="employeesList != null && employeesList.length > 0">
+                                {{employeesList.length}}
+                            </span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" name="selectEmployee"
+                                [typeahead]="ddlEmployees" typeaheadOptionField="text"
+                                placeholder="Type Employee Name Here..." (typeaheadOnSelect)="employeeOnSelect($event)"
+                                autocomplete="off" [typeaheadMinLength]="0" [typeaheadScrollable]="true"
+                                id="selectEmployee" formControlName="selectEmployee" />
+                            <div class="input-group-prepend cursor-pointer hide" (click)="1==1">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-upload"></i>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content border-radius-5 mt-1 pb-1 shadow-sm"
+                    style="max-height: 350px !important; overflow: scroll;"
+                    *ngIf="employeesList != null && employeesList.length > 0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-responsive-xl">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th>Name</th>
+                                    <th>Designation</th>
+                                    <th class="text-center">Amount</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of employeesList; let i=index">
+                                    <td class="text-center font-bold">{{i+1}}</td>
+                                    <td>{{item.text}}</td>
+                                    <td>{{item.designation}}</td>
+                                    <td class="text-center">
+                                        <input type="number" placeholder="Enter Amount" class="text-center"
+                                            style="width: 60px;"
+                                            [title]="employeesList[i].isValid == false ? 'Amount is required. Please enter Amount':''"
+                                            (input)="rowChanged(i)" [(ngModel)]="employeesList[i].amount"
+                                            [class]="employeesList[i].isValid == false ? 'border-danger':''"
+                                            [ngModelOptions]="{standalone: true}" />
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-xs btn-danger"
+                                            (click)="deleteEmployee(item.id)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="form.invalid  || !rows_valid || btnSubmit">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnSubmit"
+                    (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

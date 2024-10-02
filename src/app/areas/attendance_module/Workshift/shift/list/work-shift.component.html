@@ -1,0 +1,1064 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-sm-8 col-md-8">
+        <h2 @slideInUp class="mt-2">Work Shift {{employeeWorkShiftChecking ? "Approval":""}}</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Attendance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Work Shift</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-4 col-sm-4 col-md-4">
+        <div class="title-action text-x-small" *ngIf="employeeWorkShiftEntry || employeeWorkShiftChecking">
+            <button class="btn btn-sm btn-rounded btn-outline-primary" title="Back To List"
+                (click)="showHidePageSection('pageTabs')"><i class="fa fa-arrow-left"></i> | Back To List</button>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated pt-3 fadeInRight" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small" *ngIf="pageTabs">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs ">
+                    <li><a href="#workShift" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-clock-o"></i> | Work Shift
+                        </a></li>
+                    <li><a href="#employeeWorkShift" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-clock-o"></i> | Employee Work Shift
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="workShift" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="workShiftFilter"
+                                            onkeyup="tableFilter('#tblWorkShifts tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openWorkShiftModal()">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table
+                                    class="table table-sm table-striped table-hover table-responsive-sm table-responsive-xl"
+                                    id="tblWorkShifts">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>TItle</th>
+                                            <th>Name</th>
+                                            <th>Name In Bengali</th>
+                                            <th>Name Detail</th>
+                                            <th>Name Detail In Bengali</th>
+                                            <th>Remarks</th>
+                                            <th class="text-center">In-Out Time</th>
+                                            <th class="text-center">Max In-Time</th>
+                                            <th class="text-center">Lunch In-Out Time</th>
+                                            <th class="text-center">Max OT Hour</th>
+                                            <th class="text-center">OT Start Time</th>
+                                            <th class="text-center">Max Before Time</th>
+                                            <th class="text-center">Max After Time</th>
+                                            <th class="text-center">Exceeded Max After Time</th>
+                                            <th class="text-center">Weekends</th>
+                                            <th class="text-center">StateStatus</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let ws of workShiftList; let i =index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{ws.title}}</td>
+                                            <td>{{ws.name}}</td>
+                                            <td>{{ws.nameInBengali}}</td>
+                                            <td>{{ws.nameDetail}}</td>
+                                            <td>{{ws.nameDetailInBengali}}</td>
+                                            <td>{{ws.remarks}}</td>
+                                            <td class="text-center">{{ws.startTime}}-{{ws.endTime}}-</td>
+                                            <td class="text-center">{{ws.maxInTime}}</td>
+                                            <td class="text-center">{{ws.lunchStartTime}}-{{ws.lunchEndTime}}</td>
+                                            <td class="text-center">{{ws.maxOTHour}}</td>
+                                            <td class="text-center">{{ws.oTStartTime}}</td>
+                                            <td class="text-center">{{ws.maxBeforeTime}}</td>
+                                            <td class="text-center">{{ws.maxAfterTime}}</td>
+                                            <td class="text-center">{{ws.exceededMaxAfterTime}}</td>
+                                            <td>
+                                                <span class="label label-primary">{{ws.weekendDayName}}</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="label label-primary" [hidden]="ws.stateStatus=='Entered'">
+                                                    <i class="fa fa-check"></i>{{ws.stateStatus}}
+                                                </span>
+                                                <span class="label label-success" [hidden]="ws.stateStatus=='Approved'">
+                                                    <i class="fa fa-arrow-down"></i> {{ws.stateStatus}}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs"
+                                                    [hidden]="ws.stateStatus=='Approved'"
+                                                    (click)="editWorkShift(ws.workShiftId)">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs"
+                                                    [hidden]="ws.stateStatus=='Approved' || ws.stateStatus=='Recheck'"
+                                                    (click)="workShiftApprovalOrReject(ws.workShiftId)">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="employeeWorkShift" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-12 col-sm-12 col-md-3 text-x-small">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon ">
+                                                <i class="fa fa-table" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <select name="departmentSrc" id="departmentSrc"
+                                            class="form-control form-control-sm" #departmentSrc="ngModel"
+                                            [(ngModel)]="searchByDepartment"
+                                            (change)="[loadSections(departmentSrc.value),
+                                            loadEmployees('',departmentSrc.value,0,0),getEmployeesWorkShifts()]">
+                                            <option [value]="0" selected>--Select Department--</option>
+                                            <option [value]="dept.id" *ngFor="let dept of departmentList | async">
+                                                {{dept.text}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-12 col-sm-12 col-md-5 text-x-small">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon ">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div class="d-inline" style="width: 80%;">
+                                            <ng-select2 [data]="ddlEmployees" name="employeeSrc" #employeeSrc="ngModel"
+                                                [(ngModel)]="searchByEmployee" id="employeeSrc"
+                                                [placeholder]="'Select Employee...'"
+                                                [options]="employeeShiftSelect2Options" [allowClear]="true" required
+                                                (click)="touchedSelect2(employeeSrc)"
+                                                (ngModelChange)="searchByEmployee_changed()">
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-12 col-sm-12 col-md-4">
+                                    <button class="btn btn-sm btn-primary ml-2 pull-right btn-rounded"
+                                        (click)="showHidePageSection('employeeWorkShiftChecking')">
+                                        <i class="fa fa-check"></i> | Approval
+                                    </button>
+                                    <button class="btn btn-sm btn-success pull-right btn-rounded"
+                                        (click)="showHidePageSection('employeeWorkShiftEntry')">
+                                        <i class="fa fa-plus"></i> | Bulk Rostering
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover table-responsive-xl"
+                                    id="tblEmployeesWorkShift">
+                                    <thead>
+                                        <tr class="">
+                                            <th class="text-center">#SL</th>
+                                            <th>Employee</th>
+                                            <th>Designation</th>
+                                            <th>Department</th>
+                                            <th>Section</th>
+                                            <th>Subsection</th>
+                                            <th>Present Shift</th>
+                                            <th>Proposal Shift</th>
+                                            <th class="text-center">Active Date</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Created Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of employeeWorkShiftList,let i =index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{item.fullName+'~'+item.employeeCode}}</td>
+                                            <td>{{item.designationName}}</td>
+                                            <td>{{item.departmentName}}</td>
+                                            <td>{{item.sectionName}}</td>
+                                            <td>{{item.subSectionName}}</td>
+                                            <td>{{item.currentWorkShiftName}}</td>
+                                            <td>{{item.workShiftName}}</td>
+                                            <td>{{item.activeDate | date:"dd-MMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <span class='label label-primary'
+                                                    [hidden]="item.stateStatus=='Entered'">
+                                                    {{item.stateStatus}}
+                                                </span>
+                                                <span class='label label-success'
+                                                    [hidden]="item.stateStatus=='Approved'">
+                                                    {{item.stateStatus}}
+                                                </span>
+                                            </td>
+                                            <td>{{item.createdDate | date:"dd-MMM-yyyy hh:mm a"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs"
+                                                    *ngIf="item.stateStatus=='Entered'">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" employeeWorkShiftList.length ==0 && employeeWorkShiftDTLabel == null">
+                                            <td colspan="15" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" employeeWorkShiftList.length ==0 && employeeWorkShiftDTLabel != null">
+                                            <td colspan="15" class="text-center font-bold">
+                                                {{employeeWorkShiftDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="d-flex justify-content-end">
+                                    <pagination-controls (pageChange)="employeesWorkShiftsPageChanged($event)"
+                                        [responsive]="true" [autoHide]="true" id="employeeShiftData">
+                                    </pagination-controls>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="employeeWorkShiftEntry">
+            <div class="col-md-12">
+                <div class="ibox shadow-sm">
+                    <div class="ibox-content bg-white pt-2 pb-3 border-radius-5">
+                        <h3 class="mb-0"> <i class="icofont icofont-clock-time"></i> | Employee(s) Work-Shift Roster
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mb-4">
+                <form #employeeWorkShiftForm="ngForm" (submit)="submitEmployeesWorkShift(employeeWorkShiftForm)">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-4">
+                            <div class="ibox shadow-lg">
+                                <div class="ibox-content border-radius-5 bg-white pt-2 pb-2 font-bold">
+                                    <h3><i class="fa fa-info"></i> Employee(s) Information</h3>
+                                    <hr>
+                                    <div class="form-row text-x-small">
+                                        <div class="form-group col-sm-12 col-md-12">
+                                            <label for="designation" class="control-label">Designation</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-id-badge"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="designation" id="designation"
+                                                    class="form-control form-control-sm" #designationRef
+                                                    (change)="loadEmployees(designationRef.value,0,0,0)">
+                                                    <option [value]="0" selected>--Select Designation--</option>
+                                                    <option [value]="item.id" *ngFor="let item of designationList | async">
+                                                        {{item.text}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-12">
+                                            <label for="department" class="control-label">Department</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-building"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="department" id="department"
+                                                    class="form-control form-control-sm" #departmentRef
+                                                    (change)="[loadSections(departmentRef.value),loadEmployees(designationRef.value,departmentRef.value,0,0)]">
+                                                    <option [value]="0" selected>--Select Department--</option>
+                                                    <option [value]="dept.id" *ngFor="let dept of departmentList | async">
+                                                        {{dept.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-12">
+                                            <label for="section" class="control-label">Section</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-pie-chart"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="section" id="section" class="form-control form-control-sm"
+                                                    #sectionRef
+                                                    (change)="[loadSubsections(sectionRef.value),loadEmployees(designationRef.value,departmentRef.value,sectionRef.value,0)]">
+                                                    <option [value]="0" selected>--Select Section--</option>
+                                                    <option [value]="item.id" *ngFor="let item of sectionList">{{item.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-12">
+                                            <label for="subsection" class="control-label">Sub-Section</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-pie-chart"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="subsection" id="subsection"
+                                                    class="form-control form-control-sm" #subsectionRef
+                                                    (change)="loadEmployees(designationRef.value,departmentRef.value,sectionRef.value,subsectionRef.value)">
+                                                    <option [value]="0" selected>--Select Subsection--</option>
+                                                    <option [value]="item.id" *ngFor="let item of subsectionList">
+                                                        {{item.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-12">
+                                            <label for="" class="control-label">Employee(s)</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-users"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="d-inline" style="width: 70%;">
+                                                    <ng-select2 [(ngModel)]="employeeWorkShift.employeeId"
+                                                        [data]="ddlEmployees" name="shiftemployeeId"
+                                                        #shiftemployeeId="ngModel" id="shiftemployeeId"
+                                                        [placeholder]="'Select Employee...'"
+                                                        [options]="employeeShiftSelect2Options" [allowClear]="true"
+                                                        required (click)="touchedSelect2(shiftemployeeId)">
+                                                    </ng-select2>
+                                                </div>
+                                                <div class="input-group-prepend cursor-pointer"
+                                                    (click)="loadEmployeeSingly(shiftemployeeId.value)"
+                                                    title="Load Employee Singly">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-arrow-right"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox-footer text-x-small">
+                                    <button type="button" class="btn btn-sm btn-rounded btn-outline-primary"
+                                        (click)="loadEmployeesForShiftAssign(shiftemployeeId.value,designationRef.value,departmentRef.value,sectionRef.value,subsectionRef.value,false)">
+                                        <i class="fa fa-refresh" aria-hidden="true"></i> Load Employee(s) Based On
+                                        Criteria <i class="fa fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-8">
+                            <div class="ibox shadow-lg">
+                                <div class="ibox-content border-radius-5 bg-white text-x-small pb-1">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="workShiftRef" id="workShiftRef"
+                                                    class="form-control form-control-sm" #workShiftRef
+                                                    (change)="assignAllShiftTogether(workShiftRef.value,shiftActiveDate.value,remarks.value)">
+                                                    <option [value]="0" selected>--Select Work-Shift--</option>
+                                                    <option [value]="sf.id" *ngFor="let sf of ddlWorkShiftList">
+                                                        {{sf.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <div class="input-group">
+                                                <span class="input-group-addon ">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                                <input type="text" name="shiftActiveDate" id="shiftActiveDate"
+                                                    #shiftActiveDate class="form-control form-control-sm bg-white"
+                                                    bsDatepicker readonly placeholder="Active Date"
+                                                    (bsValueChange)="assignAllShiftTogether(workShiftRef.value,$event,remarks.value)"
+                                                    autocomplete="off" [bsConfig]="datePickerConfig">
+                                                <div class="input-group-prepend cursor-pointer"
+                                                    (click)="[shiftActiveDate.value =null,
+                                                assignAllShiftTogether(workShiftRef.value,shiftActiveDate.value,remarks.value)]">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-times"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon ">
+                                                        <i class="fa fa-comment"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="remarks" id="remarks" #remarks
+                                                    placeholder="Write Remarks..."
+                                                    (input)="assignAllShiftTogether(workShiftRef.value,shiftActiveDate.value,remarks.value)"
+                                                    class="form-control form-control-sm bg-white" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox-content text-x-small pt-2 pb-1">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 col-sm-12">
+                                            <table class="table table-sm table-striped table-hover table-responsive-xl">
+                                                <thead>
+                                                    <tr class="">
+                                                        <th>#SL</th>
+                                                        <th>Name</th>
+                                                        <th>Details</th>
+                                                        <th>Shift</th>
+                                                        <th>Active Date</th>
+                                                        <th>Remarks</th>
+                                                        <th class="cursor-pointer" (click)="shiftEmployeesData=[]">
+                                                            Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let d of shiftEmployeesData; let i = index">
+                                                        <td class="text-center font-bold">{{i+1}}</td>
+                                                        <td>{{d.employeeName +'~'+d.employeeCode}}</td>
+                                                        <td>
+                                                            {{d.designationName+'#'+(d.departmentName ??
+                                                            "")+'#'+(d.sectionName??"")+'#'+(d.subSectionName??"")}}
+                                                        </td>
+                                                        <td>
+                                                            <select name="{{'empWorkShiftRef-'+i.toString()}}"
+                                                                id="{{'empWorkShiftRef-'+i.toString()}}"
+                                                                class="form-control form-control-sm"
+                                                                [class]="shiftEmployeesData[i].error ? 'border-danger':''"
+                                                                #empWorkShiftRef{{i.toString()}}="ngModel"
+                                                                [title]="shiftEmployeesData[i].error && shiftEmployeesData[i].workShiftId > 0? 'This shift is already exist':''"
+                                                                [(ngModel)]="shiftEmployeesData[i].workShiftId">
+                                                                <option [value]="0" selected>--Select Work-Shift--
+                                                                </option>
+                                                                <option [value]="sf.id"
+                                                                    *ngFor="let sf of ddlWorkShiftList">
+                                                                    {{sf.text}}
+                                                                </option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <input type="text" name="{{'activeDate-'+i.toString()}}"
+                                                                    id="{{'activeDate-'+i.toString()}}"
+                                                                    #activeDate{{i.toString()}}="ngModel"
+                                                                    [(ngModel)]="shiftEmployeesData[i].activeDate"
+                                                                    readonly
+                                                                    class="form-control form-control-sm bg-white"
+                                                                    bsDatepicker autocomplete="off"
+                                                                    [bsConfig]="datePickerConfig">
+                                                                <div class="input-group-prepend cursor-pointer"
+                                                                    (click)="shiftEmployeesData[i].activeDate = null">
+                                                                    <span class="input-group-addon ">
+                                                                        <i class="fa fa-times"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text"
+                                                                name="{{'empWorkShiftRemarks-'+i.toString()}}"
+                                                                id="{{'empWorkShiftRemarks-'+i.toString()}}"
+                                                                class="form-control form-control-sm"
+                                                                #empWorkShiftRemarks{{i.toString()}}="ngModel"
+                                                                [(ngModel)]="shiftEmployeesData[i].remarks">
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" class="btn btn-xs"
+                                                                (click)="shiftEmployeesData.splice(i,1)">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox-footer text-x-small">
+                                    <button type="submit" class="btn btn-sm btn-rounded btn-outline-success">
+                                        Submit | <i class="fa fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-12 mb-4" *ngIf="employeeWorkShiftChecking">
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 bg-white">
+                    <div class="form-row font-bold">
+                        <div class="form-group mb-1 col-sm-12 col-md-3 text-x-small">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon ">
+                                        <i class="fa fa-id-badge"></i>
+                                    </span>
+                                </div>
+                                <select name="designationChk" id="designationChk" class="form-control form-control-sm"
+                                    #designationChk
+                                    (change)="[loadEmployees(designationChk.value,0,0,0),getEmployeesWorkShifts()]">
+                                    <option [value]="0" selected>--Search By Designation--</option>
+                                    <option [value]="item.id" *ngFor="let item of designationList | async">{{item.text}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-3 text-x-small">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon ">
+                                        <i class="fa fa-building"></i>
+                                    </span>
+                                </div>
+                                <select name="departmentChk" id="departmentChk" class="form-control form-control-sm"
+                                    #departmentChk
+                                    (change)="[loadSections(departmentChk.value),loadEmployees(designationChk.value,departmentChk.value,0,0),getEmployeesWorkShifts()]">
+                                    <option [value]="0" selected>--Search By Department--</option>
+                                    <option [value]="dept.id" *ngFor="let dept of departmentList | async">
+                                        {{dept.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-3 text-x-small hide">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon ">
+                                        <i class="fa fa-pie-chart"></i>
+                                    </span>
+                                </div>
+                                <select name="sectionChk" id="sectionChk" class="form-control form-control-sm" #sectionChk
+                                    (change)="[loadSubsections(sectionChk.value),loadEmployees(designationChk.value,departmentChk.value,sectionChk.value,0),getEmployeesWorkShifts()]">
+                                    <option [value]="0" selected>--Search by Section--</option>
+                                    <option [value]="sec.id" *ngFor="let sec of sectionList">
+                                        {{sec.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-3 text-x-small hide">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon ">
+                                        <i class="fa fa-pie-chart"></i>
+                                    </span>
+                                </div>
+                                <select name="subsectionChk" id="subsectionChk" class="form-control form-control-sm"
+                                    #subsectionChk
+                                    (change)="[loadEmployees(designationChk.value,departmentChk.value,sectionChk.value,subsectionChk.value),getEmployeesWorkShifts()]">
+                                    <option [value]="0" selected>--Search By Subsection--</option>
+                                    <option [value]="sub.id" *ngFor="let sub of subsectionList">
+                                        {{sub.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-3 text-x-small">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon ">
+                                        <i class="fa fa-users"></i>
+                                    </span>
+                                </div>
+                                <div class="d-inline" style="width: 80%;">
+                                    <ng-select2 [(ngModel)]="employeeWorkShift.employeeId" [data]="ddlEmployees"
+                                        name="shiftemployeeId" #shiftemployeeIdChk="ngModel" id="shiftemployeeIdChk"
+                                        [placeholder]="'Select Employee...'" [options]="employeeShiftSelect2Options"
+                                        [allowClear]="true" required (click)="touchedSelect2(shiftemployeeIdChk)">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-3 text-x-small">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon ">
+                                        <i class="fa fa-clock-o"></i>
+                                    </span>
+                                </div>
+                                <select name="workShiftRefChk" id="workShiftRefChk" class="form-control form-control-sm"
+                                    #workShiftChk>
+                                    <option [value]="0" selected>--Search By Work-Shift--</option>
+                                    <option [value]="sf.id" *ngFor="let sf of ddlWorkShiftList">
+                                        {{sf.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-3  text-x-small">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon ">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="activeFromTo" id="activeFromTo" #activeFromTo readonly
+                                    class="form-control form-control-sm bg-white" bsDaterangepicker autocomplete="off"
+                                    [bsConfig]="datePickerConfig" placeholder="Search By Daterange">
+                                <div class="input-group-prepend cursor-pointer" (click)="activeFromTo.value=''">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-sm-12 col-md-3 ">
+                            <div class="input-group text-x-small">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        Total : <strong class="text-info">{{employeeWorkShiftList.length}}</strong> Row(s)
+                                    </span>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon  text-dark">
+                                        Selected :<strong class="text-danger">{{selectedRowsCount}}</strong> Row(s)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-1 col-md-3 col-sm-6 text-x-small">
+                            <button type="button" (click)="SubmitEmployeesWorkShiftChecking()"
+                                class="btn btn-sm btn-outline-primary btn-rounded" [disabled]="selectedRowsCount == 0">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 bg-white">
+                    <div class="form-row text-x-small">
+                        <div class="form-group col-md-12">
+                            <table class="table table-sm table-striped table-hover table-responsive-xl">
+                                <thead>
+                                    <tr class="">
+                                        <th>
+                                            <input type="checkbox" name="masterSelected" #masterSelectedBox
+                                                [(ngModel)]="masterSelected" (change)="checkUncheckAll()">
+                                        </th>
+                                        <th class="text-center">#SL</th>
+                                        <th>Employee</th>
+                                        <th>Designation</th>
+                                        <th>Department</th>
+                                        <th>Section</th>
+                                        <th>Subsection</th>
+                                        <th>Present Shift</th>
+                                        <th>Proposal Shift</th>
+                                        <th class="text-center">Active Date</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Created Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of employeeWorkShiftList,let i =index">
+                                        <td><input type="checkbox" name="{{item.isSelected+i.toString()}}"
+                                                id="{{item.isSelected+i.toString()}}"
+                                                [(ngModel)]="employeeWorkShiftList[i].isSelected"
+                                                #isSelected{{i.toString()}}="ngModel" (change)="isAllSelected()"></td>
+                                        <td class="text-center font-bold">{{i+1}}</td>
+                                        <td>{{item.fullName+'~'+item.employeeCode}}</td>
+                                        <td>{{item.designationName}}</td>
+                                        <td>{{item.departmentName}}</td>
+                                        <td>{{item.sectionName}}</td>
+                                        <td>{{item.subSectionName}}</td>
+                                        <td>{{item.currentWorkShiftName}}</td>
+                                        <td>{{item.workShiftName}}</td>
+                                        <td>{{item.activeDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td class="text-center">
+                                            <span class='label label-success' *ngIf="item.stateStatus=='Entered'">
+                                                {{item.stateStatus}}
+                                            </span>
+                                        </td>
+                                        <td>{{item.createdDate | date:"dd-MMM-yyyy hh:mm a"}}</td>
+                                    </tr>
+                                    <tr *ngIf="employeeWorkShiftList.length == 0">
+                                        <td class="text-center font-bold" colspan="12">
+                                            No record(s) found..
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #workShiftModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle 
+            fa fa-clock-o"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #workShiftForm="ngForm" (submit)="submitWorkShiftForm(workShiftForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="title" class="control-label">
+                            Title<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="title" name="title" #title="ngModel" [(ngModel)]="workShift.title"
+                                class="form-control form-control-sm" required minlength="2" maxlength="100">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="title.value && title.invalid">
+                                <span *ngIf="title.errors?.required">Title is required</span>
+                                <span *ngIf="title.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="title.errors?.maxlength">Maxlength is 100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="remarks" class="control-label">Remarks
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="remarks" name="remarks" id="remarks" class="form-control form-control-sm"
+                                #remarks="ngModel" autocomplete="off" [(ngModel)]="workShift.remarks" maxlength="200">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="name" class="control-label">Name
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="name" id="name" class="form-control form-control-sm"
+                                #name="ngModel" autocomplete="off" [(ngModel)]="workShift.name" required maxlength="50"
+                                minlength="2">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="name.invalid && name.touched">
+                                <span *ngIf="name.errors?.required">Name is required</span>
+                                <span *ngIf="name.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="name.errors?.maxlength">Maxlength is 100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="nameInBengali" class="control-label">Name In Bengali</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="nameInBengali" id="nameInBengali" #nameInBengali="ngModel"
+                                [(ngModel)]="workShift.nameInBengali" class="form-control form-control-sm" minlength="2"
+                                maxlength="100">
+                        </div>
+                        <div *ngIf="nameInBengali.invalid && nameInBengali.touched">
+                            <span *ngIf="nameInBengali.errors?.minlength">Minlength is 2</span>
+                            <span *ngIf="nameInBengali.errors?.maxlength">Maxlength is 100</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="nameDetail" class="control-label">Name Detail</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="nameDetail" id="nameDetail" #nameDetail="ngModel"
+                                [(ngModel)]="workShift.nameDetail" class="form-control form-control-sm" minlength="2"
+                                maxlength="200">
+                        </div>
+                        <div *ngIf="nameDetail.invalid && nameDetail.touched">
+                            <span *ngIf="nameDetail.errors?.minlength">Minlength is 2</span>
+                            <span *ngIf="nameDetail.errors?.maxlength">Maxlength is 100</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="nameDetailInBengali" class="control-label">Name Detail In Bengali</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="nameDetailInBengali" name="nameDetailInBengali"
+                                #nameDetailInBengali="ngModel" [(ngModel)]="workShift.nameDetailInBengali"
+                                class="form-control form-control-sm" minlength="2" maxlength="200">
+                        </div>
+                        <div *ngIf="nameDetailInBengali.invalid && nameDetailInBengali.touched">
+                            <span *ngIf="nameDetailInBengali.errors?.minlength">Minlength is 2</span>
+                            <span *ngIf="nameDetailInBengali.errors?.maxlength">Maxlength is 200</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="weekends" class="control-label">Weekend(s)
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span></div>
+                            <div style="width: 80%;">
+                                <ng-select2 [(ngModel)]="workShift.weekends" [data]="days" name="weekendDays"
+                                    #weekendDays="ngModel" id="weekendDays" [placeholder]="'Select Weekend Day(s)...'"
+                                    required [options]="select2Options" (click)="touchedSelect2(weekendDays)"
+                                    (ngModelChange)="[workShift.weekends.length > 2 ?workShift.weekends=[]: workShift.weekends ]">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="maxOTHour" class="control-label">Max OT Hour</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <select name="maxOTHour" id="maxOTHour" #maxOTHour="ngModel"
+                                [(ngModel)]="workShift.maxOTHour" class="form-control form-control-sm">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label for="maxBeforeTime" class="control-label">Max Before Time</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                            </div>
+                            <input type="number" id="maxBeforeTime" name="maxBeforeTime"
+                                class="form-control form-control-sm" #maxBeforeTime="ngModel"
+                                [(ngModel)]="workShift.maxBeforeTime">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label for="maxAfterTime" class="control-label">Max After Time</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                            </div>
+                            <input type="number" id="maxAfterTime" name="maxAfterTime"
+                                class="form-control form-control-sm" #maxAfterTime="ngModel"
+                                [(ngModel)]="workShift.maxAfterTime">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label for="exceededMaxAfterTime" class="control-label">Exceeded Max After Time</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                            </div>
+                            <input type="number" id="exceededMaxAfterTime" name="exceededMaxAfterTime"
+                                class="form-control form-control-sm" #exceededMaxAfterTime="ngModel"
+                                [(ngModel)]="workShift.exceededMaxAfterTime">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label for="StartTime" class="control-label">
+                            Start Time<span class="text-danger">*</span>
+                        </label>
+                        <timepicker [(ngModel)]="workShift.startTime" name="startTime" #startTime="ngModel" required>
+                        </timepicker>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label for="endTime" class="control-label">End Time
+                            <span class="text-danger">*</span>
+                        </label>
+                        <timepicker [(ngModel)]="workShift.endTime" name="endTime" #maxInTime="ngModel" required>
+                        </timepicker>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label for="maxInTime" class="control-label">Max In-Time
+                            <span class="text-danger">*</span>
+                        </label>
+                        <timepicker [(ngModel)]="workShift.maxInTime" name="maxInTime" #maxInTime="ngModel" required>
+                        </timepicker>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label for="oTStartTime" class="control-label">OT Start-Time</label>
+                        <timepicker [(ngModel)]="workShift.oTStartTime" name="oTStartTime" #oTStartTime="ngModel">
+                        </timepicker>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label for="lunchStartTime" class="control-label">Lunch Start Time
+                            <span class="text-danger">*</span></label>
+                        <timepicker [(ngModel)]="workShift.lunchStartTime" name="lunchStartTime"
+                            #lunchStartTime="ngModel" required></timepicker>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label for="lunchEndTime" class="control-label">Lunch End Time
+                            <span class="text-danger">*</span></label>
+                        <timepicker [(ngModel)]="workShift.lunchEndTime" name="lunchEndTime" #lunchEndTime="ngModel"
+                            required>
+                        </timepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="workShiftForm.invalid || btnWorkShift">
+                    <i class="fa fa-paper-plane"></i> | {{this.workShift.workShiftId == 0? 'Submit':'Update' }}
+                    <span [hidden]="!btnWorkShift" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #workShiftApprovalModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle 
+            fa fa-clock-o"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl">
+                <tbody>
+                    <tr>
+                        <td class="">Title</td>
+                        <td>{{workShift.title}}</td>
+                        <td class="">Name</td>
+                        <td>{{workShift.name}}</td>
+                        <td class="">Name In Bengali</td>
+                        <td>{{workShift.nameInBengali}}</td>
+                    </tr>
+                    <tr>
+                        <td class="">Name Detail</td>
+                        <td>{{workShift.nameDetail}}</td>
+                        <td class="">Name Detail In Bengali</td>
+                        <td>{{workShift.nameDetailInBengali}}</td>
+                        <td class="">Weekend(s)</td>
+                        <td>{{workShift.weekendDayName}}</td>
+                    </tr>
+                    <tr>
+                        <td class="">Start-End Time</td>
+                        <td>{{workShift.startTime}}-{{workShift.endTime}}</td>
+                        <td class="">Lunch Start-End Time</td>
+                        <td>{{workShift.lunchStartTime}}-{{workShift.lunchEndTime}}</td>
+                        <td class="">Remarks</td>
+                        <td>{{workShift.remarks}}</td>
+                    </tr>
+                    <tr>
+                        <td class="">OT Start Time</td>
+                        <td>{{workShift.oTStartTime}}</td>
+                        <td class="">Max OT Hour</td>
+                        <td>{{workShift.maxOTHour}}</td>
+                        <td class="">Max Before Time</td>
+                        <td>{{workShift.maxBeforeTime}}</td>
+                    </tr>
+                    <tr>
+                        <td class="">Max After Time</td>
+                        <td>{{workShift.maxAfterTime}}</td>
+                        <td class="">Exceeded Max After Time</td>
+                        <td>{{workShift.exceededMaxAfterTime}}</td>
+                        <td class="">StateStatus</td>
+                        <td>
+                            <span [hidden]="workShift.stateStatus =='Approved' || workShift.stateStatus =='Recheck'"
+                                class="label label-success">
+                                {{workShift.stateStatus}}
+                            </span>
+                            <span [hidden]="workShift.stateStatus =='Approved' || workShift.stateStatus =='Entered'"
+                                class="label label-warning">
+                                {{workShift.stateStatus}}
+                            </span>
+                            <span [hidden]="workShift.stateStatus =='Entered' || workShift.stateStatus =='Recheck'"
+                                class="label label-primary">
+                                {{workShift.stateStatus}}
+                            </span>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <form #submitWorkShiftCheckingForm="ngForm" (submit)="submitWorkShiftChecking(remarks.value,checkStatus.value)">
+            <div class="modal-body">
+                <div class="form-row border-top">
+                    <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                        <div class="input-group">
+                            <input type="text" name="checkRemarks" #remarks id="checkRemarks"
+                                class="form-control form-control-sm" placeholder="Write Comments Here..">
+                            <div class="input-group-prepend">
+                                <select name="checkStatus" #checkStatus id="checkStatus"
+                                    class="form-control form-control-sm">
+                                    <option value="Approved">Approved</option>
+                                    <option value="Recheck">Recheck</option>
+                                </select>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-paper-plane"></i>|
+                                    Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

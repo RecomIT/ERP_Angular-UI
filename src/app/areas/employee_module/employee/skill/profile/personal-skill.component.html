@@ -1,0 +1,29 @@
+<div class="ibox" *ngFor="let item of listOfEmployeeSkill">
+    <div class="ibox-content bg-white border-radius-5">
+        <div class="row">
+            <div class=" col-8 col-sm-8 col-md-8">
+                <h3 class="font-weight-light mb-1"><i class="icofont-wrench"></i> {{item.trainingName}}</h3>
+            </div>
+            <div class=" col-4 col-sm-4 col-md-4">
+                <button type="button" class="btn btn-xs btn-outline-secondary pull-right" title="EDIT" (click)="openModal(item.employeeSkillId)"><i
+                        class="fa fa-edit"></i></button>
+            </div>
+        </div>
+        <h5 class="mb-1">{{item.organization}} , {{item.location}}</h5>
+        <p class="mb-1"> Topic:  {{item.topicCovers}}</p>
+        <p class="mb-1">Duration: {{item.duration}}</p>
+    </div>
+</div>
+<div class="ibox text-x-small">
+    <div class="ibox-footer bg-white border-radius-5">
+        <button type="button" class="btn btn-sm btn-outline-primary btn-rounded mb-0" (click)="openModal(0)">
+            <i class="fa fa-plus"></i> | Skill
+        </button>
+    </div>
+</div>
+
+
+<ng-container *ngIf="showModal == true && modalObj != null">
+    <app-employee-module-employee-skill-insert-update-modal [skill]="modalObj" (closeModalEvent)="closeModal($event)">
+    </app-employee-module-employee-skill-insert-update-modal>
+</ng-container>

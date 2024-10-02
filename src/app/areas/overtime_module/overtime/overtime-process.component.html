@@ -1,0 +1,171 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Overtime Process</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Overtime</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Process</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li><a href="#approvalLevel" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Overtime Process
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="approvalLevel" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openOvertimeProcessModal(0,'Create')">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                id="tblAllowanceHeads">
+                                <thead class="text-dark text-white">
+                                    <tr class="text-center font-bold">
+                                        <th>#SL</th>
+                                        <th>Salary Month</th>
+                                        <th>Process Date</th>
+                                        <th>Disbursed</th>
+                                        <th>Created Date</th>
+                                        <th>Updated Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center font-bold" *ngFor="let item of overtimeProcessList; let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item?.salaryMonth | date:"dd-MMM-yyyy"}}</td>
+                                        <td>{{item?.processDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>{{item?.isDisbursed == true ? 'Yes' : 'No'}}</td>
+                                        <td>{{item?.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>{{item?.updatedDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button type="button" (click)="!item?.isDisbursed ? openOvertimeProcessModal(item?.id,'Disburse') : null"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-check-square-o"></i>
+                                            </button>
+                                            <button type="button" (click)="!item?.isDisbursed ? openOvertimeProcessModal(item?.id,'Roll Back') : null"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-refresh"></i>
+                                            </button>
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #overtimeProcessModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #overtimeProcessForm="ngForm" (submit)="submitOvertimeProcessForm(overtimeProcessForm)">
+            <fieldset [disabled]="fieldsetDisabled">
+                <div class="modal-body">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="month" class="control-label"> Month
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div style="width:90%">
+                                    <ng-select2 name="month" id="month" [placeholder]="'Select Month'"
+                                        [options]="select2Options" [data]="months" [(ngModel)]="overtimeProcess.month"
+                                        #monthRef="ngModel" (ngModelChange)="onMonthChange()" required
+                                        [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="year" class="control-label"> Year
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div style="width:90%">
+                                    <ng-select2 name="year" id="year" [placeholder]="'Select Year'"
+                                        [options]="select2Options" [data]="years" [(ngModel)]="overtimeProcess.year"
+                                        #yearRef="ngModel" (ngModelChange)="onYearChange()" required
+                                        [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="processDate" class="control-label"> Process Date
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="date" class="form-control form-control-sm" id="processDate" name="processDate" required 
+                                #processDate="ngModel" [(ngModel)]="overtimeProcess.processDate" [ngModel]="overtimeProcess.processDate | date: 'yyyy-MM-dd'">
+                                
+                            </div>
+                            <div class="text-danger" *ngIf="processDate.touched && processDate.invalid">
+                                <span *ngIf="processDate.errors?.required">Process Date is required </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="overtimeProcessForm.invalid || monthRef.value == 0 || yearRef.value == 0">
+                    <i class="fa fa-paper-plane"></i> | {{this.buttonAction}}
+                    <span [hidden]="!btnApprovalLevel" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

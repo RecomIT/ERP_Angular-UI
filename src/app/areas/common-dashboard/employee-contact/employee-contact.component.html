@@ -1,0 +1,80 @@
+
+
+<div class="ibox">
+    <div class="ibox-content bg-white border-radius-5">
+      <div class="row">
+        <div class="col-sm-12">
+          <h4 class="">Employee Contact</h4>
+          <hr class="m-1">
+        </div>
+
+
+        <div class="col-sm-12 mb-1">
+          <ng-select2 [(ngModel)]="searchEmployeeId"
+            [data]="listOfEmployee"
+            name="searchByEmployee"
+            id="searchByEmployee"
+            [placeholder]="'Select Employee...'"
+            [options]="employeeContactSelect2Options"
+            [allowClear]="true"
+            #searchEmployeeIdRef="ngModel"
+            (ngModelChange)="onEmployeeSelectionChange($event)"
+          >
+          </ng-select2>
+        </div>
+
+        <div class="col-sm-12 mb-1">
+          <ng-select2 [(ngModel)]="searchByBloodGroupId"
+            [data]="bloodGroups"
+            name="searchByBloodGroupId"
+            id="searchByBloodGroupId"
+            [placeholder]="'Select A Blood Group ...'"
+            [options]="employeeBloodGroupsSelect2Options"
+            [allowClear]="true"
+            #searchByBloodGroupIdRef="ngModel"
+            (ngModelChange)="onBloodGroupSelectionChange($event)"
+          >
+          </ng-select2>
+        </div>
+      </div>
+
+
+      <div class="card-container mt-1">
+        <div class="row" style="width: 100%; margin: auto;">
+          <div class="col-12 col-md-12 col-lg-12 col-sm-12 px-1 " *ngFor="let employee of employeeData">
+            <div class="card custom-card mb-1">
+              <div class="card-body">
+                <div class="row p-0 m-0">
+
+                  <div class="dropdown-messages-box col-2 p-0 m-1">
+                      <a href="profile.html">
+                        
+                          <img
+                            alt="image"
+                            class="rounded-circle"
+                            [src]="employee.photoPath || ImagePath"
+                            (error)="employee.photoPath = ImagePath"
+                          >
+                        </a>
+                  </div>
+
+                  <div class="col-9 p-1 m-0">
+                    <h6 class="card-title"><strong>{{ employee.text }}</strong></h6>
+                    <p class="card-text p-0 m-0"> {{ employee.designationName }}</p>
+                    <p class="card-text p-0 m-0"><strong></strong> {{ employee.officeEmail }}</p>
+                    <p class="card-text p-0 m-0"><strong>Phone:</strong> {{ employee.officeMobile }}</p>
+                    <p class="card-text p-0 m-0"><strong>Blood Group:</strong> {{ employee.bloodGroup }}</p>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+

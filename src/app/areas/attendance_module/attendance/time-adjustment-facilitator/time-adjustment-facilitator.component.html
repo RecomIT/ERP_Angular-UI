@@ -1,0 +1,617 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Time Adjustment Facilitator</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Late Consideration</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>out going</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#lateConsideration" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-info"></i> | Late Consideration
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#lateConsiderationById" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-list"></i> | Late Consideration For User
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#earlyDeparture" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-list"></i> | Early Departure 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#earlyDepartureById" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-list"></i> | Early Departure For User
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="lateConsideration" class="tab-pane active">                        
+                        <div class="panel-body bg-white pb-1">
+                            <form [formGroup]="lateConsideration" (ngSubmit)="1==1">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width:80%">
+                                                <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                    id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                    [options]="select2Options" [allowClear]="true"
+                                                    formControlName="approverEmployeeId" required>
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                   
+                                   
+                                    <div class="form-group col-md-3 col-sm-12">                                   
+                                        <!-- <button type="button"
+                                            class="btn btn-sm btn-primary btn-rounded btn-outline"
+                                            (click)="openUploadCashSalaryExcelFileModal()"><i class="fa fa-arrow-up"></i> | Upload Cash Salary
+                                        </button>    -->
+                                        &nbsp;
+                                        <button type="button"
+                                            class="btn btn-sm btn-success btn-rounded btn-outline" (click)="openLateConsideration(0)"><i class="fa fa-plus"></i> | Requeste For Late Consideration
+                                        </button>                          
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Employee Code</th>
+                                            <th class="text-center">Employee Name</th>
+                                            <th class="text-center">Supervisor Name</th>
+                                            <th class="text-center">Applied Date</th>
+                                            <th class="text-center">Email Notification Status</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of employeeList | paginate: approvalHierarchyPageConfig, let i =index">
+                                            <td class="text-center font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>
+                                            <td class="text-center">{{item.employeeCode}}</td>                                            
+                                            <td class="text-center">{{item.fullName}}</td>
+                                            <td class="text-center">{{item.supervisorName}}</td>
+                                            <td class="text-center">{{item.appliedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <span class="label" [ngClass]="item?.emailNotificationStatus == 'Notified' ? 'label label-primary' : 'label label-warning'">
+                                                    <i [ngClass]="item?.emailNotificationStatus != null ? 'fa fa-check' : 'fa fa-times'"></i>
+                                                    {{item?.emailNotificationStatus == 'Notified' ? 'Notified' : 'Unnotified' }}
+                                                </span>
+                                                            <!-- {{item?.emailNotificationStatus = 'Notified' ? }} -->
+                                            </td>                              
+                                                                                      
+                                            
+                                           
+                                            <td class="text-center">
+                                                
+                                                <span class="label" [ngClass]="item?.checkedBy != null ? 'label label-primary' : 'label label-warning'">
+                                                    <i [ngClass]="item?.checkedBy != null ? 'fa fa-check' : 'fa fa-times'"></i>
+                                                    {{item?.checkedBy != null ? 'Checked' : 'Unchecked'}}
+                                                </span>
+                                            </td>
+                                            
+                                            
+<!--                                             
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td> -->
+                                            <td class="text-center">                                               
+                                                <!-- <button type="button" class="btn btn-xs" title="Edit"
+                                                (click)="openEditApprovalHierarchyModal(item?.lateRequestsId)"
+                                                    *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button> -->
+                                            
+                                                <!-- <button type="button" class="btn btn-xs text-info"
+                                                (click)="openCheckAndApprovalHierarchyGroupModal(item?.lateRequestsId,'Approval')"
+                                                    title="Check" *ngIf="item.stateStatus == 'Pending'"><i
+                                                        class="fa fa-check"></i>
+                                                </button>                                             -->
+                                                <button type="button" class="btn btn-xs text-success" title="View"
+                                                (click)="openCheckAndApprovalHierarchyGroupModal(item?.lateRequestsId,'View')" >
+                                                    <i class="fa fa-eye"></i>
+                                                </button> 
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="employeeListPageChanged($event)" [responsive]="true"
+                                    [autoHide]="true" id="employeeList"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="earlyDeparture" class="tab-pane">                        
+                        <div class="panel-body bg-white pb-1">
+                            <form [formGroup]="earlyDepartureForm" (ngSubmit)="1==1">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width:80%">
+                                                <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                    id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                    [options]="select2Options" [allowClear]="true"
+                                                    formControlName="approverEmployeeId" required>
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                   
+                                   
+                                    <div class="form-group col-md-3 col-sm-12">                                   
+                                       
+                                        
+                                        <button type="button"
+                                            class="btn btn-sm btn-success btn-rounded btn-outline" (click)="openEarlyDepartureId(0)"><i class="fa fa-plus"></i> | Requeste For Early Departure
+                                        </button>                          
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Employee Code</th>
+                                            <th class="text-center">Employee Name</th>
+                                            <th class="text-center">Supervisor Name</th>
+                                            <th class="text-center">Applied Date</th>
+                                            <th class="text-center">Email Notification Status</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of earlyDepartureList | paginate: approvalHierarchyPageConfig, let i =index">
+                                            <td class="text-center font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>
+                                            <td class="text-center">{{item.employeeCode}}</td>                                            
+                                            <td class="text-center">{{item.fullName}}</td>
+                                            <td class="text-center">{{item.supervisorName}}</td>
+                                            <td class="text-center">{{item.appliedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <span class="label" [ngClass]="item?.empEmailNotificationStatus == 'Notified' ? 'label label-primary' : 'label label-warning'">
+                                                    <i [ngClass]="item?.empEmailNotificationStatus != null ? 'fa fa-check' : 'fa fa-times'"></i>
+                                                    {{item?.empEmailNotificationStatus == 'Notified' ? 'Notified' : 'Unnotified' }}
+                                                </span>
+                                                            <!-- {{item?.emailNotificationStatus = 'Notified' ? }} -->
+                                            </td>                              
+                                                                                      
+                                            
+                                           
+                                            <td class="text-center">
+                                                
+                                                <span class="label" [ngClass]="item?.status != 'Pending' ? 'label label-primary' : 'label label-warning'">
+                                                    <i [ngClass]="item?.status != 'Pending' ? 'fa fa-check' : 'fa fa-times'"></i>
+                                                    {{item?.status != 'Pending' ? 'Checked' : 'Unchecked'}}
+                                                </span>
+                                            </td>
+                                           
+                                              
+                                            
+                                            
+<!--                                             
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td> -->
+                                            <td class="text-center">                                               
+                                                <!-- <button type="button" class="btn btn-xs" title="Edit"
+                                                (click)="openEditApprovalHierarchyModal(item?.lateRequestsId)"
+                                                    *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button> -->
+                                            
+                                                <!-- <button type="button" class="btn btn-xs text-info"
+                                                (click)="openCheckAndApprovalHierarchyGroupModal(item?.lateRequestsId,'Approval')"
+                                                    title="Check" *ngIf="item.stateStatus == 'Pending'"><i
+                                                        class="fa fa-check"></i>
+                                                </button>                                             -->
+                                                <button type="button" class="btn btn-xs text-success" title="View"
+                                                (click)="openShowEarlyDepartureDetailModal(item?.earlyDepartureId,'View','earlyDeparture')" >
+                                                    <i class="fa fa-eye"></i>
+                                                </button> 
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="employeeListPageChanged($event)" [responsive]="true"
+                                    [autoHide]="true" id="employeeList"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="earlyDepartureById" class="tab-pane">                        
+                        <div class="panel-body bg-white pb-1">
+                            <form [formGroup]="earlyDepartureByIdForm" (ngSubmit)="1==1">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width:80%">
+                                                <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                    id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                    [options]="select2Options" [allowClear]="true"
+                                                    formControlName="approverEmployeeId" required>
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="form-group col-md-2 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>                                        
+                                          
+                                            <select name="searchByTypeId" id="searchByTypeId" class="form-control form-control-sm" formControlName="typeId">
+                                                <option [value]="0" selected>---Select Hierarchy Type---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlApprovalHierarchyType">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+
+                                    <!-- <div class="form-group col-md-2 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-dot-circle-o"></i>
+                                                </span>
+                                            </div>                                        
+                                          
+                                            <select name="searchByTypeId" id="searchByTypeId" class="form-control form-control-sm" formControlName="groupId">
+                                                <option [value]="0" selected>---Select Hierarchy Group---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlApprovalHierarchyGroup">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                   
+                                    <div class="form-group col-md-3 col-sm-12">                                   
+                                        <!-- <button type="button"
+                                            class="btn btn-sm btn-primary btn-rounded btn-outline"
+                                            (click)="openUploadCashSalaryExcelFileModal()"><i class="fa fa-arrow-up"></i> | Upload Cash Salary
+                                        </button>    -->
+                                        &nbsp;
+                                        <button type="button"
+                                            class="btn btn-sm btn-success btn-rounded btn-outline" (click)="openEarlyDepartureId(0)"><i class="fa fa-plus"></i> | Requeste For Early Departure
+                                        </button>                          
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Employee Code</th>
+                                            <th class="text-center">Employee Name</th>
+                                            <th class="text-center">Supervisor Name</th>
+                                            <th class="text-center">Applied Date</th>
+                                            <th class="text-center">Request Email Notification Status</th>
+                                            <th class="text-center">Feedback Email Notification Status</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of earlyDepartureListById | paginate: approvalHierarchyPageConfig, let i =index">
+                                            <td class="text-center font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>
+                                            <td class="text-center">{{item.employeeCode}}</td>                                            
+                                            <td class="text-center">{{item.fullName}}</td>
+                                            <td class="text-center">{{item.supervisorName}}</td>
+                                            <td class="text-center">{{item.appliedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <span class="label" [ngClass]="item?.adminEmailNotificationStatus == 'Notified' ? 'label label-primary' : 'label label-warning'">
+                                                    <i [ngClass]="item?.adminEmailNotificationStatus != null ? 'fa fa-check' : 'fa fa-times'"></i>
+                                                    {{item?.adminEmailNotificationStatus == 'Notified' ? 'Notified' : 'Unnotified' }}
+                                                </span>
+                                                            <!-- {{item?.emailNotificationStatus = 'Notified' ? }} -->
+                                            </td>       
+                                            <td class="text-center">
+                                                <span class="label" [ngClass]="item?.empEmailNotificationStatus == 'Notified' ? 'label label-primary' : 'label label-warning'">
+                                                    <i [ngClass]="item?.empEmailNotificationStatus != null ? 'fa fa-check' : 'fa fa-times'"></i>
+                                                    {{item?.empEmailNotificationStatus == 'Notified' ? 'Notified' : 'Unnotified' }}
+                                                </span>
+                                                            <!-- {{item?.emailNotificationStatus = 'Notified' ? }} -->
+                                            </td>     
+                                                            
+                                                                                      
+                                            
+                                           
+                                            <td class="text-center">
+                                                
+                                                <span class="label" [ngClass]="item?.status != 'Pending' ? 'label label-primary' : 'label label-warning'">
+                                                    <i [ngClass]="item?.status != 'Pending' ? 'fa fa-check' : 'fa fa-times'"></i>
+                                                    {{item?.status != 'Pending' ? 'Checked' : 'Unchecked'}}
+                                                </span>
+                                            </td>
+                                           
+                                              
+                                            
+                                            
+<!--                                             
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td> -->
+                                            <td class="text-center">                                               
+                                                <!-- <button type="button" class="btn btn-xs" title="Edit"
+                                                (click)="openEditApprovalHierarchyModal(item?.lateRequestsId)"
+                                                    *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button> -->
+                                            
+                                                <!-- <button type="button" class="btn btn-xs text-info"
+                                                (click)="openCheckAndApprovalHierarchyGroupModal(item?.lateRequestsId,'Approval')"
+                                                    title="Check" *ngIf="item.stateStatus == 'Pending'"><i
+                                                        class="fa fa-check"></i>
+                                                </button>                                             -->
+                                                <button type="button" class="btn btn-xs text-success" title="View"
+                                                (click)="openShowEarlyDepartureDetailModal(item?.earlyDepartureId,'View','earlyDepartureById')" >
+                                                    <i class="fa fa-eye"></i>
+                                                </button> 
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="employeeListPageChanged($event)" [responsive]="true"
+                                    [autoHide]="true" id="employeeList"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div id="lateConsiderationById" class="tab-pane"> 
+
+                                     
+                        <div class="panel-body bg-white pb-1">
+                            <div class="panel-body bg-white pb-1">
+                                <form [formGroup]="lateConsiderationById" (ngSubmit)="1==1">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3 col-sm-12">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark">
+                                                        <i class="fa fa-users"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width:80%">
+                                                    <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                        id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                        [options]="select2Options" [allowClear]="true"
+                                                        formControlName="approverEmployeeId" required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <!-- <div class="form-group col-md-2 col-sm-12">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark">
+                                                        <i class="fa fa-money"></i>
+                                                    </span>
+                                                </div>                                        
+                                              
+                                                <select name="searchByTypeId" id="searchByTypeId" class="form-control form-control-sm" formControlName="typeId">
+                                                    <option [value]="0" selected>---Select Hierarchy Type---</option>
+                                                    <option [value]="item.id" *ngFor="let item of ddlApprovalHierarchyType">
+                                                        {{item.text}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div> -->
+    
+                                        <!-- <div class="form-group col-md-2 col-sm-12">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark">
+                                                        <i class="fa fa-dot-circle-o"></i>
+                                                    </span>
+                                                </div>                                        
+                                              
+                                                <select name="searchByTypeId" id="searchByTypeId" class="form-control form-control-sm" formControlName="groupId">
+                                                    <option [value]="0" selected>---Select Hierarchy Group---</option>
+                                                    <option [value]="item.id" *ngFor="let item of ddlApprovalHierarchyGroup">
+                                                        {{item.text}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div> -->
+                                       
+                                        <div class="form-group col-md-3 col-sm-12">                                   
+                                            <!-- <button type="button"
+                                                class="btn btn-sm btn-primary btn-rounded btn-outline"
+                                                (click)="openUploadCashSalaryExcelFileModal()"><i class="fa fa-arrow-up"></i> | Upload Cash Salary
+                                            </button>    -->
+                                            &nbsp;
+                                            <button type="button"
+                                                class="btn btn-sm btn-success btn-rounded btn-outline" (click)="openLateConsideration(0)"><i class="fa fa-plus"></i> | Requeste For Late Consideration
+                                            </button>                          
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="panel-body bg-white pb-1">
+                                <div class="table-responsive">
+                                    <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th class="text-center">Employee Code</th>
+                                                <th class="text-center">Employee Name</th>
+                                                <th class="text-center">Supervisor Name</th>
+                                                <th class="text-center">Applied Date</th>
+                                                <th class="text-center">Email Notification Status</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let item of listById | paginate: approvalHierarchyPageConfig, let i =index">
+                                                <td class="text-center font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>
+                                                <td class="text-center">{{item.employeeCode}}</td>                                            
+                                                <td class="text-center">{{item.fullName}}</td>
+                                                <td class="text-center">{{item.supervisorName}}</td>
+                                                <td class="text-center">{{item.appliedDate | date: "dd-MMMM-yyyy"}}</td>
+                                                <td class="text-center">
+                                                    <span class="label" [ngClass]="item?.emailNotificationStatus == 'Notified' ? 'label label-primary' : 'label label-warning'">
+                                                        <i [ngClass]="item?.emailNotificationStatus != null ? 'fa fa-check' : 'fa fa-times'"></i>
+                                                        {{item?.emailNotificationStatus == 'Notified' ? 'Notified' : 'Unnotified' }}
+                                                    </span>
+                                                                <!-- {{item?.emailNotificationStatus = 'Notified' ? }} -->
+                                                </td>                              
+                                                                                          
+                                                
+                                               
+                                                <td class="text-center">
+                                                    
+                                                    <span class="label" [ngClass]="item?.checkedBy != null ? 'label label-primary' : 'label label-warning'">
+                                                        <i [ngClass]="item?.checkedBy != null ? 'fa fa-check' : 'fa fa-times'"></i>
+                                                        {{item?.checkedBy != null ? 'Checked' : 'Unchecked'}}
+                                                    </span>
+                                                </td>
+                                                
+                                                
+                                                        <!--  lateRequestsId                                           
+                                                <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                                <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td> -->
+                                                <td class="text-center">                                               
+                                                    <!-- <button type="button" class="btn btn-xs" title="Edit"
+                                                    (click)="openEditApprovalHierarchyModal(item?.lateRequestsId)"
+                                                        *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </button> -->
+                                                
+                                                    <!-- <button type="button" class="btn btn-xs text-info"
+                                                    (click)="openCheckAndApprovalHierarchyGroupModal(item?.lateRequestsId,'Approval')"
+                                                        title="Check" *ngIf="item.stateStatus == 'Pending'"><i
+                                                            class="fa fa-check"></i>
+                                                    </button>                                             -->
+                                                    <button type="button" class="btn btn-xs text-success" title="View"
+                                                    (click)="openshowLateConsiderationDetailModal(item?.lateRequestsId,'View')" >
+                                                        <i class="fa fa-eye"></i>
+                                                    </button> 
+                                                </td>
+    
+                                            </tr>
+    
+                                        </tbody>
+                                    </table>
+                                </div>
+                          
+
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="employeeListPageChanged($event)" [responsive]="true"
+                                    [autoHide]="true" id="employeeList"></pagination-controls>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                </div> 
+
+                                           
+          
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-container *ngIf="showaddLateConsiderationModal">
+    <app-add-late-consider-request-model [assignmentId]="assignmentId"
+        (closeModalEvent)="closeAddLateConsiderationModal($event)"></app-add-late-consider-request-model>
+</ng-container>
+
+ <!-- <ng-container *ngIf="showEditApprovalHierarchyModal">
+    <app-hr-edit-approval-hierarchy-modal [lateRequestsId]="lateRequestsId" (closeModalEvent)="closeEditApprovalHierarchyModal($event)">
+    </app-hr-edit-approval-hierarchy-modal>
+</ng-container>  -->
+<ng-container *ngIf="showCheckAndApprovalHierarchyGroupModal">
+    <app-hr-view-and-check-late-request [lateRequestsId]="lateRequestsId" [approvalData]="approvalData" [checkModalFlag]="checkModalFlag" (closeModalEvent)="closeCheckAndApprovalHierarchyGroupModal($event)">
+    </app-hr-view-and-check-late-request>
+</ng-container> 
+
+<!-- <ng-container *ngIf="showAddEmpApprovalHierarchyModal">
+    <app-hr-add-hierarchy-assignment-modal
+        (closeModalEvent)="closeAddEmpApprovalHierarchyModal($event)"></app-hr-add-hierarchy-assignment-modal>
+</ng-container> -->
+<ng-container *ngIf="showLateConsiderationDetailModal">
+    <app-view-late-request-by-id-model [lateRequestsId]="lateRequestsId" [approvalDataforId]="approvalDataforId" [checkModalFlagg]="checkModalFlagg" (closeModalEvent)="closeLateConsiderationDetailModal($event)">
+    </app-view-late-request-by-id-model>
+</ng-container> 
+
+<ng-container *ngIf="showaddEarlyDepartureModal">
+    <app-add-early-departure-request [earlyDepartureId]="earlyDepartureId"
+        (closeModalEvent)="closeAddEarlyDepartureModal($event)">
+    </app-add-early-departure-request>
+</ng-container>
+
+<!-- <ng-container *ngIf="showEarlyDepartureDetailModal">
+    <app-check-early-depature-model [earlyDepartureById]="earlyDepartureById" [approvalDataforId]="approvalDataforId" [checkEarlyDepartureModalFlagg]="checkEarlyDepartureModalFlagg" (closeModalEvent)="closeearlyDepartureByIdDetailModal($event)">
+    </app-check-early-depature-model>
+</ng-container>  -->
+<ng-container *ngIf="showEarlyDepartureDetailModal">
+    <app-check-early-depature-model
+      [earlyDepartureId]="earlyDepartureId"
+      [checkEarlyDepartureModalFlagg]="checkEarlyDepartureModalFlagg"
+      [approvalData]="approvalData" 
+      [setModalType]="setModalType"
+      (closeModalEvent)="closeEarlyDepartureByIdDetailModal($event)">
+    </app-check-early-depature-model>
+  </ng-container>
+  

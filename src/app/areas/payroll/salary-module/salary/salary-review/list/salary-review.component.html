@@ -1,0 +1,916 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 @slideInUp class="mt-2">Salary Review</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Salary Review</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-8 col-sm-6">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-sm btn-secondary btn-outline btn-rounded" (click)="showBulkApproval()" [tooltip]="'Bulk Approval'"
+                *ngIf="!this.isEntryScreen && pagePrivilege?.approval == true">
+                <i class="fa fa-check"></i> | Bluk Approval
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-sm btn-info btn-outline btn-rounded" [tooltip]="'Download excel sheet'"
+                (click)="openDownloadSalaryReviewModal()" *ngIf="!this.isEntryScreen && pagePrivilege?.report == true">
+                <i class="fa fa-file-excel-o"></i> | Download Salary Review Sheet
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded" (click)="viewShowAndHide()" [tooltip]="'Create new one'"
+                *ngIf="!this.isEntryScreen && pagePrivilege?.add == true">
+                <i class="fa fa-plus"></i> | Add New Salary Review
+            </button>
+            <button type="button" class="btn btn-sm btn-primary btn-outline btn-rounded" (click)="viewShowAndHide()" [tooltip]="'Back to the list page'"
+                *ngIf="this.isEntryScreen"><i class="fa fa-arrow-left"></i> | Back To List</button>
+        </div>
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight pt-2 pb-3" id="page-container">
+    <ng-container *ngIf="isEntryScreen==false">
+        <div class="row m-t-sm mt-0" @fadeIn>
+            <div class="col-md-12 pl-0 pr-0">
+                <div class="ibox">
+                    <div class="ibox-content text-x-small font-bold  pb-2">
+                        <div class="form-row row mb-0">
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label for="employeesSearchRef" class="control-label">Search By Employee</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-users" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <div class="d-inline" style="width: 90%;">
+                                        <ng-select2 [data]="ddlEmployees" name="employeesSearchRef"
+                                            #employeeRefSearch="ngModel" [(ngModel)]="searchByEmployee"
+                                            id="employeesSearchRef" (valueChanged)="searchEmployeeChanged($event)"
+                                            [placeholder]="'Search Employee...'" [options]="select2Options"
+                                            (click)="touched(employeeRefSearch)" [allowClear]="true" required>
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <label for="searchByConfigurationType" class="control-label">Search By
+                                    Config-Type</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-list-alt"></i>
+                                        </span>
+                                    </div>
+                                    <select name="searchByConfigurationType" id="searchByConfigurationType"
+                                        class="form-control form-control-sm" [(ngModel)]="searchByConfigCategory"
+                                        #searchByConfigCategoryRef="ngModel" (change)="searchSalaryReviewInfos()">
+                                        <option [value]="''">---Select Configuration---</option>
+                                        <option [value]="'Employee Wise'">Employee Wise</option>
+                                        <option [value]="'Designation'">Designation</option>
+                                        <option [value]="'Grade'">Grade</option>
+                                        <option [value]="'Job Type'">Job Type</option>
+                                        <option [value]="'All'">All</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <label for="searchByStatus" class="control-label">Search By Status</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-angle-double-up" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <select name="searchByStatus" id="searchByStatus" #searchByStatusRef="ngModel"
+                                        [(ngModel)]="searchByStatus" class="form-control form-control-sm"
+                                        (change)="searchSalaryReviewInfos()">
+                                        <option [value]="''">---Select Status---</option>
+                                        <option [value]="'Pending'">Pending</option>
+                                        <option [value]="'Approved'">Approved</option>
+                                        <option [value]="'Accepted'">Accepted</option>
+                                        <option [value]="'Rejected'">Rejected</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2 col-sm-12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-t-sm mt-0">
+            <div class="col-md-12 mb-4 pl-0 pr-0">
+                <div class="ibox">
+                    <div class="ibox-content text-x-small font-bold">
+                        <table class="table tables-sm table-hover table-striped table-responsive-xl"
+                            id="tblConfiguration">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th class="text-center">Configuration Type <i aria-hidden="true"
+                                            class="fa fa-sort-amount-asc"></i></th>
+                                    <th>Name & Code <i aria-hidden="true" class="fa fa-sort-amount-asc"></i></th>
+                                    <th>Details <i aria-hidden="true" class="fa fa-sort-amount-asc"></i></th>
+                                    <th class="text-right">New Salary Amount <i aria-hidden="true"
+                                            class="fa fa-sort-amount-asc"></i></th>
+                                    <th class="text-right">Previous Salary Amount <i aria-hidden="true"
+                                            class="fa fa-sort-amount-asc"></i></th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Entry Date</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let item of salaryReviewList | paginate:salaryReviewListPageConfig ; let i = index">
+                                    <td class="text-center">
+                                        {{i+1 +(pageSize*(pageNumber-1))}}
+                                    </td>
+                                    <td class="text-left">
+                                        <span class="label label-info">
+                                            {{item.salaryConfigCategory}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{item.fullName +'~'+ item.employeeCode}}
+                                    </td>
+                                    <td>{{'Branch:'+item.branchName+' Designation:'+item.designationName}}</td>
+                                    <td class="text-right">{{item.currentSalaryAmount}} &#2547;</td>
+                                    <td class="text-right">{{item.previousSalaryAmount}} &#2547;</td>
+                                    <td class="text-center">
+                                        <span class="label label-primary"
+                                            *ngIf="item.stateStatus =='Approved'">{{item.stateStatus}}</span>
+                                        <span class="label label-info"
+                                            *ngIf="item.stateStatus =='Recheck'">{{item.stateStatus}}</span>
+                                        <span class="label label-warning"
+                                            *ngIf="item.stateStatus =='Pending'">{{item.stateStatus}}</span>
+                                        <span class="label label-danger"
+                                            *ngIf="item.stateStatus =='Cencelled'">{{item.stateStatus}}</span>
+                                    </td>
+                                    <td>{{item.createdDate | date:"dd-MMMM-yyyy hh:mm:ss a"}}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-xs" [tooltip]="'Update'"
+                                            *ngIf="(item.stateStatus =='Pending' || item.stateStatus =='Recheck') && pagePrivilege?.edit == true"
+                                            (click)="getSalaryReviewForEdit(item.salaryReviewInfoId, item.employeeId)">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-xs text-info" [tooltip]="'Approval'"
+                                            *ngIf="(item.stateStatus =='Pending' || item.stateStatus =='Recheck') && pagePrivilege?.approval == true"
+                                            (click)="getSalaryReviewInfoAndDetail(item.salaryReviewInfoId,item.employeeId,'Approval')">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-xs text-info" [tooltip]="'View Detail'"
+                                            (click)="getSalaryReviewInfoAndDetail(item.salaryReviewInfoId,item.employeeId,'View')">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-xs text-danger" [tooltip]="'Delete Pending Review'"
+                                            *ngIf="(item.stateStatus =='Pending' || item.stateStatus =='Recheck') && pagePrivilege?.delete == true"
+                                            (click)="openDeleteModal(item.salaryReviewInfoId,item.employeeId)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-xs text-danger" [tooltip]="'Delete Approved Review'"
+                                            *ngIf="(item.stateStatus =='Approved') && pagePrivilege?.approval == true"
+                                            (click)="openDeleteModal(item.salaryReviewInfoId,item.employeeId)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <div class="d-flex justify-content-end">
+                            <pagination-controls (pageChange)="salaryReviewPageChanged($event)" [responsive]="true"
+                                [autoHide]="true" id="salaryReviewData"></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <div class="row m-t-sm mt-0" *ngIf="isEntryScreen==true" @fadeIn>
+        <div class="col-md-12 mb-2">
+            <div class="row bg-white">
+                <div class="col-md-6 pl-0">
+                    <div class="ibox-title border-0 pt-1">
+                        <h5 class="mb-0">
+                            <a class="btn btn-xs btn-outline-secondary btn-circle font-bold">
+                                <i class="fa fa-money" aria-hidden="true"></i>
+                            </a> | Employee Salary Review
+                        </h5>
+                    </div>
+                </div>
+                <div class="col-md-6 text-x-small pl-0">
+                    <div class="mt-2">
+                        &nbsp;<button type="button" class="btn btn-primary btn-rounded btn-sm btn-outline pull-right"
+                            (click)=" openUploadSalaryReviewExcelFileModal()" *ngIf="pagePrivilege?.upload == true">
+                            <i class="fa fa-arrow-up"></i> | Upload File
+                        </button>&nbsp;
+                        <button type="button" class="btn btn-success btn-rounded btn-sm btn-outline pull-right mr-1"
+                            (click)="openFlatAmountUploaderModal()" *ngIf="pagePrivilege?.upload == true">
+                            <i class="fa fa-arrow-up"></i> | Upload Flat Amount
+                        </button>&nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <form #saveSalaryReviewForm="ngForm" (ngSubmit)="saveSalaryReview(saveSalaryReviewForm)">
+                <div class="row">
+                    <div class="col-sm-12 col-md-4 mb-4 text-x-small">
+                        <div class="ibox-content  shadow-sm pt-2 pb-2">
+                            <div class="form-row text-dark">
+                                <div class="form-group col-sm-12 col-md-12 mb-0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-users" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <div class="d-inline" style="width: 90%;">
+                                            <ng-select2 [data]="ddlEmployees" name="employees" #employeeRef="ngModel"
+                                                id="employeeRef" [(ngModel)]="salaryReviewInfo.employeeId"
+                                                (valueChanged)="getEmployeeInfo($event)"
+                                                [placeholder]="'Search Employee...'" [options]="select2Options"
+                                                (click)="touched(employeeRef)" [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                    <div class="text-danger"
+                                        *ngIf="employeeRef.touched && employeeRef.value =='' || employeeRef.value ==null">
+                                        <span>Field is required</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content pt-1 pb-1 text-dark">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">
+                                                    <i class="fa fa-info-circle"></i> | Employee Info
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Employee Code</td>
+                                                <td>
+                                                    {{employeeInfo?.employeeCode}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Full Name</td>
+                                                <td>
+                                                    {{employeeInfo?.fullName}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Department</td>
+                                                <td>
+                                                    {{employeeInfo?.departmentName}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Designation</td>
+                                                <td>
+                                                    {{employeeInfo?.designationName}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Section</td>
+                                                <td>
+                                                    {{employeeInfo?.sectionName}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Date Of Joining</td>
+                                                <td>
+                                                    {{employeeInfo?.dateOfJoining | date:"dd MMM yyyy"}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 text-dark">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="3">
+                                                    <i class="fa fa-database" aria-hidden="true"></i> | Employee Salary
+                                                    Review
+                                                    Data
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <thead>
+                                            <tr>
+                                                <th>Total Salary Amt.</th>
+                                                <th>Effective From</th>
+                                                <th>Reason</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of employeeReviewData, let i =index">
+                                                <td>{{item.currentSalaryAmount}}</td>
+                                                <td>{{item.activationDate | date:"dd-MMM-yyyy"}}</td>
+                                                <td>{{item.incrementReason}}</td>
+                                            </tr>
+                                            <tr *ngIf="employeeReviewData.length ==0">
+                                                <td colspan="3" class="text-center">No record(s) found.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 text-dark">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="4">
+                                                    <i class="fa fa-database" aria-hidden="true"></i> | Employee Salary
+                                                    Breakdown
+                                                    Data
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <thead>
+                                            <tr>
+                                                <th>#SL</th>
+                                                <th>Allowance Name</th>
+                                                <th class="hide">Percentage</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of employeeSalaryBreakdownData, let i =index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.allowanceName}}</td>
+                                                <td class="hide">{{item.percentageOfTotalSalary}}</td>
+                                                <td>{{item.currentAmount}}</td>
+                                            </tr>
+                                            <tr *ngIf="employeeSalaryBreakdownData.length ==0">
+                                                <td colspan="4" class="text-center">No record(s) found.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-8 mb-4 text-x-small">
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content pt-2 pb-2  shadow-sm hide">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 col-sm-8 mb-0">
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input id="inputGroupFile01" type="file" class="custom-file-input">
+                                                <label class="custom-file-label" for="inputGroupFile01">Choose
+                                                    file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-md-4 mb-0 mt-1 font-bold">
+                                        <div class="clearfix pull-right">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-12 border-right border-success">
+                                        <div class="form-row text-dark font-bold">
+                                            <div class="form-group col-md-12 col-sm-12">
+                                                <label for="effectiveReviewDate" class="control-label">Effective
+                                                    From <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" id="effectiveReviewDate" required
+                                                        name="effectiveReviewDate" #effectiveReviewDateRef="ngModel"
+                                                        [(ngModel)]="salaryReviewInfo.effectiveFrom"
+                                                        class="form-control form-control-sm bg-white" readonly
+                                                        placeholder="Select Effective Date From Picker" bsDatepicker
+                                                        [bsConfig]="datePickerConfig" placement="bottom"
+                                                        [class]="effectiveReviewDateRef.touched && (effectiveReviewDateRef.value == null || effectiveReviewDateRef.value =='')?'is-invalid':(effectiveReviewDateRef.touched && salaryReviewInfo.effectiveFrom != null ?'is-valid':'')">
+                                                    <div class="input-group-prepend cursor-pointer"
+                                                        (click)="salaryReviewInfo.effectiveFrom = null"
+                                                        *ngIf="salaryReviewInfo.effectiveFrom != null">
+                                                        <span class="input-group-addon text-danger">
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                {{errrorObject?.haseffective}}
+                                            </div>
+                                            <div class="form-group col-md-12 col-sm-12">
+                                                <label for="activationMonthAndYear" class="control-label">Activation
+                                                    Month & Year
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                    <select name="activationMonth" id="activationMonthAndYear"
+                                                        class="form-control form-control-sm"
+                                                        #activationMonthRef="ngModel" (change)="activation_changed()"
+                                                        [(ngModel)]="salaryReviewInfo.activationMonth">
+                                                        <option [value]="0">---Month---</option>
+                                                        <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                            {{item.month}}</option>
+                                                    </select>
+                                                    <div class="input-group-prepend">
+                                                        <select id="activationYear" id="activationYear"
+                                                            name="activationYear" class="form-control form-control-sm"
+                                                            #activationYearRef="ngModel" (change)="activation_changed()"
+                                                            [(ngModel)]="salaryReviewInfo.activationYear">
+                                                            <option [value]="0">---Year---</option>
+                                                            <option [value]="item" *ngFor="let item of ddlYears">
+                                                                {{item}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12 col-sm-12">
+                                                <label for="incrementReason" class="control-label">Increment
+                                                    Reason <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-bolt" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                    <select id="incrementReason" name="incrementReason"
+                                                        [disabled]="employeeReviewData.length ==0 || salaryReviewInfo.incrementReason == 'Joining'"
+                                                        class="form-control form-control-sm"
+                                                        #incrementReasonRef="ngModel"
+                                                        (change)="touched(incrementReasonRef)"
+                                                        [class]="incrementReasonRef.touched && (incrementReasonRef.value == null || incrementReasonRef.value =='')?'is-invalid':(salaryReviewInfo.incrementReason != '' && incrementReasonRef.value != null ?'is-valid':'')"
+                                                        [(ngModel)]="salaryReviewInfo.incrementReason">
+                                                        <option [value]="''">---Select Reason---</option>
+                                                        <option [value]="'Joining'">Joining</option>
+                                                        <option [value]="'Promotion'">Promotion</option>
+                                                        <option [value]="'Confirmation'">Confirmation</option>
+                                                        <option [value]="'Transfer'">Transfer</option>
+                                                        <option [value]="'Annual Increment'">Annual Increment</option>
+                                                        <option [value]="'Change Role'">Change Role</option>
+                                                        <option [value]="'Job Enhancement'">Job Enhancement</option>
+                                                        <option [value]="'Salary Review'">Salary Review</option>
+                                                        <option [value]="'Contract Renewal'">Contract Renewal</option>
+                                                        <option [value]="'Salary Allignment'">Salary Allignment</option>
+                                                        <option [value]="'Probation'">Probation</option>
+                                                        <option [value]="'Rehired'">Rehired</option>
+                                                        <option [value]="'Adjustment'">Adjustment</option>
+                                                        <option [value]="'Others'">Others</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12 col-sm-12">
+                                                <label for="description" class="control-label">Description About
+                                                    Increment</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" id="description" name="description"
+                                                        #descriptionRef="ngModel"
+                                                        [(ngModel)]="salaryReviewInfo.description"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="Say Somthing about increment" autocomplete="off"
+                                                        maxlength="200">
+                                                </div>
+                                                <div *ngIf="descriptionRef.touched" class="text-danger">
+                                                    <span *ngIf="descriptionRef.errors?.maxlength">Maxlength is
+                                                        200</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12 col-sm-12">
+                                                <label for="arrearMonthAndYear" class="control-label">
+                                                    Arrear Month & Year<span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                    <select name="arrearMonthAndYear" id="arrearMonthAndYear"
+                                                        class="form-control form-control-sm" #arrearMonthRef="ngModel"
+                                                        [(ngModel)]="salaryReviewInfo.arrearMonth">
+                                                        <option [value]="0">---Month---</option>
+                                                        <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                            {{item.month}}</option>
+                                                    </select>
+                                                    <div class="input-group-prepend">
+                                                        <select id="arrearYear" id="arrearYear" name="arrearYear"
+                                                            class="form-control form-control-sm"
+                                                            #arrearYearRef="ngModel"
+                                                            [(ngModel)]="salaryReviewInfo.arrearYear">
+                                                            <option [value]="0">---Year---</option>
+                                                            <option [value]="item" *ngFor="let item of ddlYears">
+                                                                {{item}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12 col-sm-12 mb-1">
+                                                <label for="yearlyCTC" class="control-label">Yearly CTC</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            &#2547;
+                                                        </span>
+                                                    </div>
+                                                    <input type="number" class="form-control form-control-sm"
+                                                        placeholder="Monthly CTC" name="yearlyCTC" id="yearlyCTC"
+                                                        #yearlyCTCRef="ngModel" [(ngModel)]="salaryReviewInfo.yearlyCTC"
+                                                        (input)="yearlyCTC_changed()">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 col-sm-12">
+                                        <div class="form-row border-bottom border-success text-dark font-bold">
+                                            <div class="form-group col-md-4 col-sm-12 mb-1">
+                                                <label for="monthlyCTC" class="control-label">Monthly CTC</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            &#2547;
+                                                        </span>
+                                                    </div>
+                                                    <input type="number" class="form-control form-control-sm"
+                                                        placeholder="Monthly CTC" name="monthlyCTC" id="monthlyCTC"
+                                                        #monthlyCTCRef="ngModel"
+                                                        [(ngModel)]="salaryReviewInfo.monthlyCTC">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4 col-sm-12 mb-1">
+                                                <label for="monthlyFB" class="control-label">Monthly FB</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            &#2547;
+                                                        </span>
+                                                    </div>
+                                                    <input type="number" class="form-control form-control-sm"
+                                                        placeholder="Monthly FB" name="monthlyFB" id="monthlyFB"
+                                                        #monthlyFbRef="ngModel"
+                                                        [(ngModel)]="salaryReviewInfo.monthlyFB">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4 col-sm-12 mb-1">
+                                                <label for="monthlyPF" class="control-label">Monthly PF</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            &#2547;
+                                                        </span>
+                                                    </div>
+                                                    <input type="number" class="form-control form-control-sm"
+                                                        placeholder="Monthly PF" name="monthlyPF" id="monthlyPF"
+                                                        #monthlyPFRef="ngModel"
+                                                        [(ngModel)]="salaryReviewInfo.monthlyPF">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12 col-sm-12 mb-0">
+                                                <div class="custom-control custom-switch pl-0"
+                                                    style="vertical-align: middle;">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                        name="chkIsAutoComplete" id="chkIsAutoComplete"
+                                                        #isAutoCalculateRef="ngModel"
+                                                        (ngModelChange)="autocalculate_change()"
+                                                        [(ngModel)]="salaryReviewInfo.isAutoCalculate">
+                                                    <label
+                                                        class="custom-control-label custom-switch-lable pull-right mb-0 mt-2"
+                                                        for="chkIsAutoComplete"> Auto Calculate</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6 col-sm-12">
+                                                <label for="previousSalaryAmount" class="control-label">Current
+                                                    Salary Amount</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            &#2547;
+                                                        </span>
+                                                    </div>
+                                                    <input type="number" class="form-control form-control-sm font-bold"
+                                                        name="previousSalaryAmount" id="previousSalaryAmount"
+                                                        #previousSalaryAmountRef="ngModel"
+                                                        [disabled]="employeeReviewData.length ==0"
+                                                        [(ngModel)]="salaryReviewInfo.previousSalaryAmount">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6 col-sm-12">
+                                                <label for="newSalaryAmount" class="control-label">New
+                                                    Gross/Basic<span class="text-danger">*</span> &nbsp;
+                                                    <span class="label label-warning"> {{baseOfSalary}}</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-addon">
+                                                            &#2547;
+                                                        </span>
+                                                    </div>
+                                                    <input type="number" class="form-control form-control-sm font-bold"
+                                                        name="newSalaryAmount" id="newSalaryAmount"
+                                                        #currentSalaryAmountRef="ngModel" [(ngModel)]="newSalaryAmount"
+                                                        [disabled]="!salaryReviewInfo.isAutoCalculate"
+                                                        (input)="[newSalaryCalculation(currentSalaryAmountRef.value)]"
+                                                        required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12 col-sm-12">
+                                                <table
+                                                    class="table table-sm table-striped table-hover table-responsive-lg">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Allowance</th>
+                                                            <th class="text-center">Base</th>
+                                                            <th class="text-center">Per/Amt</th>
+                                                            <th class="text-center">Amount</th>
+                                                            <th class="text-center"
+                                                                [ngClass]="{'hide': employeeSalaryBreakdownData.length ==0 }">
+                                                                Current Amount
+                                                            </th>
+                                                            <th class="text-center">Max Amount</th>
+                                                            <th class="text-center">Additional Amount</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of salaryReviewDetails; let i=index">
+                                                            <td>{{item.allowanceName}}
+                                                                <span class="text-danger">*</span>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <span *ngIf="item.allowanceBase =='Flat'"
+                                                                    class="label label-primary text-white">
+                                                                    {{item.allowanceBase}}
+                                                                </span>
+                                                                <span *ngIf="item.allowanceBase !='Flat'"
+                                                                    class="label label-warning text-dark">
+                                                                    {{item.allowanceBase}}
+                                                                </span>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <span *ngIf="item.allowanceBase =='Flat'"
+                                                                    class="label label-primary text-white">
+                                                                    {{item.allowanceAmount}} &#2547;
+                                                                </span>
+                                                                <span *ngIf="item.allowanceBase !='Flat'"
+                                                                    class="label label-warning text-dark">
+                                                                    {{item.allowancePercentage}} %
+                                                                </span>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <div class="input-group">
+                                                                    <input type="number"
+                                                                        name="{{'amount-'+(i+1).toString()}}"
+                                                                        id="{{'amount-'+(i+1).toString()}}"
+                                                                        #amount{{(i+1).toString()}}="ngModel"
+                                                                        (keyup)="amount_changed()"
+                                                                        [(ngModel)]="salaryReviewDetails[i].currentAmount"
+                                                                        class="form-control form-control-sm text-right"
+                                                                        [disabled]="salaryReviewInfo.isAutoCalculate"
+                                                                        (input)="newSalaryCalculation(currentSalaryAmountRef.value)">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-addon">
+                                                                            &#2547;
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td [ngClass]="{'hide': employeeSalaryBreakdownData.length ==0 }"
+                                                                class="text-right">
+                                                                {{item.previousAmount}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{item.maxAmount > 0 ? item.maxAmount.toString():
+                                                                'N/A'}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <div class="input-group">
+                                                                    <input type="number"
+                                                                        name="{{'additionalAmount-'+(i+1).toString()}}"
+                                                                        id="{{'additionalAmount-'+(i+1).toString()}}"
+                                                                        #additionalAmount{{(i+1).toString()}}="ngModel"
+                                                                        (keyup)="amount_changed()"
+                                                                        [(ngModel)]="salaryReviewDetails[i].additionalAmount"
+                                                                        class="form-control form-control-sm text-right"
+                                                                        [disabled]="salaryReviewInfo.isAutoCalculate"
+                                                                        (input)="newSalaryCalculation(currentSalaryAmountRef.value)">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-addon">
+                                                                            &#2547;
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot *ngIf="salaryReviewDetails.length > 0">
+                                                        <tr class="bg-light-blue text-white">
+                                                            <td colspan="3" class="text-left">
+                                                                <span class="label label-info"> Diff:
+                                                                    {{salaryReviewInfo.currentSalaryAmount-salaryReviewInfo.previousSalaryAmount}}
+                                                                    &#2547;</span>
+                                                            </td>
+                                                            <td colspan="4" class="text-right">
+                                                                <span class="label label-primary">Total Salary
+                                                                    Amount: {{salaryReviewInfo.currentSalaryAmount}}
+                                                                    &#2547;</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ibox-footer">
+                                <div class="clearfix">
+                                    <input type="hidden" name="currentSalaryAmount" id="currentSalaryAmount"
+                                        [(ngModel)]="salaryReviewInfo.currentSalaryAmount">
+                                    <button type="submit" class="btn btn-rounded btn-sm btn-primary pull-right"
+                                        [disabled]="salaryReviewInfo.employeeId == 0 ||  salaryReviewInfo.incrementReason =='' || salaryReviewDetails.length ==0 || salaryReviewInfo.currentSalaryAmount <=0 || btnSalaryReviewSubmit || salaryReviewInfo.activationMonth <= 0 || salaryReviewInfo.activationYear <=0">
+                                        <i class="fa fa-paper-plane"></i> | Submit
+                                        <span [hidden]="!btnSalaryReviewSubmit" class="spinner-border spinner-border-sm"
+                                            role="status" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Added by Monzur 16-Nov-2023 -->
+
+<ng-container *ngIf="showUploadSalaryReviewModal">
+    <app-salary-module-upload-salary-review-modal [salaryReviewInfoId]="0"
+        (closeModalEvent)="closeUploadSalaryReviewExcelFileModal($event)">
+    </app-salary-module-upload-salary-review-modal>
+</ng-container>
+
+<ng-container *ngIf="showDownloadSalaryReviewModal">
+    <app-salary-module-download-salary-review-sheet-modal [salaryReviewInfoId]="0"
+        (closeModalEvent)="closeDownloadSalaryReviewModal($event)">
+    </app-salary-module-download-salary-review-sheet-modal>
+</ng-container>
+
+<ng-container *ngIf="isBulkApproval">
+    <app-salary-review-bulk-approval-Modal (closeModalEvent)="closeBulkApproval($event)">
+    </app-salary-review-bulk-approval-Modal>
+</ng-container>
+
+<!-- Ended by Monzur 18-Nov-2023 -->
+
+<ng-template #salaryReviewApproavalModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm fa fa-money" aria-hidden="true"></i>|
+            {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
+            [disabled]="btnSalaryReviewApproval"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="info">
+                <tr>
+                    <td>Employee Name</td>
+                    <td>{{salaryReviewInfo.fullName + '~' + salaryReviewInfo.employeeCode}}</td>
+                    <td>Designation</td>
+                    <td>{{salaryReviewInfo.designationName}}</td>
+                    <td>Salary Config Category</td>
+                    <td>{{salaryReviewInfo.salaryConfigCategory}}</td>
+                </tr>
+                <tr>
+                    <td>Reason</td>
+                    <td>{{salaryReviewInfo.incrementReason}}</td>
+                    <td>Activation Date</td>
+                    <td>{{salaryReviewInfo.activationDate | date:"dd-MMM-yyyy"}}</td>
+                    <td>Gross Amount</td>
+                    <td>{{salaryReviewInfo.currentSalaryAmount}}</td>
+
+                </tr>
+                <tr>
+                    <td>Base Amount</td>
+                    <td>{{salaryReviewInfo.salaryBaseAmount}}</td>
+                    <td>Status</td>
+                    <td>
+                        <span class="label label-warning" *ngIf="salaryReviewInfo.stateStatus=='Pending'">
+                            {{salaryReviewInfo.stateStatus + '...'}}</span>
+                        <span class="label label-primary" *ngIf="salaryReviewInfo.stateStatus=='Approved'">
+                            <i class="fa fa-check"></i> {{salaryReviewInfo.stateStatus}}</span>
+                        <span class="label label-danger" *ngIf="salaryReviewInfo.stateStatus=='Cancelled'"><i
+                                class="fa fa-times"></i> {{salaryReviewInfo.stateStatus}}</span>
+                        <span class="label label-info" *ngIf="salaryReviewInfo.stateStatus=='Recheck'"><i
+                                class="fa fa-backward"></i> {{salaryReviewInfo.stateStatus}}</span>
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="detail">
+                <thead>
+                    <tr>
+                        <td class="text-center">#SL</td>
+                        <td>Allowance Name</td>
+                        <td class="text-center">Base</td>
+                        <td class="text-center">Percentage/Amount</td>
+                        <td class="text-right">Proposal Amount</td>
+                        <td *ngIf="salaryReviewInfo.incrementReason != 'Joining'">Current Amount</td>
+                        <td class="text-right">Max Amount</td>
+                    </tr>
+                </thead>
+                <tr *ngFor="let item of salaryReviewInfo.salaryReviewDetails; let i=index">
+                    <td class="text-center">{{i+1}}</td>
+                    <td>{{item.allowanceName}}</td>
+                    <td class="text-center">{{item.allowanceBase}}</td>
+                    <td class="text-center">
+                        <span *ngIf="item.allowancePercentage > 0" class="label label-warning text-dark">
+                            {{item.allowancePercentage}} %
+                        </span>
+                        <span *ngIf="item.allowanceAmount > 0" class="label label-primary">
+                            {{item.allowanceAmount}} &#2547;
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        {{item.currentAmount}}
+                    </td>
+                    <td *ngIf="salaryReviewInfo.incrementReason != 'Joining'">{{item.previousAmount}}</td>
+                    <td class="text-right">
+                        {{item.maxAmount > 0 ? item.maxAmount.toString(): 'N/A'}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-body pt-0 text-x-small font-bold text-dark" *ngIf="salaryReviewModalFlag =='Approval'">
+        <form #salaryReviewApproavalForm="ngForm"
+            (ngSubmit)="submitSalaryReviewStatus(salaryReviewApproavalForm,remarks.value,checkStatus.value)">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                    <div class="input-group">
+                        <input type="text" name="checkRemarks" #remarks id="checkRemarks" required
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="checkStatus" #checkStatus id="checkStatus"
+                                class="form-control form-control-sm" required>
+                                <option value="Approved">Approved</option>
+                                <option value="Recheck">Recheck</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                                [disabled]="salaryReviewApproavalForm.invalid || btnSalaryReviewApproval">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnSalaryReviewSubmit" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="showFlatAmountUploader">
+    <app-salary-review-flat-amount-uploader-modal
+        (closeModalEvent)="closeFlatAmountUploaderModal($event)"></app-salary-review-flat-amount-uploader-modal>
+</ng-container>
+
+
+<ng-container *ngIf="showDeleteModal">
+    <payroll-delete-salary-review-modal [id]="id_delete_modal" [employeeId]="employee_id_delete_modal"
+        (closeModalEvent)="closeDeleteModal($event)"></payroll-delete-salary-review-modal>
+</ng-container>

@@ -1,0 +1,17 @@
+
+
+<div class="popup" *ngIf="showPopup">
+    <div class="popup-header">
+      <h3>Dashboard List  </h3>
+      <span (click)="togglePopup()" class="close-icon">&#10006;</span>
+    </div>
+    <ul>
+      <li (click)="showAllDashboard()">All</li>
+      <li (click)="showHR()" *ngIf="showHrDashboardLink">HR</li>
+      <li (click)="showPayroll()" *ngIf="showPayrollDashboardLink && visiblePayrollDashboard">Payroll</li>
+      <li (click)="showAttendance()" *ngIf="visibleAttendanceDashboard">Attendance</li>
+      <li (click)="showLeave()">Leave</li>
+    
+    </ul>
+  </div>
+  

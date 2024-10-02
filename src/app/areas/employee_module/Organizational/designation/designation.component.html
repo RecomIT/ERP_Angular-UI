@@ -1,0 +1,95 @@
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-1"><i class="icofont-badge"></i> | Designation</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Organizational</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Designation</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-4 col-sm-6 text-x-small">
+        <div class="title-action pt-3">
+            <button type="button" class="btn btn-sm btn-outline-info btn-rounded pull-right" tooltip="Make A Designation"
+                (click)="showModal(0)"> <i class="fa fa-plus"></i> | Designation
+            </button>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated pt-2 fadeInRight">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small font-bold text-dark">
+                    <div class="form-row pt-3">
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="searchByAnything" class="control-label font-bold">Search By Anything</label>
+                            <div class="input-group">
+                                <input type="text" name="searchByAnything" id="searchByAnything" onkeyup="tableFilter('#tbl tbody tr',this)"
+                                    class="form-control form-control-sm" autofocus placeholder="Type here..." />
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon  text-dark">
+                                        <i class="icofont-search-2"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg" id="tbl">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th>Name</th>
+                                    <th class="text-center">Short Name</th>
+                                    <th class="text-center">Grade</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list ; let i=index">
+                                    <td class="text-center font-bold">{{i+1}}</td>
+                                    <td>{{item.designationName}}</td>
+                                    <td class="text-center">{{item.shortName}}</td>
+                                    <td class="text-center">{{item.gradeName}}</td>
+                                    <td class="text-center">N/A</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm" (click)="showModal(item.designationId)">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf=" list.length == 0 && list_loading_label == null">
+                                    <td colspan="15" class="text-center">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="list.length == 0 && list_loading_label == ''">
+                                    <td colspan="15" class="text-center font-bold">
+                                        {{list_loading_label}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="isShowingInsertUpdateModal == true">
+    <employee-module-designation-insert-update-modal [id]="this.itemId" (closeModalEvent)="closeModal($event)">
+    </employee-module-designation-insert-update-modal>
+</ng-container>

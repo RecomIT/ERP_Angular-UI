@@ -1,0 +1,29 @@
+<ng-template #deleteCompanyEventsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="fa fa-trash-o btn btn-sm btn-danger btn-circle" aria-hidden="true"></i> Delete Event
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('close click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body font-bold text-dark">
+        <div class="ibox ibox-content">
+            <div class="container-fluid mt-2">
+                <h2><strong>Are you sure want to delete?</strong></h2>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      
+
+        <button class="btn btn-xs btn-primary btn-rounded shadow" type="button"  (click)="onDelete()">
+            <i class="fa fa-paper-plane"></i> Yes, Delete
+        </button>
+
+        <button class="btn btn-xs btn-danger btn-rounded shadow" type="button"  (click)="closeModal('Close Click')">
+            <i class="fa fa-times"></i> | Cancel
+        </button>
+
+    </div>
+</ng-template>

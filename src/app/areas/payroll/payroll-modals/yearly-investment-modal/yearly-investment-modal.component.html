@@ -1,0 +1,46 @@
+<ng-template #yearinvestmentmodal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-secondary btn-circle" aria-hidden="true">&#2547;</i>| Investment
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="saveForm" (submit)="submit()">
+        <div class="modal-body">
+            <div class="form-row text-x-small">
+                <div class="form-group col-12 col-md-12 col-sm-12">
+                    <label for="investmentAmount" class="control-label font-bold">Investment Amount</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <span>&#2547;</span>
+                                </span>
+                            </div>
+                            <input type="number" class="form-control form-control-sm" name="investmentAmount" formControlName="investmentAmount">
+                        </div>
+                </div>
+                <div class="form-group col-12 col-md-12 col-sm-12">
+                   <p>* Applicable Investment Instrument (Investment Guideline)</p> 
+                   <p>a) Govt Securities (Treasury Bond/Sanchayapatra) up to 5 Lac.</p>
+                   <p>b) DPS upto 120,000.</p>
+                   <p>c) Mutual Fund up to 5 Lac.</p>
+                   <p>d) Investment in Capital Market (Shares of listed companies with DSE/CSE) no limit</p>
+                   <p>e) Insurance Premium</p>
+                   <p>f)  Others (as per Bangladesh Gazette on 22 Jun 2023).</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-x-small">
+            <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                [disabled]="saveForm.invalid || btnSave">
+                <span [hidden]="!btnSave" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+                <i class="fa fa-paper-plane"></i> | Submit
+            </button>
+            <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </form>
+</ng-template>

@@ -1,0 +1,115 @@
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-2">Dashboard</h2>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight pt-3">
+
+        <div class="row mt-2">
+            <div class="col-md-4">
+                <div class="row" id="additional-values">
+                    <div class="col-md-12 m-auto p-1 border-radius-5">
+                        <div class="dashboard-item" (click)="navigateToApproval('Creation')">
+                            <div class="icon-container">
+                                <i class="fa fa-cubes"></i>
+                            </div>
+                            <div class="text-container">
+                                <h5 class="title m-0">Awaiting Approval (Asset Creation)</h5>
+                                <h2 class="value m-0">{{ getCreationData }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-md-4">
+                <div class="row" id="additional-values">
+                    <div class="col-md-12 m-auto p-1 border-radius-5">
+                        <div class="dashboard-item" (click)="navigateToApproval('Assigning')">
+                            <div class="icon-container">
+                                <i class="fa fa-cube"></i>
+                            </div>
+                            <div class="text-container">
+                                <h5 class="title m-0">Awaiting Approval (Asset Assigning)</h5>
+                                <h2 class="value m-0">{{ getAssigningData }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+
+        <div class="row mt-2">
+            <div class="col-md-12 mb-4">
+                <div class="ibox">
+                    <div class="ibox-content pt-3 pb-2 text-x-small border-radius-5 shadow-sm font-bold text-dark">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th>Asset Name</th>
+                                    <th>Store</th>
+                                    <th>Vendor</th>
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
+                                    <th>Brand</th>
+                                    <th class="text-center">Total Quantity</th>
+                                    <th class="text-center">Assigning Quantity</th>
+                                    <th class="text-center">Handover Quantity</th>
+                                    <th class="text-center">Replacement Quantity</th>
+                                    <th class="text-center">Received Quantity</th>
+                                    <th class="text-center">Servicing Quantity</th>
+                                    <th class="text-center">Repaired Quantity</th>
+                                    <th class="text-center">In Hand</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list; let i=index">
+                                    <td class="text-center font-bold">{{i+1}}</td>
+                                    <td>{{item.assetName}}</td>
+                                    <td>{{item.store}}</td>
+                                    <td>{{item.vendor}}</td>
+                                    <td>{{item.category}}</td>    
+                                    <td>{{item.subCategory}}</td>   
+                                    <td>{{item.brand}}</td>                                   
+                                    <td class="text-center">
+                                        {{item.totalQuantity}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{item.assigningQuantity}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{item.handoverQuantity}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{item.replacementQuantity}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{item.receivedQuantity}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{item.servicingQuantity}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{item.repairedQuantity}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{item.balance}}
+                                    </td>                                
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- <div class="d-flex justify-content-end">
+                            <pagination-controls (pageChange)="page_changed($event)" [responsive]="true" [autoHide]="true"
+                                id="data_list"></pagination-controls>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- 
+        <div class="container mt-4">
+            <app-asset-chart [list]="list"></app-asset-chart>
+          </div> -->
+ </div>

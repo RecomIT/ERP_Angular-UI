@@ -1,0 +1,114 @@
+<div class="ibox">
+  <div class="ibox-content bg-white border-radius-5">
+    <div class="row">
+      <div class="col-7 col-lg-7 col-md-7 col-sm-7">
+        <h4 class="mb-2">Lunch Requests</h4>
+      </div>
+
+      <div class="col-5 col-lg-5 col-md-5 col-sm-5">
+        <button class="btn btn-xs btn-primary shadow pull-right" (click)="openAddLunchRequestModal()"
+          title="Request For Lunch">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-xs btn-success shadow mr-1  pull-right" (click)="openLunchRequestReportModal()"
+          title="Lunch Request Report">
+          <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <hr class="m-1" />
+
+    <div class="table-container">
+      <div>
+        <h2 class="hide">Total Lunch Requests</h2>
+        <div class="input-group text-x-small font-bold">
+          <div class="input-group-prepend">
+            <span class="input-group-addon">
+              <i class="fa fa-calendar"></i>
+            </span>
+          </div>
+          <input type="text" [(ngModel)]="selectedDate" bsDatepicker [bsConfig]="datePickerConfig"
+            #selectedDateRef="ngModel" id="lunchDate" name="lunchDate" (ngModelChange)="getTotalRequests()"
+            placeholder="Select a date to get total lunch" class="form-control form-control-sm" />
+          <div class="input-group-prepend hide">
+            <button (click)="getTotalRequests()" class="btn btn-sm btn-outline-primary">
+              Get Total
+            </button>
+          </div>
+        </div>
+
+        <!-- <div *ngIf="totalLunches !== null" class="mt-2">
+          <h4>
+            Total Lunch - {{ selectedDate | date : "mediumDate" }} :
+            <button class="btn btn-sm btn-circle btn-primary">
+              {{ totalLunches }}
+            </button>
+          </h4>
+        </div> -->
+        <div class="widget style1 shadow-sm border">
+          <div class="row">
+            <div class="col-6 text-center">
+              <i class="fa fa-calendar fa-5x text-info"></i>
+              <h4 class="font-bold text-x-small">{{ selectedDate | date : "mediumDate"}}</h4>
+            </div>
+            <div class="col-6 text-center">
+              <i class="icofont-spoon-and-fork fa-5x text-warning"></i>
+              <h4 class="font-bold">Total Lunch: <span class="btn btn-xs btn-rounded btn-info" (click)="openDetailsModal()">{{ totalLunches }}</span></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="container p-1">
+                <div *ngFor="let item of listOfCompanyHolidaysAndEvents" class="{{ item.tableName === 'Event' ? 'event' : 'holiday' }}">
+                    
+                    <div class="event-details" [title]="item.description ? item.description : 'No Description'" style="cursor: pointer;">
+                        <div>
+                            <h3 class="m-0 p-0">{{ item.eventTitle }}</h3>
+                            <h6 class="font-bold m-1">{{ item.date | date: 'EEE, dd MMM, yyyy' }}</h6>
+                        </div>
+                        <h5 class="event-time m-0 p-0">{{ item.eventTime | date: 'HH:mm' }}</h5>
+  
+                        <div *ngIf="item.tableName === 'Event' && companyEventsControl" class="icon-container text-center">
+                            <button class="btn btn-xs text-success" (click)="openEditCompanyEventsModal(item)" title="Edit" type="button">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button class="btn btn-xs text-danger" (click)="openDeleteCompanyEventsModal(item.eventId)" title="Delete" type="button">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------- Child Components ------------------------------------------- -->
+
+<ng-container *ngIf="showDeleteCompanyEventsModal">
+  <app-delete-company-events (closeModalEvent)="closeDeleteCompanyEventsModal($event)" [eventId]="eventId">
+  </app-delete-company-events>
+</ng-container>
+
+<ng-container *ngIf="showEditCompanyEventsModal">
+  <app-add-company-events (closeModalEvent)="closeEditCompanyEventsModal($event)" [selectedEvent]="selectedEvent">
+  </app-add-company-events>
+</ng-container>
+
+<!-- Open Add Lunch Request Modal -->
+<ng-container *ngIf="showAddLunchRequestModal">
+  <app-add-lunch-request (closeModalEvent)="closeAddLunchRequestModal($event)">
+  </app-add-lunch-request>
+</ng-container>
+
+<ng-container *ngIf="showLunchRequestReportModal">
+  <app-lunch-request-report-modal (closeModalEvent)="closeLunchRequestReportModal($event)">
+  </app-lunch-request-report-modal>
+</ng-container>
+
+<ng-container *ngIf="showDetailsModal">
+  <app-lunch-list-modal (closeModalEvent)="closeDetailsModal($event)" [date]="this.selectedDate">
+  </app-lunch-list-modal>
+</ng-container>

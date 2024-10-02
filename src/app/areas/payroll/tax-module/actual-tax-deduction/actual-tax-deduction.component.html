@@ -1,0 +1,166 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-2">Actual Tax Deduct Info</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Tax</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Actual Tax Deduct Info</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-4 col-sm-6 text-x-small">
+        <div class="title-action">
+            <button type="button" class="btn btn-sm btn-secondary btn-outline ml-1 btn-rounded pull-right"
+                (click)="openUploadModal()"> <i class="fa fa-upload"></i> | Upload
+            </button>
+            <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded pull-right"
+                (click)="openInsertUpdateModal(0)"> <i class="icofont-plus"></i> | Deduction Amount
+            </button>
+            <button type="button" class="btn btn-sm btn-success btn-outline mr-1 btn-rounded pull-right"
+                (click)="openApprovalModal()"> <i class="icofont-check"></i> | Approval
+            </button>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight pt-3" id="page-container">
+    <div class="row mt-0">
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="ibox-content pb-3 text-x-small text-dark font-bold border-radius-5 shadow-sm">
+                    <form [formGroup]="searchForm">
+                        <div class="form-row">
+                            <div class="form-group mb-0 col-md-4 col-sm-12">
+                                <label for="employeeId" class="control-label text-uppercase">SEARCH BY Employee</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width:80%">
+                                        <ng-select2 [data]="ddlEmployees" name="employeeId" id="employeeId"
+                                            [placeholder]="'Select Employee...'" [options]="select2Options"
+                                            formControlName="employeeId" [allowClear]="true">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0 col-md-4 col-sm-12">
+                                <label for="month" class="control-label text-uppercase">SEARCH BY Month & Year</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="icofont-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <select name="month" id="month" class="form-control form-control-sm"
+                                        formControlName="salaryMonth">
+                                        <option [value]="0" selected>---Select Month ---</option>
+                                        <option [value]="item.monthNo" *ngFor="let item of months">{{item.month}}
+                                        </option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <select name="years" id="years" class="form-control form-control-sm"
+                                            formControlName="salaryYear">
+                                            <option [value]="0" selected>---Select Year ---</option>
+                                            <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0 col-md-4 col-sm-12">
+                                <label for="status" class="control-label text-uppercase">SEARCH BY Status</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                    </div>
+                                    <select name="status" id="status" class="form-control form-control-sm"
+                                        formControlName="stateStatus">
+                                        <option [value]="''" selected>---Select Status---</option>
+                                        <option [value]="item" *ngFor="let item of statusList">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content text-x-small border-radius-5 shadow-sm">
+                    <table class="table table-sm table-striped table-hover table-responsive-lg" id="tbl">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#SL</th>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Month & Year</th>
+                                <th>Fiscal Year</th>
+                                <th class="text-center">Tax Deducted</th>
+                                <th class="text-center">StateStatus</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of list ;let i =index">
+                                <td class="text-center font-bold">{{i+1}}</td>
+                                <td>{{item.employeeCode}}</td>
+                                <td>{{item.employeeName}}</td>
+                                <td>{{item.monthName}}-{{item.salaryYear}}</td>
+                                <td>{{item.fiscalYearRange}}</td>
+                                <td class="text-center">{{item.actualTaxAmount | number}}</td>
+                                <td class="text-center">
+                                    <span class="label label-warning"
+                                        *ngIf="item.stateStatus=='Pending'">{{item.stateStatus + '...'}}</span>
+                                    <span class="label label-primary" *ngIf="item.stateStatus=='Approved'"> <i
+                                            class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                    <span class="label label-danger" *ngIf="item.stateStatus=='Cancelled'"><i
+                                            class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                    <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                            class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-xs"
+                                        (click)="openInsertUpdateModal(item.actualTaxDeductionId)">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </button>
+                                    <!-- <button type="button" class="btn btn-xs" (click)="1==1">
+                                        <i class="fa fa-check"></i>
+                                    </button> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showUploadModal == true">
+    <app-payroll-upload-employee-tax-deduction
+        (closeModalEvent)="closeUploadModal($event)"></app-payroll-upload-employee-tax-deduction>
+</ng-container>
+
+<ng-container *ngIf="showInsertUpdateModal == true">
+    <app-payroll-actual-tax-deduction-modal [id]="actualTaxDeductionId"
+        (closeModalEvent)="closeInsertUpdateModal($event)"></app-payroll-actual-tax-deduction-modal>
+</ng-container>
+
+<ng-container *ngIf="showApprovalModal == true">
+    <app-payroll-actual-tax-deduction-approval-modal
+        (closeModalEvent)="closeApprovalModal($event)"></app-payroll-actual-tax-deduction-approval-modal>
+</ng-container>

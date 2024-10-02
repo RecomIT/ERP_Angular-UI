@@ -1,0 +1,24 @@
+
+<ng-template #employeeLeaveRequestDeleteModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="icofont-beach fa-2x"></i>| Cancel Leave Request
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <h5>Are you sure you want to cancel <span class="text-info">{{employeeDeleteItem?.leaveTypeName}}</span>
+            of <span class="text-warning">{{employeeDeleteItem?.appliedFromDate | date:"dd MMM yyyy"}}-
+                {{employeeDeleteItem?.appliedToDate | date:"dd MMM yyyy"}}</span>
+        </h5>
+    </div>
+    <div class="modal-footer p-2">
+        <button type="button" class="btn btn-xs btn-outline-danger" (click)="closeModal('Cancel click')" [disabled]="this.btnSubmit == true">
+            <i class="fa fa-times"></i> | Cancel</button>
+        <button type="submit" class="btn btn-xs btn-outline-warning" (click)="confirmDelete()" [disabled]="this.btnSubmit == true">
+            <i class="fa fa-check"></i> | Ok <span class="spinner-border spinner-border-sm hide" role="status"
+                aria-hidden="true"></span>
+        </button>
+    </div>
+</ng-template>

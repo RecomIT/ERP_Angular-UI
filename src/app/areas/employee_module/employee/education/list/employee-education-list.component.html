@@ -1,0 +1,81 @@
+<div class="ibox">
+    <div class="ibox-content text-x-small font-bold">
+        <div class="form-row">
+            <div class="form-group col-md-6 col-sm-12 mb-1">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm font-bold search-box"
+                        placeholder="Search By Anything" id="edufilter"
+                        onkeyup="tableFilter('#tblEdu tbody tr',this)" />
+                    <div class="input-group-prepend">
+                        <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-6 col-sm-6 mb-1">
+                <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded pull-right"
+                    (click)="openModal(0)"><i class="fa fa-book"></i> | Add Education</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ibox">
+    <div class="ibox-content text-x-small font-bold">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover table-striped table-responsive-lg" id="tblEdu">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#SL</th>
+                            <th>Education</th>
+                            <th>Degree</th>
+                            <th>Group</th>
+                            <th>Institution</th>
+                            <th>Result</th>
+                            <th>Scale/Class</th>
+                            <th>Passing Year</th>
+                            <th>Duration</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listOfEmployeeEducation;let i =index">
+                            <td class="text-center">{{i+1}}</td>
+                            <td>{{item.levelOfEducationName}}</td>
+                            <td>{{item.degreeName}}</td>
+                            <td>{{item.major}}</td>
+                            <td>{{item.institutionName}}</td>
+                            <td>{{item.result}}</td>
+                            <td>{{item.scaleDivisionClass}}</td>
+                            <td>{{item.yearOfPassing}}</td>
+                            <td class="text-center">{{item.duration}}</td>
+                            <td>
+                                <button type="button" class="btn btn-xs">
+                                    <i class="fa fa-pencil" (click)="openModal(item.employeeEducationId)"></i>
+                                </button>
+                                <button type="button" class="btn btn-xs">
+                                    <i class="fa fa-trash" (click)="1==1"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="listOfEmployeeEducation == null" class="text-center">
+                            <td colspan="13">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                            </td>
+                        </tr>
+                        <tr *ngIf="listOfEmployeeEducation != null && listOfEmployeeEducation.length == 0"
+                            class="text-center font-bold">
+                            <td colspan="13">No data found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-container *ngIf="showInsertUpdateModal == true && modalObj != null">
+    <employee-module-education-insert-update-modal [education]="modalObj" (closeModalEvent)="closeModal($event)">
+    </employee-module-education-insert-update-modal>
+</ng-container>

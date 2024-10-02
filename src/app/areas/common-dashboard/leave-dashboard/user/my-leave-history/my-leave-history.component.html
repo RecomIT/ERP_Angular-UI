@@ -1,0 +1,220 @@
+<div class="col-sm-12 col-md-12 col-lg-12 p-0">
+    <div class="ibox">
+        <div class="ibox-content bg-white border-radius-5">
+            <div class="row">
+                <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                    <h4 class="d-inline-block">
+                        <i class="icofont-beach"></i> My Leave Summary
+                    </h4>
+                </div>
+                <div class="col-12 col-lg-6 col-md-6 col-sm-6 d-flex justify-content-end" *ngIf="myleaveHistoryList.length > 0">
+                    <button type="button"
+                        class="btn btn-xs p-1 px-3 text-x-small shadow btn-rounded btn-primary ml-1"
+                        shadow-sm (click)="showLeaveRequestModal()" title="Apply a leave request">
+                        <i class="icofont-plus"></i> | Leave Request
+                    </button>
+                    <button type="button"
+                        class="btn btn-xs p-1 px-2 text-x-small shadow btn-rounded btn-info ml-1"
+                        shadow-sm (click)="downloadLeaveCard()" title="Download Annual Leave Record Card">
+                        <i class="icofont-file-pdf"></i> | Leave Card
+                    </button>
+                </div>
+            </div>
+            <hr class="m-1">
+            <div class="col -12 col-sm-12 col-md-12 col-lg-12" *ngIf="myleaveHistoryList.length > 0">
+                <div class="row card-container  px-1" style="max-height: 155px; overflow-y: auto;">
+                    <div *ngFor="let type of getUniqueLeaveType()" class="col-12 col-lg-3 col-md-3 col-sm-6 p-1">
+                        <div class="">
+                            <div class="form-row card-container">
+                                <div class="type-details shadow m-1">
+                                    <div class="mt-2">
+                                        <h2 class="text-center"
+                                            style="color: green; display: inline-block; font-weight: bold;">{{
+                                            getLeaveBalance(type) }}</h2>
+                                        <span class="separator">/</span>
+                                        <span class="sanctioned-value">{{ getAllottedLeave(type) }}</span>
+                                    </div>
+                                    <div class="text-x-small">
+                                        <h2 class="heading">{{ getLeaveTypeName(type) }}</h2>
+                                        <h4 class="text-center text-danger"><strong>Availed: {{ getLeaveAvailed(type)
+                                                }}</strong></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-x-small pt-2">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 p-0 text-x-small">
+                        <div class="border-section">
+                            <div class="border-label">Search By Years / Months
+                            </div>
+                            <div class="row px-2">
+                                <div class="col-12 col-lg-3 col-md-3 col-sm-12 p-1">
+                                    <label for="fromYear"><strong>From Year</strong></label>
+                                    <select class="form-control rounded" id="fromYear" [(ngModel)]="fromYear"
+                                        (change)="onFromYearChange()">
+                                        <option value="0" disabled selected>Select From Year</option>
+                                        <option *ngFor="let year of leavePeriodYear" [value]="year.id">{{ year.text }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-lg-3 col-md-3 col-sm-12 p-1">
+                                    <label for="fromMonth font-bold"><strong>From Month</strong></label>
+                                    <select class="form-control rounded" id="fromMonth" [(ngModel)]="fromMonth"
+                                        (change)="onFromMonthChange()">
+                                        <option value="0" disabled selected>Select From Month</option>
+                                        <option *ngFor="let month of leavePeriodFromMonth" [value]="month.id">{{
+                                            month.text }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-lg-3 col-md-3 col-sm-12 p-1">
+                                    <label for="toYear"><strong>To Year</strong></label>
+                                    <select class="form-control rounded" id="toYear" [(ngModel)]="toYear"
+                                        (change)="onToYearChange()">
+                                        <option value="0" disabled selected>Select To Year</option>
+                                        <option *ngFor="let year of leavePeriodYear" [value]="year.id">{{ year.text }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-lg-3 col-md-3 col-sm-12 p-1">
+                                    <label for="toMonth font-bold"><strong>To Month</strong></label>
+                                    <select class="form-control rounded" id="toMonth" [(ngModel)]="toMonth"
+                                        (change)="onToMonthChange()">
+                                        <option value="0" disabled selected>Select To Month</option>
+                                        <option *ngFor="let month of leavePeriodToMonth" [value]="month.id">{{
+                                            month.text }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row text-x-small p-1 card-container" style="max-height: 440px; overflow-y: auto;">
+                    <div *ngFor="let month of getUniqueMonths()" class="col-12 col-lg-6 col-md-6 col-sm-12 p-1 ">
+
+                        <div class="type-card">
+
+                            <div class="form-row">
+
+                                <div class="col-8 p-0">
+                                    <h2 class="month-heading"><strong>{{ getMonthName(month) }}</strong></h2>
+                                </div>
+
+                                <div class="col-4 p-0 type-info">
+                                    <h3 class="availed">Availed: {{ getMonthlyTotalLeaveAvailed(month) }}</h3>
+                                </div>
+
+                            </div>
+
+
+                            <div class="leave-details-container">
+                                <div class="leave-type-chip">
+                                    <div class="leave-info">
+                                        <!-- <div class="col-12 col-lg-12 col-md-12 col-sm-12 px-3"> -->
+                                            <table
+                                                class="table table-sm table-hover table-responsive-sm table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center align-middle">Type</th>
+                                                        <th class="text-center align-middle">Yearly Balance</th>
+                                                        <th class="text-center align-middle">Opening Balance</th>
+                                                        <th class="text-center align-middle">Availed</th>
+                                                        <th class="text-center align-middle">Closing Balance</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    <tr *ngFor="let leaveDetail of getLeaveDetailsByMonth(month)">
+                                                        <td class="text-center align-middle">{{
+                                                            leaveDetail.LeaveTypeName }}</td>
+
+                                                        <td class="text-center align-middle">{{
+                                                            leaveDetail.AllottedLeave }}</td>
+
+                                                        <td class="text-center align-middle text-info">{{
+                                                            leaveDetail.OpeningBalance }}</td>
+                                                        <td class="text-center align-middle text-danger">{{
+                                                            leaveDetail.MonthlyLeaveTypeAvailed }}</td>
+                                                        <td class="text-center align-middle" style="color: blue;">{{
+                                                            leaveDetail.ClosingBalance }}</td>
+
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="input-group-prepend mt-1">
+                                <button (click)="openCalender(month)" class="btn btn-xs btn-primary">
+                                    <i class="fa fa-calendar" title="Leave Availed Calender" aria-hidden="true"></i> |
+                                    Leave Calender
+
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+             
+
+
+                <div class="popup-container" [ngClass]="{'visible': isMyAttendanceSummeryPopupVisible}">
+                    <div class="header">
+
+                        <div class="col-11">
+                            <h3 class="font-bold" style="color: #02665f;">Leave Availed Calender</h3>
+                        </div>
+
+                        <div class="col-1 d-flex justify-content-end">
+                            <span id="close-popup" class="close-button" (click)="closeMyAttendanceSummeryPopup()">
+                                <i class="icofont-close-line"></i>
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="content-container">
+                        <div class="calendar-container">
+                            <full-calendar class="leaveHistoryCalender" #myAttendanceCalendarComponentRef
+                                [options]="myAttendanceCalendarOptions"
+                                [events]="myAttendnceCalendarEvents"></full-calendar>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div *ngIf="myleaveHistoryList.length === 0;">
+                <div class="col-12 text-center bg-light"
+                    style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">
+                    <h5 style="color: #555; font-size: 24px; font-weight: bold;">No Data Found</h5>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showLeaveRequest">
+    <leave-module-insert-update-leave-modal [leaveItem]="null" [id]="0"
+        (closeModalEvent)="hideLeaveRequestModal($event)"></leave-module-insert-update-leave-modal>
+</ng-container>

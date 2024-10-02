@@ -1,0 +1,27 @@
+.border-section {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.border-label {
+    background-color: #fff;
+    padding: 0 10px;
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-weight: bold;
+}
+
+
+/* Add this style to your component's CSS file or style section */
+.ng-select-container {
+    border-radius: 5px; /* You can adjust the value to your preference */
+  }
+  
+  /* Optional: Add some padding to make it visually appealing */
+  .ng-select-container .ng-value-container {
+    padding: 0 8px;
+  }
+  

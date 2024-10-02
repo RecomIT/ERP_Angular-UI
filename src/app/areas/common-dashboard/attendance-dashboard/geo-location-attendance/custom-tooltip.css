@@ -1,0 +1,30 @@
+.tooltip-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.tooltip-icon:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    background: #000;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0; 
+    transition: opacity 0.3s ease-in-out;
+    min-width: 150px;
+    max-width: 300px; 
+    width: auto; 
+    min-height: 100px; 
+    max-height: 300px;
+    height: auto;
+    overflow: auto; 
+    white-space: normal; 
+}
+
+.tooltip-icon:hover:before {
+    opacity: 1;
+}

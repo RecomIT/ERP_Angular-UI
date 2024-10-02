@@ -1,0 +1,484 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Overtime Approver Assignment</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Overtime</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Approver Assignment</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li><a href="#approver" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Approver Assignment
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="approver" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openOvertimeApproverModal(0, 'Create')">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                id="tblAllowanceHeads">
+                                <thead class="text-dark text-white">
+                                    <tr class="text-center font-bold">
+                                        <th>#SL</th>
+                                        <th>Employee Name</th>
+                                        <th>Designation</th>
+                                        <th>Department</th>
+                                        <th>Division</th>
+                                        <th>Branch</th>
+                                        <th>Active Status</th>
+                                        <th>Proxy</th>
+                                        <th>Proxy Details</th>
+                                        <th>Created Date</th>
+                                        <th>Updated Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center font-bold"
+                                        *ngFor="let item of overtimeApproverList; let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item?.name}} ({{item?.employeeCode}})</td>
+                                        <td>{{item?.designation}}</td>
+                                        <td>{{item?.department}}</td>
+                                        <td>{{item?.division}}</td>
+                                        <td>{{item?.branch}}</td>
+                                        <td>{{item?.isActive ? 'Active' : 'Inactive'}}</td>
+                                        <td>{{item?.proxyEnabled ? 'Enabled' : 'Disabled'}}</td>
+
+                                        <td type="button"
+                                            (click)="item?.proxyApproverId > 0 ? openProxyApproverDetailsModal(item?.proxyApproverId) : null">
+                                            {{item?.proxyApproverId > 0 ? 'View' : '-'}}
+                                        </td>
+
+                                        <td>{{item?.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>{{item?.updatedDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button type="button" (click)="openOvertimeApproverModal(item?.overtimeApproverId, 'Edit')"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                            <button type="button" (click)="openOvertimeApproverModal(item?.overtimeApproverId, 'Delete')"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #proxyApproverDetailsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Name </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="name" name="name"
+                            value="{{overtimeApprover?.name}} ({{overtimeApprover?.employeeCode}})" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Designation </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="designation" name="designation"
+                            value="{{overtimeApprover?.designation}}" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Department </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="department" name="department"
+                            value="{{overtimeApprover?.department}}" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Division </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="division" name="division"
+                            value="{{overtimeApprover?.division}}" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Branch </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="branch" name="branch"
+                            value="{{overtimeApprover?.branch}}" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Active Status </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="isActive" name="isActive"
+                            value="{{overtimeApprover?.isActive ? 'Active' : 'Inactive'}}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i class="fa fa-times"></i> | Close</button>
+        </div>
+
+    </div>
+</ng-template>
+
+<ng-template #overtimeApproverModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #overtimeApproverForm="ngForm" (submit)="overtimeApproverAssignmentForm(overtimeApproverForm)">
+            <fieldset [disabled]="fieldsetDisabled">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="employeeId" class="control-label"> Employee
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <!-- <select name="employeeId" id="employeeId" class="form-control form-control-sm"
+                                #employeeId="ngModel" [(ngModel)]="overtimeApprover.employeeId" (change)="onEmployeeIdChange()" [disabled]="disableEmployeeSelection">
+                                <option [value]="0">--Select Option--</option>
+                                <option [value]="approver.employeeId"
+                                    *ngFor="let approver of employeeList">
+                                    {{approver.name}} ({{approver.employeeCode}})
+                                </option>
+                            </select> -->
+
+                            <div style="width:90%">
+                                <ng-select2 name="employeeId" id="employeeId" [placeholder]="'Search Employee'" [options]="select2Options" [data]="select2OptionData"  
+                                value="employeeId" #employeeId ="ngModel" [(ngModel)]="overtimeApprover.employeeId" (change)="onEmployeeIdChange()" [disabled]="disableEmployeeSelection">
+                                </ng-select2>
+                            </div>
+                        </div>
+                        <div class="text-danger"> 
+                            <span *ngIf="employeeId.touched && overtimeApprover.employeeId==0">Please Select Approver</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="isActive" class="control-label"> Active Status
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                    <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <select name="isActive" id="isActive" class="form-control form-control-sm"
+                                #isActive="ngModel" [(ngModel)]="overtimeApprover.isActive" (change)="onActiveChange()">
+                                <!-- <option [value]="0">--Select Option--</option> -->
+                                <option [value]=true>Active</option>
+                                <option [value]=false>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="proxyEnabled" class="control-label"> Proxy
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-list" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <select name="proxyEnabled" id="proxyEnabled" class="form-control form-control-sm"
+                                #proxyEnabled="ngModel" [(ngModel)]="overtimeApprover.proxyEnabled"
+                                (change)="onProxyEnableChange()">
+                                <!-- <option [value]="0">--Select Option--</option> -->
+                                <option [value]= true> Enabled</option>
+                                <option [value]= false> Disabled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6" [class.hide]="!overtimeApprover.proxyEnabled" >
+                        <label for="proxyApproverId" class="control-label"> Proxy Approver </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <select name="proxyApproverId" id="proxyApproverId" class="form-control form-control-sm"
+                                #proxyApproverId="ngModel" [(ngModel)]="overtimeApprover.proxyApproverId">
+                                <option [value]="0">--Select Option--</option>
+                                <option [value]="approver.overtimeApproverId"
+                                    *ngFor="let approver of proxyApproverList">
+                                    {{approver.name}} ({{approver.employeeCode}})
+                                </option>
+                            </select>
+                        </div>
+                        <!--*ngIf="proxyApproverId.value == 0" && proxyApproverId.touched -->
+                        <div class="text-danger"> 
+                            <span *ngIf="overtimeApprover.proxyEnabled && proxyApproverId.value==0">Please Select Proxy Approver</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="overtimeApproverForm.invalid || (overtimeApprover.proxyEnabled && proxyApproverId.value==0) || overtimeApprover.employeeId==0">
+                    <i class="fa fa-paper-plane"></i> | {{this.buttonAction}}
+                    <!-- <span [hidden]="" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span> -->
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+
+<!-- <ng-template #allowanceNameModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #allowanceNameForm="ngForm" (submit)="submitAllowanceName(allowanceNameForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="allowanceName" class="control-label">
+                                Allowance Name <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span
+                                        class="input-group-addon text-dark text-dark text-dark text-dark">
+                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="allowanceName" id="allowanceName"
+                                    class="form-control form-control-sm" #allowanceNameRef="ngModel"
+                                    [(ngModel)]="allowanceName.name" required minlength="2" maxlength="200">
+                            </div>
+                            <div class="text-danger">
+                                <div *ngIf="allowanceNameRef.invalid && allowanceNameRef.touched">
+                                    <span *ngIf="allowanceNameRef.errors?.required">Name is required</span>
+                                    <span *ngIf="allowanceNameRef.errors?.minlength">Minlength is 2</span>
+                                    <span *ngIf="allowanceNameRef.errors?.maxlength">Minlength is 200</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="allowanceNameInBengali" class="control-label">
+                                In Bengali<span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span
+                                        class="input-group-addon text-dark text-dark text-dark text-dark">
+                                        <i>অ</i>
+                                    </span>
+                                </div>
+                                <input type="text" name="allowanceNameInBengali" id="allowanceNameInBengali"
+                                    class="form-control form-control-sm" #allowanceNameInBengaliRef="ngModel"
+                                    [(ngModel)]="allowanceName.allowanceNameInBengali" minlength="2" maxlength="200">
+                            </div>
+                            <div class="text-danger">
+                                <div *ngIf="allowanceNameInBengaliRef.invalid && allowanceNameInBengaliRef.touched">
+                                    <span *ngIf="allowanceNameInBengaliRef.errors?.minlength">Minlength is 2</span>
+                                    <span *ngIf="allowanceNameInBengaliRef.errors?.maxlength">Minlength is 200</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="allowanceHeadId" class="control-label">
+                                Allowance Head<span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span
+                                        class="input-group-addon text-dark">
+                                        <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select name="allowanceHeadId" id="allowanceHeadId" class="form-control form-control-sm"
+                                    #allowanceHeadIdRef="ngModel" [(ngModel)]="allowanceName.allowanceHeadId">
+                                    <option [value]="0">--Select Option--</option>
+                                    <option [value]="ah.allowanceHeadId" *ngFor="let ah of overtimeApproverList">
+                                        {{ah.maximumLevel}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="text-danger"
+                                *ngIf="allowanceHeadIdRef.value == 0 && allowanceHeadIdRef.touched">
+                                <span *ngIf="allowanceHeadIdRef.value==0">Head is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="glCode" class="control-label">
+                                GLCode<span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span
+                                        class="input-group-addon text-dark">
+                                        <i class="fa fa-codepen" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="glCode" id="glCode" #glCodeRef="ngModel"
+                                    [(ngModel)]="allowanceName.glCode" class="form-control form-control-sm" required>
+                            </div>
+                            <div class="text-danger" *ngIf="glCodeRef.invalid && glCodeRef.touched">
+                                <span *ngIf="glCodeRef.errors?.required">GLCode is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="description" class="control-label">
+                                Description
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" id="description" name="description" #descriptionRef="ngModel"
+                                    [(ngModel)]="allowanceName.allowanceDescription" autocomplete="off"
+                                    class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="allowanceType" class="control-label">Type</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list"></i>
+                                    </span>
+                                </div>
+                                <select name="allowanceType" id="allowanceType" class="form-control form-control-sm"
+                                    [(ngModel)]="allowanceName.allowanceType" (change)="allowanceName.isFixed = null">
+                                    <option [value]="'General'">General</option>
+                                    <option [value]="'Salary'">Salary</option>
+                                </select>
+                               
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4" *ngIf="allowanceName.allowanceType =='Salary'">
+                            <label for="" class="control-label font-bold hidden">Is Fixed?</label>
+                            <div class="form-control form-control-sm" >
+                                <input type="checkbox" name="isFixed" id="isFixed" #isFixed="ngModel"
+                                    [(ngModel)]="allowanceName.isFixed"> <span class="font-bold">Is Fixed Salary Component?</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="Flag" class="control-label font-bold">Flag</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-flag"></i>
+                                    </span>
+                                </div>
+                                <select name="allowanceFlag" id="allowanceFlag" class="form-control form-control-sm" [(ngModel)]="allowanceName.flag">
+                                    <option [value]="''" selected>---Select Flag---</option>
+                                    <option [value]="'BASIC'">Basic</option>
+                                    <option [value]="'HR'">House Rent</option>
+                                    <option [value]="'MEDICAL'">Medical</option>
+                                    <option [value]="'CONVEYANCE'">CONVEYANCE</option>
+                                    <option [value]="'FESTIVAL BONUS'">Festival Bonus</option>
+                                    <option [value]="'PF'">PF</option>
+                                    <option [value]="'GF'">GF</option>
+                                    <option [value]="'OT'">OT</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="allowanceNameForm.invalid || btnAllowanceName">
+                    <i class="fa fa-paper-plane"></i> | {{this.overtimeApprover.allowanceHeadId == 0? 'Submit':'Update' }}
+                    <span [hidden]="!btnAllowanceName" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template> -->

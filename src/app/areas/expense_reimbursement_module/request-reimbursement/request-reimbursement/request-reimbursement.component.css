@@ -1,0 +1,27 @@
+.table-responsive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.select-type-message {
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    display: inline-block;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.select-type-message::before {
+    content: "⚠️ ";
+    font-size: 28px;
+    color: #007bff;
+}
+
+/* .select-type-message:hover {
+    color: #fff;
+    background-color: #007bff;
+} */

@@ -1,0 +1,337 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 @slideInUp class="mt-2"> <i class="icofont-document-folder fa-2x"></i> AIT & Tax Refund</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Tax</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>AIT & Tax Refund</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-8 col-sm-6">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-sm btn-outline-secondary btn-rounded pull-right"
+                (click)="openUploadModal()" *ngIf="this.pagePrivilege?.upload == true">
+                <i class="fa fa-plus"></i> | Upload AIT/Tax-Refund
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#ait" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | AIT
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#refund" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Tax Refund
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="ait" class="tab-pane active">
+                        <div class="panel-body bg-white pb-1">
+                            <form [formGroup]="aitForm">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width:80%">
+                                                <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                    id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                    [options]="select2Options" [allowClear]="true"
+                                                    formControlName="employeeId" required>
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="fiscalYearId" id="fiscalYearId"
+                                                class="form-control form-control-sm" formControlName="fiscalYearId">
+                                                <option [value]="0" selected>---Select Fiscal year---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlFiscalYears">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-12 hidden">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="icofont-certificate-alt-1"></i>
+                                                </span>
+                                            </div>
+                                            <select name="certificateType" id="certificateType"
+                                                class="form-control form-control-sm" formControlName="certificateType">
+                                                <option [value]="''">---Select Certificate Type---</option>
+                                                <option [value]="'AIT'">AIT</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-12" *ngIf="this.pagePrivilege?.add == true">
+                                        <button type="button"
+                                            class="btn btn-sm btn-outline-primary  btn-rounded pull-right"
+                                            (click)="openAITModal(0)">
+                                            <i class="fa fa-plus"></i> | Add AIT
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Employee Name</th>
+                                            <th class="text-center">Fiscal Year</th>
+                                            <th class="text-center">Certificate Type</th>
+                                            <th class="text-center">Amount</th>
+                                            <th class="text-center hide">Status</th>
+                                            <th class="text-center">Documents</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of list_of_ait | paginate: list_of_ait_Page_config, let i =index">
+                                            <td class="text-center font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>
+
+                                            <td>{{item.employeeName}}</td>
+                                            <td class="text-center">{{item.fiscalYearRange}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-info">AIT</span>
+                                            </td>
+                                            <td class="text-center">{{item.amount}}</td>
+                                            <td class="text-center hide">
+                                                <span
+                                                    [class]="item.isAuction == true? 'label label-primary':'label label-success'">
+                                                    {{item.isAuction == true ? "Auction" :"Non-Auction"}}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs text-danger btn-outline"
+                                                    (click)="downloadFile(item.filePath,item.employeeName+'_AIT')">
+                                                    <i class="icofont-file-alt"></i>
+                                                </button>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs" title="Edit"
+                                                    *ngIf="this.pagePrivilege?.edit == true"
+                                                    (click)="openAITModal(item?.submissionId)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-danger" title="Delete"
+                                                    *ngIf="this.pagePrivilege?.delete == true"
+                                                    (click)="openDeleteModal(item?.submissionId,'AIT')">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="list_of_ait == null || list_of_ait.length == 0">
+                                            <td colspan="15" class="text-center font-bold">
+                                                <span *ngIf="list_of_ait == null" role="status" aria-hidden="true">
+                                                    <span class="spinner-border spinner-border-sm"></span> Loading
+                                                </span>
+                                                <span *ngIf="list_of_ait != null && list_of_ait.length == 0">No data
+                                                    found..</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="list_of_aitPageChanged($event)" [responsive]="true"
+                                    [autoHide]="true" id="list_of_ait"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="refund" class="tab-pane">
+                        <div class="panel-body bg-white pb-1">
+                            <form [formGroup]="refundForm">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width:80%">
+                                                <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                    id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                    [options]="select2Options" [allowClear]="true"
+                                                    formControlName="employeeId" required>
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="fiscalYearId" id="fiscalYearId"
+                                                class="form-control form-control-sm" formControlName="fiscalYearId">
+                                                <option [value]="0" selected>---Select Fiscal year---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlFiscalYears">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-12 hidden">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="icofont-certificate-alt-1"></i>
+                                                </span>
+                                            </div>
+                                            <select name="certificateType" id="certificateType"
+                                                class="form-control form-control-sm" formControlName="certificateType">
+                                                <option [value]="''">---Select Certificate Type---</option>
+                                                <option [value]="'AIT'">AIT</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <button type="button"
+                                            class="btn btn-sm btn-outline-primary  btn-rounded pull-right"
+                                            *ngIf="this.pagePrivilege?.add == true" (click)="openRefundModal(0)">
+                                            <i class="fa fa-plus"></i> | Add Refund
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Employee Name</th>
+                                            <th class="text-center">Fiscal Year</th>
+                                            <th class="text-center">Certificate Type</th>
+                                            <th class="text-center">Amount</th>
+                                            <th class="text-center hide">Status</th>
+                                            <th class="text-center">Documents</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of list_of_refund | paginate: list_of_refund_Page_config, let i =index">
+                                            <td class="text-center font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>
+
+                                            <td>{{item.employeeName}}</td>
+                                            <td class="text-center">{{item.fiscalYearRange}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-info">Tax-Refund</span>
+                                            </td>
+                                            <td class="text-center">{{item.amount}}</td>
+                                            <td class="text-center hide">
+                                                <span
+                                                    [class]="item.isAuction == true? 'label label-primary':'label label-success'">
+                                                    {{item.isAuction == true ? "Auction" :"Non-Auction"}}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs text-danger btn-outline"
+                                                    (click)="downloadFile(item.filePath,item.employeeName+'_Tax_Refund')">
+                                                    <i class="icofont-file-alt"></i>
+                                                </button>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs" title="Edit"
+                                                    *ngIf="this.pagePrivilege?.edit == true"
+                                                    (click)="openRefundModal(item?.submissionId)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-danger" title="Delete"
+                                                    *ngIf="this.pagePrivilege?.delete == true"
+                                                    (click)="openDeleteModal(item?.submissionId,'CET')">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                                        <tr *ngIf="list_of_refund == null || list_of_refund.length == 0">
+                                            <td colspan="15" class="text-center font-bold">
+                                                <span *ngIf="list_of_refund == null" role="status" aria-hidden="true">
+                                                    <span class="spinner-border spinner-border-sm"></span> Loading
+                                                </span>
+                                                <span *ngIf="list_of_refund != null && list_of_refund.length == 0">No
+                                                    data found..</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="list_of_refund_PageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="list_of_refund"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showAITModal">
+    <app-payroll-add-employee-advance-income-tax-modal [id]="id" (closeModalEvent)="closeAITModal($event)">
+    </app-payroll-add-employee-advance-income-tax-modal>
+</ng-container>
+
+<ng-container *ngIf="showRefundModal">
+    <app-payroll-tax-refund-insert-update-modal [id]="id" (closeModalEvent)="closeRefundModal($event)">
+    </app-payroll-tax-refund-insert-update-modal>
+</ng-container>
+
+<ng-container *ngIf="showUploadModal">
+    <app-payroll-upload-tax-document (closeModalEvent)="closeUploadModal($event)">
+    </app-payroll-upload-tax-document>
+</ng-container>
+
+<ng-container *ngIf="showDeleteModal">
+    <app-payroll-delete-tax-document [id]="delete_item_id" [doc_type]="delete_item_type" (closeModalEvent)="closeDeleteModal($event)">
+    </app-payroll-delete-tax-document>
+</ng-container>

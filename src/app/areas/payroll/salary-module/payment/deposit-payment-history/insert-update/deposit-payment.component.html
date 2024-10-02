@@ -1,0 +1,209 @@
+<ng-template #projectedPaymentProcessModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-cogs" aria-hidden="true"></i>| Accrued Allowance
+            Payment
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <form [formGroup]='searchForm' (ngSubmit)="submit()">
+                        <div class="ibox">
+                            <div class="ibox-title ">
+                                <h4 class="m-0">Search Panel</h4>
+                            </div>
+                            <div
+                                class="ibox-content shadow-sm bg-white text-x-small border-radius-5 pt-2 text-x-small font-bold text-dark">
+                                <div class="form-row">
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="employeeId" class="control-label font-bold">Search By
+                                            Employee</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" name="employeeId" id="employeeId"
+                                                formControlName="employeeId" class="form-control form-control-sm"
+                                                [typeahead]="ddlEmployees" typeaheadOptionField="text"
+                                                [isAnimated]="false" placeholder="Type Employee Name Here..."
+                                                (typeaheadOnSelect)="employeeOnSelect($event)" autocomplete="off"
+                                                [typeaheadMinLength]="0" [typeaheadScrollable]="true">
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-sm btn-secondary font-bold"
+                                                    title="Load all eligible employees">Load All</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="hasPayableAmount" class="control-label font-bold">Payee Type</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-dot-circle-o"></i>
+                                            </span>
+                                            <select name="hasPayableAmount" formControlName="hasPayableAmount"
+                                                id="hasPayableAmount" class="form-control form-control-sm">
+                                                <option [value]="'Yes'">Who has Payable amount.</option>
+                                                <option [value]="'No'">Regardless payable amount.</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox">
+                            <div class="ibox-title ">
+                                <h4 class="m-0">Payment Process</h4>
+                            </div>
+                            <div
+                                class="ibox-content shadow-sm bg-white text-x-small border-radius-5 pt-2 text-x-small font-bold text-dark">
+                                <div class="form-row">
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="allowanceNameId" class="control-label font-bold">Payment
+                                            Approach</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>
+                                            <select name="paymentApproach" id="paymentApproach"
+                                                formControlName="paymentApproach" class="form-control form-control-sm">
+                                                <option [value]="item.id" *ngFor="let item of ddlPaymentApproach">
+                                                    {{item.text}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="paymentApproach" class="control-label font-bold">Payment Be
+                                            Made</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>
+                                            <select class="form-control" id="paymentBeMade" name="paymentBeMade"
+                                                formControlName="paymentBeMade">
+                                                <option [value]="'With Salary'">With Salary</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="allowanceId" class="control-label font-bold">Payment Month &
+                                            Year</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                            <select name="currentMonth" id="currentMonth"
+                                                class="form-control form-control-sm" formControlName="paymentMonth">
+                                                <option [value]="0" selected>--Month--</option>
+                                                <option [value]="item.monthNo" *ngFor="let item of months">
+                                                    {{item.month}}</option>
+                                            </select>
+                                            <select name="currentYear" id="currentYear"
+                                                class="form-control form-control-sm" formControlName="paymentYear">
+                                                <option [value]="0" selected>--Year--</option>
+                                                <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-12 col-sm-12 col-md-8 col-lg-8">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h4 class="m-0 d-inline">Eligible Employees <span class="text-info">
+                                    {{this.eligibleEmployeeCount == 0 ? '' : this.eligibleEmployeeCount}}</span>
+                            </h4>
+                            <div class="ibox-tools" *ngIf="this.eligibleEmployeeCount > 0">
+                                <a class="link">
+                                    <button class="btn btn-xs btn-outline-danger" title="Clear All Employees"
+                                        (click)="1==1">Clear All</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark h-380"
+                            *ngIf="dataform != null">
+                            <form [formGroup]="dataform">
+                                <div class="table-responsive">
+                                    <table
+                                        class="table table-sm table-striped table-bordered table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>#SL</th>
+                                                <th>Employee Code</th>
+                                                <th>Name</th>
+                                                <th>Total</th>
+                                                <th>Paid</th>
+                                                <th>Payable Amount</th>
+                                                <th
+                                                    *ngIf="this.searchForm.get('paymentApproach').value =='Proposal amount' || 
+                                                this.searchForm.get('paymentApproach').value =='Exact Proposal amount'">
+                                                    Disbursed Amount</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngIf="formArray != null && formArray.length > 0">
+
+                                            <tr formArrayName="paymentInfos" class="text-center"
+                                                *ngFor="let paymentInfo of formArray; let i = index">
+                                                <ng-container [formGroupName]="i">
+                                                    <td>{{i + 1}}</td>
+                                                    <td>{{paymentInfo.controls.employeeCode.value}}</td>
+                                                    <td>{{paymentInfo.controls.employeeName.value}}</td>
+                                                    <td>{{paymentInfo.controls.total.value}}</td>
+                                                    <td>{{paymentInfo.controls.paid.value}}</td>
+                                                    <td>{{paymentInfo.controls.payableAmount.value}}</td>
+                                                    <td
+                                                        *ngIf="this.searchForm.get('paymentApproach').value=='Proposal amount' || 
+                                                    this.searchForm.get('paymentApproach').value=='Exact Proposal amount'">
+                                                        <input type="number" formControlName="disbursedAmount"
+                                                            [value]="paymentInfo.controls.disbursedAmount.value"
+                                                            name="disbursedAmount"
+                                                            class="form-control form-control-sm text-right">
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-sm">
+                                                            <i class="fa fa-trash" (click)="removeItem(i)"></i>
+                                                        </button>
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer text-x-small pb-2">
+            <button type="button" class="btn btn-sm btn-danger btn-rounded pull-right"
+                (click)="closeModal('Close click')" [disabled]="btnSubmit">
+                <i class="fa fa-times"></i> | Close
+            </button>
+            <button type="button" class="btn btn-sm btn-primary btn-rounded pull-right" *ngIf="btnSubmit == true"
+                [disabled]="btnSubmit">
+                Payment <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button type="submit" class="btn btn-sm btn-primary btn-rounded pull-right" (click)="submit()">
+                Payment
+            </button>
+        </div>
+    </div>
+</ng-template>

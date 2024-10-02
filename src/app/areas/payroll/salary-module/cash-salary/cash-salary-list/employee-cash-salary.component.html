@@ -1,0 +1,563 @@
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 class="mt-2">Cash Salary Process & Detail</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Cash Salary</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Cash Salary Process & Detail</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#cashSalaryHead" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-info"></i> | Cash Salary Head
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#cashSalaryUpload" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-list"></i> | Cash Salary Amount
+                        </a>
+                    </li>
+                   
+                    <li>
+                        <a href="#cashSalaryProcessInfo" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-cogs"></i> | Cash Salary Process
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#cashSalarySheet" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-newspaper-o"></i> | Cash Salary Sheet
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="cashSalaryHead" class="tab-pane active">
+                        <div class="panel-body bg-white pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        </div>                                 
+                                        <input type="text" name="searchByCashSalaryHeadCode" id="searchByCashSalaryHeadCode" class="form-control form-control-sm"
+                                        #searchByCashSalaryHeadCodeRef="ngModel"  [(ngModel)]="searchByCashSalaryHeadCode" (ngModelChange)="onCashSalaryHeadChanged()" placeholder="Search by Head Code">
+                                      
+                                    </div>
+                                </div>    
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        </div>                                 
+                                        <input type="text" name="searchByCashSalaryHead" id="searchByCashSalaryHead" class="form-control form-control-sm"
+                                        #searchByCashSalaryHeadRef="ngModel" [(ngModel)]="searchByCashSalaryHead" (ngModelChange)="onCashSalaryHeadChanged()" placeholder="Search by Head Name">                                      
+                                    </div>
+                                </div>   
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        </div>                                 
+                                        <input type="text" name="searchByCashSalaryHeadInBng" id="searchByCashSalaryHeadInBng" class="form-control form-control-sm"
+                                        #searchByCashSalaryHeadInBngRef="ngModel" [(ngModel)]="searchByCashSalaryHeadInBng" (ngModelChange)="onCashSalaryHeadChanged()" placeholder="Search by Head Name Bengali">                                      
+                                    </div>
+                                </div>   
+                                
+                                <div class="form-group col-md-3 col-sm-12">                                   
+                                    <button type="button"
+                                        class="btn btn-sm btn-success btn-rounded btn-outline float-right"
+                                        (click)="openCashSalaryHeadModal(0)"><i class="fa fa-plus"></i> | Create Cash Salary Head
+                                    </button>                              
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>     
+                                            <th class="text-center">SL</th> 
+                                            <th class="text-center">Head Code</th>                                       
+                                            <th class="text-center">Head Name</th>    
+                                            <th class="text-center">Head Name in Bengali</th>                                       
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <tr  *ngFor="let item of listOfCashSalaryHead | paginate: cashSalaryPageConfig, let i =index" >
+                                                <td class="text-center font-bold">{{i+1 + (cashSalaryPageSize
+                                                    *(cashSalaryPageNo-1))}}</td>                                             
+                                                <td class="text-center">{{item.cashSalaryHeadCode}}</td>                           
+                                                <td class="text-center">{{item.cashSalaryHeadName}}</td>                                        
+                                                <td class="text-center">{{item.cashSalaryHeadNameInBengali}}</td>       
+                                                                                          
+                                                <td class="text-center">                                                  
+                                                    <button type="button" class="btn btn-xs" title="Edit" (click)="openCashSalaryHeadModal(item?.cashSalaryHeadId)">
+                                                    <i class="fa fa-pencil-square-o"></i> 
+                                                    </button>  
+                                                </td>                                               
+                                        </tr>
+                                        
+                                        <tr
+                                            *ngIf="listOfCashSalaryHead.length ==0 && cashSalaryHeadDTLabel == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf="listOfCashSalaryHead.length ==0 && cashSalaryHeadDTLabel != null">
+                                            <td colspan="20" class="text-center font-bold">
+                                                {{cashSalaryHeadDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                         
+
+                        </div>
+                    </div>
+                    <div id="cashSalaryUpload" class="tab-pane">                        
+                        <div class="panel-body bg-white pb-1">
+                            <form [formGroup]="uploadCashSalaryForm" (ngSubmit)="1==1">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width:80%">
+                                                <ng-select2 [data]="ddlEmployees" name="employees"
+                                                id="searchByEmployee" formControlName="employeeId"
+                                                [placeholder]="'Employee...'" [options]="select2Config"
+                                                [allowClear]="true" required>
+                                                </ng-select2>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>                                        
+                                          
+                                            <select name="cashSalaryHeadId" id="cashSalaryHeadId" class="form-control form-control-sm" formControlName="cashSalaryHeadId">
+                                                <option [value]="0" selected>---Select Cash Salary Head---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlCashSalaryHead">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-2">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-dot-circle-o"></i>
+                                                </span>
+                                            </div>
+                                            <select name="searchByStatus" id="searchByStatus"
+                                                class="form-control form-control-sm" formControlName="stateStatus">
+                                                <option [value]="''" selected>---Status---</option>
+                                                <option [value]="'Pending'">Pending</option>
+                                                <option [value]="'Approved'">Approved</option>
+                                                <option [value]="'Cancelled'">Cancelled</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group text-x-small">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <div class="input-group-prepend">
+                                                <select name="salaryMonth" id="salaryMonth"
+                                                    class="form-control form-control-sm" formControlName="salaryMonth">
+                                                    <option [value]="0" selected>---Select Month---</option>
+                                                    <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                        {{item.month}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="input-group-prepend">
+                                                <select name="salaryYear" id="salaryYear"
+                                                    class="form-control form-control-sm" formControlName="salaryYear">
+                                                    <option [value]="0" selected>---Select Year---</option>
+                                                    <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-2 col-sm-12">                                   
+                                        <button type="button"
+                                            class="btn btn-sm btn-primary btn-rounded btn-outline"
+                                            (click)="openUploadCashSalaryExcelFileModal()"><i class="fa fa-arrow-up"></i> | Upload
+                                        </button>   
+                                        &nbsp;
+                                        <button type="button"
+                                            class="btn btn-sm btn-success btn-rounded btn-outline" (click)="openCreateCashSalaryModal(0)"><i class="fa fa-plus"></i> | Create
+                                        </button>                          
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Employee ID</th>
+                                            <th class="text-center">Employee Name</th>
+                                            <th class="text-center">Cash Salary Head</th>
+                                            <th class="text-center">Salary Month</th>
+                                            <th class="text-center">Salary Year</th>
+                                            <th class="text-center">Amount</th>
+                                            <th class="text-center">Status</th>                                           
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of employeeList | paginate: uploadCashSalaryPageConfig, let i =index">
+                                            <td class="text-center font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>
+                                            <td class="text-center">{{item.employeeCode}}</td>
+                                            <td class="text-center">{{item.employeeName}}</td>
+                                            <td class="text-center">{{item.cashSalaryHeadName}}</td>    
+                                            <td class="text-center">{{item.salaryMonthName}}</td>
+                                            <td class="text-center">{{item.salaryYear}}</td>                                 
+                                            <td class="text-center">{{item.amount}}</td>                                         
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                    + '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">                                               
+                                                <button type="button" class="btn btn-xs" title="Edit"
+                                                (click)="openEditCashSalaryModal(item?.uploadCashSalaryId)"
+                                                    *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            
+                                                <button type="button" class="btn btn-xs text-info"
+                                                (click)="openApprovalCashSalaryModal(item?.uploadCashSalaryId,'Approval')"
+                                                    title="Check" *ngIf="item.stateStatus == 'Pending'"><i
+                                                        class="fa fa-check"></i>
+                                                </button>                                            
+                                                <button type="button" class="btn btn-xs text-success" title="View"
+                                                (click)="openApprovalCashSalaryModal(item?.uploadCashSalaryId,'View')" >
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="employeeListPageChanged($event)" [responsive]="true"
+                                    [autoHide]="true" id="employeeList"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                 
+                    <div id="cashSalaryProcessInfo" class="tab-pane">
+                        <div class="ibox shadow-sm">
+                            <form [formGroup]="salaryProcessInfoSearchForm" (ngSubmit)="1==1">
+                                <div class="ibox-content font-bold pb-1 shadow-lg text-x-small">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <label for="searchByBatchNoInSalaryInfo"
+                                                class="control-label text-uppercase">Search By Bacth No</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon animated-hover">
+                                                        <i class="fa fa-search faa-pulse"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="searchByBatchNoInSalaryInfo"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Search by Batch No" formControlName="batchNo">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <label for="searchByMonthNoInSalaryInfo"
+                                                class="control-label text-uppercase">Search Month & Year</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon animated-hover">
+                                                        <i class="fa fa-calendar faa-pulse"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="searchBySalaryProcessMonth"
+                                                    id="searchBySalaryProcessMonth" class="form-control form-control-sm"
+                                                    formControlName="salaryMonth">
+                                                    <option [value]="0" selected>---Select Month---</option>
+                                                    <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                        {{item.month}}</option>
+                                                </select>
+                                                <div class="input-group-prepend">
+                                                    <select name="searchBySalaryProcessYear"
+                                                        id="searchBySalaryProcessYear"
+                                                        class="form-control form-control-sm" formControlName="salaryYear">
+                                                        <option [value]="0" selected>---Select Year---</option>
+                                                        <option [value]="item" *ngFor="let item of ddlYears">{{item}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mt-lg-4 mt-sm-4">
+                                            <div class="clearfix">
+                                                <button type="button"
+                                                    class="btn btn-sm btn-success btn-rounded float-right faa-parent animated-hover"
+                                                    (click)="openProcessModal()"><i class="fa fa-cog faa-spin"></i> | Cash Salary
+                                                    Process</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content pb-1 shadow-lg text-x-small">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                        id="tblSalaryProcess">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>#SL</th>
+                                                <th>Batch</th>
+                                                <th>Salary Date</th>
+                                                <th>Month & Year</th>                                              
+                                                <th>Net Pay</th>
+                                                <th>Is Disbursed</th>
+                                                <th>Entry Date</th>
+                                                <th class="hide">Update Date</th>
+                                                <th class="text-centen">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of listOfsalaryProcess; let i = index">
+                                                <td class="text-center font-bold">{{i+1}}</td>
+                                                <td class="text-center">{{item.batchNo}}</td>
+                                                <td class="text-center">{{item.salaryDate | date:"dd-MMMM-yyyy"}}</td>
+                                                <td class="text-center">{{item.salaryDate | date:"MMMM-yyyy"}}</td>                                                
+                                                <td class="text-center">{{item.cashAmount | number}}</td>
+                                                <td class="text-center">
+                                                    <span class="label label-primary" *ngIf="item.isDisbursed"><i
+                                                            class="fa fa-check"></i>{{'Yes'}}</span>
+                                                    <span class="label label-warning" *ngIf="!item.isDisbursed">
+                                                        {{'No'}}</span>
+                                                </td>
+                                                <td class="text-center">{{item.createdDate | date:"dd-MMMM-yyyy hh:mm:ss
+                                                    a"}}
+                                                </td>
+                                                <td class="text-center hide">{{item.updatedDate | date:"dd-MMMM-yyyy
+                                                    hh:mm:ss
+                                                    a"}}
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button"
+                                                        (click)="openSalaryProcessStatusModal(item.cashSalaryProcessId)"
+                                                        class="btn btn-xs" *ngIf="!item.isDisbursed">
+                                                        <i class="fa fa-hand-pointer-o" aria-hidden="true" title="Disburse"></i>
+                                                    </button>
+                                                    <button type="button" (click)="openProcessDetailModal(item?.cashSalaryProcessId)"
+                                                        class="btn btn-xs text-info">
+                                                        <i class="fa fa-eye" title="Show"></i>
+                                                    </button>
+                                                    <button type="button" (click)="openEmailingModal(item.salaryMonth,item.salaryYear)" class="btn btn-xs text-info" 
+                                                    *ngIf="item.isDisbursed">
+                                                        <i class="fa fa-envelope-square"></i>
+                                                    </button>
+                                                  
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="cashSalarySheet" class="tab-pane">
+                        <div class="ibox shadow-sm">
+                            <form [formGroup]="cashSalarySheetForm" (ngSubmit)="1==1">
+                                <div class="ibox-content font-bold pb-1 shadow-lg text-x-small">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-12 hide">
+                                            <label for="searchByBatchNoInSalaryInfo"
+                                                class="control-label text-uppercase">Search By Bacth No</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon animated-hover">
+                                                        <i class="fa fa-search faa-pulse"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="searchByBatchNoInSalaryInfo"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Search by Batch No" formControlName="batchNo">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <label for="searchByMonthNoInSalaryInfo"
+                                                class="control-label text-uppercase">Search By Month & Year</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon animated-hover">
+                                                        <i class="fa fa-calendar faa-pulse"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="searchBySalaryProcessMonth"
+                                                    id="searchBySalaryProcessMonth" class="form-control form-control-sm"
+                                                    formControlName="salaryMonth">
+                                                    <option [value]="0" selected>---Select Month---</option>
+                                                    <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                        {{item.month}}</option>
+                                                </select>
+                                                <div class="input-group-prepend">
+                                                    <select name="searchBySalaryProcessYear"
+                                                        id="searchBySalaryProcessYear"
+                                                        class="form-control form-control-sm"
+                                                        formControlName="salaryYear">
+                                                        <option [value]="0" selected>---Select Year---</option>
+                                                        <option [value]="item" *ngFor="let item of ddlYears">{{item}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mt-lg-4 mt-sm-4">
+                                            <div class="clearfix">
+                                                <button type="button"
+                                                    class="btn btn-sm btn-primary btn-rounded btn-outline mr-1"
+                                                    (click)="downloadCashSalarySheetExcel('xlsx')"><i
+                                                        class="fa fa-file-excel-o fa-3x"></i> | Salary Sheet .xlsx
+                                                </button>                                              
+                                                <button type="button"
+                                                    class="btn btn-sm btn-success btn-rounded btn-outline mr-1"
+                                                    (click)="downloadActualCashSalarySheetExcel('xlsx')"><i
+                                                        class="fa fa-file-excel-o fa-3x"></i> | Actual Sheet .xlsx
+                                            </button>      
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                        id="tblSalarySheet">
+                                        <thead>
+                                            <tr>
+                                                <th *ngFor="let key of jsonKeys">
+                                                    {{key}}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of listOfSalarySheetInfo">
+                                                <td *ngFor="let key of jsonKeys; let i =index">
+                                                    <ng-container *ngIf="i <= 3">
+                                                        {{item[key]}}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="i > 3">
+                                                        {{item[key] | number}}
+                                                    </ng-container>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showUploadCashSalaryHeadModal">
+    <app-salary-module-upload-cash-salary-head-modal [cashSalaryHeadId]="0" (closeModalEvent)="closeUploadExcelFileModal($event)">
+    </app-salary-module-upload-cash-salary-head-modal>
+</ng-container> 
+<ng-container *ngIf="showCashSalaryHeadModal">
+    <app-salary-module-add-cash-salary-head-modal [cashSalaryHeadId]="cashSalaryHeadId" (closeModalEvent)="closeCashSalaryHeadModal($event)">
+    </app-salary-module-add-cash-salary-head-modal>
+</ng-container> 
+
+<ng-container *ngIf="showUploadCashSalaryModal">
+    <app-salary-module-upload-cash-salary-amount-modal [uploadCashSalaryId]="0" (closeModalEvent)="closeUploadCashSalaryExcelFileModal($event)">
+    </app-salary-module-upload-cash-salary-amount-modal>
+</ng-container> 
+<ng-container *ngIf="showCreateCashSalaryModal">
+    <app-salary-module-add-cash-salary-amount [uploadCashSalaryId]="uploadCashSalaryId" (closeModalEvent)="closeCreateCashSalaryModal($event)">
+    </app-salary-module-add-cash-salary-amount>
+</ng-container> 
+
+<ng-container *ngIf="showEditCashSalaryModal">
+    <app-salary-module-edit-cash-salary-amount-modal [uploadCashSalaryId]="uploadCashSalaryId" (closeModalEvent)="closeEditCashSalaryModal($event)">
+    </app-salary-module-edit-cash-salary-amount-modal>
+</ng-container> 
+<ng-container *ngIf="showApprovalCashSalaryModal">
+    <app-salary-module-view-and-check-cash-salary-modal [uploadCashSalaryId]="uploadCashSalaryId" [approvalData]="approvalData" [checkModalFlag]="checkModalFlag" (closeModalEvent)="closeApprovalCashSalaryModal($event)">
+    </app-salary-module-view-and-check-cash-salary-modal>
+</ng-container> 
+
+<ng-container *ngIf="showSalaryProcessModal">
+    <app-salary-module-cash-salary-process-modal  (closeModalEvent)="closeProcessModal($event)"></app-salary-module-cash-salary-process-modal>
+</ng-container>
+
+<ng-container *ngIf="showSalaryProcessDetailModal">
+    <app-salary-module-cash-salary-process-detail-modal [cashSalaryProcessId]="cashSalaryProcessId"
+        (closeModalEvent)="closeSalaryProcessDetailModal($event)"></app-salary-module-cash-salary-process-detail-modal>
+</ng-container>
+
+<ng-container *ngIf="showSalaryProcessDisbursedModal">
+    <app-salary-module-cash-salary-disbursed-modal [id]="cashSalaryProcessId" [list]="listOfsalaryProcess"
+        (closeModalEvent)="closeSalaryProcessStatusModal($event)"></app-salary-module-cash-salary-disbursed-modal>
+</ng-container>

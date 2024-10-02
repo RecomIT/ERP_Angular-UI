@@ -1,0 +1,182 @@
+<ng-template #allowanceHeadNameConfigModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle icofont-pay" aria-hidden="true"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="form" (submit)="submit()">
+            <div class="modal-body">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <label for="allowanceHeadName" class="control-label font-bold">Allowance Head</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="allowanceHeadName" id="allowanceHeadName"
+                                formControlName="allowanceHeadName" (blur)="logFormErrors()" (input)="logFormErrors()"
+                                [typeahead]="ddlAllowanceHead" typeaheadOptionField="text" [typeaheadMinLength]="0"
+                                [typeaheadScrollable]="true" (typeaheadOnSelect)="allowanceHeadOnSelect($event)"
+                                autocomplete="off" class="form-control form-control-sm"
+                                placeholder="Type Head Name Here" autofocus="true">
+                        </div>
+                        <div class="text-danger">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-6 col-md-6 col-sm-12">
+                        <label for="allowanceName" class="control-label font-bold">Allowance Name</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="allowanceName" id="allowanceName" formControlName="allowanceName"
+                                (blur)="logFormErrors()" (input)="logFormErrors()" autocomplete="off"
+                                class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-md-6 col-sm-12">
+                        <label for="allowanceNameInBengali" class="control-label font-bold">Allowance Name In
+                            Bengali</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="allowanceNameInBengali" id="allowanceNameInBengali"
+                                formControlName="allowanceNameInBengali" (blur)="logFormErrors()"
+                                (input)="logFormErrors()" autocomplete="off" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-6 col-md-6 col-sm-12">
+                        <label for="glCode" class="control-label font-bold">GL Code</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="glCode" id="glCode" formControlName="glCode"
+                                (blur)="logFormErrors()" (input)="logFormErrors()" autocomplete="off"
+                                class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-md-6 col-sm-12">
+                        <label for="allowanceFlag" class="control-label font-bold">Mark As</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-list"></i>
+                                </span>
+                            </div>
+                            <select name="allowanceFlag" id="allowanceFlag" formControlName="allowanceFlag"
+                                (blur)="logFormErrors()" (input)="logFormErrors()" autocomplete="off"
+                                class="form-control form-control-sm">
+                                <option [value]="''" selected>--Select Mark As---</option>
+                                <option [value]="'BASIC'">Basic</option>
+                                <option [value]="'HR'">House Rent</option>
+                                <option [value]="'MEDICAL'">Medical</option>
+                                <option [value]="'CONVEYANCE'">CONVEYANCE</option>
+                                <option [value]="'FESTIVAL BONUS'">Festival Bonus</option>
+                                <option [value]="'PF'">PF</option>
+                                <option [value]="'GF'">GF</option>
+                                <option [value]="'OT'">OT</option>
+                            </select>
+                        </div>
+                        <span class="font-weight-lighter"><i>(Mark As indicates the role of this allowance)</i></span>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-6 col-md-6 col-sm-12">
+                        <label for="allowanceType" class="control-label font-bold">Allowance Type</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-list"></i>
+                                </span>
+                            </div>
+                            <select name="allowanceType" id="allowanceType" formControlName="allowanceType"
+                                class="form-control form-control-sm">
+                                <option [value]="'General'" selected>General</option>
+                                <option [value]="'Salary'">Salary</option>
+                            </select>
+                        </div>
+                        <span class="font-weight-lighter"><i>(If the allowance is General allowance will not be in salary breakdown)</i></span>
+                    </div>
+                    <div class="form-group col-6 col-md-6 col-sm-12">
+                        <label for="isFixed" class="control-label font-bold">Is Fixed Salary Allowance?</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-list"></i>
+                                </span>
+                            </div>
+                            <select name="isFixed" id="isFixed" formControlName="isFixed"
+                                class="form-control form-control-sm">
+                                <option [value]="true" selected>Yes</option>
+                                <option [value]="false">No</option>
+                            </select>
+                        </div>
+                        <span class="font-weight-lighter"><i>(Required When Allowance type is salary)</i></span>
+                    </div>
+                </div>
+                <h4>Config :</h4>
+                <hr/>
+                <div class="form-row text-x-small">
+                  <div class="form-group col-6 col-md-6 col-sm-12">
+                    <label for="isTaxable" class="control-label font-bold">Is Taxable?</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="icofont-list"></i>
+                            </span>
+                        </div>
+                        <select name="isTaxable" id="isTaxable" formControlName="isTaxable"
+                            class="form-control form-control-sm">
+                            <option [value]="true" selected>Yes</option>
+                            <option [value]="false">No</option>
+                        </select>
+                    </div>
+                  </div>  
+                  <div class="form-group col-6 col-md-6 col-sm-12">
+                    <label for="isTaxable" class="control-label font-bold">Taxable Type</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="icofont-list"></i>
+                            </span>
+                        </div>
+                        <select name="taxableType" id="taxableType" formControlName="taxableType"
+                            class="form-control form-control-sm">
+                            <option [value]="'OnceOff'">OnceOff</option>
+                            <option [value]="'Projected'">Projected</option>
+                        </select>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <!-- [disabled]="form.invalid || btnSubmit" -->
+                <!-- <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span> -->
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

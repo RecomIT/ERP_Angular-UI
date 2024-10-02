@@ -1,0 +1,86 @@
+<ng-template #salaryProcessDetailModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle 
+            fa fa-clock-o"></i>| Salary Process Details
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped table-responsive-xl">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="text-center">#SL</th>
+                            <th>Employee</th>
+                            <th class="text-center">Designation</th>
+                            <th class="text-center">Days</th>
+                            <th class="text-center">Month & Year</th>
+                            <th class="text-center">This Month Basic</th>
+                            <th class="text-center">Total Allowance</th>
+                            <th class="text-center">Total Arrear Allowance</th>
+                            <th class="text-center">PF Amount</th>
+                            <th class="text-center">PF Arrear</th>
+                            <th class="text-center">Total Deduction</th>
+                            <th class="text-center">Projection Tax</th>
+                            <th class="text-center">OnceOff Tax</th>
+                            <th class="text-center">Total Monthly Tax</th>
+                            <th class="text-center">Bonus Amount</th>
+                            <th class="text-center">Gross Pay</th>
+                            <th class="text-center">Net Pay</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listOfsalaryProcessDetail; let i =index">
+                            <td class="text-center font-bold">{{i+1}}</td>
+                            <td>{{item.employeeName}}</td>
+                            <td class="text-center">{{item.designationName}}</td>
+                            <td class="text-center">{{item.calculationForDays}}</td>
+                            <td class="text-center">{{item.salaryDate | date:"MMMM-yyyy"}}</td>
+                            <td class="text-center">{{item.thisMonthBasic}}</td>
+                            <td class="text-center">{{item.totalAllowance}}</td>
+                            <td class="text-center">{{item.totalArrearAllowance}}</td>
+                            <td class="text-center">{{item?.pfAmount??0}}</td>
+                            <td class="text-center">{{item?.pfArrear??0}}</td>
+                            <td class="text-center">{{item.totalDeduction}}</td>
+                            <td class="text-center">0</td>
+                            <td class="text-center">0</td>
+                            <td class="text-center">{{item.totalMonthlyTax}}</td>
+                            <td class="text-center">{{item.totalBonus}}</td>
+                            <td class="text-center">{{item.grossPay}}</td>
+                            <td class="text-center">{{item.netPay}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="text-center">
+                            <td>Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{this.footerOfsalaryProcessDetail?.totalAllowance}}</td>
+                            <td></td>
+                            <td>{{this.footerOfsalaryProcessDetail.pfAmount}}</td>
+                            <td>{{this.footerOfsalaryProcessDetail.pfArrear}}</td>
+                            <td>{{this.footerOfsalaryProcessDetail?.totalDeduction}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{this.footerOfsalaryProcessDetail?.grossPay}}</td>
+                            <td>{{this.footerOfsalaryProcessDetail?.netPay}}</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer hide p-2">
+        </div>
+    </div>
+</ng-template>

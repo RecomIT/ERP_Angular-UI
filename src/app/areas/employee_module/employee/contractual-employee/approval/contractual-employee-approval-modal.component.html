@@ -1,0 +1,124 @@
+
+<ng-template #approvalModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-file-document pr-1 fa-1x border-right"></i> Approval Of Contract
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')" [disabled]="btnSubmit"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="col-12 col-md-6 col-sm-12 font-bold">
+                <div class="activity-stream">
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-briefcase"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    Contract Id
+                                </a>
+                            </div>
+                            {{infoInDb?.contractCode}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-id-card"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    Employee ID
+                                </a>
+                            </div>
+                            {{infoInDb?.employeeCode}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-user-alt-5"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    Employee Name
+                                </a>
+                            </div>
+                            {{infoInDb?.employeeName}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-sm-12 font-bold">
+                <div class="activity-stream">
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-ui-calendar"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    Last Contract End Date
+                                </a>
+                            </div>
+                            {{infoInDb?.lastContractEndDate | date:"dd MMM yyyy"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-ui-calendar"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    This Contract Start Date
+                                </a>
+                            </div>
+                            {{infoInDb?.contractStartDate | date:"dd MMM yyyy"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-worker"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    This Contract End Date
+                                </a>
+                            </div>
+                            {{infoInDb?.contractEndDate | date:"dd MMM yyyy"}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="modal-body text-x-small">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                    <div class="input-group">
+                        <input type="text" name="remarks" id="remarks" formControlName="remarks"
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="status" id="status" formControlName="stateStatus"
+                                class="form-control form-control-sm">
+                                <option value="Approved" selected>Approved</option>
+                                <option value="Recheck">Recheck</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-rounded btn-primary"><i
+                                    class="fa fa-paper-plane"></i>| Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>

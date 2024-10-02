@@ -1,0 +1,104 @@
+<ng-template #promotionProposalModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-recycle pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="promotionProposalForm" (ngSubmit)="submitProposal()">
+        <div class="modal-body text-x-small">
+            <div class="form-row">
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="departmentName" class="control-label font-bold">
+                        Employee <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-ui-user-group"></i>
+                            </span>
+                        </div>
+                        <div class="d-inline" style="width: 90%;">
+                            <ng-select2 [data]="ddlEmployees" name="employeesSearchRef" formControlName="employeeId"
+                                id="employeesSearchRef" [placeholder]="'Search Employee...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="head" class="control-label font-bold">
+                        Head <span class="text-danger">*</span>
+                        <span *ngIf="this.existingText != '' && this.existingText != null" class="label label-info">{{this.existingText}}</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-recycle"></i>
+                            </span>
+                        </div>
+                        <select name="head" id="head" class="form-control form-control-sm" formControlName="head">
+                            <option [value]="''" selected>---Select Head---</option>
+                            <option [value]="item" *ngFor="let item of head">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="proposalValue" class="control-label font-bold">
+                        Proposal Value <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-substitute"></i>
+                            </span>
+                        </div>
+                        <select name="proposalValue" id="proposalValue" class="form-control form-control-sm" formControlName="proposalValue">
+                            <option [value]="''" selected>---Select Proposal Value---</option>
+                            <option [value]="item.id" *ngFor="let item of ddlProposalId">{{item.text}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="effectiveDate" class="control-label font-bold">
+                        Effective Date <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-ui-calendar"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="effectiveDate" id="effectiveDate" readonly
+                            [bsConfig]="datePickerConfig" class="form-control form-control-sm bg-white"
+                            formControlName="effectiveDate" bsDatepicker autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="remarks" class="control-label font-bold">
+                        Remarks
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-comment"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="remarks" id="remarks" class="form-control form-control-sm" formControlName="remarks" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" [disabled]="!this.promotionProposalForm.valid">
+                <i class="fa fa-paper-plane"></i> | {{this.modalTitle == 'Update Promotion Proposal'?'Update':'Submit'}}
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger" (click)="closeModal('Cancel click')">
+                <i class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>

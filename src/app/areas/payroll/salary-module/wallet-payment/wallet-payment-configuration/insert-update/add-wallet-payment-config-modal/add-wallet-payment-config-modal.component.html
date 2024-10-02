@@ -1,0 +1,128 @@
+<ng-template #addWalletPaymentConfigModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="icofont-money"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div formArrayName="walletPayments" *ngFor="let payment of formArray; let i = index">
+                    <div class="ibox">
+                        <div class="ibox-content pb-1 shadow-sm">
+                            <div [formGroupName]="i" class="form-row">
+                                <div class="form-group col-12 col-md-4 col-sm-12">
+                                    <label for="internalDesignations" class="control-label font-bold">Select Internal Designation</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark font-bold">
+                                                {{i+1}}
+                                            </span>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="icofont-briefcase"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 80%">
+                                            <ng-select2 [data]="ddlInternalDesignations" name="internalDesignations"
+                                                formControlName="internalDesignationId" id="internalDesignations"
+                                                [placeholder]="'Internal Designation...'" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-md-2 col-sm-12">
+                                    <label for="activationDate" class="control-label font-bold">Select Activation Date</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div> 
+                                        <input type="text" name="activationDate" id="activationDate" formControlName="activationDate"
+                                        class="form-control form-control-sm bg-white" readonly placeholder="Select Activation Date ..."
+                                        title="Activation Date" bsDatepicker [bsConfig]="datePickerConfig" autocomplete="off">                                      
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-md-2 col-sm-12">
+                                    <label for="baseOfPayment" class="control-label font-bold">Base Of Payment</label>
+                                    <div class="input-group">
+                                        <select name="baseOfPayment" class="form-control form-control-sm"
+                                            formControlName="baseOfPayment">
+                                            <option [value]="'Flat'" selected>Flat</option>
+                                            <option [value]="'Gross'">Gross</option>
+                                            <option [value]="'Basic'">Basic</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-md-2 col-sm-12">
+                                    <label for="amount" class="control-label font-bold">Enter Amount</label>
+                                    <div class="input-group">                                  
+                                        
+                                        <ng-container *ngIf="formArray[i].controls.baseOfPayment.value=='Flat'">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i>&#2547;</i>
+                                                </span>
+                                            </div>
+                                            <input type="number" formControlName="walletFlatAmount"
+                                                class="form-control form-control-sm" name="walletFlatAmount">
+                                        </ng-container>
+                                        <ng-container *ngIf="formArray[i].controls.baseOfPayment.value!='Flat'">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    %
+                                                </span>
+                                            </div>
+                                            <input type="number" formControlName="walletTransferPercentage"
+                                            class="form-control form-control-sm" name="walletTransferPercentage">
+                                        </ng-container>                                   
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-12 col-md-2 col-sm-12">
+                                    <label for="cocInWalletTransferPercentage" class="control-label font-bold">COC In Wallet Percentage (%)</label>
+                                    <div class="input-group">                                                               
+                                        <ng-container>
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    %
+                                                </span>
+                                            </div>
+                                            <input type="number" formControlName="cocInWalletTransferPercentage" id="cocInWalletTransferPercentage"
+                                            class="form-control form-control-sm" name="cocInWalletTransferPercentage">
+                                        </ng-container>                                    
+
+                                        <div class="input-group-prepend cursor-pointer" (click)="addWalletPaymentConfigs(i)">
+                                            <span class="input-group-addon text-primary">
+                                                <i class="fa fa-plus" title="Add"></i></span>
+                                        </div>
+                                        <div class="input-group-prepend cursor-pointer" (click)="remove(i)">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-trash" title="Remove"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="form.invalid || btnSubmit">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnSubmit"
+                    (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

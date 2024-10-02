@@ -1,0 +1,388 @@
+<ng-template #periodicallyVariableAllowanceInsertUpdateModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-cogs" aria-hidden="true"></i>| Add Periodical
+            Variable Allowance
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 text-x-small text-dark">
+                        <div class="form-row">
+                            <div class="form-group col-sm-12"
+                                [class]="specifyFor == 'Job Type' ? 'col-md-4':'col-md-6'">
+                                <label for="specifyFor" class="control-label">Specify For
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-users"></i>
+                                    </span>
+                                    <select name="specifyFor" id="specifyFor" class="form-control form-control-sm"
+                                        formControlName="specifyFor">
+                                        <option [value]="''" selected>---Select One---</option>
+                                        <option [value]="item" *ngFor="let item of listOfSpecifyFor">{{item}}</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors.specifyFor" class="text-danger">
+                                    <span>{{formErrors.specifyFor}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12" [class]="specifyFor == 'Job Type' ? 'col-md-4':'col-md-6'"
+                                *ngIf="specifyFor == 'Job Type'">
+                                <label for="jobType" class="control-label">Job-type <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-list"></i>
+                                    </div>
+                                    <select name="jobType" id="jobType" class="form-control form-control-sm">
+                                        <option [value]="item" *ngFor="let item of types_of_jobtype">{{item}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12"
+                                [class]="specifyFor == 'Job Type' ? 'col-md-4':'col-md-6'">
+                                <label for="allowanceNameId" class="control-label">Allownance Name <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-list"></i>
+                                    </div>
+                                    <select name="allowanceNameId" id="allowanceNameId"
+                                        class="form-control form-control-sm" formControlName="allowanceNameId">
+                                        <option [value]="0" selected>---Select One---</option>
+                                        <option [value]="item.id" *ngFor="let item of list_of_allowance">
+                                            {{item.text}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors.allowanceNameId" class="text-danger">
+                                    <span>{{formErrors.allowanceNameId}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 text-x-small text-dark" *ngIf="specifyFor != 'All' && specifyFor != ''"
+                        [class]="specifyFor != 'All' ? 'col-md-4':'col-md-12'">
+                        <div class="ibox" *ngIf="specifyFor != 'Job Type'">
+                            <div class="ibox-content">
+                                <div class="form-row">
+                                    <label for="selector" class="control-label">{{label_of_specify_for}} <span
+                                            class="text-danger">*</span> &nbsp;&nbsp; <span class="label label-info"
+                                            *ngIf="item_count > 0">Total: {{item_count}}</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend shadow-sm">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-user" *ngIf="specifyFor == 'Employee wise'"></i>
+                                                <i class="fa fa-id-badge" *ngIf="specifyFor == 'Grade'"></i>
+                                                <i class="fa fa-id-card" *ngIf="specifyFor == 'Designation'"></i>
+                                                <i class="fa fa-building" *ngIf="specifyFor == 'Department'"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="selector" id="selector"
+                                            class="form-control form-control-sm" [placeholder]="placeHolderText"
+                                            formControlName="selector" [typeahead]="ddlData" typeaheadOptionField="text"
+                                            [isAnimated]="false" (typeaheadOnSelect)="item_selected($event)"
+                                            autocomplete="off" [typeaheadMinLength]="0" [typeaheadScrollable]="true" />
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="openExcelFileDataUplaoder()">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-upload"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="table-responsive" style="max-height: 270px;">
+                                    <table class="table table-sm table-striped table-hover table-responsive-xl">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Value</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody
+                                            style="min-height: 300px !important;max-height: 300px !important; overflow-y: scroll !important;">
+                                            <tr *ngFor="let item of selectedItems; let i = index">
+                                                <td class="text-center">{{i+1}}</td>
+                                                <td>
+                                                    {{item.text}}
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm text-danger"
+                                                        (click)="remove_item(i)"><i class="fa fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 text-x-small text-dark"
+                        [class]="(specifyFor == 'All' || specifyFor=='Job Type' || specifyFor == '') ? 'col-md-12':'col-md-8'">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                Payment Type & Duration Parameters
+                            </div>
+                            <div class="ibox-content">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4 col-sm-12"
+                                        *ngIf="this.form.get('durationType').value =='Daterange'">
+                                        <label for="effectiveDate" class="control-label">From~To
+                                            <span class="text-danger">*</span> &nbsp; <span class="label label-info"
+                                                *ngIf="month_diff >0">Month diff: {{month_diff}}</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar-times-o"></i>
+                                            </div>
+                                            <input type="text" name="effectiveDate" id="effectiveDate"
+                                                class="form-control form-control-sm bg-white"
+                                                formControlName="effectiveDate" placeholder="Enter Daterange"
+                                                [bsConfig]="datePickerConfig" bsDaterangepicker readonly
+                                                [title]="'Will be treat as  start month to end month'" />
+                                            <div class="input-group-addon text-danger cursor-pointer"
+                                                (click)="this.form.get('effectiveDate').setValue(null)"
+                                                *ngIf="this.form.get('effectiveDate').value !='' && this.form.get('effectiveDate').value !=null">
+                                                <i class="fa fa-times"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-12">
+                                        <label for="amountBaseOn" class="control-label">Payment based on <span
+                                                class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-list"></i>
+                                            </div>
+                                            <select name="amountBaseOn" id="amountBaseOn" formControlName="amountBaseOn"
+                                                class="form-control form-control-sm">
+                                                <option [value]="''">--Select One--</option>
+                                                <option [value]="'Gross'">Gross</option>
+                                                <option [value]="'Basic'">Basic</option>
+                                                <option [value]="'Flat'">Flat</option>
+                                                <option [value]="'Principal Amount'">Principal Amount</option>
+                                            </select>
+                                        </div>
+                                        <div *ngIf="formErrors.amountBaseOn" class="text-danger">
+                                            <span>{{formErrors.amountBaseOn}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-12"
+                                        *ngIf="this.form.get('amountBaseOn').value =='Principal Amount'">
+                                        <label for="principalAmount" class="control-label">Principal Amount <span
+                                                class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-list"></i>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="principalAmount"
+                                                name="principalAmount" formControlName="principalAmount" autocomplete="off" />
+                                        </div>
+                                        <div *ngIf="formErrors.principalAmount" class="text-danger">
+                                            <span>{{formErrors.principalAmount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-12"
+                                        *ngIf="this.form.get('amountBaseOn').value =='Flat'">
+                                        <label for="amount" class="control-label">Amount <span
+                                                class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-list"></i>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="amount"
+                                                name="amount" formControlName="amount" autocomplete="off" />
+                                        </div>
+                                        <div *ngIf="formErrors.amount" class="text-danger">
+                                            <span>{{formErrors.amount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-12"
+                                        *ngIf="this.form.get('amountBaseOn').value =='Gross' || this.form.get('amountBaseOn').value =='Basic'">
+                                        <label for="percentage" class="control-label">Percentage <span
+                                                class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="">%</i>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="percentage"
+                                                name="percentage" formControlName="percentage" autocomplete="off" />
+                                        </div>
+                                        <div *ngIf="formErrors.percentage" class="text-danger">
+                                            <span>{{formErrors.percentage}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-12" style="display: none;">
+                                        <label for="percentage" class="control-label">Duration-type
+                                            <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <select name="durationType" id="durationType"
+                                                class="form-control form-control-sm" formControlName="durationType">
+                                                <option [value]="'Daterange'">Daterange</option>
+                                                <option [value]="'Income-Year'">Income-Year</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-12"
+                                        *ngIf="this.form.get('durationType').value =='Income-Year'">
+                                        <label for="fiscalYearId" class="control-label">Fiscal-Year
+                                            <span class="text-danger">*</span>
+                                            &nbsp;&nbsp;
+                                            <span class="label label-info"
+                                                *ngIf="fiscalYearRangeInfo != null && fiscalYearRangeInfo!=''">{{fiscalYearRangeInfo}}</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar-times-o"></i>
+                                            </div>
+                                            <select name="fiscalYearId" id="fiscalYearId"
+                                                class="form-control form-control-sm" formControlName="fiscalYearId">
+                                                <option [value]="0" selected>--Select One--</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlFiscalYearDropdown">
+                                                    {{item.text}}</option>
+                                            </select>
+                                            <div class="input-group-addon">
+                                                <span class="label label-info" *ngIf="month_diff >0">Diff:
+                                                    {{month_diff}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-12 hide">
+                                        <label for="calculateProrated" class="control-label">Is prorated as work days?
+                                            <span class="text-danger">*</span></label>
+                                        <div class="form-inline">
+                                            <div class="form-check mr-2">
+                                                <input class="form-check-input" type="radio" id="proratedYes" name=""
+                                                    [value]="true" formControlName="calculateProratedAmount">
+                                                <label class="form-check-label" for="proratedYes">Yes</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" id="proratedNo"
+                                                    [value]="false" formControlName="calculateProratedAmount">
+                                                <label class="form-check-label" for="proratedNo">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ibox-content"
+                                *ngIf="this.form.get('amountBaseOn').value =='Principal Amount' && list_of_priciple_month != null && list_of_priciple_month.length >0">
+                                <div class="form-row">
+                                    <p class="text-medium">Monthly Amount Breakdown:</p>
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <div class="table-responsive">
+                                            <table
+                                                class="table table-sm table-striped table-bordered table-responsive-lg">
+                                                <thead>
+                                                    <tr class="text-center">
+                                                        <th>#SL</th>
+                                                        <th>Month</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="text-center">
+                                                    <tr *ngFor="let item of list_of_priciple_month; let i= index">
+                                                        <td>{{i+1}}</td>
+                                                        <td>{{item?.monthName +'-'+item?.year}}</td>
+                                                        <td>
+                                                            <input type="number" placeholder="Enter Amount"
+                                                                class="text-center" style="width: 60px;"
+                                                                [title]="list_of_priciple_month[i].isValid == false ? 'Amount is required. Please enter Amount':''"
+                                                                (input)="rowChanged(i)"
+                                                                [(ngModel)]="list_of_priciple_month[i].amount"
+                                                                [class]="list_of_priciple_month[i].isValid == false ? 'border-danger':''"
+                                                                [ngModelOptions]="{standalone: true}" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox hide">
+                            <div class="ibox-title">
+                                Others Parameters
+                            </div>
+                            <div class="ibox-content">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4 col-sm-12">
+                                        <label for="citizen" class="control-label">Citizen</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-list"></i>
+                                            </div>
+                                            <select name="citizen" id="citizen" class="form-control form-control-sm"
+                                                formControlName="citizen">
+                                                <option [value]="item" *ngFor="let item of types_of_citizen">{{item}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-12">
+                                        <label for="gender" class="control-label">Gender</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-list"></i>
+                                            </div>
+                                            <select name="gender" id="gender" class="form-control form-control-sm"
+                                                formControlName="gender">
+                                                <option [value]="item" *ngFor="let item of types_of_gender">{{item}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4 col-sm-12">
+                                        <label for="religion" class="control-label">Religion</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-list"></i>
+                                            </div>
+                                            <select name="religion" id="religion" class="form-control form-control-sm"
+                                                formControlName="reigion">
+                                                <option [value]="item" *ngFor="let item of types_of_religion">{{item}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-xx-small">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit">
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="showExcelFileDataUplaoder == true">
+    <app-payroll-singel-item-file-values [key]="key_of_uploader"
+        (closeModalEvent)="closeExcelFileDataUplaoder($event)"></app-payroll-singel-item-file-values>
+</ng-container>

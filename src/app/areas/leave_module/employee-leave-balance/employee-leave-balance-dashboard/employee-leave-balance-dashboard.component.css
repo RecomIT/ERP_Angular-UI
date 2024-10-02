@@ -1,0 +1,48 @@
+
+
+
+/* ----------------------------------- Mat Card
+----------------------------------- */
+
+.card-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+
+
+.mat-card {
+margin: 0 auto;
+box-sizing: border-box;
+background-color: #ffffff;
+border-radius: 8px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s ease-in-out;
+}
+
+
+
+.mat-card-header,
+.mat-card-content,
+.mat-expansion-panel-body {
+padding: 0; 
+margin: 0;
+}
+
+.mat-expansion-panel {
+width: 100%;
+}
+
+
+
+.mat-card:hover {
+transform: scale(1.02);
+}
+
+
+.mat-card-header {
+display: flex;
+justify-content: space-between;
+}

@@ -1,0 +1,68 @@
+<ng-template #excludeEmployeeFromBonusModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i>| Exclude Employee
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark text-x-small">
+        <form [formGroup]="saveForm" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <label for="employeeId" class="control-label font-bold text-uppercase">Select Employee</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                            </div>
+                            <div style="width: 80%;">
+                                <ng-select2 [data]="employees" name="employees"
+                                    id="searchByEmployee" formControlName="employeeId"
+                                    [placeholder]="'Select Employee...'" [options]="select2Config"
+                                    [allowClear]="true" required>
+                                </ng-select2>
+                            </div>
+                            <div class="input-group-prepend cursor-pointer" *ngIf="saveForm.valid">
+                                <span class="input-group-addon text-dark" (click)="submit()">
+                                    <i class="fa fa-plus"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <div class="table-responsive-sm">
+                            <table class="table table-sm table-striped table-hover table-responsive-sm">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th>#SL</th>
+                                        <th>Employee</th>
+                                        <th>Bonus-Name</th>
+                                        <th>Bonus-Config</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr *ngFor="let item of excludeList; let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.employeeName + '-' + item.employeeCode}}</td>
+                                        <td>{{item.bonusName}}</td>
+                                        <td>{{item.bonusConfigCode}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-xs" (click)="delete(item.employeeId)"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

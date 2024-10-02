@@ -1,0 +1,154 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 @slideInUp class="mt-2">Employee Transfer Proposal</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Transfer Proposal</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-8 col-sm-6">
+        <div class="title-action">
+            <button type="button"
+                class="btn btn-primary btn-rounded btn-outline"
+                (click)="openUploadTransferProposalExcelFileModal()"><i class="fa fa-arrow-up"></i> | Upload Transfer Proposal
+            </button>   
+            &nbsp;
+            <button type="button" class="btn btn-success btn-outline btn-rounded" (click)="openModal(0)"><i class="fa fa-plus"></i> | Make Transfer Proposal</button>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight pt-3" id="page-container">
+    <div class="row mt-0">
+        <div class="col-md-12">
+            <form [formGroup]="searchForm">
+                <div class="ibox">
+                    <div class="ibox-content border-radius-5 pb-2 text-x-small font-bold">
+                        <div class="form-row">
+                            <div class="form-group mb-0 col-md-4 col-sm-12">
+                                <label for="" class="control-label">SEARCH BY Employee</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                    </div>
+                                    <div class="d-inline" style="width: 90%;">
+                                        <ng-select2 [data]="ddlEmployees" name="employeesSearchRef"
+                                            formControlName="employeeId" id="employeesSearchRef"
+                                            [placeholder]="'Search Employee...'" [options]="select2Options"
+                                            [allowClear]="true" required>
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <label for="stateStatus" class="control-label text-uppercase">Search By
+                                    Status</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-angle-double-up" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <select name="stateStatus" id="stateStatus" class="form-control form-control-sm"
+                                        formControlName="stateStatus">
+                                        <option [value]="''" selected>---Select Status---</option>
+                                        <option [value]="'Pending'">Pending</option>
+                                        <option [value]="'Approved'">Approved</option>
+                                        <option [value]="'Accepted'">Accepted</option>
+                                        <option [value]="'Rejected'">Rejected</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 text-x-small">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg" id="tbl">
+                            <thead>
+                                <tr>
+                                    <th class="text-center font-bold">#SL</th>
+                                    <th>Employee Code</th>
+                                    <th>Eployee Name</th>
+                                    <th>Type Head</th>
+                                    <th>Existing Head</th>
+                                    <th>Proposal Head</th>
+                                    <th>Effective Date</th>
+                                    <th>Status</th>
+                                    <th>Entry Date</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of listOfTransfer | paginate: transfer_list_pager;let i =index">
+                                    <td class="text-center font-bold">{{i+1}}</td>
+                                    <td>{{item?.employeeCode}}</td>
+                                    <td>{{item?.employeeName}}</td>
+                                    <td>{{item?.head}}</td>
+                                    <td>{{item?.existingText}}</td>
+                                    <td>{{item?.proposalText}}</td>
+                                    <td>{{item?.effectiveDate | date: "dd-MMMM-yyyy"}}</td>
+                                    <td>
+                                        <span class="label label-warning"
+                                            *ngIf="item.stateStatus=='Pending'">{{item.stateStatus + '...'}}</span>
+                                        <span class="label label-primary" *ngIf="item.stateStatus=='Approved'"> <i
+                                                class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-danger" *ngIf="item.stateStatus=='Cancelled'"><i
+                                                class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                class="fa fa-backward"></i> {{item.stateStatus}}</span>
+
+                                    </td>
+                                    <td>{{item?.createdDate | date: "dd-MMMM-yyyy hh:mm:ss a"}}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-xs btn-default btn-outline btn-rounded" (click)="openModal(item.transferProposalId??0)">
+                                            <i class="icofont-ui-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="listOfTransfer.length == 0 && this.transferDTLabel ==''">
+                                    <td class="text-center font-bold" colspan="15">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr *ngIf="listOfTransfer.length == 0 && this.transferDTLabel !=''">
+                                    <td class="text-center font-bold" colspan="15">
+                                        No row(s) found
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-end">
+                            <pagination-controls (pageChange)="transfer_list_pageChanged($event)" [responsive]="true"
+                                [autoHide]="true" id="transfer_list_pager"></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showInsertUpdateModal">
+    <app-employee-transfer-request-modal [id]="transferProposalId" (closeModalEvent)="closeModal($event)"></app-employee-transfer-request-modal>
+</ng-container>
+
+<ng-container *ngIf="showUploaTransferProposalModal">
+    <app-employee-module-upload-employee-transfer-proposal-modal [transferProposalId]="0" (closeModalEvent)="closeUploadTransferProposalExcelFileModal($event)"></app-employee-module-upload-employee-transfer-proposal-modal>
+</ng-container>

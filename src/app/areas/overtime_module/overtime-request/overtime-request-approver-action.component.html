@@ -1,0 +1,313 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Overtime Request</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Overtime</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Request</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li><a href="#approver" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Approver-Action
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="approver" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                
+                                <!-- <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <select name="status" id="status" class="form-control form-control-sm" #statusRef="ngModel" [(ngModel)]="status"
+                                    (change)="onStatusChange()">
+                                    <option value="">All Request</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <option value="Reverted">Reverted</option>
+                                </select>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                id="tblAllowanceHeads">
+                                <thead class="text-dark text-white">
+                                    <tr class="text-center font-bold">
+                                        <th>#SL</th>
+                                        <th>Employee Name</th>
+                                        <th>Overtime Name</th>
+                                        <th>Request Date</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Remarks</th>
+                                        <th>Status</th>
+                                        <th>Waiting Stage</th>
+                                        <th>Progress Details</th>
+                                        <th>Created Date</th>
+                                        <th>Updated Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center font-bold"
+                                        *ngFor="let item of requestList; let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item?.employee?.name}} ({{item?.employee?.employeeCode}})</td>
+                                        <td>{{item?.overtimeType?.overtimeName}}</td>
+                                        <td>{{item?.requestDate  | date:"dd-MMM-yyyy"}}</td>
+                                        <td>{{item?.startTime}}</td>
+                                        <td>{{item?.endTime}}</td>
+                                        <td>{{item?.remarks}}</td>
+                                        <td>{{item?.status}}</td>
+                                        <td>{{item?.waitingStage}}</td>
+                                        <td type="button" (click)="openOvertimeRequestDetailsModal(item?.overtimeRequestId)">
+                                            View
+                                        </td>
+                                        <td>{{item?.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>{{item?.updatedDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <!-- (item?.status == 'Pending' || item?.status == 'Reverted') ? openApprovalActionModal(item?.overtimeRequestId) : null -->
+                                            <button type="button" (click)="openApprovalActionModal(item?.overtimeRequestId)" class="btn btn-xs">
+                                                <i class="fa fa-plus-square"></i>
+                                            </button>
+                                        </td> 
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #requestDetailsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+
+            <div class="panel-body pb-1">
+                <table class="table table-sm table-hover table-striped table-responsive-lg"
+                    id="tblAllowanceHeads">
+                    <thead class="text-dark text-white">
+                        <tr class="text-center font-bold">
+                            <th>#SL</th>
+                            <th>Approver Name</th>
+                            <th>Approval Order</th>
+                            <!-- <th>Action Required</th> -->
+                            <th>Remarks</th>
+                            <th>Status</th>
+                            <th>Process At</th>
+                            
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center font-bold"
+                            *ngFor="let item of request.overtimeRequestDetails; let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{item?.approver?.name}} ({{item?.approver?.employeeCode}})</td>
+                            <td>{{item?.approvalOrder}} </td>
+                            <!-- <td>{{item?.actionRequired}}</td> -->
+                            <td>{{item?.remarks}}</td>
+                            <td>{{item?.status}}</td>
+                            <td>{{item?.processAt | date:"dd-MMM-yy  h:mm:ss a"}}</td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+         </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i class="fa fa-times"></i> | Close</button>
+        </div>
+
+    </div>
+</ng-template>
+
+<ng-template #approvalActionModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+            <fieldset [disabled]="fieldsetDisabled">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="employeeName" class="control-label"> Employee Name
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" id="employeeName" name="employeeName"   #employeeNameRef="ngModel" [(ngModel)]="employeeName">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="overtimeName" class="control-label"> Overtime Name <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" id="overtimeName" name="employeeName"   #overtimeNameRef="ngModel" [(ngModel)]="overtimeName">
+                                
+                                <!-- <div style="width:90%">
+                                    <ng-select2 name="overtimeId" id="overtimeId" [placeholder]="'Select Overtime'" [options]="select2Options" [data]="overtimeList"
+                                    #overtimeId ="ngModel" [(ngModel)]="saveRequest.overtimeId" (ngModelChange)="onOvertimeChange()" required [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                     <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="requestDate" class="control-label"> Request Date
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="date" class="form-control form-control-sm" id="requestDate" name="requestDate" #requestDate="ngModel" [(ngModel)]="saveRequest.requestDate" [ngModel]="saveRequest.requestDate | date: 'yyyy-MM-dd'">
+                            </div>
+                            
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="startTime" class="control-label"> Start Time
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="time" class="form-control form-control-sm" id="startTime" name="startTime" #startTime="ngModel" [(ngModel)]="saveRequest.startTime">
+                            </div>
+                           
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="endTime" class="control-label"> End Time
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="time" class="form-control form-control-sm" id="endTime" name="endTime" #endTime="ngModel" [(ngModel)]="saveRequest.endTime">
+                            </div>
+                           
+                        </div>
+                    </div>
+                     <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="remarks" class="control-label"> Remarks
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" id="remarks" name="remarks" #remarks="ngModel" [(ngModel)]="saveRequest.remarks" placeholder="Remarks">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="panel-body">
+                <table class="table table-sm table-hover table-striped table-responsive-lg" id="tblAllowanceHeads">
+                    <thead class="text-dark text-white">
+                        <tr class="text-center font-bold">
+                            <th>#SL</th>
+                            <th>Approver Name</th>
+                            <th>Approval Order</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center font-bold" *ngFor="let item of saveRequest.approvers; let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{item?.name}} ({{item?.employeeCode}})</td>
+                            <td>{{item?.approvalOrder}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form #actionForm="ngForm" (submit)="overtimeActionForm(actionForm)">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="status" class="control-label"> Action
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select name="requestAction.status" id="requestAction.status" class="form-control form-control-sm"
+                                    #statusRef="ngModel" [(ngModel)]="requestAction.status" (change)="onRequestActionChange()"
+                                    required>
+                                    <option value="Approved" selected>Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <option value="Reverted">Reverted</option>
+                                </select>
+                                <!-- <input type="text" class="form-control form-control-sm" id="employeeName" name="employeeName"   #employeeNameRef="ngModel" [(ngModel)]="employeeName"> -->
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="remarks" class="control-label"> Remarks <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" id="remarks" name="remarks"
+                                    #remarksRef="ngModel" [(ngModel)]="requestAction.remarks" required>
+                            </div>
+                            <div class="text-danger" *ngIf="remarksRef.touched && remarksRef.invalid">
+                                <span *ngIf="remarksRef.errors?.required">Remarks is required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-primary btn-rounded" [disabled]="actionForm.invalid || requestAction.overtimeRequestId == 0"> 
+                            <i class="fa fa-paper-plane"></i> | {{this.buttonAction}}
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                                class="fa fa-times"></i> | Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+           
+   
+</ng-template>
+

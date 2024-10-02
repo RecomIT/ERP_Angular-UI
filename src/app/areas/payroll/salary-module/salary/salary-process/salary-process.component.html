@@ -1,0 +1,340 @@
+<div class="wrapper wrapper-content">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small" *ngIf="isViewPage" @fadeIn>
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li><a href="#salaryProcessList" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Salary Process Information
+                        </a></li>
+                    <li><a href="#salaryProcessDetails" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Salary Process By System
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="salaryProcessList" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-3 col-sm-6"></div>
+                                <div class="form-group col-md-3 col-sm-6"></div>
+                                <div class="form-group col-md-3 col-sm-6"></div>
+                                <div class="form-group col-md-3 col-sm-6">
+                                    <button type="button" class="btn btn-sm btn-success btn-rounded float-right"
+                                        (click)="showPage()"><i class="fa fa-cogs"></i> | Salary Process</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                    id="tblSalaryProcess">
+                                    <thead class="bg-dark-blue">
+                                        <tr class="text-white text-center">
+                                            <th>#SL</th>
+                                            <th>Batch</th>
+                                            <th>Salary Date</th>
+                                            <th>Month & Year</th>
+                                            <th>Total Employees</th>
+                                            <th class="hide">Total New Joiner</th>
+                                            <th class="hide">Total Separated</th>
+                                            <th>Total Allowance</th>
+                                            <th>Total Arrear Allowance</th>
+                                            <th>Total Deduction</th>
+                                            <th>Total Monthly Tax</th>
+                                            <th>Gross Pay</th>
+                                            <th>Net Pay</th>
+                                            <th>Is Disbursed</th>
+                                            <th>Entry Date</th>
+                                            <th class="hide">Update Date</th>
+                                            <th class="text-centen">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of listOfsalaryProcess; let i = index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td class="text-center">{{item.batchNo}}</td>
+                                            <td class="text-center">{{item.salaryDate | date:"dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.processDate | date:"MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                {{item.totalEmployees}}
+                                            </td>
+                                            <td class="text-right">{{item.totalAllowance}}</td>
+                                            <td class="text-right">{{item.totalArrearAllowance}}</td>
+                                            <td class="text-right">{{item.totalDeduction}}</td>
+                                            <td class="text-right">{{item.totalMonthlyTax}}</td>
+                                            <td class="text-right">{{item.totalGrossPay}}</td>
+                                            <td class="text-right">{{item.totalNetPay}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-primary" *ngIf="item.isDisbursed"><i
+                                                        class="fa fa-check"></i>{{'Yes'}}</span>
+                                                <span class="label label-warning" *ngIf="!item.isDisbursed">
+                                                    {{'No'}}</span>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date:"dd-MMMM-yyyy hh:mm:ss
+                                                a"}}
+                                            </td>
+                                            <td class="text-center hide">{{item.updatedDate | date:"dd-MMMM-yyyy
+                                                hh:mm:ss
+                                                a"}}
+                                            </td>
+                                            <td>
+                                                <button type="button"
+                                                    (click)="openSalaryProcessStatusModal(item.salaryProcessId)"
+                                                    class="btn btn-xs" *ngIf="!item.isDisbursed">
+                                                    <i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button"
+                                                    (click)="getSalaryProcessDetails(item.salaryProcessId)"
+                                                    class="btn btn-xs text-info">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="salaryProcessDetails" class="tab-pane">
+                        <div class="panel-body pb-1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mb-4" *ngIf="!isViewPage" @fadeIn>
+            <div class="ibox-title pt-1 bg-light-blue">
+                <h5 class="mb-0 text-white">
+                    <a class="btn btn-circle btn-sm btn-success text-white" title="Back to list" (click)="showPage()"><i
+                            class="fa fa-arrow-left"></i> </a>
+                    | Salary Process <i class="fa fa-cogs"></i>
+                </h5>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-x-small">
+                    <form [formGroup]="salaryProcessForm" (ngSubmit)="runSalaryProcess()">
+                        <div class="ibox-content">
+                            <div class="form-row">
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <label for="processBy" class="control-label hide">Process By</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-cog"></i>
+                                            </span>
+                                        </div>
+                                        <select name="processBy" id="processBy" class="form-control form-control-sm"
+                                            formControlName="processBy" title="Salary Process By" [ngClass]="{'is-invalid':
+                                        ((salaryProcessForm.get('processBy').touched ||
+                                        salaryProcessForm.get('processBy').dirty) &&
+                                        salaryProcessForm.get('processBy').errors)}"
+                                            [class.is-valid]="salaryProcessForm.get('processBy').valid ">
+                                            <option [value]="''">--Select Process--</option>
+                                            <option [value]="'Systemically'">Systemically</option>
+                                            <option [value]="'Uploaded Component'">Uploaded Component</option>
+                                            <option [value]="'Uploaded Salary-Sheet'">Uploaded Salary-Sheet</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <label for="salaryMonthAndYear" class="control-label hide">
+                                        Month & Year
+                                    </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <select name="salaryMonthAndYear" id="salaryMonthAndYear"
+                                            class="form-control form-control-sm" title="Month & Year"
+                                            formControlName="monthYear" [ngClass]="{'is-invalid':
+                                            ((salaryProcessForm.get('monthYear').touched ||
+                                            salaryProcessForm.get('monthYear').dirty) &&
+                                            salaryProcessForm.get('monthYear').errors)}"
+                                            [class.is-valid]="salaryProcessForm.get('monthYear').valid ">
+                                            <option [value]="''">--Select Month & Year--</option>
+                                            <option [value]="'06-2022'">June-2022</option>
+                                            <option [value]="'07-2022'">July-2022</option>
+                                            <option [value]="'08-2022'">August-2022</option>
+                                            <option [value]="'09-2022'">September-2022</option>
+                                            <option [value]="'10-2022'">October-2022</option>
+                                            <option [value]="'11-2022'">November-2022</option>
+                                            <option [value]="'12-2022'">December-2022</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <label for="salaryDate" class="control-label hide">
+                                        Salary Date
+                                    </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-calendar-check-o"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="salaryDate" id="salaryDate" [ngClass]="{'is-invalid':
+                                        ((salaryProcessForm.get('salaryDate').touched ||
+                                        salaryProcessForm.get('salaryDate').dirty) &&
+                                        salaryProcessForm.get('salaryDate').errors)}"
+                                            [class.is-valid]="salaryProcessForm.get('salaryDate').valid "
+                                            class="form-control form-control-sm bg-white" readonly
+                                            placeholder="Select Salary Date.." title="Salary Date"
+                                            formControlName="salaryDate" bsDatepicker [bsConfig]="datePickerConfig">
+                                        <div class="input-group-prepend cursor-pointer" title="Remove Date"
+                                            [hidden]="salaryProcessForm.get('salaryDate').value== null"
+                                            (click)="salaryProcessForm.get('salaryDate').setValue(null)">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <div class="clearfix pull-right">
+                                        <button type="submit" class="btn btn-success btn-rounded btn-sm ml-1"
+                                            [disabled]="this.salaryProcessForm.invalid || btnProcess">
+                                            <i class="fa fa-cogs"></i> | Run Process
+                                            <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm"
+                                                role="status" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #salaryProcessDetailModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle 
+            fa fa-clock-o"></i>| Salary Process Details
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-hover table-striped table-responsive-xl">
+                <thead class="bg-dark-blue">
+                    <tr class="text-white text-center">
+                        <th class="text-center">#SL</th>
+                        <th>Employee</th>
+                        <th class="text-center">Designation</th>
+                        <th class="text-center">Days</th>
+                        <th class="text-center">Month & Year</th>
+                        <th class="text-center">This Month Basic</th>
+                        <th class="text-center">Total Allowance</th>
+                        <th class="text-center">Total Arrear Allowance</th>
+                        <th class="text-center">Total Deduction</th>
+                        <th class="text-center">Total Monthly Tax</th>
+                        <th class="text-center">Bonus Amount</th>
+                        <th class="text-center">Gross Pay</th>
+                        <th class="text-center">Net Pay</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listOfsalaryProcessDetail; let i =index">
+                        <td class="text-center font-bold">{{i+1}}</td>
+                        <td>{{item.employeeName}}</td>
+                        <td class="text-center">{{item.designationName}}</td>
+                        <td class="text-center">{{item.calculationForDays}}</td>
+                        <td class="text-center">{{item.salaryDate | date:"MMMM-yyyy"}}</td>
+                        <td class="text-center">{{item.thisMonthBasic}}</td>
+                        <td class="text-center">{{item.totalAllowance}}</td>
+                        <td class="text-center">{{item.totalArrearAllowance}}</td>
+                        <td class="text-center">{{item.totalDeduction}}</td>
+                        <td class="text-center">{{item.totalMonthlyTax}}</td>
+                        <td class="text-center">{{item.totalBonus}}</td>
+                        <td class="text-center">{{item.grossPay}}</td>
+                        <td class="text-center">{{item.netPay}}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer p-2">
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #salaryProcessCheckingModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle 
+            fa fa-clock-o"></i>| Salary Process Info
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #salaryProcessDisbursedOrUndoForm="ngForm"
+            (ngSubmit)="submitSalaryProcessDisbursedOrUndo(processActionName.value)">
+            <div class="modal-body">
+                <table class="table table-sm table-striped table-hover table-responsive-xl">
+                    <tbody>
+                        <tr>
+                            <td class="bg-dark-blue text-white">Batch No</td>
+                            <td>{{processObjChecking?.batchNo}}</td>
+                            <td class="bg-dark-blue text-white">Salary Date</td>
+                            <td>{{processObjChecking?.salaryDate | date: "dd-MMMM-yyyy"}}</td>
+                            <td class="bg-dark-blue text-white">Month & Year</td>
+                            <td>{{processObjChecking?.processDate | date:"MMMM-yyyy"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-dark-blue text-white">Total Employee(s)</td>
+                            <td>{{processObjChecking?.totalEmployees}}</td>
+                            <td class="bg-dark-blue text-white">Total Allowance</td>
+                            <td>{{processObjChecking?.totalAllowance}}</td>
+                            <td class="bg-dark-blue text-white">Total Arrea Allowance</td>
+                            <td>{{processObjChecking?.totalArrearAllowance}}</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-dark-blue text-white">Total Deduction</td>
+                            <td>{{processObjChecking?.totalDeduction}}</td>
+                            <td class="bg-dark-blue text-white">Total Monthly Tax</td>
+                            <td>{{processObjChecking?.totalMonthlyTax}}</td>
+                            <td class="bg-dark-blue text-white">Gross Pay</td>
+                            <td>{{processObjChecking?.totalGrossPay}}</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-dark-blue text-white">Net Pay</td>
+                            <td>{{processObjChecking?.totalNetPay}}</td>
+                            <td class="bg-dark-blue text-white">Is Disbursed</td>
+                            <td>
+                                <span class="label label-primary" *ngIf="processObjChecking.isDisbursed">
+                                    <i class="fa fa-check"></i>{{'Yes'}}
+                                </span>
+                                <span class="label label-warning" *ngIf="!processObjChecking.isDisbursed">
+                                    {{'No'}}</span>
+                            </td>
+                            <td class="bg-dark-blue text-white">Action</td>
+                            <td>
+                                <select name="salaryProcessCheckingAction" id="salaryProcessCheckingAction"
+                                    class="form-control form-control-sm" #processActionName>
+                                    <option [value]="''">---Select Action---</option>
+                                    <option [value]="'Disbursed'">Disbursed</option>
+                                    <option [value]="'Undo Process'">Undo Process</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer p-2">
+                <button class="btn btn-sm btn-primary btn-redius-none" type="submit"
+                    [disabled]="salaryProcessDisbursedOrUndoForm.invalid || btnProcess">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

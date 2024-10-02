@@ -1,0 +1,266 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Overtime Time Card</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Overtime</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Time Card</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li><a href="#approvalLevel" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Overtime Time Card
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="approvalLevel" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded mx-1"
+                                        (click)="downloadTimeCardExcelFile()">
+                                        <i class="fa fa-download"></i> | Download Format
+                                    </button>
+
+                                    <button class="btn btn-sm btn-success float-right btn-rounded mx-1"
+                                        (click)="openOvertimeTimeCardRollBackModal()">
+                                        <i class="fa fa-refresh"></i> | Roll Back
+                                    </button>
+                                    
+                                    <button class="btn btn-sm btn-success float-right btn-rounded mx-1"
+                                        (click)="openOvertimeTimeCardModal(0,'Upload')">
+                                        <i class="fa fa-plus"></i> | Upload
+                                    </button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="panel-body pb-1">
+                                <button type="button" (click) ="getLocation()">Share my Location</button>
+                                <pre id="json-result"></pre>
+                            </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #overtimeTimeCardModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #overtimeTimeCardForm="ngForm" (submit)="submitOvertimeTimeCardForm(overtimeTimeCardForm)">
+            <fieldset [disabled]="fieldsetDisabled">
+                <div class="modal-body">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="month" class="control-label"> Month
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div style="width:90%">
+                                    <ng-select2 name="month" id="month" [placeholder]="'Select Month'"
+                                        [options]="select2Options" [data]="months" [(ngModel)]="overtimeTimeCard.month"
+                                        #monthRef="ngModel" (ngModelChange)="onMonthChange()" required
+                                        [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="year" class="control-label"> Year
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div style="width:90%">
+                                    <ng-select2 name="year" id="year" [placeholder]="'Select Year'"
+                                        [options]="select2Options" [data]="years" [(ngModel)]="overtimeTimeCard.year"
+                                        #yearRef="ngModel" (ngModelChange)="onYearChange()" required
+                                        [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="overtimeId" class="control-label"> Overtime Name <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                
+                                <div style="width:90%">
+                                    <ng-select2 name="overtimeId" id="overtimeId" [placeholder]="'Select Overtime'" [options]="select2Options" [data]="overtimeList"
+                                    #overtimeIdRef ="ngModel" [(ngModel)]="overtimeTimeCard.overtimeId" (ngModelChange)="onOvertimeChange(overtimeTimeCard.overtimeId)" required [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="isActive" class="control-label"> Select Upload Type
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select name="isUnitUpload" id="isUnitUpload" class="form-control form-control-sm"
+                                    #isUnitUpload="ngModel" [(ngModel)]="overtimeTimeCard.isUnitUpload" (change)="onTypeChange()">
+                                    <option [value]=true>Unit</option>
+                                    <option [value]=false>Amount</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group form-group col-md-6">
+                            <label for="excelFile" class="control-label"> Upload Excel File Only
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input id="excelFile" name="excelFile" type="file" class="custom-file-input" (change)="excelFileUpload($event)" required 
+                                    accept=".xls,.xlsx" #excelFile="ngModel" [(ngModel)]="overtimeTimeCard.excelFile">
+                                    <label class="custom-file-label" for="excelFile">
+                                        {{excelFileName}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </fieldset>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded" 
+                    [disabled]="overtimeTimeCardForm.invalid || monthRef.value == 0 || yearRef.value == 0 || overtimeIdRef.value == 0">
+                    <i class="fa fa-paper-plane"></i> | {{this.buttonAction}}
+                    <span [hidden]="!btnApprovalLevel" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #overtimeTimeCardRollBackModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #overtimeTimeCardRollBackForm="ngForm" (submit)="submitOvertimeTimeCardRollBackForm(overtimeTimeCardRollBackForm)">
+            <fieldset [disabled]="fieldsetDisabled">
+                <div class="modal-body">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="month" class="control-label"> Month
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div style="width:90%">
+                                    <ng-select2 name="month" id="month" [placeholder]="'Select Month'"
+                                        [options]="select2Options" [data]="months" [(ngModel)]="overtimeTimeCard.month"
+                                        #monthRef="ngModel" (ngModelChange)="onMonthChange()" required
+                                        [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="year" class="control-label"> Year
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div style="width:90%">
+                                    <ng-select2 name="year" id="year" [placeholder]="'Select Year'"
+                                        [options]="select2Options" [data]="years" [(ngModel)]="overtimeTimeCard.year"
+                                        #yearRef="ngModel" (ngModelChange)="onYearChange()" required
+                                        [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="overtimeId" class="control-label"> Overtime Name <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                
+                                <div style="width:90%">
+                                    <ng-select2 name="overtimeId" id="overtimeId" [placeholder]="'Select Overtime'" [options]="select2Options" [data]="overtimeList"
+                                    #overtimeIdRef ="ngModel" [(ngModel)]="overtimeTimeCard.overtimeId" (ngModelChange)="onOvertimeChange(overtimeTimeCard.overtimeId)" required [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded" 
+                    [disabled]="overtimeTimeCardRollBackForm.invalid || monthRef.value == 0 || yearRef.value == 0 || overtimeIdRef.value == 0">
+                    <i class="fa fa-paper-plane"></i> | {{this.buttonAction}}
+                    <span [hidden]="!btnApprovalLevel" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

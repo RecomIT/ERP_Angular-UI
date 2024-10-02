@@ -1,0 +1,154 @@
+<div class="ibox rounded">
+    <div class="ibox-content bg-white border-radius-5">
+        <div class="attendance">
+            
+            
+            <div class="header" (click)="toggleAttendanceContainer()">
+                <h4 class="title"><i class="icofont-finger-print"></i> Geo Location Attendance</h4>
+                <i class="toggle-icon" [ngClass]="{'flipped': !showAttendanceContainer, 'unflipped': showAttendanceContainer}">
+                    <i class="fa" [ngClass]="{'fa-list-ul': showAttendanceContainer, 'fa-arrow-right': !showAttendanceContainer}" aria-hidden="true"></i>
+                </i>
+            </div>
+            
+            <hr class="m-1">
+
+            <div  class="attendance-container" [@fadeInRight]="showAttendanceContainer ? 'show' : 'hide'"  [hidden]="!showAttendanceContainer" @fadeRight>
+
+               <div class="form-row w-100">     
+                    <div class="col-12 shift-details">
+                        <div class="form-row">
+                            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                                <p class="in-time"><i class="fa fa-clock-o"></i>Shift In Time: <span class="text-success">{{ getHourAndMinute(checkPunchInPunchOut?.shiftInTime) }}</span></p>
+                                <p class="out-time"><i class="fa fa-clock-o"></i>Shift Max In Time: <span class="text-success">{{ getHourAndMinute(checkPunchInPunchOut?.maxInTime) }}</span></p>
+                                <p class="out-time"><i class="fa fa-clock-o"></i>Shift Out Time: <span class="text-success">{{ getHourAndMinute(checkPunchInPunchOut?.shiftEndTime) }}</span></p>
+                            </div>
+
+                            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                                <div class="current-time">
+                                    <p class="current-time-value"> {{ currentTime }}</p>
+                                    <p class="date">{{ today | date: 'fullDate' }}</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>            
+               </div>
+                 
+
+               <div class="form-row w-100 sans-serif-font location">
+                    <div class="col-12 p-2 text-center">
+                        <label id="location" name="location" class="text-x-small">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i> {{attendanceLocation}}
+                        </label>
+                    </div>
+                </div>
+
+    
+                <div class="form-row w-100 sans-serif-font">
+
+                    <div class="col-12 col-lg-4 col-md-4 col-sm-6 text-center p-0 d-flex flex-column align-items-center">
+                        <div class="flex-grow-1"></div> 
+                        <div class="text-center">
+
+                            <p *ngIf="checkPunchInPunchOut?.actualInTime !== null && checkPunchInPunchOut?.actualInTime !== '00:00:00'" class="font-bold p-0 m-0 text-success">
+                                <i class="icofont-clock-time "></i>
+                                <span class="text-success ml-1 mr-2">{{ getHourAndMinute(checkPunchInPunchOut?.actualInTime) }}</span>
+                                <span [attr.data-tooltip]="checkPunchInPunchOut?.inTimeLocation" class="tooltip-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                            </p>           
+                        
+                            <p *ngIf="checkPunchInPunchOut?.earlyInTime !== null && checkPunchInPunchOut?.earlyInTime !== '00:00:00'"
+                                class="font-bold p-0 m-0">
+                                Early In Time: <span class="text-info">{{ getHourAndMinute(checkPunchInPunchOut?.earlyInTime) }} Hour</span>
+                            </p>
+                        
+                            <p *ngIf="checkPunchInPunchOut?.lateInTime !== null && checkPunchInPunchOut?.lateInTime !== '00:00:00'"
+                                class="font-bold p-0 m-0">
+                                Late: <span class="text-danger">{{ getHourAndMinute(checkPunchInPunchOut?.lateInTime) }} Hour</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                                    
+    
+                    <div class="col-12 col-lg-4 col-md-4 col-sm-6 text-center p-0">
+                        <ng-container *ngIf="checkPunchInPunchOut">
+                            <ng-container *ngIf="!checkPunchInPunchOut.punchInAndPunchOut && !checkPunchInPunchOut.punchIn">
+                                <div class="button-3d cursor-pointer mx-2" (click)="openPunchInModal()">
+                                    <i class="icofont-finger-print"></i>
+                                    <span class="subtitle text-white">Punch In</span>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="!checkPunchInPunchOut.punchInAndPunchOut && checkPunchInPunchOut.punchIn && !checkPunchInPunchOut.punchOut">
+                                <div class="button-3d punch-out-bg cursor-pointer mx-2" (click)="openPunchOutModal()">
+                                    <i class="icofont-finger-print"></i>
+                                    <span class="subtitle text-white">Punch Out</span>
+                                </div>
+                            </ng-container>
+                    
+                            <ng-container *ngIf="checkPunchInPunchOut.punchInAndPunchOut">
+                                <div class="button-3d bg-success cursor-pointer mx-2 disabled">
+                                    <i class="icofont-finger-print"></i>
+                                    <span class="subtitle text-white">Punch Done</span>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+    
+    
+                    <div class="col-12 col-lg-4 col-md-4 col-sm-6 text-center p-0 d-flex flex-column align-items-center">
+                        <div class="flex-grow-1"></div> 
+                        <div class="text-center">
+
+
+
+                            <p *ngIf="checkPunchInPunchOut?.actualOutTime !== null && checkPunchInPunchOut?.actualOutTime !== '00:00:00'" class="font-bold p-0 m-0"> <i class="icofont-clock-time "></i> <span class="text-success ml-1 mr-2">{{ getHourAndMinute(checkPunchInPunchOut?.actualOutTime) }}</span>
+                                <span [attr.data-tooltip]="checkPunchInPunchOut?.outTimeLocation" class="tooltip-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                            </p>
+
+                            <p *ngIf="checkPunchInPunchOut?.earlyGoing !== null && checkPunchInPunchOut?.earlyGoing !== '00:00:00'" class="font-bold p-0 m-0">Early: <span class="text-danger">{{ getHourAndMinute(checkPunchInPunchOut?.earlyGoing) }} Hour</span></p>
+
+                            <p *ngIf="checkPunchInPunchOut?.overTime !== null && checkPunchInPunchOut?.overTime !== '00:00:00'" class="font-bold p-0 m-0">OverTime: <span class="text-info">{{ getHourAndMinute(checkPunchInPunchOut?.overTime) }} Hour</span></p>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="attendance-details"  [hidden]="showAttendanceContainer" [@fadeInRight]="showAttendanceContainer ? 'hide' : 'show'"> 
+                <app-geo-location-attendance-details></app-geo-location-attendance-details>
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<ng-container *ngIf="showPunchInModal">
+    <app-punch-in-punch-out
+        [attendanceDetails]="attendanceDetails"
+        (closeModalEvent)="closePunchInOutModal($event)"
+    >
+    </app-punch-in-punch-out>
+</ng-container>
+
+
+
+<ng-container *ngIf="showPunchOutModal">
+    <app-punch-in-punch-out
+        [attendanceDetails]="attendanceDetails"
+        (closeModalEvent)="closePunchInOutModal($event)"
+    >
+    </app-punch-in-punch-out>
+</ng-container>
+

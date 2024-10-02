@@ -1,0 +1,561 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Bonus & Config</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Bonus</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Bonus & Config</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 font-bold">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#bonus" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Bonus
+                        </a></li>
+                    <li><a href="#bonusConfig" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-cogs" aria-hidden="true"></i> | Bonus Config
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="bonus" class="tab-pane active">
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content pb-1 shadow-lg text-x-small">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 col-sm-8">
+                                        <label for="SearchByBonus" class="control-label">SEARCH BY BONUS</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-gift"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" id="SearchByBonus" name="SearchByBonus"
+                                                class="form-control form-control-sm" placeholder="ENTER BONUS NAME">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-4">
+                                        <label for="" class="hidden">Create Bonus</label>
+                                        <div class="clearfix">
+                                            <button type="button" class="btn btn-success btn-sm btn-rounded pull-right"
+                                                (click)="openBonusInsertModal()">
+                                                <i class="fa fa-plus"></i> | Create Bonus
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-xl">
+                                        <thead class="text-center bg-dark-blue text-white">
+                                            <tr>
+                                                <th></th>
+                                                <th>#SL</th>
+                                                <th>Name</th>
+                                                <th>Is Religious</th>
+                                                <th>Religion Name</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center">
+                                            <ng-container *ngFor="let item of listOfBonusWithConfigs; let i = index">
+                                                <tr>
+                                                    <td class="text-center cursor-pointer">
+                                                        <button class="btn btn-xs" *ngIf="!hideme[i]"
+                                                            (click)="showChild(i)">
+                                                            <i class="fa fa-chevron-right"></i>
+                                                        </button>
+                                                        <button class="btn btn-xs" *ngIf="hideme[i]"
+                                                            (click)="hideme[i] = !hideme[i]">
+                                                            <i class="fa fa-chevron-down"></i>
+                                                        </button>
+                                                    </td>
+                                                    <td class="text-center font-bold">{{i+1}}</td>
+                                                    <td>{{item.bonusName}}</td>
+                                                    <td>
+                                                        <ng-container *ngIf="item.isReligious == true">
+                                                            <span class="label label-success">Yes</span>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item.isReligious == false">
+                                                            <span class="label label-info">No</span>
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>{{item.religionName}}</td>
+                                                    <td>
+                                                        <ng-container *ngIf="item.isActive == true">
+                                                            <span class="label label-primary">Active</span>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item.isActive == false">
+                                                            <span class="label label-danger">Inactive</span>
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-xs">
+                                                            <i class="fa fa-pencil faa-pulse animated-hover"
+                                                                (click)="openBonusUpdateModal(item.bonusId)"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr [hidden]="!hideme[i]">
+                                                    <td colspan="15">
+                                                        <table
+                                                            class="table table-sm table-striped table-hover table-responsive-xl bg-white">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#SL</th>
+                                                                    <th>Fiscal Year</th>
+                                                                    <th>Is Festival Bonus</th>
+                                                                    <th>Is Taxable</th>
+                                                                    <th>Is Confirmed Employee</th>
+                                                                    <th>Based On</th>
+                                                                    <th>Amount/Percentage</th>
+                                                                    <th>Bonus Qty</th>
+                                                                    <th>Action <button type="button"
+                                                                            class="btn btn-xs btn-rounded faa-parent animated-hover btn-primary"><i
+                                                                                class="fa fa-plus faa-pulse"></i></button>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr
+                                                                    *ngFor="let config of item.bonusConigList; let j = index">
+                                                                    <td>{{j+1}}</td>
+                                                                    <td>{{config.fiscalYearRange}}</td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="config.isFestival == true">
+                                                                            <span class="label label-primary">Yes</span>
+                                                                        </ng-container>
+                                                                        <ng-container
+                                                                            *ngIf="config.isFestival == false">
+                                                                            <span class="label label-danger">No</span>
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container *ngIf="config.isTaxable == true">
+                                                                            <span class="label label-primary">Yes</span>
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="config.isTaxable == false">
+                                                                            <span class="label label-danger">No</span>
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container
+                                                                            *ngIf="config.isConfirmedEmployee == true">
+                                                                            <span class="label label-primary">Yes</span>
+                                                                        </ng-container>
+                                                                        <ng-container
+                                                                            *ngIf="config.isConfirmedEmployee == false">
+                                                                            <span class="label label-danger">No</span>
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>{{config.basedOn}}</td>
+                                                                    <td>
+                                                                        <ng-container
+                                                                            *ngIf="config.basedOn == 'Basic' || config.basedOn == 'Gross'">
+                                                                            <span
+                                                                                class="label label-warning">{{config.percentage}}%</span>
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="config.basedOn == 'Flat'">
+                                                                            <span
+                                                                                class="label label-info">{{config.amount}}&#2547;</span>
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="label label-info">
+                                                                            {{config.bonusCount}}</span>
+                                                                    </td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+
+                                            <!-- <tr *ngIf=" listOfBonusWithConfigs.length ==0 && listOfBonusWithConfigsDTLable == null">
+                                                <td colspan="15" class="text-center">
+                                                    <span class="spinner-border spinner-border-sm" role="status"
+                                                        aria-hidden="true"></span>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf=" listOfBonusWithConfigs.length ==0 && listOfBonusWithConfigsDTLable != null">
+                                                <td colspan="15" class="text-center font-bold">
+                                                    {{listOfBonusWithConfigsDTLable}}
+                                                </td>
+                                            </tr> -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="bonusConfig" class="tab-pane"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+        </div>
+    </div> -->
+</div>
+
+<ng-template #bonusInsertModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i>| Bonus & Config
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="bonusInsertForm" (submit)="saveBonusWithConfig()">
+            <div class="modal-body">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="custom-control custom-switch pl-0" title="Active/Inactive">
+                            <!-- <label class="control-label font-bold mb-0" for="txtbonusName">
+                                BONUS NAME
+                            </label> -->
+                            <input type="checkbox" class="custom-control-input" title="Active/Inactive" id="chkIsActive"
+                                formControlName="isActive">
+                            <label class="custom-control-label custom-switch-lable ml-5" for="chkIsActive">BONUS NAME
+                                <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-gift"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="txtbonusName" id="txtbonusName" formControlName="bonusName"
+                                autocomplete="off" class="form-control form-control-sm" placeholder="ENTER BONUS NAME">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="isReligious" class="control-label font-bold">IS RELIGIOUS?</label>
+                        <div class="input-group mt-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="isReligious" id="religiousYes"
+                                    formControlName="isReligious" [value]="true">
+                                <label class="form-check-label" for="religiousYes">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="isReligious" id="religiousNo"
+                                    formControlName="isReligious" [value]="false">
+                                <label class="form-check-label" for="religiousNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-12 col-sm-12 mb-0"
+                        [class.hide]="this.bonusInsertForm.controls.isReligious.value==false">
+                        <label for="ReligionId" class="control-label font-bold">RELIGION <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-moon-o"></i>
+                                </span>
+                            </div>
+                            <select name="ReligionId" id="ReligionId" class="form-control form-control-sm"
+                                formControlName="religionId">
+                                <option [value]="0">---Select Religion---</option>
+                                <option [value]="item.id" *ngFor="let item of ddlReligion">{{item.text}}</option>
+                            </select>
+                        </div>
+                        <hr class="mb-1">
+                    </div>
+                </div>
+                <h3 class="mt-0 mb-0 text-large font-weight-light">Configuration</h3>
+                <hr class="mt-1">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="fiscalYearId" class="control-label font-bold">FISCAL YEAR<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="fiscalYearId" id="fiscalYearId" class="form-control form-control-sm"
+                                formControlName="fiscalYearId">
+                                <option [value]="0">--Select Fiscal Year--</option>
+                                <option [value]="item.id" *ngFor="let item of ddlFiscalyear">{{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="isFestival" class="control-label font-bold">IS FESTIVAL BONUS?</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="isFestival" id="isFestival" class="form-control form-control-sm"
+                                formControlName="isFestival">
+                                <option [value]="null">--Select One--</option>
+                                <option [value]="true">Yes</option>
+                                <option [value]="false">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="isTaxable" class="control-label font-bold">IS TAXABLE?</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <select name="isTaxable" id="isTaxable" class="form-control form-control-sm"
+                                formControlName="isTaxable">
+                                <option [value]="''">--Select One--</option>
+                                <option [value]="'true'">Yes</option>
+                                <option [value]="'false'">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [class.hide]="this.bonusInsertForm.controls.isTaxable.value == 'false' || this.bonusInsertForm.controls.isTaxable.value == ''">
+                        <label for="taxConditionType" class="control-label font-bold">Tax Condition Type</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <select name="taxConditionType" id="taxConditionType" class="form-control form-control-sm"
+                                formControlName="taxConditionType">
+                                <option [value]="''">--Select One--</option>
+                                <option [value]="'Payment-Projected'">Projected Payment</option>
+                                <option [value]="'Tax-Distributed'">Tax Distributed in remain month</option>
+                                <option [value]="'OnceOff-tax'">OnceOff tax</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="isConfirmedEmployee" class="control-label font-bold">IS BONUS FOR CONFIRMED
+                            EMPLOYEE?<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </div>
+                            <select name="isConfirmedEmployee" id="isConfirmedEmployee"
+                                class="form-control form-control-sm" formControlName="isConfirmedEmployee">
+                                <option [value]="null">--Select One--</option>
+                                <option [value]="true">Yes</option>
+                                <option [value]="false">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="basedOn" class="control-label">BONUS BASED ON<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-arrow-circle-o-down"></i>
+                                </span>
+                            </div>
+                            <select name="basedOn" id="basedOn" class="form-control form-control-sm"
+                                formControlName="basedOn">
+                                <option [value]="'Basic'">Basic</option>
+                                <option [value]="'Gross'">Gross</option>
+                                <option [value]="'Flat'">Flat</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- [class.hide]="bonusInsertForm.controls.basedOn.value == 'Flat'" -->
+                    <div class="form-group col-md-4 col-sm-12 hide">
+                        <label for="percentage" class="control-label text-uppercase">Bonus Percentage<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i>%</i>
+                                </span>
+                            </div>
+                            <input type="text" name="percentage" id="percentage" formControlName="percentage"
+                                placeholder="ENTER PERCENTAGE" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12"
+                        [class.hide]="bonusInsertForm.controls.basedOn.value == 'Flat'">
+                        <label for="bonusCount" class="control-label">Bonus Count<span class="text-danger">*</span>
+                            &nbsp;
+                            <span class="label label-info"> {{this.payrollModuleConfig.unitOfBonus}}%</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="bonusCount" id="bonusCount" formControlName="bonusCount"
+                                placeholder="ENTER Count" class="form-control form-control-sm" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12"
+                        [class.hide]="bonusInsertForm.controls.basedOn.value == 'Gross' || bonusInsertForm.controls.basedOn.value == 'Basic'">
+                        <label for="amount" class="control-label">AMOUNT<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    &#2547;
+                                </span>
+                            </div>
+                            <input type="text" name="amount" id="amount" formControlName="amount"
+                                placeholder="ENTER AMOUNT" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="form-row">
+                    <div class="form-group col-md-12">
+                        {{bonusInsertForm.value | json}}
+                    </div>
+                </div> -->
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="[modal.close('Cancel click')]">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="bonusInsertForm.invalid || btnInsertBonus">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnInsertBonus" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #bonusEditModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i>| Update Bonus
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="bonusEditForm" (submit)="1==1">
+            <div class="modal-body">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <div class="custom-control custom-switch pl-0" title="Active/Inactive">
+                            <input type="checkbox" class="custom-control-input" title="Active/Inactive"
+                                id="chkEditIsActive" formControlName="isActive">
+                            <label class="custom-control-label custom-switch-lable ml-5" for="chkEditIsActive">BONUS
+                                NAME
+                                <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-gift"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="txtEditBonusName" id="txtEditBonusName" formControlName="bonusName"
+                                autocomplete="off" class="form-control form-control-sm" placeholder="ENTER BONUS NAME">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="isEditReligious" class="control-label font-bold">IS RELIGIOUS?</label>
+                        <div class="input-group mt-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="isReligious" id="EditReligiousYes"
+                                    formControlName="isReligious" [value]="true">
+                                <label class="form-check-label" for="isEditReligious">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="isReligious" id="EditReligiousNo"
+                                    formControlName="isReligious" [value]="false">
+                                <label class="form-check-label" for="religiousNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small" [class.hide]="this.bonusEditForm.controls.isReligious.value==false">
+                    <div class="form-group col-md-12 col-sm-12 mb-0">
+                        <label for="EditReligionId" class="control-label font-bold">RELIGION <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-moon-o"></i>
+                                </span>
+                            </div>
+                            <select name="EditReligionId" id="EditReligionId" class="form-control form-control-sm"
+                                formControlName="religionId">
+                                <option [value]="0">---Select Religion---</option>
+                                <option [value]="item.id" *ngFor="let item of ddlReligion">{{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="[modal.close('Cancel click')]">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="bonusEditForm.invalid || btnInsertBonus">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnInsertBonus" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #bonusConfigUpdateModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i>| Update Bonus
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="[modal.close('Cancel click')]">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="btnInsertBonus">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnInsertBonus" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

@@ -1,0 +1,1008 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Variable Deduction</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Deduction</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Variable Deduction</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-4 col-md-4 col-sm-4">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-info btn-rounded btn-sm" (click)="openUploadDeductionModal()"><i class="fa fa-arrow-up"></i> | Upload
+                Excel</button>
+            <button type="button" class="btn btn-success btn-rounded btn-sm ml-1"
+                (click)="openMonthlyVariableDeductionModal()">
+                <i class="fa fa-plus"></i> | Create
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#monthlyVariable" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Monthly Variable Deduction
+                        </a></li>
+                    <li><a href="#periodicallyVariable" data-toggle="tab" class="nav-link hide">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Periodically Variable Deduction
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="monthlyVariable" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width:80%">
+                                            <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                #ddlSearchByEmployeeRef="ngModel" [(ngModel)]="searchByEmployee"
+                                                id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                (ngModelChange)="onEmployeeChanged()" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-money"></i>
+                                            </span>
+                                        </div>
+                                        <select name="ddlSearchByDeduction" id="ddlSearchByDeduction"
+                                            class="form-control form-control-sm"
+                                            (change)="getMonthlyVariableDeductions(1)"
+                                            #ddlSearchByDeductionRef="ngModel" [(ngModel)]="searchByDeduction">
+                                            <option [value]="0">---Select Deduction---</option>
+                                            <option [value]="item.id" *ngFor="let item of ddlDeductionNames">
+                                                {{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-dot-circle-o"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByStatus" id="searchByStatus"
+                                            class="form-control form-control-sm" #searchByStatusRef="ngModel"
+                                            [(ngModel)]="searchByStatus" (change)="getMonthlyVariableDeductions(1)">
+                                            <option [value]="''" selected>---Select Status---</option>
+                                            <option [value]="'Pending'">Pending</option>
+                                            <option [value]="'Approved'">Approved</option>
+                                            <option [value]="'Cancelled'">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <div class="input-group text-x-small">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                            <select name="salaryMonth" id="salaryMonth"
+                                                class="form-control form-control-sm" #salaryMonthRef="ngModel"
+                                                [(ngModel)]="salaryMonth" (change)="getMonthlyVariableDeductions(1)">
+                                                <option [value]="0" selected>---Select Month---</option>
+                                                <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                    {{item.month}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                            <select name="salaryYear" id="salaryYear"
+                                                class="form-control form-control-sm" #salaryYearRef="ngModel"
+                                                [(ngModel)]="salaryYear" (change)="getMonthlyVariableDeductions(1)">
+                                                <option [value]="0" selected>---Select Year---</option>
+                                                <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl"
+                                    id="tblMonthlySalaryVariableDeduction">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Employee Name</th>
+                                            <th class="text-center">Deduction Name</th>
+                                            <th class="text-center">Salary Month & Year</th>
+                                            <th class="text-center">Amount</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listOfMonthlyVariableDeductions | paginate: monthlyVariableDeductionPageConfig, let i =index">
+                                            <td class="text-center font-bold">{{i+1 + (monthlyVariableDeductionPageSize
+                                                *(monthlyVariableDeductionPageNo-1))}}</td>
+                                            <td>{{item.employeeName}}</td>
+                                            <td class="text-center">{{item.deductionName}}</td>
+                                            <td class="text-center">{{item.salaryMonthYear | date:"MMMM yyyy"}}</td>
+                                            <td class="text-center">
+                                                {{item.amount}}
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                    + '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs" title="Edit"
+                                                    (click)="monthlyVariableDeductionForEdit(item.monthlyVariableDeductionId)"
+                                                    *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-info"
+                                                    (click)="openMonthlyVariableDeductionCheckModal(item.monthlyVariableDeductionId,'Approval')"
+                                                    title="Check" *ngIf="item.stateStatus == 'Pending'"><i
+                                                        class="fa fa-check"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-success"
+                                                    (click)="openMonthlyVariableDeductionCheckModal(item.monthlyVariableDeductionId,'View')">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-danger" *ngIf="item.stateStatus == 'Pending'"
+                                                    (click)="openDeductionDeleteModal(item)" >
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfMonthlyVariableDeductions.length ==0 && monthlyVariableDeductionsDTLabel == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfMonthlyVariableDeductions.length ==0 && monthlyVariableDeductionsDTLabel != null">
+                                            <td colspan="20" class="text-center font-bold">
+                                                {{monthlyVariableDeductionsDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="monthlyVariableDeductionsPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="monthlyVariableDeductionData">
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="periodicallyVariable hide" class="tab-pane">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-money"></i>
+                                            </span>
+                                        </div>
+                                        <select name="ddlSearchByDeduction2" id="ddlSearchByDeduction2"
+                                            class="form-control form-control-sm"
+                                            (change)="getPeriodicalVariableDeductions(1)"
+                                            #ddlSearchByDeduction2Ref="ngModel"
+                                            [(ngModel)]="searchByPeriodicalDeduction">
+                                            <option [value]="0">---Select Deduction---</option>
+                                            <option [value]="item.id" *ngFor="let item of ddlSearchByDeduction">
+                                                {{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-md-4 col-sm-12">
+
+                                </div>
+                                <div class="form-group mb-1 col-md-4 col-sm-12">
+                                    <div class="clearfix pull-right">
+                                        <button type="button" class="btn btn-info btn-rounded btn-sm"><i
+                                                class="fa fa-arrow-up"></i> | Upload Excel</button>
+                                        <button type="button" class="btn btn-success btn-rounded btn-sm ml-1"
+                                            (click)="openPeriodicallyVariableDeductionModal()">
+                                            <i class="fa fa-plus"></i> | Create
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl"
+                                    id="tblPeriodicalSalaryVariableDeduction">
+                                    <thead >
+                                        <tr class="text-white">
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Deduction Name</th>
+                                            <th>Variable For</th>
+                                            <th class="text-center">Head Count</th>
+                                            <th>Base Of Deduction</th>
+                                            <th class="text-center">Amount/Percentage</th>
+                                            <th class="text-center">Effectivity</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listOfPeriodicalVariableDeductions | paginate: periodicalVariableDeductionPageConfig, let i =index">
+                                            <td class="text-center">{{i+1 + (periodicalVariableDeductionPageSize
+                                                *(periodicalVariableDeductionPageNo-1))}}</td>
+                                            <td class="text-center">{{item.deductionName}}</td>
+                                            <td>{{item.salaryVariableFor}}</td>
+                                            <td class="text-center font-bold">{{item.headCount}}</td>
+                                            <td>{{item.amountBaseOn}}</td>
+                                            <td class="text-center">
+                                                <span *ngIf="item?.amount > 0 && item?.principalAmount == 0"
+                                                    class="label label-primary">
+                                                    {{item.amount}} &#2547;
+                                                </span>
+                                                <span *ngIf="item?.percentage > 0" class="label label-primary">
+                                                    {{item.percentage}} %
+                                                </span>
+                                                <span *ngIf="item?.principalAmount > 0 && item?.amount > 0"
+                                                    class="label label-primary">
+                                                    {{'Principal Amount: '+item?.principalAmount + " - Amount: "+
+                                                    item?.amount}}
+                                                </span>
+                                            </td>
+                                            <td>{{item.effectiveFrom | date:"dd MMM yyyy"}}-{{item.effectiveTo |
+                                                date:"dd
+                                                MMM yyyy"}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                    + '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs text-success"
+                                                    (click)="openPeriodicalVariableDeductionViewModal('View',item.periodicallyVariableDeductionInfoId)">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-info"
+                                                    *ngIf="item.stateStatus =='Pending'"
+                                                    (click)="openPeriodicalVariableDeductionViewModal('Approval',item.periodicallyVariableDeductionInfoId)">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs"
+                                                    *ngIf="item.stateStatus == 'Pending' || item.stateStatus =='Recheck'"
+                                                    (click)="openPeriodicalVariableDeductionEditModal(item.periodicallyVariableDeductionInfoId)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfPeriodicalVariableDeductions.length ==0 && periodicalVariableDeductionsDTLabel == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfPeriodicalVariableDeductions.length ==0 && periodicalVariableDeductionsDTLabel != null">
+                                            <td colspan="20" class="text-center font-bold">
+                                                {{periodicalVariableDeductionsDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="periodicalVariableDeductionsPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="periodicalVariableDeductionData">
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showUploadDeductionModal">
+    <app-payroll-upload-variable-deduction-modal (closeModalEvent)="closeUploadDeductionModal($event)"></app-payroll-upload-variable-deduction-modal>
+</ng-container>
+
+<ng-container *ngIf="showDeductionDeleteModal">
+    <payroll-module-variable-deduction-delete-modal [item]="deductionDeleteItem" (closeModalEvent)="closeDeductionDeleteModal($event)">
+    </payroll-module-variable-deduction-delete-modal>
+</ng-container>
+
+<ng-template #monthlyVariableDeductionModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>| Add Monthly Variable
+            deduction
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="monthlyVariableDeductionForm" (ngSubmit)="submitMonthlyVariableDeduction()">
+            <div class="modal-body">
+                <div formArrayName="deductions" *ngFor="let deduction of formArray; let i = index">
+                    <div [formGroupName]="i" class="form-row">
+                        <div class="form-group col-md-4 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark font-bold">
+                                        {{i+1}}
+                                    </span>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-users"></i>
+                                    </span>
+                                </div>
+                                <div style="width:80%">
+                                    <ng-select2 [data]="ddlEmployees" name="employees" formControlName="employeeId"
+                                        id="employeesRef" [placeholder]="'Select Employee...'"
+                                        [options]="select2Options" [allowClear]="true" required>
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-money"></i>
+                                    </span>
+                                </div>
+                                <div style="width:80%">
+                                    <ng-select2 [data]="ddlDeductionNames" name="deductionNames"
+                                        formControlName="deductionNameId" [placeholder]="'Select Deduction Name...'"
+                                        [options]="select2Options" [allowClear]="true" required>
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                               
+                                <select name="deductionMonth" class="form-control form-control-sm"
+                                    formControlName="deductionMonth">
+                                    <option [value]="''">---Select Month---</option>
+                                    <option [value]="item.monthNo" *ngFor="let item of ddlMonths">{{item.month}}
+                                    </option>
+                                </select>
+                                <div class="input-group-prepend">
+                                    <select name="deductionYear" class="form-control form-control-sm"
+                                        formControlName="deductionYear">
+                                        <option [value]="''">---Select Year---</option>
+                                        <option [value]="item" *ngFor="let item of ddlYears">{{item}}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i>&#2547;</i>
+                                    </span>
+                                </div>
+                                <input type="number" formControlName="amount" class="form-control form-control-sm"
+                                    name="amount">
+                                <div class="input-group-prepend cursor-pointer" (click)="addDeductionsButtonClick()">
+                                    <span class="input-group-addon text-primary">
+                                        <i class="fa fa-plus"></i></span>
+                                </div>
+                                <div class="input-group-prepend cursor-pointer"
+                                    (click)="removeDeductionsButtonClick(i)">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-trash"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="monthlyVariableDeductionForm.invalid || btnVariableDeduction">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnVariableDeduction" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnVariableDeduction"
+                    (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #monthlyVariableDeductionEditModal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>| Update Monthly Variable
+            deduction
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="monthlyVariableDeductionEditForm" (ngSubmit)="updateMonthlyVariableDeduction()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </div>
+                            <div style="width:80%">
+                                <ng-select2 [data]="ddlEmployees" name="employees" formControlName="employeeId"
+                                    id="employeesRef" [placeholder]="'Select Employee...'" [options]="select2Options"
+                                    [allowClear]="true" required>
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <div style="width:80%">
+                                <ng-select2 [data]="ddlDeductionNames" name="deductionNames"
+                                    formControlName="deductionNameId" [placeholder]="'Select deduction Name...'"
+                                    [options]="select2Options" [allowClear]="true" required>
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-prepend">
+                                <select name="salaryMonth" formControlName="salaryMonth"
+                                    class="form-control form-control-sm">
+                                    <option [value]="0" selected>---Select Month---</option>
+                                    <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                        {{item.month}}</option>
+                                </select>
+                            </div>
+                            <div class="input-group-prepend">
+                                <select name="salaryYear" formControlName="salaryYear"
+                                    class="form-control form-control-sm">
+                                    <option [value]="0" selected>---Select Year---</option>
+                                    <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i>&#2547;</i>
+                                </span>
+                            </div>
+                            <input type="number" formControlName="amount" class="form-control form-control-sm"
+                                name="amount">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="monthlyVariableDeductionEditForm.invalid || btnVariableDeduction">
+                    <i class="fa fa-paper-plane"></i> | Update
+                    <span [hidden]="!btnVariableDeduction" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnVariableDeduction"
+                    (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #monthlyVariableDeductionViewAndCheckModal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-money" aria-hidden="true"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="info">
+                <tbody>
+                    <tr>
+                        <td >Employee Name</td>
+                        <td>{{monthlyVariableDeduction.employeeName}}</td>
+                        <td >Deduction</td>
+                        <td>{{monthlyVariableDeduction.deductionName}}</td>
+                        <td >Salary Month & Year</td>
+                        <td>{{monthlyVariableDeduction.salaryMonthYear | date:"MMMM yyyy"}}</td>
+                    </tr>
+                    <tr>
+                        <td >Amount</td>
+                        <td>{{monthlyVariableDeduction.amount}}</td>
+                        <td >Status</td>
+                        <td>
+                            <span class="label label-warning" *ngIf="monthlyVariableDeduction.stateStatus=='Pending'">
+                                {{monthlyVariableDeduction.stateStatus
+                                + '...'}}</span>
+                            <span class="label label-primary" *ngIf="monthlyVariableDeduction.stateStatus=='Approved'">
+                                <i class="fa fa-check"></i> {{monthlyVariableDeduction.stateStatus}}</span>
+                            <span class="label label-danger"
+                                *ngIf="monthlyVariableDeduction.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                {{monthlyVariableDeduction.stateStatus}}</span>
+                            <span class="label label-info" *ngIf="monthlyVariableDeduction.stateStatus=='Recheck'"><i
+                                    class="fa fa-backward"></i> {{monthlyVariableDeduction.stateStatus}}</span>
+                        </td>
+                        <td >Entry Date</td>
+                        <td>{{monthlyVariableDeduction.createdDate | date:"dd-MMMM-yyyy"}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-body pt-0 text-x-small font-bold text-dark" *ngIf="checkModalFlag =='Approval'">
+        <form #monthlyVariableDeductionApprovalForm="ngForm"
+            (ngSubmit)="submitMonthlyVariableDeductionStatus(monthlyVariableDeductionApprovalForm,remarks.value,checkStatus.value)">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                    <div class="input-group">
+                        <input type="text" name="checkRemarks" #remarks id="checkRemarks" required
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="checkStatus" #checkStatus id="checkStatus"
+                                class="form-control form-control-sm" required>
+                                <option value="Approved">Approved</option>
+                                <option value="Recheck">Recheck</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                                [disabled]="monthlyVariableDeductionApprovalForm.invalid || btnVariableDeduction">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnVariableDeduction" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #periodicallyVariableDeductionModal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>| Add Periodical Variable
+            Deduction
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold">
+        <form [formGroup]="periodicallyVariableDeductionForm" (ngSubmit)="submitPeriodical()">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 border-bottom text-x-small text-dark">
+                        <div class="form-row">
+                            <div class="form-group col-md-5 col-sm-12">
+                                <label for="salaryVariableFor" class="control-label">Variable For
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-users"></i>
+                                        </span>
+                                    </div>
+                                    <select name="salaryVariableFor" id="salaryVariableFor"
+                                        class="form-control form-control-sm" formControlName="salaryVariableFor"
+                                        (blur)="logFormErrors()"
+                                        [ngClass]="{'is-invalid':formErrors.salaryVariableFor}">
+                                        <option [value]="'All'">All</option>
+                                        <option [value]="'Employee'">Employee</option>
+                                        <!-- <option [value]="'Grade'">Grade</option>
+                                        <option [value]="'Designation'">Designation</option> -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-sm-12 col-md-4"
+                        *ngIf="periodicallyVariableDeductionForm.get('salaryVariableFor').value != 'All'">
+                        <div class="ibox">
+                            <div class="ibox-content text-x-small text-dark pt-2 pb-2 pl-1 pr-1">
+                                <div class="form-group col-md-12 col-sm-12 p-0 mb-0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <textarea name="employeeIds" id="employeeIds" cols="30" rows="1"
+                                            class="form-control form-control-sm"
+                                            formControlName="employeeIds"></textarea>
+                                        <div class="input-group-prepend cursor-pointer" (click)="findEmployees()">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ibox-content text-x-small text-dark"
+                                style="max-height: 300px;overflow-y: scroll;">
+                                <table
+                                    class="table table-sm table-striped table-hover table-responsive-lg table-responsive-lg">
+                                    <thead>
+                                        <tr >
+                                            <th class="text-center">#SL</th>
+                                            <th>Name</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr formArrayName="periodicalDetails"
+                                            *ngFor="let creds of periodicallyVariableDeductionForm.controls.periodicalDetails?.value; let i = index">
+                                            <ng-container [formGroupName]="i">
+                                                <td class="text-center">
+                                                    <input type="hidden" name="detailId" id="detailId"
+                                                        formControlName="detailId">
+                                                    {{i+1}}
+                                                </td>
+                                                <td>
+                                                    <input type="hidden" name="id" id="id" formControlName="id">
+                                                    <input type="hidden" name="name" id="name" formControlName="name">
+                                                    <span>{{creds.name}}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-xs text-danger" (click)="1==1">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </button>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12"
+                        [class]="periodicallyVariableDeductionForm.get('salaryVariableFor').value == 'All'? 'col-md-12':'col-md-8'">
+                        <div class="ibox">
+                            <div class="ibox-title bg-light-blue text-white">
+                                <h5>Payable Deduction</h5>
+                            </div>
+                            <div class="ibox-content text-x-small text-dark">
+                                <div class="form-row">
+                                    <div class="form-group mb-1 col-md-4 col-sm-12">
+                                        <label for="DeductionNameId" class="control-label">Deduction
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>
+                                            <select name="DeductionNameId" id="DeductionNameId"
+                                                class="form-control form-control-sm" formControlName="DeductionNameId"
+                                                [ngClass]="{'is-invalid':formErrors.deductionNameId}"
+                                                (blur)="logFormErrors()">
+                                                <option [value]="0">---Select Deduction---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlDeductions">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-1 col-md-4 col-sm-12">
+                                        <label for="durationType" class="control-label">Duration Type
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <select name="durationType" id="durationType"
+                                                class="form-control form-control-sm" formControlName="durationType"
+                                                [ngClass]="{'is-invalid':formErrors.durationType}"
+                                                (blur)="logFormErrors()">
+                                                <option [value]="'Income Year'" selected>Income Year</option>
+                                                <option [value]="'Date Range'">Date Range</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-1 col-md-4 col-sm-12"
+                                        *ngIf="periodicallyVariableDeductionForm.get('durationType').value =='Income Year'">
+                                        <label for="fiscalYearId" class="control-label">Fiscal Years
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </span>
+                                            </div>
+                                            <select name="fiscalYearId" id="fiscalYearId"
+                                                class="form-control form-control-sm" formControlName="fiscalYearId"
+                                                [ngClass]="{'is-invalid':formErrors.fiscalYearId}"
+                                                (blur)="logFormErrors()">
+                                                <option [value]="0" selected>---Select Fiscal year---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlFiscalyears">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-1 col-md-6 col-sm-12"
+                                        *ngIf="periodicallyVariableDeductionForm.get('durationType').value =='Date Range'">
+                                        <label for="effectionFromTo" class="control-label">Effective From ~ To
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar-check-o"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm bg-white"
+                                                id="effectiveFrom" readonly name="effectiveFrom"
+                                                [ngClass]="{'is-invalid':formErrors.effectiveFrom}" placeholder="From"
+                                                bsDatepicker [bsConfig]="datePickerConfig" (click)="logFormErrors()">
+                                            <input type="text" class="form-control form-control-sm bg-white"
+                                                id="effectiveTo" readonly name="effectiveTo"
+                                                [ngClass]="{'is-invalid':formErrors.effectiveTo}" placeholder="To"
+                                                bsDatepicker [bsConfig]="datePickerConfig" (click)="logFormErrors()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-1 col-md-6 col-sm-12">
+                                        <label for="amountBaseOn" class="control-label">Amount Base
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>
+                                            <select name="amountBaseOn" id="amountBaseOn"
+                                                class="form-control form-control-sm" formControlName="amountBaseOn"
+                                                (blur)="logFormErrors()"
+                                                [ngClass]="{'is-invalid':formErrors.amountBaseOn}">
+                                                <option [value]="'Gross'">Gross</option>
+                                                <option [value]="'Basic'">Basic</option>
+                                                <option [value]="'Flat'">Flat</option>
+                                                <option [value]="'Principle'">Principle</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <!-- When Flat then amount -->
+                                                <!-- When Gross/Basic then percentage -->
+                                                <!-- When Principle then principalAmount -->
+                                                <input type="number" class="form-control form-control-sm"
+                                                    id="percentage" name="percentage" formControlName="percentage"
+                                                    (blur)="logFormErrors()"
+                                                    *ngIf="periodicallyVariableDeductionForm.get('amountBaseOn').value=='Gross' || periodicallyVariableDeductionForm.get('amountBaseOn').value=='Basic'"
+                                                    [ngClass]="{'is-invalid':formErrors.percentage}">
+                                                <input type="number" class="form-control form-control-sm" id="amount"
+                                                    name="amount" formControlName="amount"
+                                                    *ngIf="periodicallyVariableDeductionForm.get('amountBaseOn').value=='Flat'"
+                                                    [ngClass]="{'is-invalid':formErrors.amount}"
+                                                    (blur)="logFormErrors()">
+                                                <input type="number" class="form-control form-control-sm"
+                                                    id="principalAmount" name="principalAmount"
+                                                    formControlName="principalAmount"
+                                                    *ngIf="periodicallyVariableDeductionForm.get('amountBaseOn').value=='Principle'"
+                                                    [ngClass]="{'is-invalid':formErrors.principalAmount}"
+                                                    (blur)="logFormErrors()">
+                                            </div>
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <span
+                                                        *ngIf="periodicallyVariableDeductionForm.get('amountBaseOn').value=='Flat' || periodicallyVariableDeductionForm.get('amountBaseOn').value=='Principle'">&#2547;</span>
+                                                    <span
+                                                        *ngIf="periodicallyVariableDeductionForm.get('amountBaseOn').value=='Gross' || periodicallyVariableDeductionForm.get('amountBaseOn').value=='Basic'">%</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="periodicallyVariableDeductionForm.invalid || btnPeriodically">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnPeriodically"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #periodicallyVariableDeductionViewModal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-eye" aria-hidden="true"></i>|Periodical Variable
+            Deduction
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <span class="label label-primary">{{periodicalVariableDeductionInfo.salaryVariableFor}} Wise
+                        Periodical
+                        Salary
+                        Variable Deduction</span>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-sm-12 col-md-4" *ngIf="periodicalVariableDeductionInfo.salaryVariableFor!='All'">
+                    <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                        <tbody>
+                            <tr *ngFor="let item of periodicalVariableDeductionInfo.periodicalDetails; let i=index">
+                                <td class="bg-dark-blue text-white text-center">{{i+1}}</td>
+                                <td>{{item.text}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-12"
+                    [class]="periodicalVariableDeductionInfo.salaryVariableFor=='All' ?'col-md-12':'col-md-8'">
+                    <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                        <tbody>
+                            <tr>
+                                <td >Deduction Name</td>
+                                <td>{{periodicalVariableDeductionInfo.deductionName}}</td>
+                                <td >Duration Type</td>
+                                <td>{{periodicalVariableDeductionInfo.durationType}}</td>
+                                <td >Effectivity</td>
+                                <td>{{periodicalVariableDeductionInfo.effectiveFrom | date:"dd MMM yyyy"}}-
+                                    {{periodicalVariableDeductionInfo.effectiveTo | date:"dd MMM yyyy"}}</td>
+                            </tr>
+                            <tr>
+                                <td >Amount Base</td>
+                                <td>{{periodicalVariableDeductionInfo.amountBaseOn}}</td>
+                                <td >Amount/Percentage</td>
+                                <td>{{periodicalVariableDeductionInfo.amountBaseOn == 'Gross' ||
+                                    periodicalVariableDeductionInfo.amountBaseOn == 'Basic' ?
+                                    periodicalVariableDeductionInfo?.percentage.toString()+"%":(periodicalVariableDeductionInfo.amount
+                                    > 0 && periodicalVariableDeductionInfo.principalAmount > 0?
+                                    periodicalVariableDeductionInfo.principalAmount
+                                    :periodicalVariableDeductionInfo.amount)}}</td>
+                                <td >StateStatus</td>
+                                <td>
+                                    <span class="label label-warning"
+                                        *ngIf="periodicalVariableDeductionInfo.stateStatus=='Pending'">{{periodicalVariableDeductionInfo.stateStatus
+                                        + '...'}}</span>
+                                    <span class="label label-primary"
+                                        *ngIf="periodicalVariableDeductionInfo.stateStatus=='Approved'"> <i
+                                            class="fa fa-check"></i>
+                                        {{periodicalVariableDeductionInfo.stateStatus}}</span>
+                                    <span class="label label-danger"
+                                        *ngIf="periodicalVariableDeductionInfo.stateStatus=='Cancelled'"><i
+                                            class="fa fa-times"></i>
+                                        {{periodicalVariableDeductionInfo.stateStatus}}</span>
+                                    <span class="label label-info"
+                                        *ngIf="periodicalVariableDeductionInfo.stateStatus=='Recheck'"><i
+                                            class="fa fa-backward"></i>
+                                        {{periodicalVariableDeductionInfo.stateStatus}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body pt-0 text-x-small font-bold text-dark" *ngIf="isPeriodicalApprovalModal">
+        <form #periodicallyVariableDeductionApprovalForm="ngForm"
+            (ngSubmit)="submitPeriodicalVariableDeductionStatus(periodicallyVariableDeductionApprovalForm,remarks.value,checkStatus.value)">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                    <div class="input-group">
+                        <input type="text" name="checkRemarks" #remarks id="checkRemarks" required
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="checkStatus" #checkStatus id="checkStatus"
+                                class="form-control form-control-sm" required>
+                                <option value="Approved">Approved</option>
+                                <option value="Recheck">Recheck</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                                [disabled]="periodicallyVariableDeductionApprovalForm.invalid || btnPeriodically">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnPeriodically" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

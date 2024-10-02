@@ -1,0 +1,22 @@
+.disabled-cursor {
+    cursor: not-allowed;
+}
+
+
+.eligibleLeaveHeight{
+    max-height: 150px;
+    overflow: auto;
+}
+
+
+
+
+.label2{
+    background-color: inherit;
+    padding: 0;
+    font-weight: bold;
+}
+
+.value{
+    padding-left: 10px;
+}

@@ -1,0 +1,272 @@
+<div class="wrapper wrapper-content">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li>
+                        <a href="#leaveRequestApproval" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i> | Leave Request Approval
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="leaveRequestApproval" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 80%;">
+                                            <ng-select2 [(ngModel)]="searchByEmployee" [data]="ddlEmployeesForSearch"
+                                                name="searchByEmployee" id="searchByEmployee"
+                                                [placeholder]="'Select Employee...'" [options]="select2Options"
+                                                [allowClear]="true" (ngModelChange)="searchBy_employeeChanged()"
+                                                #searchByEmployeeRef="ngModel">
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByleaveTypeId" id="searchByleaveTypeId"
+                                            class="form-control form-control-sm" [(ngModel)]="searchByLeaveType"
+                                            #searchByLeaveTypeRef="ngModel" (change)="getEmployeeLeaveRequests(1)">
+                                            <option [value]="0" selected>---Select Leave Type---</option>
+                                            <option [value]="item.id" *ngFor="let item of ddlEmployeeLeaveTypes">
+                                                {{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                        </div>
+                                        <select name="dayLeaveTypeRef" id="dayLeaveTypeRef"
+                                            class="form-control form-control-sm" #dayLeaveTypeRef="ngModel"
+                                            [(ngModel)]="searchByDayLeaveType" (change)="getEmployeeLeaveRequests(1)">
+                                            <option [value]="''" selected>---Select Day Leave Type---</option>
+                                            <option [value]="'Full-Day'" selected>Full-Day</option>
+                                            <option [value]="'Half-Day'">Half-Day</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-2 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-arrow-circle-o-up"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByStatus" id="searchByStatus" #searchByStatusRef="ngModel"
+                                            [(ngModel)]="searchByStatus" class="form-control form-control-sm"
+                                            (change)="getEmployeeLeaveRequests(1)">
+                                            <option [value]="''">---Select Status---</option>
+                                            <option [value]="'Pending'">Pending</option>
+                                            <option [value]="'Approved'">Approved</option>
+                                            <option [value]="'Accepted'">Accepted</option>
+                                            <option [value]="'Cancelled'">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                    <thead class="bg-dark-blue text-white">
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Code</th>
+                                            <th>Employee Name</th>
+                                            <th class="hide">Employee Details</th>
+                                            <th>Leave Type</th>
+                                            <th class="text-center">Day Leave Type</th>
+                                            <th class="text-center">Applied From-To</th>
+                                            <th class="text-center">Total Days</th>
+                                            <th>Leave Purpose</th>
+                                            <th>Emergency Phone No</th>
+                                            <th>Address During Leave</th>
+                                            <th class="text-center">StateStatus</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listEmployeeLeaveRequests | paginate:employeeLeaveTypePageConfig; let i=index">
+                                            <td class="text-center font-bold">{{i+1 +
+                                                (employeeLeaveTypePageSize*(employeeLeaveTypePageNo-1))}}</td>
+                                            <td>{{item.employeeLeaveCode}}</td>
+                                            <td>{{item.employeeName}}</td>
+                                            <td class="hide">{{item.gradeName+', '+item.designationName+',
+                                                '+item.departmentName+',
+                                                '+item.sectionName+', '+item.subSectionName}}</td>
+                                            <td>{{item.leaveTypeName}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-info"
+                                                    [hidden]="item.dayLeaveType == 'Half-Day'">
+                                                    <i class="fa fa-star text-dark" aria-hidden="true"></i>
+                                                    {{item.dayLeaveType}}
+                                                </span>
+                                                <span class="label label-warning"
+                                                    [hidden]="item.dayLeaveType == 'Full-Day'">
+                                                    <i class="fa fa-star-half text-dark" aria-hidden="true"></i>
+                                                    {{item.dayLeaveType}}
+                                                    <i
+                                                        [class]="item.halfDayType == 'First Portion'? 'fa fa-hourglass-start text-dark':'fa fa-hourglass-end text-dark'"></i>
+                                                    {{item.halfDayType}}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">{{item.appliedFromDate | date:"dd MMM yyyy"}} -
+                                                {{item.appliedToDate | date:"dd MMM yyyy"}}</td>
+                                            <td class="text-center">{{item.appliedTotalDays}}</td>
+                                            <td>{{item.leavePurpose}}</td>
+                                            <td>{{item.emergencyPhoneNo}}</td>
+                                            <td>{{item.addressDuringLeave}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus +
+                                                    '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-xs text-info"
+                                                    (click)="openEmployeeLeaveRequestApprovalModal(item.employeeId, item.employeeLeaveRequestId)"
+                                                    [disabled]="item.stateStatus=='Recheck'"
+                                                    *ngIf="item.stateStatus=='Recheck' || item.stateStatus=='Pending'">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listEmployeeLeaveRequests.length ==0 && employeeLeaveRequestsDTLabel == null">
+                                            <td colspan="15" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listEmployeeLeaveRequests.length ==0 && employeeLeaveRequestsDTLabel != null">
+                                            <td colspan="15" class="text-center font-bold">
+                                                {{employeeLeaveRequestsDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="employeeLeaveRequestPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="employeeLeaveType"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #leaveRequestApprovalModal let-modal>
+    <div class="modal-header bg-dark-blue text-white">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-clock-o" aria-hidden="true"></i>| Leave Request
+            Permission
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl" table-name="info">
+                <tbody>
+                    <tr>
+                        <td class="bg-dark-blue text-white">Code</td>
+                        <td>{{leaveRequestApprovalItem?.employeeLeaveCode}}</td>
+                        <td class="bg-dark-blue text-white">Employee</td>
+                        <td>{{leaveRequestApprovalItem?.employeeName}}</td>
+                        <td class="bg-dark-blue text-white">Designation</td>
+                        <td>{{leaveRequestApprovalItem?.designationName}}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-dark-blue text-white">Leave Type</td>
+                        <td>{{leaveRequestApprovalItem?.leaveTypeName}}</td>
+                        <td class="bg-dark-blue text-white">Day Leave Type</td>
+                        <td>{{leaveRequestApprovalItem?.dayLeaveType}}</td>
+                        <td class="bg-dark-blue text-white">From-To Date</td>
+                        <td>
+                            {{leaveRequestApprovalItem?.appliedFromDate | date:"dd MMM yyyy"}} -
+                            {{leaveRequestApprovalItem?.appliedToDate | date:"dd MMM yyyy" }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bg-dark-blue text-white">Total</td>
+                        <td>{{leaveRequestApprovalItem?.appliedTotalDays}}</td>
+                        <td class="bg-dark-blue text-white">Leave Purpose</td>
+                        <td>{{leaveRequestApprovalItem?.leavePurpose}}</td>
+                        <td class="bg-dark-blue text-white">State Status</td>
+                        <td>
+                            <span class="label label-warning"
+                                *ngIf="leaveRequestApprovalItem?.stateStatus=='Pending'">{{leaveRequestApprovalItem.stateStatus
+                                + '...'}}</span>
+                            <span class="label label-primary" *ngIf="leaveRequestApprovalItem?.stateStatus=='Approved'">
+                                <i class="fa fa-check"></i> {{leaveRequestApprovalItem?.stateStatus}}</span>
+                            <span class="label label-danger"
+                                *ngIf="leaveRequestApprovalItem?.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                {{leaveRequestApprovalItem?.stateStatus}}</span>
+                            <span class="label label-info" *ngIf="leaveRequestApprovalItem?.stateStatus=='Recheck'"><i
+                                    class="fa fa-backward"></i> {{leaveRequestApprovalItem?.stateStatus}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-body pt-0 text-x-small font-bold text-dark">
+        <form #leaveRequestApproavalForm="ngForm"
+            (submit)="submitLeaveRequestApproval(leaveRequestApproavalForm,remarks.value,checkStatus.value)">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                    <div class="input-group">
+                        <input type="text" name="checkRemarks" #remarks id="checkRemarks" required
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="checkStatus" #checkStatus id="checkStatus"
+                                class="form-control form-control-sm" required>
+                                <option value="Approved">Approved</option>
+                                <option value="Recheck">Recheck</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                                [disabled]="leaveRequestApproavalForm.invalid || btnLeaveRequestApproval">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnLeaveRequestApproval" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

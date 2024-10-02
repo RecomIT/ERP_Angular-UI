@@ -1,0 +1,128 @@
+<ng-template #discontinuedEmployeeApprovalModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-shopping-bag" aria-hidden="true"></i>| Approval Of Discontinued Employee
+        </h5>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="form-row text-x-small">
+                <div class="col-12 col-md-12 col-sm-12 font-bold">
+                    <div class="activity-stream">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Employee ID
+                                    </a>
+                                </div>
+                                {{this.employeeCode}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity-stream">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Employee Name
+                                    </a>
+                                </div>
+                                {{this.employeeName}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity-stream">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Last Working Day
+                                    </a>
+                                </div>
+                                {{this.lastWorkingDate | date: 'dd MMM yyyy'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity-stream">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Release type
+                                    </a>
+                                </div>
+                                {{this.releasetype}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity-stream">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Calculate Festival Bonus Tax Prorated Basis
+                                    </a>
+                                </div>
+                                {{this.calculateFestivalBonusTaxProratedBasis ? 'Yes' :'No'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity-stream">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Calculate Projection Tax Prorated Basis
+                                    </a>
+                                </div>
+                                {{this.calculateProjectionTaxProratedBasis ? 'Yes':'No'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body text-x-small">
+                <div class="form-row border-top">
+                    <div class="form-group offset-md-4 col-md-12 col-sm-12 mt-1">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <select name="stateStatus" id="status" formControlName="stateStatus"
+                                    class="form-control form-control-sm">
+                                    <option value="Approved">Approved</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button type="submit" class="btn btn-sm btn-rounded btn-primary"><i
+                                        class="fa fa-paper-plane"></i>| Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

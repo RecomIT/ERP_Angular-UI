@@ -1,0 +1,160 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle" aria-hidden="true">&#2547;</i>| Approval
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body text-x-small">
+                <div class="form-row">
+                    <div class="col-12 col-md-6 col-sm-12 font-bold">
+                        <div class="activity-stream">
+                            <div class="stream pb-0">
+                                <div class="stream-badge">
+                                    <i class="icofont-money"></i>
+                                </div>
+                                <div class="stream-panel y">
+                                    <div class="stream-info font-normal">
+                                        <a class="text-info">
+                                            Allowance
+                                        </a>
+                                    </div>
+                                    {{this.data?.allowanceName +" "+ this.data?.reason + " "+ this.data?.payableYear}}
+                                </div>
+                            </div>
+                            <div class="stream pb-0">
+                                <div class="stream-badge">
+                                    <i class="icofont-list"></i>
+                                </div>
+                                <div class="stream-panel">
+                                    <div class="stream-info font-normal">
+                                        <a class="text-info">
+                                            Base Of Payment
+                                        </a>
+                                    </div>
+                                    {{this.data?.baseOfPayment}}
+                                </div>
+                            </div>
+                            <div class="stream pb-0">
+                                <div class="stream-badge">
+                                    <i class="">%</i>
+                                </div>
+                                <div class="stream-panel">
+                                    <div class="stream-info font-normal">
+                                        <a class="text-info" *ngIf="this.data?.baseOfPayment == 'Flat'">
+                                            Amount
+                                        </a>
+                                        <a class="text-info" *ngIf="this.data?.baseOfPayment != 'Flat'">
+                                            Percentage
+                                        </a>
+                                    </div>
+                                    <div *ngIf="this.data?.baseOfPayment == 'Flat'">
+                                        &#2547; {{this.data?.amount}}
+                                    </div>
+                                    <div *ngIf="this.data?.baseOfPayment != 'Flat'">
+                                        {{this.data?.percentage}} %
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stream pb-0">
+                                <div class="stream-badge">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <div class="stream-panel">
+                                    <div class="stream-info font-normal">
+                                        <a class="text-info">
+                                            Income Year
+                                        </a>
+                                    </div>
+                                    {{this.data?.fiscalYear}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-sm-12 font-bold">
+                        <div class="activity-stream">
+                            <div class="stream pb-0">
+                                <div class="stream-badge">
+                                    <i class="fa fa-list"></i>
+                                </div>
+                                <div class="stream-panel">
+                                    <div class="stream-info font-normal">
+                                        <a class="text-info">
+                                            Job-Type
+                                        </a>
+                                    </div>
+                                    {{this.data?.jobType??'N/A'}}
+                                </div>
+                            </div>
+                            <div class="stream pb-0">
+                                <div class="stream-badge">
+                                    <i class="fa fa-list"></i>
+                                </div>
+                                <div class="stream-panel">
+                                    <div class="stream-info font-normal">
+                                        <a class="text-info">
+                                            Citizen
+                                        </a>
+                                    </div>
+                                    {{this.data?.citizen??'N/A'}}
+                                </div>
+                            </div>
+                            <div class="stream pb-0">
+                                <div class="stream-badge">
+                                    <i class="fa fa-list"></i>
+                                </div>
+                                <div class="stream-panel">
+                                    <div class="stream-info font-normal">
+                                        <a class="text-info">
+                                            Religion
+                                        </a>
+                                    </div>
+                                    {{this.data?.religion??'N/A'}}
+                                </div>
+                            </div>
+                            <div class="stream pb-0">
+                                <div class="stream-badge">
+                                    <i class="fa fa-list"></i>
+                                </div>
+                                <div class="stream-panel">
+                                    <div class="stream-info font-normal">
+                                        <a class="text-info">
+                                            Confirmation Required
+                                        </a>
+                                    </div>
+                                    {{(this.data?.isConfirmationRequired ?? false) == false ? "No":"Yes"}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <div class="form-row">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-list"></i>
+                            </span>
+                        </div>
+                        <select name="status" id="status" class="form-control form-control-sm" formControlName="status">
+                            <option [value]="'Approved'">Approved</option>
+                            <option [value]="'Cancelled'">Cancelled</option>
+                        </select>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                                [disabled]="form.invalid || btnSubmit">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

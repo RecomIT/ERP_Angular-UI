@@ -1,0 +1,95 @@
+<ng-template #enrollSetupModal let-modal>
+    <div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="icofont-ui-settings mr-2"></i>
+                    {{ modalTitle }}
+                </h5>
+                <button type="button" class="close" aria-label="Close" (click)="closeEnrollModal('close click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="container-fluid" *ngIf="ExecutionFlag === 'I'">
+                    <form [formGroup]="trainingForm" (ngSubmit)="submit()">
+                        <div class="form-group">
+                            <label for="trainingName" class="font-weight-bold">Training Name:</label>
+                            <p class="form-control-static">{{ enrollTraining?.trainingName }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmation" class="font-weight-bold">Confirmation:</label>
+                            <p class="text-muted">Are you sure you want to enroll in this training?</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary px-4" type="submit" [disabled]="trainingForm.invalid">
+                                <i class="fa fa-paper-plane mr-2"></i> | Yes, Submit
+                                
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+                <div class="container-fluid" *ngIf="ExecutionFlag === 'Approve'">
+                    <form [formGroup]="trainingForm" (ngSubmit)="submit()">
+                        <div class="form-group">
+                            <label for="trainingName" class="font-weight-bold">Training Name:</label>
+                            <p class="form-control-static">{{ enrollTraining?.trainingName }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="employeeName" class="font-weight-bold">Employee Name:</label>
+                            <p class="form-control-static">{{ enrollTraining?.employeeName }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmation" class="font-weight-bold">Confirmation:</label>
+                            <p class="text-muted">Are you sure you want to Approve?</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary px-4" type="submit" [disabled]="trainingForm.invalid">
+                                <i class="fa fa-paper-plane mr-2"></i> | Yes, Submit
+                                
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+
+                <div class="container-fluid" *ngIf="ExecutionFlag === 'Reject'">
+                    <form [formGroup]="trainingForm" (ngSubmit)="submit()">
+                        <div class="form-group">
+                            <label for="trainingName" class="font-weight-bold">Training Name:</label>
+                            <p class="form-control-static">{{ enrollTraining?.trainingName }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="employeeName" class="font-weight-bold">Employee Name:</label>
+                            <p class="form-control-static">{{ enrollTraining?.employeeName }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmation" class="font-weight-bold">Confirmation:</label>
+                            <p class="text-muted">Are you sure you want to Reject?</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary px-4" type="submit" [disabled]="trainingForm.invalid">
+                                <i class="fa fa-paper-plane mr-2"></i> | Yes, Submit
+                                
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+
+                <button class="btn btn-xs btn-danger btn-rounded shadow-lg px-2" type="button" (click)="closeEnrollModal('Close Click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+        
+            </div>
+        </div>
+    </div>
+</ng-template>

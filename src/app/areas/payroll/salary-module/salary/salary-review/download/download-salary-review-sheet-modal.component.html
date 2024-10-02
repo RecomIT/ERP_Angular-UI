@@ -1,0 +1,123 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-download"></i> | Download Salary Review Sheet
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="1==1">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label for="effectiveDate" class="control-label font-bold"> Effective Date</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="effectiveDate" id="effectiveDate" formControlName="effectiveDate"
+                                class="form-control form-control-sm bg-white" readonly
+                                placeholder="Select Effective Date ..." [tooltip]="'Effective Date'" bsDaterangepicker
+                                [bsConfig]="datePickerConfig" autocomplete="off">
+                            <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date"
+                                [hidden]="form.get('effectiveDate').value == null"
+                                (click)="form.get('effectiveDate').setValue(null)">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label for="employeeId" class="control-label font-bold">
+                            Employee
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-ui-user-group"></i>
+                                </span>
+                            </div>
+                            <div class="d-inline" style="width: 86%;">
+                                <ng-select2 [data]="ddlEmployees" name="employees" id="searchByEmployee"
+                                    formControlName="employeeId" [placeholder]="'Employee...'" [options]="select2Config"
+                                    [allowClear]="true" required>
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label for="dateOfjoining" class="control-label font-bold"> Joining Date</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="dateOfjoining" id="dateOfjoining" formControlName="dateOfjoining"
+                                class="form-control form-control-sm bg-white" readonly
+                                placeholder="Select Joining Date ..." [tooltip]="'Joining Date'" bsDaterangepicker
+                                [bsConfig]="datePickerConfig" autocomplete="off">
+                            <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date"
+                                [hidden]="form.get('dateOfjoining').value == null"
+                                (click)="form.get('dateOfjoining').setValue(null)">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label for="stateStatus" class="control-label font-bold"> Status</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-list-ul"></i>
+                                </span>
+                            </div>
+                            <select name="stateStatus" id="stateStatus" class="form-control form-control-sm"
+                                formControlName="stateStatus">
+                                <option [value]="''">---Select Status---</option>
+                                <option [value]="item" *ngFor="let item of ddlStatus">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label for="branchId" class="control-label  font-bold">Branch</label>
+                        <div class="input-group shadow-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-building"></i>
+                                </span>
+                            </div>
+                            <select name="branchId" id="branchId" class="form-control form-control-sm"
+                                formControlName="branchId">
+                                <option [value]="0">---Select Branch---</option>
+                                <option [value]="item.id" *ngFor="let item of ddlBranch">{{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-info">[Please select at least one, then click dowload]</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-outline btn-rounded" type="button" (click)="download()" [disabled]="btnDownload">
+                    <i class="icofont-download"></i> | Download
+                    <span [hidden]="!btnDownload" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                    </span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button"
+                    (click)="closeModal('Cancel click')" [disabled]="btnDownload">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+
+</ng-template>

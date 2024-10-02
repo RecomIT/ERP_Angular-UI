@@ -1,0 +1,253 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Bonus & Config</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Bonus</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Bonus & Config</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 font-bold">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#bonus" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Bonus
+                        </a></li>
+                    <li><a href="#bonusConfig" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-cogs" aria-hidden="true"></i> | Bonus Config
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="bonus" class="tab-pane active">
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content pb-1 shadow-lg text-x-small">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 col-sm-8">
+                                        <label for="SearchByBonus" class="control-label">SEARCH BY BONUS</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-gift"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" id="SearchByBonus" name="SearchByBonus"
+                                                class="form-control form-control-sm" placeholder="ENTER BONUS NAME">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-4">
+                                        <label for="" class="hidden">Create Bonus</label>
+                                        <div class="clearfix">
+                                            <button type="button" class="btn btn-success btn-sm btn-rounded pull-right"
+                                                (click)="openBonusModal(0)">
+                                                <i class="fa fa-plus"></i> | Create Bonus
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox bg-white shadow-sm">
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-xl">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th>#SL</th>
+                                                <th>Name</th>
+                                                <th>Reason</th>
+                                                <th>Remarks</th>
+                                                <th>Status</th>
+                                                <th>Created Date</th>
+                                                <th>Last Updated Date</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center">
+                                            <tr *ngFor="let item of listOfBonus; let i =index">
+                                                <td class="text-center">{{i+1}}</td>
+                                                <td class="text-center">{{item.bonusName}}</td>
+                                                <td>{{item.reason}}</td>
+                                                <td>{{item.remarks}}</td>
+                                                <td class="text-center">
+                                                    <span class="label label-danger" *ngIf="item.isActive==false">
+                                                        Inactive
+                                                    </span>
+                                                    <span class="label label-primary" *ngIf="item.isActive == true">
+                                                        Active
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">{{item.createdDate | date:"dd-MMM-yyyy hh:mm:ss
+                                                    a"}}</td>
+                                                <td class="text-center">{{item.updatedDate | date:"dd-MMM-yyyy hh:mm:ss
+                                                    a"}}</td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-xs" (click)="openBonusModal(item.bonusId)">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="bonusConfig" class="tab-pane">
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content pb-1 shadow-lg text-x-small">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 col-sm-8">
+                                        <label for="SearchByBonus" class="control-label">SEARCH BY BONUS</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-gift"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" id="SearchByBonusInConfig" name="SearchByBonusInConfig"
+                                                class="form-control form-control-sm" placeholder="Search By BONUS NAME">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-4 mt-lg-4 mt-sm-4">
+                                        <!-- <label for="" class="hidden">Create Bonus</label> -->
+                                        <div class="clearfix">
+                                            <button type="button" class="btn btn-success btn-sm btn-rounded pull-right"
+                                                (click)="openBonusConfigModal(0)">
+                                                <i class="fa fa-plus"></i> | Add Config
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox bg-white shadow-sm">
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>#SL</th>
+                                                <th>Code</th>
+                                                <th>Bonus Name</th>
+                                                <th>Fiscal Year</th>
+                                                <th>Is Religious</th>
+                                                <th>Religion Name</th>
+                                                <th>Is Confirmed Employee</th>
+                                                <th>Is Festival Bonus</th>
+                                                <th>Is Taxable</th>
+                                                <th>Tax Type</th>
+                                                <th>Exclude From salary</th>
+                                                <th>Tax Adjusted with Salary</th>
+                                                <th>Based On</th>
+                                                <th>Percentage/Amount</th>
+                                                <th>Crated Date</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center">
+                                            <tr *ngFor="let item of listOfBonusConfig; let i=index">
+                                                <td class="text-center">{{i+1}}</td>
+                                                <td class="text-center">{{item?.bonusConfigCode}}</td>
+                                                <td>{{item?.bonusName}}</td>
+                                                <td>{{item?.fiscalYearRange}}</td>
+                                                <td class="text-center">
+                                                    <span *ngIf="item.isReligious"
+                                                        class="label label-success">Yes</span>
+                                                    <span *ngIf="!item.isReligious"
+                                                        class="label label-warning">No</span>
+                                                </td>
+                                                <td>{{item?.religionName}}</td>
+                                                <td>
+                                                    <span *ngIf="item?.isConfirmedEmployee"
+                                                        class="label label-success">Yes</span>
+                                                    <span *ngIf="!item?.isConfirmedEmployee"
+                                                        class="label label-danger">No</span>
+                                                </td>
+                                                <td>
+                                                    <span *ngIf="item?.isFestival" class="label label-success">Yes</span>
+                                                    <span *ngIf="!item.isFestival" class="label label-danger">No</span>
+                                                </td>
+                                                <td>
+                                                    <span *ngIf="item.isTaxable" class="label label-success">Yes</span>
+                                                    <span *ngIf="!item.isTaxable" class="label label-danger">No</span>
+                                                </td>
+                                                <td>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.isPaymentProjected">Projection Tax</span>
+                                                    <span class="label label-primary" *ngIf="item.isOnceOff">OnceOff
+                                                        Tax</span>
+                                                    <span class="!label label-primary"
+                                                        *ngIf="item.isTaxDistributed">Distributed Tax</span>
+                                                </td>
+                                                <td>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.isExcludeFromSalary">Yes</span>
+                                                    <span class="label label-danger"
+                                                        *ngIf="!item.isExcludeFromSalary">No</span>
+                                                </td>
+                                                <td>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.isTaxAdjustedWithSalary">Yes</span>
+                                                    <span class="label label-danger"
+                                                        *ngIf="!item.isTaxAdjustedWithSalary">No</span>
+                                                </td>
+                                                <td>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.basedOn=='Basic'">Basic</span>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.basedOn=='Gross'">Gross</span>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.basedOn=='Flat'">Flat</span>
+                                                </td>
+                                                <td>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.basedOn=='Basic' || item.basedOn=='Gross'">{{item.percentage}}%</span>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.basedOn=='Flat'">{{item.amount}}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{item.createdDate | date:"dd-MMM-yyyy hh:mm:ss a"}}
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-xs btn-danger" (click)="openExcludeEmployeeModal(item.bonusId,item.bonusConfigId)" title="Exclude Employee">
+                                                        <i class="fa fa-minus text-white"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-container *ngIf="showBonusModal == true && bonus_id != null">
+    <app-payroll-bonus-modal [id]="bonus_id" [list]="listOfBonus"
+        (closeModalEvent)="closeBonusModal($event)"></app-payroll-bonus-modal>
+</ng-container>
+
+<ng-container *ngIf="showBonusConfigModal == true && bonus_config_id != null">
+    <app-payroll-bonus-config-modal [id]="bonus_config_id" [listOfBonus]="listOfBonus" [item]="bonus_config_item"
+        (closeModalEvent)="closeBonusConfigModal($event)"></app-payroll-bonus-config-modal>
+</ng-container>
+
+<ng-container *ngIf="showExcludeEmployeeModal == true && bonus_config_id != null && bonus_id != null">
+    <app-payroll-bonus-exclude-employee-modal [bonusId]="bonus_id" [bonusConfigId]="bonus_config_id"
+        (closeModalEvent)="closeExcludeEmployeeModal($event)"></app-payroll-bonus-exclude-employee-modal>
+</ng-container>

@@ -1,0 +1,368 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-8">
+        <h2 @slideInUp class="mt-2">Self Manual Attendance</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Attendance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Self Manual Attendance</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-4">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-sm btn-primary btn-rounded pull-right"
+                (click)="openManualAttendanceModal()">
+                <i class="fa fa-plus"></i> | Create
+            </button>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#manualAttendance" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i> | Manual Attendance
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="manualAttendance" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="searchByDate" id="searchByDate"
+                                            class="form-control form-control-sm bg-white" placeholder="Search By Date"
+                                            #searchByDateRef="ngModel" [(ngModel)]="searchByDate"
+                                            (ngModelChange)="getManualAttendances()" bsDaterangepicker
+                                            autocomplete="off" readonly [bsConfig]="datePickerConfig">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="[searchByDate=[],getManualAttendances()]"
+                                            [hidden]="searchByDate.length ==0">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-codepen" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="searchByCode" id="searchByCode"
+                                            class="form-control form-control-sm" placeholder="Search By Code"
+                                            #searchByCodeRef="ngModel" [(ngModel)]="searchByCode"
+                                            (input)="getManualAttendances()">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="[searchByCode='',getManualAttendances()]"
+                                            [hidden]="searchByCode==''">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="searchByReason" id="searchByReason"
+                                            class="form-control form-control-sm" placeholder="Search By Reason"
+                                            #searchByReasonRef="ngModel" [(ngModel)]="searchByReason"
+                                            (input)="getManualAttendances()">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="[searchByReason='',getManualAttendances()]"
+                                            [hidden]="searchByReason==''">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByRequestFor" id="searchByRequestFor"
+                                            #searchByRequestForRef="ngModel" [(ngModel)]="searchByRequestFor"
+                                            class="form-control form-control-sm" (change)="getManualAttendances()">
+                                            <option [value]="''">---Select Time-Request---</option>
+                                            <option [value]="'Both'">Both In & Out Time</option>
+                                            <option [value]="'In'">In-Time</option>
+                                            <option [value]="'Out'">Out-Time</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon  text-dark">
+                                                <i class="fa fa-linode" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByStatus" id="searchByStatus"
+                                            class="form-control form-control-sm" #searchByStatusRef="ngModel"
+                                            [(ngModel)]="searchByStatus" (change)="getManualAttendances()">
+                                            <option [value]="''">---Search By Status---</option>
+                                            <option [value]="'Pending'">Pending</option>
+                                            <option [value]="'Recheck'">Recheck</option>
+                                            <option [value]="'Approved'">Approved</option>
+                                            <option [value]="'Cancelled'">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                    id="tblManualAttendance">
+                                    <thead class=" ">
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Code</th>
+                                            <th>Employee</th>
+                                            <th>Department</th>
+                                            <th class="text-center">Attendance Date</th>
+                                            <th>Reason</th>
+                                            <th class="text-center">Time Request For</th>
+                                            <th class="text-center">Time</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listOfMaualAttendance | paginate: manualAttnPageConfig; let i =index">
+                                            <td class="text-center font-bold">{{i+1 + (manualAttnPageSize
+                                                *(manualAttnPageNo-1))}}</td>
+                                            <td class="text-center">{{item.manualAttendanceCode}}</td>
+                                            <td>{{item.employeeName}}</td>
+                                            <td>{{item.departmentName}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-info"> <i class="fa fa-calendar"></i>
+                                                    {{item.attendanceDate | date:"dd-MMMM-yyyy"}}</span>
+                                            </td>
+                                            <td>{{item.reason}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-success">{{item.timeRequestFor=='In-Time' ?
+                                                    'In-Time':(item.timeRequestFor =='Out-Time'? 'Out-Time':'Both In &
+                                                    Out
+                                                    Time')}}</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="label label-inverse">
+                                                    <i class="fa fa-clock-o text-danger"></i>
+                                                    {{item.timeRequestFor=='In-Time' ?
+                                                    item.inTime:(item.timeRequestFor =='Out-Time'?
+                                                    item.outTime:item.inTime+'-'+item.outTime)}}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus +
+                                                    '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date:"dd-MMMM-yyyy hh:mm:ss
+                                                a"}}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-xs"
+                                                    (click)="getManualAttendance(item.manualAttendanceId)"
+                                                    *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-danger"
+                                                    (click)="openSchedulerRequestDeleteModal(item)"
+                                                    *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf=" listOfMaualAttendance.length ==0 && maualAttendanceDTLabel == null">
+                                            <td colspan="15" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf=" listOfMaualAttendance.length ==0 && maualAttendanceDTLabel != null">
+                                            <td colspan="15" class="text-center font-bold">
+                                                {{maualAttendanceDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="manualAttendancePageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="manualAttn"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #manualAttendanceModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-clock-o" aria-hidden="true"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="manualAttendanceForm" (ngSubmit)="submitManualAttendance()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="attendanceDate" class="control-label">Attendance Date <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm bg-white"
+                                placeholder="Attendance Date Here" formControlName="attendanceDate" readonly
+                                bsDatepicker [bsConfig]="datePickerConfig" id="attendanceDate" name="attendanceDate"
+                                [ngClass]="{'is-invalid':
+                                ((manualAttendanceForm.get('attendanceDate').touched ||
+                                manualAttendanceForm.get('attendanceDate').dirty) &&
+                                manualAttendanceForm.get('attendanceDate').errors)}"
+                                [class.is-valid]="manualAttendanceForm.get('attendanceDate').valid ">
+                            <div class="input-group-prepend cursor-pointer"
+                                (click)="this.manualAttendanceForm.controls.attendanceDate.setValue(null)">
+                                <span class="input-group-addon text-danger" *ngIf="this.manualAttendanceForm.controls.attendanceDate.value != null 
+                                    && this.manualAttendanceForm.controls.attendanceDate.value != ''">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="timeReqestFor" class="control-label">Request For
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <select name="timeRequestFor" id="timeRequestFor" formControlName="timeRequestFor"
+                                class="form-control form-control-sm"
+                                [class.is-valid]="manualAttendanceForm.get('timeRequestFor').valid" [ngClass]="{'is-invalid':
+                            ((manualAttendanceForm.get('timeRequestFor').touched ||
+                            manualAttendanceForm.get('timeRequestFor').dirty) &&
+                            manualAttendanceForm.get('timeRequestFor').errors)}"
+                                (change)="[manualAttendanceForm.get('inTime').setValue(null),manualAttendanceForm.get('outTime').setValue(null)]">
+                                <option [value]="'Both'">Both In & Out Time</option>
+                                <option [value]="'In-Time'">In-Time</option>
+                                <option [value]="'Out-Time'">Out-Time</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [hidden]="manualAttendanceForm.get('timeRequestFor').value=='Out-Time'">
+                        <label for="inTime" class="control-label">In-Time <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <timepicker formControlName="inTime" name="inTime" #inTime [min]="minTime" [max]="maxTime"
+                                [showMeridian]="true"></timepicker>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [hidden]="manualAttendanceForm.get('timeRequestFor').value=='In-Time'">
+                        <label for="outTime" class="control-label">Out-Time <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <timepicker formControlName="outTime" name="outTime" #outTime [min]="minTime"
+                                [max]="maxTime" [showMeridian]="true"></timepicker>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="reason" class="control-label">Reason
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" formControlName="reason" id="reason"
+                                name="reason" [class.is-valid]="manualAttendanceForm.get('reason').valid" [ngClass]="{'is-invalid':
+                            ((manualAttendanceForm.get('reason').touched ||
+                            manualAttendanceForm.get('reason').dirty) &&
+                            manualAttendanceForm.get('reason').errors)}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="manualAttendanceForm.invalid || btnManualAttendance">
+                    <i class="fa fa-paper-plane"></i> | {{manualAttendanceForm.get('manualAttendanceId').value == 0 ?
+                    'Submit':'Update'}} <span [hidden]="!btnManualAttendance" class="spinner-border spinner-border-sm"
+                        role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #manualAttendanceDeleteModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-clock-o" aria-hidden="true"></i>| Attendance Request Delete
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body text-x-small">
+        <h4>Are you sure you want to delete this <span class="text-info">{{mattCode}}</span> </h4>
+    </div>
+    <div class="modal-footer p-2 text-small">
+        <button type="submit" class="btn btn-sm btn-rounded btn-warning" (click)="confirmDelete()">
+            <i class="fa fa-check"></i> | Ok <span class="spinner-border spinner-border-sm hide" role="status"
+                aria-hidden="true"></span>
+        </button>
+        <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+            <i class="fa fa-times"></i> | Cancel</button>
+    </div>
+</ng-template>

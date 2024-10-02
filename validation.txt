@@ -1,0 +1,64 @@
+ validationMessages = {
+    'employeeId':{
+      'required':'Employee Id is required',
+    },
+    'leaveTypeId': {
+      'min': 'Leave type is required'
+    },
+    'dayLeaveType': {
+      'required': 'Field is required'
+    },
+    'halfDayType':{
+      'required':'Field is required'
+    },
+    'appliedFromDate': {
+      'required': 'Field is required'
+    },
+    'appliedToDate': {
+      'required': 'Field is required'
+    },
+    'leavePurpose': {
+      'required': 'Field is required',
+      'minlength': 'Minlength is 4',
+      'maxlength': 'Maxlength is 200'
+    },
+    'emergencyPhoneNo': {
+      'required': 'Field is required',
+      'minlength': 'Minlength is 11',
+      'maxlength': 'Maxlength is 100'
+    },
+    'addressDuringLeave': {
+      'required': 'Field is required',
+      'minlength': 'Minlength is 2',
+      'maxlength': 'Maxlength is 150'
+    }
+  }
+
+  formErrors = {
+    'employeeId':'',
+    'leaveTypeId': '',
+    'dayLeaveType': '',
+    'halfDayType':'',
+    'appliedFromDate': '',
+    'appliedToDate': '',
+    'leavePurpose': '',
+    'emergencyPhoneNo': '',
+    'addressDuringLeave': ''
+  }
+
+
+  logFormErrors(formGroup: FormGroup = this.employeeLeaveTypeForm) {
+    Object.keys(formGroup.controls).forEach((key: string) => {
+      const abstractControl = formGroup.get(key);
+      this.formErrors[key] = '';
+      if (abstractControl && !abstractControl.valid && (abstractControl.touched || abstractControl.dirty)) {
+        const messages = this.validationMessages[key];
+        console.log("messages>>", messages);
+        console.log("abstractControl.value >>", abstractControl.value);
+        console.log("abstractControl.errors>>", abstractControl.errors);
+        for (const errorKey in abstractControl.errors) {
+          this.formErrors[key] += messages[errorKey];
+        }
+      }
+    })
+  }

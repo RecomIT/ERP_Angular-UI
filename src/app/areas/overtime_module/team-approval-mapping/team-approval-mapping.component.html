@@ -1,0 +1,295 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Overtime Team Approval Mapping</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Overtime</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Team Approval Mapping</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li><a href="#approver" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Team Approval Mapping
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="approver" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openOvertimeTeamApprovalMappingModal(0, 'Create')">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                id="tblAllowanceHeads">
+                                <thead class="text-dark text-white">
+                                    <tr class="text-center font-bold">
+                                        <th>#SL</th>
+                                        <th>Employee Name</th>
+                                        <th>Designation</th>
+                                        <th>Department</th>
+                                        <th>Division</th>
+                                        <th>Branch</th>
+                                        <th>Approver</th>
+                                        <th>Approver Details</th>
+                                        <th>Approval Level</th>
+                                        <th>Created Date</th>
+                                        <th>Updated Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center font-bold"
+                                        *ngFor="let item of employeeApproverMappingList; let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.employee?.name}} ({{item.employee?.employeeCode}})</td>
+                                        <td>{{item.employee?.designation}}</td>
+                                        <td>{{item.employee?.department}}</td>
+                                        <td>{{item.employee?.division}}</td>
+                                        <td>{{item.employee?.branch}}</td>
+                                        <td>{{item.approver?.name}} ({{item.employee?.employeeCode}})</td>
+                                        <td type="button" (click)="openApproverDetailsModal(item.approver)">View</td>
+                                        <td>{{item.employee?.approvalLevel}}</td>
+
+                                        <td>{{item.employee?.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>{{item.employee?.updatedDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button type="button" (click)="openOvertimeTeamApprovalMappingModal(item.employee?.overtimeTeamApprovalMappingId, 'Edit')"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                            <button type="button" (click)="openOvertimeTeamApprovalMappingModal(item.employee?.overtimeTeamApprovalMappingId, 'Delete')"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <ng-template #approverDetailsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Name </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="name" name="name"
+                            value="{{approver?.name}} ({{approver?.employeeCode}})" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Designation </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="designation" name="designation"
+                            value="{{approver?.designation}}" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Department </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="department" name="department"
+                            value="{{approver?.department}}" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Division </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="division" name="division"
+                            value="{{approver?.division}}" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Branch </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="branch" name="branch"
+                            value="{{approver?.branch}}" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name" class="control-label"> Active Status </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="isActive" name="isActive"
+                            value="{{approver?.isActive ? 'Active' : 'Inactive'}}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i class="fa fa-times"></i> | Close</button>
+        </div>
+
+    </div>
+</ng-template>
+
+
+<ng-template #overtimeTeamApprovalMappingModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #overtimeMappingForm="ngForm" (submit)="overtimeTeamApprovalMappingForm(overtimeMappingForm)">
+           
+            <fieldset>   <!-- [disabled]="fieldsetDisabled" -->
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="employeeId" class="control-label"> Approver
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div style="width:90%">
+                                <ng-select2 [disabled]="fieldsetDisabled" name="overtimeApproverId" id="overtimeApproverId" [placeholder]="'Search Approver'" [options]="select2Options" [data]="select2OptionDataforApprover"  
+                                value="overtimeApproverId" #overtimeApproverId ="ngModel" [(ngModel)]="teamApprovalMapping.approver.overtimeApproverId" (ngModelChange)="onApproverIdChange()">
+                                </ng-select2>
+                            </div>
+                        </div>
+                        <div class="text-danger"> 
+                            <span *ngIf="overtimeApproverId.touched && overtimeApproverId.value == 0">Please Select Approver</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="employeeId" class="control-label"> Employee
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div style="width:90%">
+                                <ng-select2 [disabled]="fieldsetDisabled" name="selectedEmployeeId" id="selectedEmployeeId" [placeholder]="'Search Employee'" [options]="select2Options" [data]="select2OptionDataforEmployee" 
+                                    value="selectedEmployeeId" #selectedEmployeeId="ngModel" [(ngModel)]="teamApprovalMapping.selectedEmployeeId" (ngModelChange)="onSelectedEmployeeIdChange()">
+                                </ng-select2>
+                            </div>
+                        </div>
+                        <div class="text-danger"> 
+                            <span *ngIf="selectedEmployeeId.touched && selectedEmployeeId.value == 0">Please Select Employee</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="approvalLevel" class="control-label">Approval Level </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-list" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="number" class="form-control form-control-sm" id="approvalLevel" name="approvalLevel" required
+                                value="" [min]="teamApprovalMapping.minApprovalLevel" [max]="teamApprovalMapping.maxApprovalLevel"
+                                #approvalLevel="ngModel" [(ngModel)]="teamApprovalMapping.approvalLevel" [disabled]="overtimeApproverId.value == 0 || lavelDisabled">
+                        </div>
+                        <div class="text-danger"> 
+                            <span *ngIf="approvalLevel.invalid">
+                                Approval Level must between Min. {{ teamApprovalMapping.minApprovalLevel }} to  Max. {{ teamApprovalMapping.maxApprovalLevel }}
+                            </span>
+                        </div>
+                    </div>
+            </div>
+
+            <br>
+            <div style ="display: flex; flex-wrap: wrap;">
+                <div *ngFor="let employee of teamApprovalMapping.selectedEmployeeList" class="m-1">
+                    <span class="badge p-2 align-items-center badge-pill badge-success rounded-pill">
+                        <span class="px-2">
+                            {{employee.name}} ({{employee.employeeCode}})<a (click)="!fieldsetDisabled ? onSelectedEmployeeChipClick(employee) : null"><i class="fa fa-times ml-1"></i></a> 
+                        </span>
+                      </span>
+                    <!-- <button type="button" class="btn btn-xl btn-success btn-rounded"> {{employee.name}} ({{employee.employeeCode}}) | <i class="fa fa-times"></i></button> -->
+                </div>
+            </div>
+            
+               
+            </div>
+            </fieldset>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded" 
+                [disabled]="overtimeMappingForm.invalid || overtimeApproverId.value == 0 || selectedEmployeeId.value == 0">
+                    <i class="fa fa-paper-plane"></i> | {{this.buttonAction}}
+                    <!-- teamApprovalMapping.approver.overtimeApproverId == 0 -->
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+
+    

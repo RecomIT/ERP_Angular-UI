@@ -1,0 +1,75 @@
+<div class="ibox">
+    <div class="ibox-content text-x-small font-bold">
+        <div class="form-row">
+            <div class="form-group col-md-6 col-sm-12 mb-1">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm font-bold search-box"
+                        placeholder="Search By Anything" id="docfilter"
+                        onkeyup="tableFilter('#tblDoc tbody tr',this)" />
+                    <div class="input-group-prepend">
+                        <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-6 col-sm-6 mb-1">
+                <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded pull-right"
+                    (click)="openModal(0)"><i class="icofont-file-document"></i> | Add Document</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ibox">
+    <div class="ibox-content text-x-small font-bold">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover table-striped table-responsive-lg" id="tblDoc">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#SL</th>
+                            <th>Document</th>
+                            <th>Number</th>
+                            <th>File Name</th>
+                            <th class="text-center">File Format</th>
+                            <th class="text-center">File Size</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listOfEmployeeDocument; let i =index">
+                            <td class="text-center">{{i+1}}</td>
+                            <td>{{item.documentName}}</td>
+                            <td>{{item.documentNumber}}</td>
+                            <td>{{item.actualFileName}}</td>
+                            <td class="text-center">{{item.fileFormat}}</td>
+                            <td class="text-center">{{item.fileSize}}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-xs text-danger btn-outline" (click)="showFile(item.filePath)">
+                                    <i class="icofont-file-pdf"></i>
+                                </button>
+                                <button type="button" class="btn btn-xs text-dark btn-outline" (click)="openModal(item.documentId)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="listOfEmployeeDocument == null" class="text-center">
+                            <td colspan="13">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                            </td>
+                        </tr>
+                        <tr *ngIf="listOfEmployeeDocument != null && listOfEmployeeDocument.length == 0"
+                            class="text-center font-bold">
+                            <td colspan="13">No data found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-container *ngIf="showInsertUpdateModal == true && modalObj != null">
+    <app-employee-module-document-insert-update-modal [document]="modalObj" (closeModalEvent)="closeModal($event)">
+    </app-employee-module-document-insert-update-modal>
+</ng-container>

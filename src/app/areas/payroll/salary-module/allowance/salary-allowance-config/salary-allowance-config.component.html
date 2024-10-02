@@ -1,0 +1,225 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-8">
+        <h2 @slideInUp class="mt-2">Salary Allowance Config</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Allowance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Salary Allowance Config</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-4">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-sm btn-success float-right btn-rounded" (click)="viewShowAndHide()"
+                *ngIf="!viewEntryScreen"><i class="fa fa-plus"></i> | Create</button>
+            <button type="button" class="btn btn-sm btn-success float-right btn-rounded" (click)="viewShowAndHide()"
+                *ngIf="viewEntryScreen"><i class="fa fa-arrow-left"></i> | Back To List</button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container" *ngIf="!viewEntryScreen">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content text-x-small font-bold">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 col-sm-12 col-12 mb-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm 
+                    font-bold" placeholder="Search By Anything" id="filter"
+                                    onkeyup="tableFilter('#tblConfiguration tbody tr',this)" />
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-content text-x-small font-bold">
+                    <div class="table-responsive">
+                        <table class="table tables-sm table-hover table-striped table-responsive-xl"
+                            id="tblConfiguration">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th class="text-center">Configuration Type</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Head Count</th>
+                                    <th>Head Details</th>
+                                    <th class="text-center">Entry Date</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of salaryAllowanceConfigurationInfos, let i = index">
+                                    <td class="text-center">{{i+1}}</td>
+                                    <td class="text-center">{{item.configCategory}}</td>
+                                    <td class="text-center">
+                                        <span class="label label-primary"
+                                            *ngIf="item.stateStatus =='Approved'">{{item.stateStatus}}</span>
+                                        <span class="label label-info"
+                                            *ngIf="item.stateStatus =='Recheck'">{{item.stateStatus}}</span>
+                                        <span class="label label-warning"
+                                            *ngIf="item.stateStatus =='Pending'">{{item.stateStatus}}</span>
+                                    </td>
+                                    <td class="text-center">{{item.headCount}}</td>
+                                    <td>{{item.headDetails}}</td>
+                                    <td class="text-center">{{item.createdDate | date:"dd-MMM-yyyy hh:mm:ss a"}}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-xs text-warning hide" (click)="1==1"
+                                            [hidden]="item.stateStatus =='Approved'">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </button>
+                                        <button type="button" [hidden]="item.stateStatus =='Approved'"
+                                            class="btn btn-xs text-info"
+                                            (click)="viewConfigurationDetails(item.salaryAllowanceConfigId,true)">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-xs text-success"
+                                            (click)="viewConfigurationDetails(item.salaryAllowanceConfigId,false)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="viewEntryScreen">
+    <app-payroll-add-salary-allowance-config
+        (closeModalEvent)="closeAddSalaryAllowanceConfig($event)"></app-payroll-add-salary-allowance-config>
+</ng-container>
+
+<ng-template #salaryAllowanceConfigDetailsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs"></i>| Salary Allowance Configuration Details
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <table class="table table-striped table-sm table-hover table-responsive-lg">
+                        <tbody>
+                            <tr>
+                                <td >Config Category</td>
+                                <td>{{salaryAllowanceConfigurationInfoInView.configCategory}}</td>
+                                <td >Status</td>
+                                <td>{{salaryAllowanceConfigurationInfoInView.stateStatus}}</td>
+                                <td >Entry Date</td>
+                                <td>{{salaryAllowanceConfigurationInfoInView.createdDate | date:"dd-MMM-yyyy hh:mm:ss
+                                    a"}}</td>
+                            </tr>
+                            <tr>
+                                <td 
+                                    *ngIf="salaryAllowanceConfigurationInfoInView.headCount > 0 ">
+                                    Head Count</td>
+                                <td *ngIf="salaryAllowanceConfigurationInfoInView.headCount > 0">
+                                    {{salaryAllowanceConfigurationInfoInView.headCount}}</td>
+                                <td 
+                                    *ngIf="salaryAllowanceConfigurationInfoInView.headDetails != '' && salaryAllowanceConfigurationInfoInView.headDetails != null">
+                                    Head Details</td>
+                                <td colspan="3"
+                                    *ngIf="salaryAllowanceConfigurationInfoInView.headDetails != '' && salaryAllowanceConfigurationInfoInView.headDetails != null">
+                                    {{salaryAllowanceConfigurationInfoInView.headDetails}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-sm table-hover table-responsive-lg">
+                        <thead>
+                            <tr >
+                                <th class="text-center">#SL</th>
+                                <th>Allowance Base</th>
+                                <th>Allowance Name</th>
+                                <th class="text-center">Percentage/Amount</th>
+                                <th class="text-center hide">Is Periodically?</th>
+                                <th class="text-center hide">Effectivity</th>
+                                <th class="text-center">Max Amount</th>
+                                <th class="text-center hide">Min Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of salaryAllowanceConfigurationDetailsInView; let i =index">
+                                <td class="text-center">{{i+1}}</td>
+                                <td>{{item.allowanceBase}}</td>
+                                <td>{{item.allowanceName}}</td>
+                                <td class="text-center">
+                                    <span *ngIf="item.percentage > 0" class="label label-warning text-dark">
+                                        {{item.percentage}} %
+                                    </span>
+                                    <span *ngIf="item.amount > 0" class="label label-primary">
+                                        {{item.amount}} &#2547;
+                                    </span>
+                                </td>
+                                <td class="text-center hide">
+                                    <span [class]="item.isPeriodically ? 'label label-success' : 'label label-danger'">
+                                        {{item.isPeriodically ? 'Yes':'No'}}
+                                    </span>
+                                </td>
+                                <td class="text-center hide">
+                                    {{item.isPeriodically? (item.effectiveFrom | date:"dd-MMM-yyyy" +'~'+
+                                    item.effectiveTo | date:"dd-MMM-yyyy"):'' }}
+                                </td>
+                                <td class="text-center">
+                                    <span *ngIf="item.maxAmount > 0" class="label label-primary">
+                                        {{item.maxAmount}} &#2547;
+                                    </span>
+                                </td>
+                                <td class="hide">
+                                    <span *ngIf="item.minAmount > 0" class="label label-primary">
+                                        {{item.minAmount}} &#2547;
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="showApprovalBlock">
+            <form #approvalOrNotForm="ngForm" (submit)="submitApprovalOrNot(remarks.value,checkStatus.value)">
+                <div class="modal-body">
+                    <div class="form-row border-top">
+                        <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                            <div class="input-group">
+                                <input type="text" name="checkRemarks" #remarks id="checkRemarks"
+                                    class="form-control form-control-sm" placeholder="Write Comments Here..">
+                                <div class="input-group-prepend">
+                                    <select name="checkStatus" #checkStatus id="checkStatus"
+                                        class="form-control form-control-sm">
+                                        <option value="Approved">Approved</option>
+                                        <option value="Recheck">Recheck</option>
+                                    </select>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <button type="submit" [disabled]="checkStatus.value=='' || btnSubmitApproval"
+                                        class="btn btn-sm btn-primary">
+                                        <i class="fa fa-paper-plane"></i>|Submit
+                                        <span [hidden]="!btnSubmitApproval" class="spinner-border spinner-border-sm"
+                                            role="status" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

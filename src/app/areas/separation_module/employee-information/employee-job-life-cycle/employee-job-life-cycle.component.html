@@ -1,0 +1,42 @@
+
+
+<div class="wrapper wrapper-content animated fadeInRight pt-sm-1">
+    <div class="row bg-white border-radius-5">
+
+        <div class="col-12 col-lg-12 col-md-12 col-sm-12 p-3 custom-scroll">
+
+            <mat-accordion>
+                <mat-expansion-panel *ngFor="let event of events">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+
+                              <mat-chip-list>
+                                <mat-chip>
+                                  <span class="chip-icon">📅</span> 
+                                  <span class="chip-label">{{ event.date | date: 'dd MMM, yyyy' }}</span>
+                                </mat-chip>
+                              </mat-chip-list>
+                              
+    
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <span class="text-small">{{ event.label }}</span>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+
+                   <div class="p-2">
+                    <p> {{ event.description }} </p>
+                   </div>
+
+                    
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+
+
+            
+    </div>
+</div>
+

@@ -1,0 +1,186 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Employee Tax Zone</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Tax</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Employee Tax Zone</strong>
+            </li>
+        </ol>
+    </div>  
+</div> 
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#empTaxZone" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Employee Tax Zone
+                        </a></li>                
+                </ul>
+                <div class="tab-content">
+                    <div id="empTaxZone" class="tab-pane active">
+                        <div class="panel-body bg-white pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width:80%">                                        
+                                            <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                #ddlSearchByEmployeeRef="ngModel" [(ngModel)]="searchByEmployee"
+                                                id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                (ngModelChange)="onEmployeeChanged()" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+
+                                <div class="form-group col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-money"></i>
+                                            </span>
+                                        </div>
+                                        <select name="ddlSearchByTaxZone" id="ddlSearchByTaxZone"
+                                            class="form-control form-control-sm"
+                                            (change)="getEmployeeTaxZones(1)"
+                                            #ddlSearchByTaxZoneRef="ngModel" [(ngModel)]="searchByTaxZone">
+                                            <option [value]="''">---Select Tax Zone---</option>
+                                            <option [value]="item.text" *ngFor="let item of ddlSearchByTaxZone">
+                                                {{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-6 col-md-4">
+                                    <div class="clearfix pull-right">
+                                        <button type="button" class="btn btn-info btn-rounded btn-sm" (click)="openUploadExcelFileModal()"><i
+                                                class="fa fa-arrow-up"></i> | Click To Upload Excel</button>
+                                        <button type="button" class="btn btn-success btn-rounded btn-sm ml-1"
+                                            (click)="openModal(0)">
+                                            <i class="fa fa-plus"></i> | Create
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl"
+                                    >
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Employee Name</th>
+                                            <th class="text-center">Tax Zone</th>                                
+                                            <th class="text-center">Amount</th>
+                                            <th class="text-center">Effective Date</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                        *ngFor="let item of listOfEmployeeTaxZones | paginate: employeeeTaxZonePageConfig, let i =index">
+                                        <td class="text-center font-bold">{{i+1 + (employeeeTaxZonePageSize
+                                            *(employeeeTaxZonePageNo-1))}}</td>
+                                        <td>{{item.employeeName}}</td>
+                                            <td class="text-center">{{item.taxZone}}</td>
+                                            <td class="text-center">{{item.minimumTaxAmount}}</td>
+                                            <td class="text-center">{{item.effectiveDate | date:"dd-MMMM-yyyy"}}</td>
+                                                
+                                            <!-- <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                    + '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td> -->
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs" title="Edit"
+                                                (click)="openModal(item?.employeeTaxZoneId)">
+                                                <i class="fa fa-pencil-square-o"></i> 
+                                                </button>
+                                            </td>
+                                            
+                                                <!-- <td class="text-center">
+                                                    <button type="button" class="btn btn-xs" title="Edit"
+                                                        (click)="monthlyVariableAllowanceForEdit(item.monthlyVariableAllowanceId)"
+                                                        *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-xs text-info"
+                                                        (click)="openMonthlyVariableAllowanceCheckModal(item.monthlyVariableAllowanceId,'Approval')"
+                                                        title="Check" *ngIf="item.stateStatus == 'Pending'"><i
+                                                            class="fa fa-check"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-xs text-success"
+                                                        (click)="openMonthlyVariableAllowanceCheckModal(item.monthlyVariableAllowanceId,'View')">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                </td> -->
+                                            </tr>
+                                        
+                                        <tr
+                                            *ngIf="listOfEmployeeTaxZones.length ==0 && employeeTaxZonesDTLabel == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf="listOfEmployeeTaxZones.length ==0 && employeeTaxZonesDTLabel != null">
+                                            <td colspan="20" class="text-center font-bold">
+                                                {{employeeTaxZonesDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="employeeTaxZonesPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="employeeeTaxZoneData">
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+         </div>
+     </div>
+  </div>
+</div>
+
+
+<ng-container *ngIf="showModal">
+    <app-payroll-addemployeetaxzone-modal [employeeTaxZoneId]="employeeTaxZoneId" (closeModalEvent)="closeModal($event)"></app-payroll-addemployeetaxzone-modal>
+</ng-container>
+<ng-container *ngIf="showUploadTaxZoneModal">
+    <app-payroll-upload-employee-tax-zone-modal [employeeTaxZoneId]="0" (closeModalEvent)="closeUploadExcelFileModal($event)">
+    </app-payroll-upload-employee-tax-zone-modal>
+</ng-container> 
+
+
+
+

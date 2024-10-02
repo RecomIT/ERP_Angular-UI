@@ -1,0 +1,340 @@
+<ng-template #generalConfigModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-success btn-circle icofont-wrench" aria-hidden="true"></i>| Salary
+            Breakdown Setup
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Close Click')"
+            [disabled]="btnSubmit"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark text-x-small">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4">
+                    <div class="ibox">
+                        <div class="ibox-content border-radius-5">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-12 col-md-12">
+                                    <label for="configCategory" class="control-label font-bold">Config Category <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-list-alt"></i>
+                                            </span>
+                                        </div>
+                                        <select name="configCategory" id="configCategory" #baseTypeRef="ngModel"
+                                            [(ngModel)]="config_category" class="form-control form-control-sm"
+                                            (change)="config_category_changed()">
+                                            <option [value]="''">--Select Config Category--</option>
+                                            <option [value]="item" *ngFor="let item of config_categories">{{item}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-12"
+                                    *ngIf="config_category == 'Employee Wise' || config_category == 'Grade' || config_category == 'Designation'">
+                                    <label for="employee_grade_designation" class="control-label font-bold">Select <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input type="text" name="employee_grade_designation"
+                                            id="employee_grade_designation" [(ngModel)]="selected"
+                                            class="form-control form-control-sm" [typeahead]="typeHead_data"
+                                            typeaheadOptionField="text" [isAnimated]="false" placeholder="Enter Here..."
+                                            (typeaheadOnSelect)="item_selected($event)" autocomplete="off"
+                                            [typeaheadMinLength]="0" [typeaheadScrollable]="true">
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-12"
+                                    *ngIf="config_category == 'Job Type'">
+                                    <label for="job_type" class="control-label font-bold">Job Type <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-list-alt"></i>
+                                            </span>
+                                        </div>
+                                        <select name="job_type" id="job_type" #jobtypeRef="ngModel"
+                                            [(ngModel)]="job_type" class="form-control form-control-sm">
+                                            <option [value]="''">--Select One--</option>
+                                            <option [value]="item" *ngFor="let item of ddlJobtypes">{{item}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-12"
+                                    *ngIf="config_category == 'Employee Wise' || config_category == 'Grade' || config_category == 'Designation'">
+                                    <table class="table table-sm table-striped table-hover table-responsive-sm">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th *ngIf="config_category == 'Employee Wise'">
+                                                    Name
+                                                </th>
+                                                <th *ngIf="config_category == 'Grade'">
+                                                    Grade
+                                                </th>
+                                                <th *ngIf="config_category == 'Designation'">
+                                                    Designation
+                                                </th>
+                                                <th class="text-center">
+
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of selected_items; let i = index">
+                                                <td class="text-center">{{i+1}}</td>
+                                                <td>
+                                                    {{item.text}}
+                                                </td>
+                                                <td class="text-right">
+                                                    <button type="button" class="btn btn-xs text-danger"
+                                                        (click)="delete_selected_item(item.id)">
+                                                        <i class="fa fa-close"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-8">
+                    <div class="ibox">
+                        <div class="ibox-content border-radius-5 p-1">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-12 col-md-12 m-1">
+                                    <label for="baseType" class="control-label font-bold ml-3">Base Type <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-list-alt"></i>
+                                            </span>
+                                        </div>
+                                        <select name="baseType" id="baseType" #baseTypeRef="ngModel"
+                                            [(ngModel)]="base_type" class="form-control form-control-sm mr-2"
+                                            (change)="base_allowance_changed()">
+                                            <option [value]="item" *ngFor="let item of base_types">{{item}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox">
+                        <div class="ibox-content border-radius-5" *ngIf="base_type !='CTC' && generalBaseForm != null">
+                            <form [formGroup]="generalBaseForm" (ngSubmit)="1==1">
+                                <table class="table table-sm table-striped table-hover table-responsive-xl mb-0">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>#SL</th>
+                                            <th>Allowance</th>
+                                            <th>Base Type</th>
+                                            <th>Per/Amt</th>
+                                            <th>Max Amt</th>
+                                            <th>Add Amt</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr formArrayName="configurationDetails"
+                                            *ngFor="let configurationDetail of generalType_formArray; let i = index">
+                                            <ng-container [formGroupName]="i">
+                                                <td class="text-center">{{i+1}}</td>
+                                                <td style="width:35% ;">
+                                                    <select name="allowanceNameId" id="allowanceNameId"
+                                                        [class.border-danger]="configurationDetail.get('allowanceNameId').invalid"
+                                                        formControlName="allowanceNameId" (change)="setValidation(i)"
+                                                        class="form-control form-control-sm">
+                                                        <option [value]="0" selected>---Select Allowance---</option>
+                                                        <option [value]="item.id" *ngFor="let item of salaryAllowances">
+                                                            {{item.text}}</option>
+                                                    </select>
+                                                </td>
+                                                <td style="width:20% ;">
+                                                    <select name="allowanceBase" id="allowanceBase"
+                                                        formControlName="allowanceBase" (change)="setValidation(i)"
+                                                        class="form-control form-control-sm">
+                                                        <option [value]="'Gross'">Gross</option>
+                                                        <option [value]="'Basic'">Basic</option>
+                                                        <option [value]="'Flat'">Flat</option>
+                                                    </select>
+                                                </td>
+                                                <td style="width:15% ;" class="text-center">
+                                                    <input type="text" class="form-control form-control-sm text-center"
+                                                        name="percentage" id="percentage" title="Enter Percentage 1-100"
+                                                        [class.border-danger]="configurationDetail.get('percentage').invalid"
+                                                        *ngIf="this.generalType_formArray[i].controls.allowanceBase.value=='Gross' || this.generalType_formArray[i].controls.allowanceBase.value=='Basic'"
+                                                        formControlName="percentage" placeholder="Per %"
+                                                        autocomplete="off">
+                                                    <span class="label label-info hide"
+                                                        *ngIf="this.generalType_formArray[i].controls.allowanceBase.value=='Gross' || this.generalType_formArray[i].controls.allowanceBase.value=='Basic'">
+                                                        %</span>
+                                                    <input type="text" class="form-control form-control-sm text-center"
+                                                        title="Enter Amount"
+                                                        [class.border-danger]="configurationDetail.get('amount').invalid"
+                                                        *ngIf="this.generalType_formArray[i].controls.allowanceBase.value=='Flat'"
+                                                        name="amount" id="amount" formControlName="amount"
+                                                        autocomplete="off" placeholder="Amt.">
+                                                    <span class="label label-info hide"
+                                                        *ngIf="this.generalType_formArray[i].controls.allowanceBase.value=='Flat'">&#2547;</span>
+                                                </td>
+                                                <td style="width:10% ;" class="text-center">
+                                                    <input type="text" class="form-control form-control-sm text-center"
+                                                        name="maxAmount" id="maxAmount" formControlName="maxAmount">
+                                                    <span class="label label-info hide">&#2547;</span>
+                                                </td>
+                                                <td style="width:10% ;">
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="additionalAmount" id="additionalAmount"
+                                                        formControlName="additionalAmount">
+                                                    <!-- &#2547; -->
+                                                </td>
+                                                <td style="width:10% ;" class="text-center">
+                                                    <button type="button" class="btn inline btn-xs text-primary"
+                                                        (click)="addGeneralTypeAllowance()">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                    <button type="button" class="btn inline btn-xs text-danger"
+                                                        (click)="removeAllowancesButtonClick(i)">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </form>
+                        </div>
+                        <div class="ibox-content border-radius-5" *ngIf="base_type=='CTC' && generalBaseForm != null">
+                            <form [formGroup]="ctcBaseForm" (ngSubmit)="1==1">
+                                <div formArrayName="configurationDetails"
+                                    *ngFor="let configurationDetail of ctcType_formArray; let i = index">
+                                    <div [formGroupName]="i" class="form-row">
+                                        <div class="form-group col-12 col-md-3 col-sm-12">
+                                            <label for="allowanceNameId" class="control-label">Allowance</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        {{i+1}}
+                                                    </span>
+                                                </div>
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-list"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="allowanceNameId" id="allowanceNameId"
+                                                    formControlName="allowanceNameId"
+                                                    class="form-control form-control-sm">
+                                                    <option [value]="0" selected>---Select Allowance---</option>
+                                                    <option [value]="item.id" *ngFor="let item of salaryAllowances">
+                                                        {{item.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-3 col-md-2 col-sm-6">
+                                            <label for="dependentAllowance" class="control-label">Depandent</label>
+                                            <div class="input-group">
+                                                <select name="dependentAllowance" id="dependentAllowance"
+                                                    formControlName="dependentAllowance"
+                                                    class="form-control form-control-sm">
+                                                    <option [value]="item" *ngFor="let item of depandent_allowances">
+                                                        {{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-3 col-md-2 col-sm-6"
+                                            *ngIf="this.ctcBaseForm[i].controls.dependentAllowance.value!='Rest Of Amount'">
+                                            <label for="percentage" class="control-label">Pecentage</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-sm"
+                                                    name="percentage" id="percentage" formControlName="percentage"
+                                                    placeholder="PER %">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        %
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-3 col-md-2 col-sm-6"
+                                            *ngIf="this.ctcBaseForm[i].controls.dependentAllowance.value=='Rest Of Amount'">
+                                            <label for="percentage" class="control-label">Amount</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-sm" name="amount"
+                                                    id="amount" formControlName="amount" placeholder="MAX AMT.">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        &#2547;
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-3 col-md-2 col-sm-6">
+                                            <label for="maxAmount" class="control-label">Max
+                                                Amount</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-sm" name="maxAmount"
+                                                    id="maxAmount" formControlName="maxAmount">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        &#2547;
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-3 col-md-3 col-sm-6">
+                                            <label for="additionalAmount" class="control-label">Add
+                                                Amount</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-sm"
+                                                    name="additionalAmount" id="additionalAmount"
+                                                    formControlName="additionalAmount">
+                                                <div class="input-group-prepend cursor-pointer">
+                                                    <span class="input-group-addon">
+                                                        &#2547;
+                                                    </span>
+                                                </div>
+                                                <div class="input-group-prepend cursor-pointer"
+                                                    (click)="addGeneralTypeAllowance()">
+                                                    <span class="input-group-addon text-primary">
+                                                        <i class="fa fa-plus"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="input-group-prepend text-danger cursor-pointer"
+                                                    (click)="removeAllowancesButtonClick(i)">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-trash"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="closeModal('Close Click')"
+                [disabled]="btnSubmit">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+            <button type="submit" class="btn btn-sm btn-primary btn-rounded" (click)="submit()"
+                [disabled]="this.generalBaseForm.invalid || btnSubmit">
+                <i class="fa fa-paper-plane"></i> | Submit
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,108 @@
+<ng-template #employeeProbationaryModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-file-document pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="probationaryForm" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="probationary_employee" class="control-label font-bold text-uppercase">Probationary
+                            Employee <span class="text-danger">*</span>
+                            <span class="label label-info" *ngIf="this.serviceLength !='' && this.serviceLength != null"> 
+                                 {{serviceLength}}
+                            </span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </div>
+                            <div style="width: 80%;">
+                                <ng-select2 [data]="ddlEmployees" name="probationary_employee"
+                                    id="probationary_employee" [placeholder]="'Select Employee...'"
+                                    [options]="select2Options" [allowClear]="true" formControlName="employeeId"
+                                    required>
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="extension_date" class="control-label font-bold text-uppercase">Probation From ~ To
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="extension_date" id="extension_date" autocomplete="off"
+                                formControlName="probationaryDate" bsDaterangepicker [bsConfig]="datePickerConfig"
+                                class="form-control form-control-sm bg-white" placeholder="Enter Extension Date" />
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="this.probationaryForm.get('probationaryDate').value != null"
+                                (click)="this.probationaryForm.get('probationaryDate').setValue(null);">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="effective_date" class="control-label font-bold text-uppercase">Effective Date
+                            <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="effective_date" id="effective_date" autocomplete="off"
+                                formControlName="effectiveDate" bsDatepicker [bsConfig]="datePickerConfig"
+                                class="form-control form-control-sm bg-white" placeholder="Enter Effective Date" />
+
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="this.probationaryForm.get('effectiveDate').value != null"
+                                (click)="this.probationaryForm.get('effectiveDate').setValue(null);">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="appraiser_comment" class="control-label font-bold text-uppercase">Appraiser Comment
+                            <!-- <span class="text-danger">*</span> -->
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="appraiser_comment" id="appraiser_comment" autocomplete="off"
+                                formControlName="appraiserComment" class="form-control form-control-sm"
+                                placeholder="Type Comment" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2 text-x-small">
+                <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary"
+                    [disabled]="this.probationaryForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | {{this.id > 0 ? 'Update': 'Submit'}}
+                </button>
+                <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                    (click)="closeModal('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

@@ -1,0 +1,310 @@
+<ng-template #approvalModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-diamond"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-lg-12">
+                    <div class="font-bold text-dark">                        
+                            <div class="table-responsive">
+                                <style>
+                                    .table {
+                                        width: 100%;
+                                        border-collapse: collapse;
+                                    }
+    
+                                    .table th,
+                                    .table td {
+                                        padding: 5px;
+                                        border: 1px solid #dddddd;
+                                        text-align: left;
+                                    }
+    
+                                    .table th {
+                                        background-color: #f2f2f2;
+                                    }
+    
+                                    .table tbody tr:nth-child(even) {
+                                        background-color: #f9f9f9;
+                                    }
+    
+                                    .table tbody tr:hover {
+                                        background-color: #e2e2e2;
+                                    }
+    
+                                    .table th:nth-child(2n-1) {
+                                        font-weight: bold;
+                                    }
+                                </style>
+                                <div class="h6" *ngIf="activeTab =='assetCreateApproval'"><strong>Asset's Info</strong></div>
+                                <table class="text-x-small table" *ngIf="activeTab =='assetCreateApproval'">
+                                    <tbody>
+                                        <tr>
+                                            <td>Transaction Date</td>
+                                            <td>{{assetCreateList?.transactionDate | date: "dd-MMM-yyyy"}}</td>
+                                            <td>Asset Name</td>
+                                            <td>{{assetCreateList?.assetName}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Vendor</td>
+                                            <td>{{assetCreateList?.vendor}}</td>
+                                            <td>Store</td>
+                                            <td>{{assetCreateList?.store}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Category</td>
+                                            <td>{{assetCreateList?.category}}</td>
+                                            <td>Sub Category</td>
+                                            <td>{{assetCreateList?.subCategory}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Brand</td>
+                                            <td>{{assetCreateList?.brand}}</td>
+                                            <td>Condition</td>
+                                            <td>
+                                                <span class="label label-warning" *ngIf="assetCreateList?.condition == false">Second-Hand</span>
+                                                <span class="label label-primary" *ngIf="assetCreateList?.condition==true">New</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Depreciation</td>
+                                            <td>
+                                                <span class="label label-warning" *ngIf="assetCreateList?.depreciation == false">Non-Depreciable</span>
+                                                <span class="label label-primary" *ngIf="assetCreateList?.depreciation==true">Depreciable</span>
+                                            </td>
+                                            <td>Depreciable Amount</td>
+                                            <td>{{assetCreateList?.depreciableAmount | number}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>IT Access</td>
+                                            <td>
+                                                <span class="label label-warning" *ngIf="assetCreateList?.itAccess == false">Inaccessible</span>
+                                                <span class="label label-primary" *ngIf="assetCreateList?.itAccess==true">Accessible</span>
+                                            </td>
+                                            <td>Warranty Date</td>
+                                            <td>{{assetCreateList?.warrantyDate | date: "dd-MMM-yyyy"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Quantity</td>
+                                            <td>{{assetCreateList?.quantity | number}}</td>
+                                            <td>Amount</td>
+                                            <td>{{assetCreateList?.amount | number:'1.0-0'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Amount</td>
+                                            <td>{{assetCreateList?.totalAmount | number:'1.0-0'}}</td>
+                                            <td>Status</td>
+                                            <td>                                                
+                                                <span class="label label-primary" *ngIf="assetCreateList?.approved == true">Approved</span>
+                                                <span class="label label-danger" *ngIf="assetCreateList?.approved == false">Pending</span> 
+                                            </td>               
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table" *ngIf="activeTab =='assetAssigningApproval'">
+                                    <div class="h6"><strong>Employee Info</strong></div>
+                                    <table class="text-x-small table table-bordered table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td>Employee ID</td>
+                                                <td>{{assetAssignigList?.employeeCode}}</td>
+                                                <td>Employee Name</td>
+                                                <td>{{assetAssignigList?.employeeName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Designation</td>
+                                                <td>{{assetAssignigList?.designationName}}</td>
+                                                <td>Department</td>
+                                                <td>{{assetAssignigList?.departmentName}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="h6"><strong>Asset's Info</strong></div>
+                                    <table class="text-x-small table table-bordered table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td>Assigning Date</td>
+                                                <td>{{assetAssignigList?.transactionDate | date: "dd-MMM-yyyy"}}</td>
+                                                <td>Asset Name</td>
+                                                <td>{{assetCreateList?.assetName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Vendor</td>
+                                                <td>{{assetCreateList?.vendor}}</td>
+                                                <td>Store</td>
+                                                <td>{{assetCreateList?.store}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Category</td>
+                                                <td>{{assetCreateList?.category}}</td>
+                                                <td>Sub Category</td>
+                                                <td>{{assetCreateList?.subCategory}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Brand</td>
+                                                <td>{{assetCreateList?.brand}}</td>
+                                                <td>Condition</td>
+                                                <td>
+                                                    <span class="label label-warning" *ngIf="assetCreateList?.condition == false">Second-Hand</span>
+                                                    <span class="label label-primary" *ngIf="assetCreateList?.condition==true">New</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Depreciation</td>
+                                                <td>
+                                                    <span class="label label-warning"
+                                                        *ngIf="assetCreateList?.depreciation == false">Non-Depreciable</span>
+                                                    <span class="label label-primary" *ngIf="assetCreateList?.depreciation==true">Depreciable</span>
+                                                </td>
+                                                <td>Depreciable Amount</td>
+                                                <td>{{assetCreateList?.depreciableAmount | number}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>IT Access</td>
+                                                <td>
+                                                    <span class="label label-warning" *ngIf="assetCreateList?.itAccess == false">Inaccessible</span>
+                                                    <span class="label label-primary" *ngIf="assetCreateList?.itAccess==true">Accessible</span>
+                                                </td>
+                                                <td>Warranty Date</td>
+                                                <td>{{assetCreateList?.warrantyDate | date: "dd-MMM-yyyy"}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Quantity</td>
+                                                <td>{{assetCreateList?.quantity | number}}</td>
+                                                <td>Amount</td>
+                                                <td>{{assetCreateList?.amount | number:'1.0-0'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Amount</td>
+                                                <td>{{assetCreateList?.totalAmount | number:'1.0-0'}}</td>
+                                                <td>Status</td>
+                                                <td>
+                                                    <span class="label label-primary" *ngIf="assetAssignigList?.approved == true">Approved</span>
+                                                    <span class="label label-danger" *ngIf="assetAssignigList?.approved == false">Pending</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </table>
+                                <div class="text-x-small table-responsive">
+                                    <table class="table" *ngIf="productList[0]?.format == 'Serial'">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Product ID</th>
+                                                <th>Serial Number</th>                                           
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of productList; let i = index">
+                                                <td class="text-center">{{i + 1}}</td>
+                                                <td>
+                                                    {{item.productId}}
+        
+                                                </td>
+                                                <td>
+                                                    {{item.number}}
+        
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table" *ngIf="productList[0]?.format == 'SIM'">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Product ID</th>
+                                                <th>Number</th>
+                                                <th>PIN</th>
+                                                <th>PUK</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of productList; let i = index">
+                                                <td class="text-center">{{i + 1}}</td>
+                                                <td>
+                                                    {{item.productId}}
+                                                </td>
+                                                <td>
+                                                    {{item.number}}
+                                                </td>
+                                                <td>
+                                                    {{item.pin}}
+                                                </td>
+                                                <td>
+                                                    {{item.puk}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table" *ngIf="productList[0]?.format == 'Phone'">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Product ID</th>
+                                                <th>Number</th>
+                                                <th>IMEI 1</th>
+                                                <th>IMEI 2</th>                                            
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of productList; let i = index">
+                                                <td class="text-center">{{i + 1}}</td>
+                                                <td>
+                                                    {{item.productId}}
+                                                </td>
+                                                <td>
+                                                    {{item.number}}
+                                                </td>
+                                                <td>
+                                                    {{item.imeI1}}
+                                                </td>
+                                                <td>
+                                                    {{item.imeI2}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table" *ngIf="productList[0]?.format == 'Product ID'">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Product ID</th>                                            
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of productList; let i = index">
+                                                <td class="text-center">{{i + 1}}</td>
+                                                <td>
+                                                    {{item.productId}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>                         
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer text-x-small pb-2">
+            <button class="btn btn-sm btn-primary btn-rounded btn-outline pull-right" type="submit" (click)="approvedAsset()" *ngIf="activeTab =='assetCreateApproval' && assetCreateList?.approved === false">
+                <i class="fa fa-cogs"></i> | Approved                
+            </button>
+
+            <button class="btn btn-sm btn-primary btn-rounded btn-outline pull-right" type="submit" (click)="approvedAsset()" *ngIf="activeTab =='assetAssigningApproval' && assetAssignigList?.approved === false">
+                <i class="fa fa-cogs"></i> | Approved                
+            </button>
+
+            <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button" (click)="closeModal(activeTab)">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>

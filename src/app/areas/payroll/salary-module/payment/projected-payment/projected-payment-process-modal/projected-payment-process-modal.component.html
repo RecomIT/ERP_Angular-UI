@@ -1,0 +1,322 @@
+<ng-template #projectedPaymentProcessModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-cogs" aria-hidden="true"></i>| Individual Bonus
+            Payment Process
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <form [formGroup]='searchForm' (ngSubmit)="submit()">
+                        <div class="ibox">
+                            <div class="ibox-title hide">
+                                <h4 class="m-0">Payment Information</h4>
+                            </div>
+                            <div
+                                class="ibox-content shadow-sm bg-white text-x-small border-radius-5 pt-2 text-x-small font-bold text-dark">
+
+                                <div class="form-row">
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="allowanceId" class="control-label font-bold">Fiscal Year</label>
+                                        <span class="text-danger"> * </span>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="currentMonth" id="currentMonth"
+                                                class="form-control form-control-sm" formControlName="fiscalYearId">
+                                                <option [value]="0" selected>--Select Fiscal-Year--</option>
+                                                <option [value]="item.value" *ngFor="let item of ddlFiscalYearDropdown">
+                                                    {{item.text}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="allowanceNameId" class="control-label font-bold">Allowance</label>
+                                        <span class="text-danger"> * </span>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width:85%">
+                                                <ng-select2 [data]="ddlAllowances" name="allowanceNameId"
+                                                    id="allowanceNameId" formControlName="allowanceNameId"
+                                                    [placeholder]="'Select Allowance...'" [options]="select2Config"
+                                                    [allowClear]="true">
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="reason" class="control-label">
+                                            Reason<span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon"><i class="fa fa-comment-o"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm"
+                                                formControlName="reason" name="reason" id="reason" [typeahead]="reasons"
+                                                [typeaheadMinLength]="0" [typeaheadScrollable]="true" />
+                                            <div class="input-group-prepend">
+                                                <select name="payableYear" id="payableYear"
+                                                    class="form-control form-control-sm" formControlName="payableYear">
+                                                    <option [value]="0" selected>--Payable Year--</option>
+                                                    <option [value]="item" *ngFor="let item of ddlYears">{{item}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <div class="alert alert-warning text-center">
+                                            Please select Fiscal-year, Allowance<br>
+                                            Reason & Payable year to load data
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2 hide">
+                                        <label for="employeeId" class="control-label font-bold">Employee ID</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width:85%">
+                                                <ng-select2 [data]="ddlEmployees" name="employeeId" id="employeeId"
+                                                    formControlName="employeeId" [placeholder]="'Select Employee...'"
+                                                    [options]="select2Config" [allowClear]="true">
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="currentMonth" class="control-label font-bold">Payment Month &
+                                            Year</label><span class="text-danger"> * </span>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="currentMonth" id="currentMonth"
+                                                class="form-control form-control-sm" formControlName="paymentMonth">
+                                                <option [value]="0" selected>--Month--</option>
+                                                <option [value]="item.monthNo" *ngFor="let item of months">
+                                                    {{item.month}}</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <select name="currentYear" id="currentYear"
+                                                    class="form-control form-control-sm" formControlName="paymentYear">
+                                                    <option [value]="0" selected>--Year--</option>
+                                                    <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="paymentMode" class="control-label">
+                                            Payment Mode<span class="text-danger"> * </span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <select name="paymentMode" id="paymentMode"
+                                                class="form-control form-control-sm" formControlName="paymentMode">
+                                                <option [value]="''">---Select Payment Mode---</option>
+                                                <option [value]="p" *ngFor="let p of ddlPaymentModes">{{p}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="showInPayslip" class="control-label font-bold">Is Visible in Salary 
+                                            Payslip?</label>
+                                        <div>
+                                            <div class="form-check abc-radio abc-radio-info form-check-inline">
+                                                <input class="form-check-input" type="radio" id="showInPayslipYes"
+                                                    [value]="true" name="showInPayslip" formControlName="showInPayslip">
+                                                <label class="form-check-label" for="showInPayslipYes"> Yes
+                                                </label>
+                                            </div>
+                                            <div class="form-check abc-radio abc-radio-danger form-check-inline">
+                                                <input class="form-check-input" type="radio" id="showInPayslipNo"
+                                                    [value]="false" name="showInPayslip"
+                                                    formControlName="showInPayslip">
+                                                <label class="form-check-label" for="showInPayslipNo"> No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="showInSalarySheet" class="control-label font-bold"> Is Visible in
+                                            Salary Sheet?</label>
+                                        <div>
+                                            <div class="form-check abc-radio abc-radio-info form-check-inline">
+                                                <input class="form-check-input" type="radio" id="showInSalarySheetYes"
+                                                    [value]="true" name="showInSalarySheet"
+                                                    formControlName="showInSalarySheet">
+                                                <label class="form-check-label" for="showInSalarySheetYes"> Yes </label>
+                                            </div>
+                                            <div class="form-check abc-radio abc-radio-danger form-check-inline">
+                                                <input class="form-check-input" type="radio" id="showInSalarySheetNo"
+                                                    [value]="false" name="showInSalarySheet"
+                                                    formControlName="showInSalarySheet">
+                                                <label class="form-check-label" for="showInSalarySheetNo"> No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="withCOC" class="control-label font-bold">With Cash Out
+                                            Charge?</label>
+                                        <div>
+                                            <div class="form-check abc-radio abc-radio-info form-check-inline">
+                                                <input class="form-check-input" type="radio" id="withCOCYes"
+                                                    [value]="true" name="withCOC" formControlName="withCOC">
+                                                <label class="form-check-label" for="withCOCYes"> Yes </label>
+                                            </div>
+                                            <div class="form-check abc-radio abc-radio-danger form-check-inline">
+                                                <input class="form-check-input" type="radio" id="withCOCNo"
+                                                    [value]="false" name="withCOC" formControlName="withCOC">
+                                                <label class="form-check-label" for="withCOCNo"> No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox hide">
+                            <div class="ibox-title">
+                                <h4 class="m-0">Config Panel</h4>
+                            </div>
+                            <div
+                                class="ibox-content shadow-sm bg-white text-x-small border-radius-5 pt-2 text-x-small font-bold text-dark">
+                                <div class="form-row">
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-12 col-sm-12 col-md-8 col-lg-8">
+                    <div class="ibox">
+                        <div class="ibox-title hide">
+                            <h4 class="m-0">Proposal Bonus Amount</h4>
+                        </div>
+                        <div
+                            class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark h-380">
+                            <ng-container *ngIf="dataform != null">
+                                <form [formGroup]="dataform">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th>#SL</th>
+                                                    <th>Name</th>
+                                                    <th class="hide">IY</th>
+                                                    <th>Allowance</th>
+                                                    <th>Base-type</th>
+                                                    <th>Amt/Per</th>
+                                                    <th>Payable Amount</th>
+                                                    <th>Disbursable Amount</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="text-center">
+                                                <ng-container
+                                                    *ngIf="this.formArray != null && this.formArray.length > 0">
+                                                    <tr formArrayName="paymentInfos"
+                                                        *ngFor="let paymentInfo of formArray; let i = index">
+                                                        <ng-container [formGroupName]="i">
+                                                            <td>{{i+1}}</td>
+                                                            <td>{{paymentInfo.get('employeeName').value + "
+                                                                ("+paymentInfo.get('employeeCode').value+")"}}</td>
+                                                            <td class="hide">
+                                                                {{paymentInfo.get('fiscalYearRange').value}}
+                                                            </td>
+                                                            <td>{{paymentInfo.get('allowanceName').value}}</td>
+                                                            <td>
+                                                                <span class="label label-info"
+                                                                    *ngIf="paymentInfo.get('baseOfPayment').value == 'Flat'">
+                                                                    {{paymentInfo.get('baseOfPayment').value}}-{{paymentInfo.get('amount').value}}
+                                                                    <i class="text-info">&#2547;</i>
+                                                                </span>
+                                                                <span class="label label-warning"
+                                                                    *ngIf="paymentInfo.get('baseOfPayment').value == 'Gross'">
+                                                                    {{paymentInfo.get('baseOfPayment').value}}-{{paymentInfo.get('percentage').value}}
+                                                                    %
+                                                                </span>
+                                                                <span class="label label-primary"
+                                                                    *ngIf="paymentInfo.get('baseOfPayment').value == 'Basic'">
+                                                                    {{paymentInfo.get('baseOfPayment').value}}-{{paymentInfo.get('percentage').value}}
+                                                                    %
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <span
+                                                                    *ngIf="paymentInfo.get('baseOfPayment').value == 'Flat'">
+                                                                    {{paymentInfo.get('amount').value}} <i
+                                                                        class="text-info">&#2547;</i>
+                                                                </span>
+                                                                <span
+                                                                    *ngIf="paymentInfo.get('baseOfPayment').value !='Flat'">
+                                                                    {{paymentInfo.get('percentage').value}} <i
+                                                                        class="text-warning">%</i>
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                {{paymentInfo.get('payableAmount').value}}
+                                                                <i>&#2547;</i>
+                                                            </td>
+                                                            <td>
+                                                                <input type="number"
+                                                                    class="form-control form-control-sm text-center"
+                                                                    formControlName="disbursedAmount" />
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-xs text-danger"
+                                                                    (click)="remove(i)"><i
+                                                                        class="fa fa-trash"></i></button>
+                                                            </td>
+                                                        </ng-container>
+                                                    </tr>
+                                                </ng-container>
+                                                <tr *ngIf="this.formArray == null">
+                                                    <td colspan="15" class=""></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-x-small pb-2">
+            <button type="button" class="btn btn-sm btn-danger btn-rounded pull-right"
+                (click)="closeModal('Close click')" [disabled]="btnSubmit">
+                <i class="fa fa-times"></i> | Close
+
+            </button>
+            <button type="button" class="btn btn-sm btn-primary btn-rounded pull-right" (click)="submit()"
+                [disabled]="btnSubmit">
+                <i class="fa fa-cogs"></i> | Run Process <span [hidden]="!btnSubmit"
+                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+</ng-template>

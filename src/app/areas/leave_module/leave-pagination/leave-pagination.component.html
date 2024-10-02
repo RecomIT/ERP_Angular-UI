@@ -1,0 +1,38 @@
+<div *ngIf="items && items > 0; else noDataMessage">
+  <div class="my-3">
+    <div class="btn-group" id="radioBtn">
+      <div class="mr-5" style="display: flex; align-items: center;">
+        <span style="margin-right: 15px; white-space: nowrap;">Total Pages: <strong class="total-pages">{{ totalPages }}</strong></span>
+        <span style="margin-right: 5px; white-space: nowrap;">Page Size</span>
+        <select class="form-control pagination-select" [(ngModel)]="pageSize" (change)="changePageSize($event)"
+          [disabled]="currentPage > 1">
+          <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
+        </select>
+      </div>
+      <div>
+        <button class="btn btn-light pagination-btn first-last-btn" (click)="goToFirstPage()" [disabled]="currentPage <= 1">
+          <i class="fa fa-angle-double-left"></i> First
+        </button>
+        <button class="btn btn-light pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage <= 1">
+          <i class="fa fa-angle-left"></i> Previous
+        </button>
+        <button *ngFor="let page of getPaginationArray()" [class.active]="page === currentPage"
+          class="btn btn-light pagination-btn" (click)="goToPage(page)">{{ page }}</button>
+        <button class="btn btn-light pagination-btn" (click)="goToNextPage()"
+          [disabled]="currentPage >= totalPages">
+          Next <i class="fa fa-angle-right"></i>
+        </button>
+        <button class="btn btn-light pagination-btn first-last-btn" (click)="goToLastPage()"
+          [disabled]="currentPage >= totalPages">
+          Last <i class="fa fa-angle-double-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noDataMessage>
+  <div class="no-data-message">
+    <p class="no-data-text">Oops! No data found.</p>
+  </div>
+</ng-template>

@@ -1,0 +1,83 @@
+<div class="ibox">
+    <div class="ibox-content bg-white border-radius-5">
+        <div class="row">
+            <div class="col-12 col-lg-10 col-md-10 col-sm-10">
+                <h4 class="mb-2">Upcoming Holidays & Events</h4>          
+            </div>
+
+            <div class="col-12 col-lg-2 col-md-2 col-sm-2" *ngIf="companyEventsControl">
+                <button class="btn btn-xs btn-primary shadow" (click)="openAddCompanyEventsModal()" title="Add Event"><i class="fa fa-plus" aria-hidden="true"></i></button>    
+            </div>
+        </div>
+
+        <hr class="m-1">
+
+        <div class="table-container" *ngIf="listOfCompanyHolidaysAndEvents.length > 0">
+            <div class="container p-1">
+                <div *ngFor="let item of listOfCompanyHolidaysAndEvents" class="{{ item.tableName === 'Event' ? 'event' : 'holiday' }}">
+                    
+                    <div class="event-details" [title]="item.description ? item.description : 'No Description'" style="cursor: pointer;">
+                        <div>
+                            <h3 class="m-0 p-0">{{ item.eventTitle }}</h3>
+                            <h6 class="font-bold m-1">{{ item.date }}</h6>
+                        </div>
+                        <h5 class="event-time m-0 p-0">{{ item.eventTime }}</h5>
+
+                        <div *ngIf="item.tableName === 'Event' && companyEventsControl" class="icon-container text-center">
+                            <button class="btn btn-xs text-success" (click)="openEditCompanyEventsModal(item)" title="Edit" type="button">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button class="btn btn-xs text-danger" (click)="openDeleteCompanyEventsModal(item.eventId)" title="Delete" type="button">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+
+
+        <div *ngIf="listOfCompanyHolidaysAndEvents.length === 0">
+          <div class="text-center bg-light" style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">
+              <h5 style="color: #555; font-size: 24px; font-weight: bold;">No Data</h5>
+              <p style="color: #777; font-size: 16px;">There are no Holiday or Events.</p>
+          </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+
+  <!-- ------------------------- Child Components
+  ------------------------------------------- -->
+
+  
+  <ng-container *ngIf="showDeleteCompanyEventsModal">
+    <app-delete-company-events
+      (closeModalEvent)="closeDeleteCompanyEventsModal($event)"
+      [eventId]="eventId"
+    >
+    </app-delete-company-events>
+  </ng-container>
+
+
+  <ng-container *ngIf="showEditCompanyEventsModal">
+    <app-add-company-events
+      (closeModalEvent)="closeEditCompanyEventsModal($event)"
+      [selectedEvent]="selectedEvent"
+    >
+    </app-add-company-events>
+  </ng-container>
+
+  
+  <ng-container *ngIf="showAddCompanyEventsModal">
+    <app-add-company-events
+      (closeModalEvent)="closeAddCompanyEventsModal($event)"
+    >
+    </app-add-company-events>
+  </ng-container>

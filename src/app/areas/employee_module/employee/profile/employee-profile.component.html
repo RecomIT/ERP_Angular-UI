@@ -1,0 +1,138 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12">
+        <h2 @slideInUp class="mt-2">Profile</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Home</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Profile</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight mb-4 pt-sm-1">
+    <div class="row m-b-md m-t-3 bg-white border-radius-5">
+        <div class="col-md-12 pt-3 pb-3">
+            <ng-container *ngIf="profile_image != null">
+                <app-employee-module-profile-image [data]="profile_image"></app-employee-module-profile-image>
+            </ng-container>
+            <div class="profile-info">
+                <div>
+                    <div class="align-middle">
+                        <h2 class="mt-2 mb-1">
+                           {{profileInfo?.employeeName}}
+                        </h2>
+                        <h4>{{profileInfo?.designationName}}</h4>
+                        <small>
+                            <span *ngIf="profileInfo?.isActive == true"><i class="fa fa-circle text-navy"></i> 
+                                Active
+                            </span>
+                            <span *ngIf="(profileInfo?.isActive ?? false) == false"><i class="fa fa-circle text-danger"></i> 
+                                In-Active
+                            </span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox hide">
+                <div class="ibox-content bg-white border-radius-5">
+                    <h3>About Yourself</h3>
+                    <p class="small">
+                        There are many variations of passages of Lorem Ipsum available, but the majority
+                        have
+                        suffered alteration in some form, by injected humour, or randomised words which
+                        don't.
+                        <br />
+                        <br />
+                        If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
+                        anything embarrassing
+                    </p>
+                </div>
+            </div>
+            <app-employee-module-personal-document [employeeId]="employeeId"></app-employee-module-personal-document>
+            <div class="ibox">
+                <div class="ibox-content bg-white border-radius-5">
+                    <h3 class="border-bottom">Organizational Hierarchy</h3>
+                    <employee-module-my-hierarchy-info></employee-module-my-hierarchy-info>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-content pt-sm-1 pb-sm-1 bg-white border-radius-5">
+                    <div class="row">
+                        <div class="col-8 col-md-8 col-sm-8 align-middle">
+                            <h3 class="mb-1">{{title}}</h3>
+                        </div>
+                        <div class="col-4 col-md-4 col-sm-4 align-middle text-x-small">
+                            <select name="infoComponent" class="form-control form-control-sm circle-border border-radius-5 text-x-small bg-white " id="infoComponent" 
+                            [(ngModel)]="infoComponent" #infoComponentRef="ngModel" (change)="infoComponent_changed()">
+                                <option [value]="'Personal'" selected>Personal</option>
+                                <option [value]="'Education'">Education</option>
+                                <option [value]="'Experiance'">Experiance</option>
+                                <option [value]="'Training'">Training/Skill</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="infoComponent =='Personal'">
+                <app-employee-module-personal-info [employeeId]="employeeId"></app-employee-module-personal-info>
+            </ng-container>
+            <ng-container *ngIf="infoComponent =='Education'">
+                <app-employee-module-personal-education [employeeId]="employeeId"></app-employee-module-personal-education>
+            </ng-container>
+            <ng-container *ngIf="infoComponent =='Experiance'">
+                <app-employee-module-personal-experience [employeeId]="employeeId"></app-employee-module-personal-experience>
+            </ng-container>
+            <ng-container *ngIf="infoComponent =='Training'">
+                <app-employee-module-personal-skill [employeeId]="employeeId"></app-employee-module-personal-skill>
+            </ng-container>
+        </div>
+        <div class="col-lg-3 m-b-lg">
+            <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+                <div class="vertical-timeline-block">
+                    <div class="vertical-timeline-icon">
+                        <i class="fa fa-briefcase"></i>
+                    </div>
+                    <div class="vertical-timeline-content">
+                        <h2>Joining</h2>
+                        <div class="widget p-sm text-center">
+                            <div class="m-b-sm">
+                                <i class="fa fa-calendar fa-5x animated"></i>
+                                <h1 class="m-xs">{{profileInfo?.dateOfJoining | date:"d"}}</h1>
+                                <h3 class="font-bold no-margins">
+                                    {{profileInfo?.dateOfJoining | date:"MMM,yyyy"}}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vertical-timeline-block">
+                    <div class="vertical-timeline-icon">
+                        <i class="fa fa-child"></i>
+                    </div>
+
+                    <div class="vertical-timeline-content">
+                        <h2>Date of birth</h2>
+                        <div class="widget p-sm text-center">
+                            <div class="m-b-sm">
+                                <i class="icofont-baby fa-5x"></i>
+                                <h1 class="m-xs">{{profileInfo?.dateOfBirth | date:"d"}}</h1>
+                                <h3 class="font-bold no-margins">
+                                    {{profileInfo?.dateOfBirth | date:"MMM,yyyy"}}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Page Title</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Main menu</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Submenu</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>menu name</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight pt-3" id="page-container">
+    <div class="row mt-0">
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="ibox-content pb-2 text-x-small font-bold">
+                    <div class="form-row">
+                        <div class="form-group mb-0 col-md-4 col-sm-12">
+                            <label for="" class="control-label">SEARCH BY ...</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark text-white">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                               
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content text-x-small">
+                     
+                    <table class="table table-sm table-striped table-hover table-responsive-lg" id="tbl">
+                        <thead>
+                            <tr>
+                                <th class="text-center font-bold">#SL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of list | paginate: employmentStagePageConfig;,let i =index">
+                                <td class="text-center font-bold">{{i+1}}</td>
+                                
+                            </tr>
+                            <tr *ngIf="list.length == 0 && this.list ==''">
+                                <td class="text-center font-bold" colspan="15">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                    Loading...
+                                </td>
+                            </tr>
+                            <tr *ngIf="list.length == 0 && this.list !=''">
+                                <td class="text-center font-bold" colspan="15">
+                                    No row(s) found
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end">
+                        <pagination-controls (pageChange)="pageChanged($event)" [responsive]="true"
+                            [autoHide]="true" id="list_pager"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

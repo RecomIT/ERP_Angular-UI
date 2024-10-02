@@ -1,0 +1,108 @@
+<ng-template #uploadProjectedPaymentModal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-arrow-up" aria-hidden="true"></i>| Upload Excel
+            File
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12 text-center">
+                        <div class="border-section">
+                            <div class="border-label">Please download the file first & then upload</div>
+                            <button type="button" class="text-dark btn btn-warning btn-rounded" (click)="download()"><i
+                                    class="icofont-download"></i> | Download Format</button>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="allowanceNameId" class="control-label font-bold">Allowance Name <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="">$</i>
+                                </span>
+                            </div>
+                            <div style="width: 95%;">
+                                <ng-select2 [data]="ddlAllowances" name="allowanceNameId" id="allowanceNameId" (blur)="logFormErrors()"
+                                    formControlName="allowanceNameId" [placeholder]="'Select Allowace...'"
+                                    [options]="select2Config" [allowClear]="true" required>
+                                </ng-select2>
+                            </div>
+                            <div *ngIf="formErrors?.allowanceNameId" class="text-danger">
+                                {{formErrors?.allowanceNameId}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="allowanceReason" class="control-label">Reason <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="allowanceReason" id="allowanceReason" (blur)="logFormErrors()"
+                                class="form-control form-control-sm" formControlName="allowanceReason"
+                                [typeahead]="reasons" [typeaheadMinLength]="0" [typeaheadScrollable]="true" />
+                        </div>
+                        <div *ngIf="formErrors?.allowanceReason" class="text-danger">
+                            {{formErrors?.allowanceReason}}
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="payableYear" class="control-label">Payable Year<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-info"></i>
+                                </span>
+                            </div>
+                            <select name="payableYear" id="payableYear" class="form-control form-control-sm" (blur)="logFormErrors()"
+                                formControlName="payableYear">
+                                <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="formErrors?.payableYear" class="text-danger">
+                            {{formErrors?.payableYear}}
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="excelFileUpload" class="control-label font-bold mt-0"
+                            style="visibility: hidden;">Excel</label>
+                        <div class="input-group">
+                            <div class="custom-file font-bold">
+                                <input id="excelFileUpload" type="file" class="custom-file-input"
+                                    (change)="file_selected($event)" accept=".xls,.xlsx">
+                                <label class="custom-file-label" for="excelFileUpload">
+                                    {{excelFileName}}
+                                </label>
+                            </div>
+                        </div>
+                        <div *ngIf="formErrors?.file" class="text-danger">
+                            {{formErrors?.file}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="btnSubmit || form.invalid">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Upload File
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')"
+                    [disabled]="btnSubmit">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

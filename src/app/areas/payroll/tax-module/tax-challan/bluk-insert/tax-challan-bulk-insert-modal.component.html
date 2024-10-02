@@ -1,0 +1,176 @@
+<ng-template #modal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-arrow-up" aria-hidden="true"></i>| Bulk Challan
+            Insert
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-6 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="taxMonth" class="control-label font-bold">Tax Month & Year</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="taxMonth" id="taxMonth" class="form-control form-control-sm"
+                                formControlName="taxMonth" [attr.disabled]="isTaxMonthDisabled ? true : false">
+                                <option [value]="0">--Month--</option>
+                                <option [value]="item.monthNo" selected *ngFor="let item of months">
+                                    {{item.month}}</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <select name="taxYear" id="taxYear" class="form-control form-control-sm"
+                                    formControlName="taxYear" [attr.disabled]="isTaxYearDisabled ? true : false">
+                                    <option [value]="0">--Year--</option>
+                                    <option [value]="item" selected *ngFor="let item of years">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div *ngIf="formErrors.taxMonth" class="text-danger">
+                            {{formErrors.taxMonth}}
+                        </div>
+                        <div *ngIf="formErrors.taxYear" class="text-danger">
+                            {{formErrors.taxYear}}
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="fiscalYearId" class="control-label font-bold">Fiscal Year</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-minus-o"></i>
+                                </span>
+                            </div>
+                            <!-- <select name="fiscalYearId" id="fiscalYearId" class="form-control form-control-sm" formControlName="fiscalYearId">
+                                <option [value]="0">---Select Fiscal Year---</option>
+                                <option [value]="item.id" selected *ngFor="let item of ddlFiscalYearDropdown">
+                                    {{item.text}}</option>
+                            </select> -->
+                            <div class="form-control form-control-sm" [attr.disabled]="true">
+                                {{this.fiscalYear}}
+                            </div>
+                        </div>
+                        <div *ngIf="formErrors.fiscalYearId" class="text-danger">
+                            {{formErrors.fiscalYearId}}
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="challanNumber" class="control-label">
+                            Challan Number <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-bill"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" formControlName="challanNumber"
+                                id="challanNumber" name="challanNumber" />
+                        </div>
+                        <div *ngIf="formErrors.challanNumber" class="text-danger">
+                            {{formErrors.challanNumber}}
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="challanDate" class="control-label">
+                            Challan Date <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" formControlName="challanDate"
+                                id="challanDate" name="challanDate" bsDatepicker [bsConfig]="datePickerConfig" [readOnly]="true"
+                                readonly />
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="this.form.get('challanDate').value != null && this.form.get('challanDate').value != ''"
+                                (click)="this.form.get('challanDate').setValue(null)">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-close"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="formErrors.challanDate" class="text-danger">
+                            {{formErrors.challanDate}}
+                        </div>
+                    </div>
+
+                    <div class="form-group col-6 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="depositeBank" class="control-label">
+                            Deposite Bank <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-bank"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" formControlName="depositeBank"
+                                id="depositeBank" name="depositeBank" />
+                        </div>
+                        <div *ngIf="formErrors.depositeBank" class="text-danger">
+                            {{formErrors.depositeBank}}
+                        </div>
+                    </div>
+
+                    <div class="form-group col-6 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="depositeBranch" class="control-label">
+                            Deposite Branch <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-building"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" formControlName="depositeBranch"
+                                id="depositeBranch" name="depositeBranch" />
+                        </div>
+                        <div *ngIf="formErrors.depositeBranch" class="text-danger">
+                            {{formErrors.depositeBranch}}
+                        </div>
+                    </div>
+
+                    <div class="form-group col-6 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="amount" class="control-label">
+                            Amount <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="number" class="form-control form-control-sm" formControlName="amount"
+                                id="amount" name="amount" />
+                        </div>
+                        <div *ngIf="formErrors.amount" class="text-danger">
+                            {{formErrors.amount}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="btnSubmit || form.invalid">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Submit
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')"
+                    [disabled]="btnSubmit">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

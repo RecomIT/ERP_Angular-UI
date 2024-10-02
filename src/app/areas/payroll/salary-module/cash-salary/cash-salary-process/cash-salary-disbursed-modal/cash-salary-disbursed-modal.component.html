@@ -1,0 +1,58 @@
+<ng-template #cashSalaryDisbursedModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle 
+            fa fa-clock-o"></i>| Cash Salary Process Info
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #cashSalaryProcessDisbursedOrUndoForm="ngForm"
+            (ngSubmit)="submitSalaryProcessDisbursedOrUndo(processActionName.value)">
+            <div class="modal-body">
+                <table class="table table-sm table-striped table-hover table-responsive-xl">
+                    <tbody>
+                        <tr>
+                            <td >Batch No</td>
+                            <td>{{processObjChecking?.batchNo}}</td>
+                            <td >Salary Date</td>
+                            <td>{{processObjChecking?.salaryDate | date: "dd-MMMM-yyyy"}}</td>
+                            <td >Month & Year</td>
+                            <td>{{processObjChecking?.salaryDate | date:"MMMM-yyyy"}}</td>
+                        </tr>               
+                        <tr>
+                            <td >Gross Pay</td>
+                            <td>{{processObjChecking?.cashAmount}}</td>
+                            <td >Is Disbursed</td>
+                            <td>
+                                <span class="label label-primary" *ngIf="processObjChecking.isDisbursed">
+                                    <i class="fa fa-check"></i>{{'Yes'}}
+                                </span>
+                                <span class="label label-warning" *ngIf="!processObjChecking.isDisbursed">
+                                    {{'No'}}</span>
+                            </td>
+                            <td >Action</td>
+                            <td>
+                                <select name="salaryProcessCheckingAction" id="salaryProcessCheckingAction"
+                                    class="form-control form-control-sm" #processActionName>
+                                    <option [value]="''">---Select Action---</option>
+                                    <option [value]="'Disbursed'">Disbursed</option>
+                                    <option [value]="'Undo Process'">Undo Process</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer p-2">
+                <button class="btn btn-sm btn-primary" type="submit"
+                    [disabled]="cashSalaryProcessDisbursedOrUndoForm.invalid || btnProcess">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

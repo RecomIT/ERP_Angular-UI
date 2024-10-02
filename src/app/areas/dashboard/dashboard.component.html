@@ -1,0 +1,65 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12 text-center">
+        <h2 @slideInUp>Welcome To <strong>Recom</strong> ERP System</h2>
+    </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="col-md-12 col-sm-12 hide">
+        <div class="alert alert-info">
+            <h4 class="text-center border-bottom border-dark">Welcome to Recom ERP System</h4>
+            <p>Apply your <strong>Manual Attendance</strong> from the menu :
+                <strong>Human Resource/Attendance/<span class="text-danger"><i> Self Manual
+                            Attendance</i></span></strong>
+            </p>
+            <p>Apply your <strong>Leave</strong> from the menu :
+                <strong>Human Resource/Leave/<span class="text-danger"><i> Self Leave Request</i></span></strong>
+            </p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-sm-12">
+            <div class="ibox" @flipInX>
+                <div class="ibox-title bg-success">
+                    <h5>
+                        <i class="fa fa-th-list" aria-hidden="true"></i> | Notice Board 
+                        <i class="fa fa-bullhorn faa-passing animated" aria-hidden="true"></i>
+                    </h5>
+                </div>
+                <div class="ibox-content bg-success text-small text-white font-bolder">
+                    <h6>
+                        <i class="fa fa-snowflake-o faa-spin animated" aria-hidden="true"></i>
+                        Apply your <strong style="text-decoration: underline;">Manual Attendance</strong> from the menu
+                        :
+                        <strong>Human Resource <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            Attendance <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            Self Manual
+                            Attendance
+                        </strong>
+                    </h6>
+                    <h6>
+                        <i class="fa fa-snowflake-o faa-spin animated" aria-hidden="true"></i>
+                        Apply your <strong style="text-decoration: underline;">Leave</strong> from the menu :
+                        <strong>Human Resource <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            Leave <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            Self Leave Request</strong>
+                    </h6>
+                    <h6>
+                        <i class="fa fa-snowflake-o faa-spin animated" aria-hidden="true"></i>
+                        Download your <strong style="text-decoration: underline;">Payslip</strong> from the menu :
+                        <strong>Payroll <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            Self Service <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            Salary Payslip</strong>
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <a [routerLink]="['pf/fund/employee-contribution']"><i class="fa fa-th-large"></i> <span
+                class="nav-label">PF Fund Contribution</span></a>
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,762 @@
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12">
+        <h2 @slideInUp class="mt-2">Locational Setup</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Setup</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Locational</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div id="page-container" class="wrapper wrapper-content pt-2">
+    <div class="row m-t-sm text-x-small">
+        <div class="col-md-12 mb-4">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#country" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-globe"></i> | Country
+                        </a></li>
+                    <li><a href="#division" data-toggle="tab" class="nav-link"><i class="fa fa-linode"></i> |
+                            Division</a></li>
+                    <li><a href="#district" data-toggle="tab" class="nav-link"> <i class="fa fa-road"></i> | District
+                        </a></li>
+                    <li><a href="#policeStation" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-terminal" aria-hidden="true"></i> | Police Station
+                        </a></li>
+                    <li><a href="#location" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-location-arrow"></i> | Location
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="country" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm 
+                                    font-bold" placeholder="Search By Anything" id="countryfilter"
+                                            onkeyup="tableFilter('#tblCountry tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-sm btn-rounded btn-rounded btn-rounded btn-rounded btn-success float-right" (click)="openCountryModal()">
+                                        <i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblCountry">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">SL &nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Code&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Nationality&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>ISO Code&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Created Date&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let c of countryList; let i=index">
+                                        <td class="font-bold text-center">{{i+1}}</td>
+                                        <td>{{c.countryName}}</td>
+                                        <td>{{c.countryCode}}</td>
+                                        <td>{{c.nationality }}</td>
+                                        <td>{{c.isoCode}}</td>
+                                        <td>{{c.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit" (click)="editCountry(c.countryId)">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button> &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="countryList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="countryList != null && countryList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="division" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm 
+                                    font-bold" placeholder="Search By Anything" id="divisionfilter"
+                                            onkeyup="tableFilter('#tblDivision tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-sm btn-rounded btn-rounded btn-rounded btn-rounded btn-success float-right" (click)="openDivisionModal()">
+                                        <i class="fa fa-plus"></i> | Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblDivision">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">SL &nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Code&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Country&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Created Date&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of divisionList; let i=index">
+                                        <td class="font-bold text-center">{{i+1}}</td>
+                                        <td>{{d.divisionName}}</td>
+                                        <td>{{d.divisionCode}}</td>
+                                        <td>{{d.countryName}}</td>
+                                        <td>{{d.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit" (click)="editDivision(d.divisionId)">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button> &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="divisionList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="divisionList != null && divisionList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="district" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm 
+                                    font-bold" placeholder="Search By Anything" id="districtfilter"
+                                            onkeyup="tableFilter('#tblDistrict tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-sm btn-rounded btn-rounded btn-rounded btn-rounded btn-success float-right" (click)="openDistrictModal()">
+                                        <i class="fa fa-plus"></i> | Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblDivision">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">SL &nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Code&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Division&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Created Date&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of districtList; let i=index">
+                                        <td class="font-bold text-center">{{i+1}}</td>
+                                        <td>{{d.districtName}}</td>
+                                        <td>{{d.districtCode}}</td>
+                                        <td>{{d.divisionName}}</td>
+                                        <td>{{d.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit" (click)="editDistrict(d.districtId)">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button> &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="districtList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="districtList != null && districtList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="policeStation" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm 
+                                    font-bold" placeholder="Search By Anything" id="policefilter"
+                                            onkeyup="tableFilter('#tblPS tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-sm btn-rounded btn-rounded btn-rounded btn-rounded btn-success float-right" (click)="openPoliceStationModal()">
+                                        <i class="fa fa-plus"></i> | Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblPS">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#SL</th>
+                                        <th>Police Station</th>
+                                        <th>District</th>
+                                        <th>Created Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let ps of policeStationList;let i = index">
+                                        <td class="font-bold text-center">{{i+1}}</td>
+                                        <td>{{ps.policeStationName}}</td>
+                                        <td>{{ps.districtName}}</td>
+                                        <td>{{ps.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit"
+                                                (click)="editPoliceStation(ps.policeStationId)">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button> &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="policeStationList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="policeStationList != null && policeStationList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="location" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm 
+                                    font-bold" placeholder="Search By Anything" id="locationfilter"
+                                            onkeyup="tableFilter('#tblLct tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-sm btn-rounded btn-rounded btn-rounded btn-rounded btn-success float-right" (click)="openLocationModal()">
+                                        <i class="fa fa-plus"></i> | Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblLct">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#SL</th>
+                                        <th>Location &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Police-Station &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let l of locationList; let i = index">
+                                        <td class="font-bold text-center">{{i+1}}</td>
+                                        <td>{{l.locationName}}</td>
+                                        <td>{{l.policeStationName}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-xs" (click)="editLocation(l.locationId)">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="locationList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="locationList != null && locationList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #countryModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-success btn-circle 
+    fa fa-globe"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #cuntryForm="ngForm" (submit)="submitCountry()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="countryName" class="control-label">Country Name
+                            <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-sort-alpha-asc"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="countryName" id="countryName"
+                                class="form-control form-control-sm font-bold" #countryName="ngModel"
+                                [(ngModel)]="country.countryName" maxlength="100" minlength="4" required>
+                        </div>
+                        <div class="text-danger font-bold">
+                            <div *ngIf="countryName.invalid && countryName.touched">
+                                <span *ngIf="countryName.errors?.required">Name is required</span>
+                                <span *ngIf="countryName.errors?.minlength">Min length is 4</span>
+                            </div>
+                            <span class="server-error">{{country_server_error?.duplicateCountry}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="nationality" class="control-label">Nationality
+                            <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-globe"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="nationality" id="nationality"
+                                class="form-control form-control-sm font-bold" #nationality="ngModel"
+                                [(ngModel)]="country.nationality" maxlength="100" minlength="4" required>
+                        </div>
+                        <div class="text-danger font-bold">
+                            <div *ngIf="nationality.invalid && nationality.touched">
+                                <span *ngIf="nationality.errors?.required">Nationality is required</span>
+                                <span *ngIf="nationality.errors?.minlength">Min length is 4</span>
+                            </div>
+                            <span class="server-error">{{country_server_error?.duplicateNationality}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="countryCode" class="control-label">Country Code <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-code"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="countryCode" id="countryCode"
+                                class="form-control form-control-sm font-bold" #countryCode="ngModel"
+                                [(ngModel)]="country.countryCode" minlength="2" maxlength="20" required>
+                        </div>
+                        <div class="text-danger font-bold">
+                            <div *ngIf="countryCode.invalid && countryCode.touched">
+                                <span *ngIf="countryCode.errors?.required">Code is required</span>
+                                <span *ngIf="countryCode.errors?.minlength">Min length is 2</span>
+                            </div>
+                            <span class="server-error">{{country_server_error?.duplicateCode}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="isoCode" class="control-label">ISO Code</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-code"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="isoCode" id="isoCode"
+                                class="form-control form-control-sm font-bold" #isoCode="ngModel"
+                                [(ngModel)]="country.isoCode" maxlength="20" minlength="2">
+                        </div>
+                        <div class="text-danger font-bold">
+                            <div *ngIf="countryCode.invalid && countryCode.touched">
+                                <span *ngIf="countryCode.errors?.maxlength">Max length is 20</span>
+                            </div>
+                            <span class="server-error">{{country_server_error?.duplicateIso}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary" [disabled]="cuntryForm.invalid || btnCountry">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnCountry"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button"  class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #divisionModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-linode"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #divisionForm="ngForm" (submit)="submitDivision()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <label for="divisionName" class="control-label">Name <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-linode"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="divisionName" id="divisionName"
+                                class="form-control form-control-sm font-bold" #divisionName="ngModel"
+                                [(ngModel)]="division.divisionName" required minlength="2" [autofocus]="true">
+                        </div>
+                        <div class="text-danger font-bold">
+                            <div *ngIf="divisionName.invalid && divisionName.touched">
+                                <p *ngIf="divisionName.errors?.required">Name is required</p>
+                                <p *ngIf="divisionName.errors?.minlength">Min length is 2</p>
+                            </div>
+                            <span>{{division_server_error?.duplicateDivision}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="divisionCountryId" class="control-label">Country <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-globe"></i>
+                                </span>
+                            </div>
+                            <select name="divisionCountryId" id="divisionCountryId"
+                                class="form-control form-control-sm font-bold" #divisionCountryId="ngModel"
+                                [(ngModel)]="division.countryId">
+                                <option [value]="0" selected>--Select Country---</option>
+                                <option [value]="c.countryId" class="font-bold" *ngFor="let c of countryList">
+                                    {{c.countryName}}</option>
+                            </select>
+                        </div>
+                        <div class="text-danger font-bold"
+                            *ngIf="divisionCountryId.value == '0' && divisionCountryId.touched">
+                            <span>Country is required</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="divisionCode" class="control-label">Code</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-code"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="divisionCode" id="divisionCode"
+                                class="form-control form-control-sm font-bold" #divisionCode="ngModel"
+                                [(ngModel)]="division.divisionCode">
+                        </div>
+                        <div class="text-danger font-bold">
+                            <span>{{division_server_error?.duplicateCode}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary" [disabled]="divisionForm.
+invalid || divisionCountryId.value=='0' || btnDivision">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnDivision"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close
+('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #districtModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-road"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #districtForm="ngForm" (submit)="submitDistrict()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <label for="districtName" class="control-label">District Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-road"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="districtName" id="districtName"
+                                class="form-control form-control-sm" #districtName="ngModel"
+                                [(ngModel)]="district.districtName" required maxlength="100" minlength="3">
+                        </div>
+                        <div class="text-danger font-bold">
+                            <div *ngIf="districtName.invalid && districtName.touched">
+                                <span *ngIf="districtName.errors?.required">Name is required</span>
+                                <span *ngIf="districtName.errors?.minlength">Minlength is 3</span>
+                            </div>
+                            <span>{{district_server_error?.duplicateDistrict}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="districtCode" class="control-label">Code</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-code"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="districtCode" id="districtCode"
+                                class="form-control form-control-sm" #districtCode="ngModel"
+                                [(ngModel)]="district.districtCode">
+                        </div>
+                        <div class="text-danger font-bold">
+                            <span>{{district_server_error?.duplicateCode}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="districtDivisionName" class="control-label">Division <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-linode"></i>
+                                </span>
+                            </div>
+                            <select name="districtDivisionName" id="districtDivisionName"
+                                class="form-control form-control-sm font-bold" #districtDivisionName="ngModel"
+                                [(ngModel)]="divisionAndCountryId">
+                                <option [value]="0" selected>---Select Division---</option>
+                                <option value="{{div.value}}" class="font-bold" *ngFor="let div of ddlDivision">
+                                    {{div.text}}</option>
+                            </select>
+                        </div>
+                        <div class="text-danger font-bold"
+                            *ngIf="districtDivisionName.value =='0' && districtDivisionName.touched">
+                            <span>Division is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="districtForm.invalid || districtDivisionName.value =='0' || btnDistrict">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnDistrict"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #policeStationModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-road"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #policeStationForm="ngForm" (submit)="submitPoliceStation()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="policeStationName" class="control-label">Police Station
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-terminal"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="policeStationName" id="policeStationName"
+                                #policeStationName="ngModel" class="form-control form-control-sm font-bold"
+                                [(ngModel)]="policeStation.policeStationName" required minlength="2" maxlength="100">
+                        </div>
+                        <div class="text-danger font-bold">
+                            <div *ngIf="policeStationName.invalid && policeStationName.touched">
+                                <span *ngIf="policeStationName.errors?.required">Name is required</span>
+                                <span *ngIf="policeStationName.errors?.minlength">Minlength is 2</span>
+                            </div>
+                            <span>{{police_server_error?.duplicateName}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="policeStationDistrict" class="control-label">District
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-road"></i>
+                                </span>
+                            </div>
+
+                            <select name="policeStationDistrict" id="policeStationDistrict"
+                                class="form-control form-control-sm font-bold" #policeStationDistrict="ngModel"
+                                [(ngModel)]="districtWithdivisionAndCountryId" required>
+                                <option class="font-bold" [value]="0" selected>---Select District---</option>
+                                <option class="font-bold" [value]="dis.value" *ngFor="let dis of ddlDistrict">
+                                    {{dis.text}}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="policeStationDistrict.value =='0' && policeStationDistrict.touched"
+                            class="text-danger font-bold">
+                            <span>District is required</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="form-row"> -->
+                <!-- <div class="form-group col-md-6"> -->
+                <!-- <select name="test" id="test" class="form-control form-control-sm"> -->
+                <!-- <option class="font-bold" [value]="0"></option> -->
+                <!-- <!-- <option class="font-bold" [value]="dis.id" *ngFor="let dis of ddlDistrict">{{dis.text}}</option> -->
+                <!-- </select> -->
+                <!-- <div class="form-control form-control-sm"> -->
+                <!-- <ng-select2 [data]="arrayData" [options]="options"></ng-select2> -->
+                <!-- </div> -->
+                <!-- </div> -->
+                <!-- </div> -->
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="policeStationForm.invalid || policeStationDistrict.value =='0' || btnPoliceStation">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnPoliceStation"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #locationModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-road"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+       click')"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #locationForm="ngForm" (submit)="submitLocation()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="locationName" class="control-label">
+                            Location Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-map-marker"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="locationName" id="locationName" #locationName="ngModel"
+                                [(ngModel)]="location.locationName" class="form-control form-control-sm" required
+                                maxlength="100" minlength="2">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="locationName.invalid && locationName.touched">
+                                <span *ngIf="locationName.errors?.required">Name is required</span>
+                                <span *ngIf="locationName.errors?.minlength">Min length is 2</span>
+                            </div>
+                            <span>{{location_server_error?.duplicateLocation}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="locationPoliceStation" class="control-label">Police Station
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-terminal"></i>
+                                </span>
+                            </div>
+                            <select name="locationPoliceStation" id="locationPoliceStation"
+                                class="form-control form-control-sm" #locationPoliceStation="ngModel"
+                                [(ngModel)]="policeStationExtentionValue">
+                                <option class="font-bold" [value]="0" selected>---Select PoliceStation---</option>
+                                <option class="font-bold" [value]="ps.value" *ngFor="let ps of ddlPoliceStation">
+                                    {{ps.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary" [disabled]="locationForm.invalid ||  btnLocation">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnLocation" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

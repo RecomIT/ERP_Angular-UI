@@ -1,0 +1,58 @@
+
+   
+<div class="ibox">
+    <div class="ibox-content bg-white border-radius-5 size">
+
+        <div class="row">
+            <div class="col-sm-5">
+                <h4 class="mb-2"><i class="fa fa-users mr-2" aria-hidden="true"></i>Team Members Leave Summary</h4>
+            </div>
+        </div>
+        <hr class="m-1">
+    
+        <div class="row">
+    
+    
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+    
+                        
+                        <li class="nav-item">
+                            <a class="nav-link active" id="approval-tab" data-toggle="tab" href="#subordinates-approval-section">Approval<sup *ngIf="totalApprovalEmployees > 0">{{ totalApprovalEmployees }}</sup></a>
+                        </li>
+    
+                        <li class="nav-item">
+                            <a class="nav-link" id="details-tab" data-toggle="tab" href="#subordinates-details-section">Leave History <sup *ngIf="leaveHistoryCount > 0">{{ leaveHistoryCount }}</sup></a>
+                        </li>
+    
+                    
+                    </ul>
+                    <div class="tab-content pt-2">
+                    
+                        <div class="tab-pane fade show active" id="subordinates-approval-section">
+                            
+                            <app-subordinates-leave-approval></app-subordinates-leave-approval>
+    
+                        </div>
+    
+    
+                        <div class="tab-pane fade" id="subordinates-details-section">
+                    
+                            <app-subordinates-leave-history></app-subordinates-leave-history>
+                            
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+    
+    
+        </div>
+
+    </div>
+</div>
+
+
+
+

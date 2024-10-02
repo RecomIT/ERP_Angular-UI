@@ -1,0 +1,131 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12">
+        <h2 class="mt-2">Training</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Request</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Training Request Approval</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="col-12 col-lg-12 col-md-12 col-sm-12 p-0 mb-5 mt-2">
+    <div class="ibox">
+
+
+      <div class="ibox-content">
+        <div class="row mt-3">
+
+            <div class="col-12">
+                <div class="border-section">
+                    <div class="border-label">Search By Team Members
+                    </div>
+      
+                    <div class="row">
+                      <div class="col-12 col-lg-12 col-md-12 col-sm-12 text-x-small" >
+                        <ng-select2 
+                          [(ngModel)]="searchBySubordinatesId"
+                          [data]="subordiantesEmployeeList"
+                          name="searchBySubordinatesId"
+                          id="searchBySubordinatesId"
+                          [placeholder]="'Select A Team Member ...'"
+                          [options]="employeeSelect2Options"
+                          [allowClear]="true"
+                          #searchBySubordinatesIdRef="ngModel"
+                          (ngModelChange)="onEmployeeSelectionChange($event)"
+                        >
+                        </ng-select2>
+                      </div>
+              
+                      </div>
+                    
+                </div>
+            </div>
+      
+          </div>
+
+
+  
+        <div class="form-row card-container p-1">
+            <div *ngFor="let training of trainingList | paginate: trainingPageConfig; let i = index;" class="col-12 col-lg-4 col-sm-12 col-md-4 mt-2">
+                <div class="p-3 bg-white rounded shadow training-card">
+                    <div class="mat-card-header">
+                        <h3 class="employee-name text-left">{{ training.employeeName }}</h3>
+                        <h5 class="training-title text-right">{{ training.trainingName }}</h5>
+                    </div>
+                    <div class="mt-3">
+                        <div class="training-details">
+                            <div><strong>Training Type:</strong> {{ training.trainingType }}</div>
+                            <div><strong>Start Date:</strong> {{ training.startDate | date }}</div>
+                            <div><strong>End Date:</strong> {{ training.endDate | date }}</div>
+                            
+                            <div><strong>Calendar Year:</strong> {{ training.calendarYear }}</div>
+                            <div><strong>Venue:</strong> {{ training.venue }}</div>
+                            <div><strong>Institute:</strong> {{ training.institute }}</div>
+                            <div><strong>Objective:</strong> {{ training.objective }}</div>
+                            <div><strong>Remarks:</strong> {{ training.remarks }}</div>
+                        </div>
+
+                    </div>
+                    <div class="text-right mt-3">
+                        <button type="button" class="btn btn-xs btn-outline-info mr-2" title="Approve" (click)="openApproveModal(training)"> 
+                            <i class="fa fa-check"></i>
+                          </button>
+          
+                          <button class="btn btn-xs btn-outline-danger" title="Reject" type="button" (click)="openRejectModal(training)">
+                            <i class="fa fa-times"></i>
+                          </button>
+      
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="trainingList.length === 0;">
+            <div class="text-center bg-light" style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">
+                <h5 style="color: #555; font-size: 24px; font-weight: bold;">There are no Requests</h5>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6 col-md-6 col-sm-12 d-flex justify-content-end align-items-center">
+            <pagination-controls (pageChange)="trainingPageChanged($event)" [responsive]="true" id="training"></pagination-controls>
+        </div>
+      </div>
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<ng-container *ngIf="showApproveModal">
+    <app-enroll-training
+    [enrollTraining]="selectedTraining" 
+    [ExecutionFlag]="ExecutionFlag"
+    (closeModalEvent)="closeApproveModal($event)">
+    >
+    </app-enroll-training>
+</ng-container>
+          
+
+
+
+
+<ng-container *ngIf="showRejectModal">
+    <app-enroll-training
+    [enrollTraining]="selectedTraining" 
+    [ExecutionFlag]="ExecutionFlag"
+    (closeModalEvent)="closeRejectModal($event)">
+    >
+    </app-enroll-training>
+</ng-container>

@@ -1,0 +1,68 @@
+
+.dashboard-card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+  
+  .dashboard-item {
+    background-color: #ffffff;
+    border-radius: 5px;
+  }
+  
+  .dashboard-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 1rem;
+    text-align: center; /* Center the heading */
+  }
+  
+  .icon-container {
+    font-size: 2.5rem;
+    color: #007bff;
+    float: left;
+  }
+  
+  .title {
+    font-size: 1rem;
+    color: #6c757d;
+  }
+  
+  .value {
+    font-size: 2rem;
+    color: #343a40;
+  }
+  
+  
+  .notification-icon {
+    font-size: 1.5rem;
+    color: #dc3545;
+    margin-right: 0.5rem; /* Space between the icon and the value */
+  }
+  
+  /* Ringing animation */
+  @keyframes ring {
+    0% { transform: rotate(0); }
+    10% { transform: rotate(15deg); }
+    20% { transform: rotate(-10deg); }
+    30% { transform: rotate(10deg); }
+    40% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+    60% { transform: rotate(0); }
+    100% { transform: rotate(0); }
+  }
+  
+  .ring-animation {
+    animation: ring 1.5s ease infinite;
+    transform-origin: 50% 50%; /* Anchor point at the center of the icon */
+  }
+  
+  

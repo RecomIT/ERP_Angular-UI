@@ -1,0 +1,132 @@
+div.row.m-t-sm.text-x-small>div.col-md-12>div.tabs-container>ul.nav.nav-tabs>li*3>a.nav-link
+div.tab-content>div.tab-pane*3
+div.form-group.row.mb-0>div.col-md-6*2
+
+div.form-row>div.form-group.col-md-3*4>div.input-group>div.input-group-prepend>span.input-group-addon.bg-dark-blue.text-white
+
+table.table.table-sm.table-striped.table-hover.table-responsive-lg#tbl
+
+email pattern
+^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$
+
+
+if (typeof error.msg === 'object') {
+                            this.utilityService.fail(error.msg?.msg, "Server Response");
+                        }
+                        else {
+                            this.utilityService.fail(error.msg, "Server Response");
+                        }
+
+--- Modal Markrup
+div.text-x-small.font-bold>form>div.modal-body>div.form-row>div.form-group.col-md-3*4>div.input-group>div.input-group-prepend>span.input-group-addon
+
+div.wrapper.wrapper-content#page-container>div.row.m-t-sm.mt-0>div.col-md-12.text-x-small>div.ibox-title.pt-1>h5+div.ibox-content.pt-1.pb-1>form>div.panel-body.pt-0.pb-0
+
+<span class="label label-warning"
+    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus + '...'}}</span>
+<span class="label label-primary"
+    *ngIf="item.stateStatus=='Approved'"> <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+<span class="label label-danger"
+    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i> {{item.stateStatus}}</span>
+<span class="label label-info"
+    *ngIf="item.stateStatus=='Recheck'"><i class="fa fa-backward"></i> {{item.stateStatus}}</span>
+
+<div class="custom-control custom-switch">
+    <input type="checkbox" class="custom-control-input" id="customSwitch1">
+    <label class="custom-control-label custom-switch-lable" for="customSwitch1">Toggle this switch element</label>
+</div>
+
+  <div class="custom-control custom-switch pl-0">
+                                <label class="control-label font-bold mb-0" for="ddlTestGroup">
+                                    Test Group <span class="text-danger">*</span>
+                                </label>
+                                <input type="checkbox" class="custom-control-input" id="chkIsActive">
+                                <label class="custom-control-label custom-switch-lable pull-right" for="chkIsActive"></label>
+   </div>
+
+button type="button" class="btn btn-sm
+button type="button"  class="btn btn-sm btn-rounded
+
+button class="btn btn-sm
+button type="button"  class="btn btn-sm btn-rounded
+
+button type="submit" class="btn btn-sm
+button type="submit"  class="btn btn-sm btn-rounded
+
+modal-header bg-dark-blue text-white
+modal-header
+
+modal-footer 
+modal-footer p-2
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="ibox-title bg-light-blue text-white pb-0">
+                     <h5>
+                        <i class="fa fa-clipboard" aria-hidden="true"></i> | Employee's Account Information
+                    </h5>
+                </div>
+                <div class="ibox-content pt-2 pb-2 text-x-small font-bold text-dark">
+                    <div class="row">
+                        <div class="form-group col-md-4"></div>
+                        <div class="form-group col-md-4"></div>
+                        <div class="form-group col-md-4"></div>
+                    </div>
+                </div>
+                <div class="ibox-content pt-2 pb-2 text-x-small font-bold text-dark">
+                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                        <thead class="bg-dark-blue text-white">
+                            <tr>
+                                <th class="text-center">#SL</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="d-flex justify-content-end">
+                         <pagination-controls
+                            (pageChange)="searchParams(0,employeeSearchRef.value,'',0,0,'','','','',$event)"
+                            [responsive]="true" [autoHide]="true" id="accountInfoPageData"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+this.listEmployeeLeaveRequests = res.body;
+this.employeeLeaveRequestsDTLabel = this.listEmployeeLeaveRequests.length == 0 ? 'No record(s) found' : null;
+var xPaginate= JSON.parse(res.headers.get('X-Pagination'));
+this.employeeLeaveTypePageConfig = this.userService.pageConfigInit("employeeLeaveType", xPaginate.itemsPerPage, xPaginate.currentPage, xPaginate.totalItems);
+
+// Panel View
+
+div.wrapper.wrapper-content>div.row.m-t-sm.mt-0>div.col-md-12.text-x-small.pl-0.pr-0>div.tab-container>
+
+// under div.tab-container
+    ul.nav.nav-tabs.bg-light-blue>li>a.nav-link>i.fa.fa-circle
+    div.tab-content>div.tab-pane>div.panel-body.pb-1>div.form-row>div.form-group.col-md-4.col-sm-12*3
+        div.panel-body.pb-1>table.table.table-sm.table-hover.table-striped.table-responsive-xl>thead.bg-dark-blue
+
+        BDT SIGN: &#2547;
+
+
+next: (response) => {
+          if (response instanceof Blob) {
+            if (response.size > 0) {
+              this.utilityService.downloadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', "108_Report.xlsx")
+            }
+          }
+          else {
+            this.utilityService.fail('No data available for report', "Server Response");
+          }
+        },
+        error: (error) => {
+          if (typeof error.msg === 'object') {
+            this.utilityService.fail(error.msg?.msg, "Server Response");
+          }
+          else {
+            this.utilityService.fail(error.msg, "Server Response");
+          }
+        }

@@ -1,0 +1,672 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="icofont-beach btn btn-sm btn-outline-secondary btn-circle"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="employeeLeaveTypeForm" (ngSubmit)="submitEmployeeLeaveRequest2()">
+            <div class="modal-body">
+                <div class="row">
+
+                    <!-- Leave Balance 
+                    -- Start
+                    -->
+                    <div class="col-12 col-lg-4 col-md-12 col-sm-12"
+                        *ngIf="this.utilityService.IntTryParse(this.employeeLeaveTypeForm.get('employeeId').value) > 0">
+                        <div class="form-row" *ngIf="companyId == 21 && organizationId == 14">
+                            <div class="form-group col-12 col-md-12 col-sm-12 pl-2">
+                                <div class="download-policy">
+                                    <a (click)="downloadFile('LEAVE POLICY_ITX Bangladesh.pdf', 'ERPDOCS//O-ITX//Pdf')">
+                                        <i class="fa fa-file-pdf-o" aria-hidden="true" style="color: red;"></i>
+                                        <span style="color: blue;" class="ml-1">Download Leave Policy</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row" *ngIf="employeeLeaveBalance != null && employeeLeaveBalance.length > 0">
+                            <div class="form-group col-12 col-md-12 col-sm-12">
+                                <div class="border-section shadow">
+                                    <div class="border-label">Employee leave Balance(s)</div>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-sm table-responsive-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Leave Type</th>
+                                                    <th>Allocated</th>
+                                                    <th>Applied</th>
+                                                    <th>Balance</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of employeeLeaveBalance, let i =index">
+                                                    <td>{{item?.leaveTypeName}}</td>
+                                                    <td class="text-center">{{item?.allocated}}</td>
+                                                    <td class="text-center">{{item?.applied}}</td>
+                                                    <td class="text-center">{{item?.balance}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-12 col-sm-12"
+                        *ngIf="this.utilityService.IntTryParse(this.employeeLeaveTypeForm.get('employeeId').value) == 0">
+                        <div class="form-row">
+                            <div class="form-group col-12 col-md-12 col-sm-12 border-dark"
+                                style="min-height: 300px;max-height: 300px">
+                                <div class="border-section shadow">
+                                    <div class="border-label">Employee leave Balance(s)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Leave Balance 
+                    -- End
+                    -->
+
+                    <!-- Apply Form 
+                    -- Start
+                    -->
+
+                    <div class="col-12 col-lg-8 col-md-12 col-sm-12">
+                        <div class="form-row">
+                            <!-- employee id insert-->
+                            <div class="form-group col-md-12 col-sm-12" *ngIf="leaveTypeDisabled == false">
+                                <label for="employeeId" class="control-label">
+                                    <strong>Employee </strong>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width:85%">
+                                        <ng-select2 [data]="ddlEmployees" name="employeeId" id="employeeId"
+                                            formControlName="employeeId" [placeholder]="'Employee...'"
+                                            [options]="select2Config" [allowClear]="true" required>
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- employee id update-->
+                            <div class="form-group col-md-12 col-sm-12" *ngIf="leaveTypeDisabled == true">
+                                <label for="employeeId" class="control-label">
+                                    <strong>Employee</strong>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" name="employeeId" id="employeeId"
+                                        class="form-control form-control-sm" [attr.disabled]="leaveTypeDisabled"
+                                        [value]="(this.leaveItem?.employeeName)" />
+                                </div>
+                            </div>
+                            <!-- leaveTypeId 
+                            -- Insert
+                            -->
+                            <div class="form-group col-md-8 col-sm-12" *ngIf="leaveTypeDisabled == false">
+                                <label for="leaveTypeId" class="control-label">
+                                    <strong>Leave Type </strong>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <select name="leaveTypeId" id="leaveTypeId"
+                                        class="form-control form-control-sm rounded" formControlName="leaveTypeId"
+                                        (blur)="logFormErrors()">
+                                        <option [value]="0">---Select Leave Type---</option>
+                                        <option [value]="item.value" *ngFor="let item of ddlEmployeeLeaveBalance">
+                                            {{item.text
+                                            +'- Avaliable: '+item.count+ ' - Max at once: '+item.max}}</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors.leaveTypeId" class="text-danger">
+                                    <span>{{formErrors.leaveTypeId}}</span>
+                                </div>
+                            </div>
+
+
+                            <!-- leaveTypeId 
+                            -- Edit
+                            -->
+                            <div class="form-group col-md-8 col-sm-12" *ngIf="leaveTypeDisabled == true">
+                                <label for="leaveTypeId" class="control-label">
+                                    <strong>Leave Type </strong>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" name="leaveTypeId" id="leaveTypeId"
+                                        class="form-control form-control-sm" [attr.disabled]="leaveTypeDisabled"
+                                        [value]="(this.leaveItem?.leaveTypeName)" />
+                                </div>
+
+                            </div>
+
+
+                            <!-- Day Leave Type 
+                            -- Insert
+                            -->
+                            <div class="form-group col-md-4 col-sm-12" *ngIf="leaveTypeDisabled == false">
+                                <label for="dayLeaveType" class="control-label">
+                                    <strong>Day Leave Type </strong><span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="fa fa-clock-o"></i>
+                                        </span>
+                                    </div>
+                                    <select name="dayLeaveType" id="dayLeaveType"
+                                        class="form-control form-control-sm rounded" #dayLeaveTypeRef
+                                        formControlName="dayLeaveType"
+                                        [ngClass]="{'is-invalid':formErrors.dayLeaveType}" (blur)="logFormErrors()">
+                                        <option [value]="'Full-Day'" selected>Full-Day</option>
+                                        <option [value]="'Half-Day'">Half-Day</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors.dayLeaveType" class="text-danger">
+                                    <span>{{formErrors.dayLeaveType}}</span>
+                                </div>
+                            </div>
+
+                            <!-- Day Leave Type 
+                            -- Edit
+                            -->
+                            <div class="form-group col-md-4 col-sm-12" *ngIf="leaveTypeDisabled == true">
+                                <label for="dayLeaveType" class="control-label">
+                                    <strong>Day Leave Type </strong><span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="fa fa-clock-o"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="dayLeaveType" id="dayLeaveType"
+                                        class="form-control form-control-sm rounded" [attr.disabled]="leaveTypeDisabled"
+                                        [value]="dayLeaveTypeInEditMode" />
+                                </div>
+                                <div *ngIf="formErrors.dayLeaveType" class="text-danger">
+                                    <span>{{formErrors.dayLeaveType}}</span>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Portion Of Day 
+                            -- Start
+                            -->
+                            <div class="form-group col-md-6 col-sm-12"
+                                [hidden]="employeeLeaveTypeForm.get('dayLeaveType').value =='Full-Day'">
+                                <label for="halfDayType" class="control-label"><strong>Part Of Day </strong></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="fa fa-clock-o"></i>
+                                        </span>
+                                    </div>
+                                    <select name="halfDayType" id="halfDayType"
+                                        class="form-control form-control-sm rounded" formControlName="halfDayType"
+                                        (blur)="logFormErrors()">
+                                        <option [value]="''">--Select--</option>
+                                        <option [value]="'First Portion'">First Half</option>
+                                        <option [value]="'Second Portion'">Second Half</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors.halfDayType" class="text-danger">
+                                    <span>{{formErrors.halfDayType}}</span>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Estimated Delivery Date
+                            -- Start
+                            -->
+
+                            <div class="form-group col-sm-6 col-md-6" [@fade]
+                                *ngIf="employeeLeaveTypeForm.get('leaveTypeId').value == 5 && companyId == 21 && organizationId == 14">
+
+                                <label for="estimatedDeliveryDate" class="control-label"
+                                    [ngClass]="{'label-error': employeeLeaveTypeForm.get('estimatedDeliveryDate').value === null}">
+                                    Estimated Delivery Date<span class="text-danger">*</span>
+                                </label>
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar-check-o"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" formControlName="estimatedDeliveryDate"
+                                        id="estimatedDeliveryDate" class="form-control form-control-sm bg-white rounded"
+                                        readonly placeholder="Select Delivery Date.." title="Estimated Delivery Date"
+                                        bsDatepicker [bsConfig]="deliveryDatePickerConfig">
+                                    <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date"
+                                        [hidden]="!employeeLeaveTypeForm.get('estimatedDeliveryDate').value"
+                                        (click)="clearEstimatedDeliveryDate('estimatedDeliveryDate')">
+
+                                        <span class="input-group-addon text-danger">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="isDeliveryDateInvalid()" class="text-danger">{{ isDeliveryDateInvalid() }}
+                                </div>
+
+                                <div *ngIf="(employeeLeaveTypeForm.get('leaveTypeId').value == 5 && companyId == 21 && organizationId == 14) && (this.employeeLeaveTypeForm.get('estimatedDeliveryDate').invalid || (this.employeeLeaveTypeForm.get('estimatedDeliveryDate').value === null && this.employeeLeaveTypeForm.get('estimatedDeliveryDate').dirty))"
+                                    class="text-danger small">
+                                    <div
+                                        *ngIf="this.employeeLeaveTypeForm.get('estimatedDeliveryDate').errors?.required">
+                                        Delivery Date is required.
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <!-- Estimated Delivery Date
+                            -- End
+                            -->
+
+
+
+
+                            <!-- appliedFromDate
+                            -- Start
+                            -->
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label for="appliedFromDate" class="control-label">
+                                    <strong>{{employeeLeaveTypeForm.get('dayLeaveType').value =='Full-Day'?'Applied Date
+                                        Range':'Applied Date '}}</strong>
+                                    <span class="text-danger">* &nbsp;</span>
+                                    <span class="label label-warning" [hidden]="totalLeave == 0"> Total Leave Days:
+                                        {{totalLeave}}</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <ng-container *ngIf="employeeLeaveTypeForm.get('dayLeaveType').value =='Full-Day'">
+                                        <input type="text" name="appliedFromDate" id="appliedFromDate"
+                                            (blur)="logFormErrors()" formControlName="appliedFromDate"
+                                            class="form-control form-control-sm bg-white rounded"
+                                            placeholder="Enter Date Range" bsDaterangepicker
+                                            [bsConfig]="datePickerConfig" readonly>
+                                    </ng-container>
+                                    <ng-container *ngIf="employeeLeaveTypeForm.get('dayLeaveType').value =='Half-Day'">
+                                        <input type="text" name="appliedFromDate" id="appliedFromDate"
+                                            (blur)="logFormErrors()" formControlName="appliedFromDate"
+                                            class="form-control form-control-sm bg-white rounded"
+                                            placeholder="Enter Date" bsDatepicker [bsConfig]="datePickerConfig"
+                                            readonly>
+                                    </ng-container>
+                                    <div class="input-group-prepend cursor-pointer"
+                                        [hidden]="this.employeeLeaveTypeForm.get('appliedFromDate').value == null"
+                                        (click)="clearDate('appliedFromDate')">
+                                        <span class="input-group-addon text-danger">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div *ngIf="formErrors.appliedFromDate" class="text-danger">
+                                    <span>{{formErrors.appliedFromDate}}</span>
+                                </div>
+
+                                <div *ngIf="showMaternityLeaveDays" class="text-danger">
+                                    <span>{{validateMaternityLeave()}}</span>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label for="leavePurpose" class="control-label">
+                                    <strong>Leave Purpose </strong><span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <textarea rows="1" name="leavePurpose" id="leavePurpose"
+                                        class="form-control form-control-sm rounded" formControlName="leavePurpose"
+                                        (blur)="logFormErrors()"></textarea>
+                                </div>
+                                <div *ngIf="formErrors.leavePurpose" class="text-danger">
+                                    <span>{{formErrors.leavePurpose}}</span>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Emergency Phone No
+                            -- Start
+                            -->
+                            <div class="form-group col-md-6 col-sm-12" *ngIf="this.organizationId != 11">
+                                <label for="emergencyPhoneNo" class="control-label">
+                                    Emergency Phone No
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="fa fa-phone" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="emergencyPhoneNo" id="emergencyPhoneNo"
+                                        class="form-control form-control-sm rounded" formControlName="emergencyPhoneNo"
+                                        (blur)="logFormErrors()">
+                                </div>
+                                <div *ngIf="formErrors.emergencyPhoneNo" class="text-danger">
+                                    <span>{{formErrors.emergencyPhoneNo}}</span>
+                                </div>
+                            </div>
+
+
+                            <!-- Address During Leave
+                            -- Start
+                            -->
+                            <div class="form-group col-md-6 col-sm-12" *ngIf="this.organizationId != 11">
+                                <label for="addressDuringLeave" class="control-label">
+                                    <strong>Address During Leave </strong>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+
+                                    <textarea rows="1" name="addressDuringLeave" id="addressDuringLeave"
+                                        class="form-control form-control-sm rounded"
+                                        formControlName="addressDuringLeave" (blur)="logFormErrors()"></textarea>
+
+                                </div>
+                                <div *ngIf="formErrors.addressDuringLeave" class="text-danger">
+                                    <span>{{formErrors.addressDuringLeave}}</span>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Upload File
+                            -- Start
+                            -->
+
+                            <div class="form-group col-md-6 col-sm-12 mb-2" *ngIf="leaveTypeDisabled == true">
+                                <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                                    *ngIf="fileName != null && filePath2 != null">
+
+                                    <div class="form-row">
+                                        <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                                            <div class="label2"><strong>File:</strong></div>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                                            <div class="value">
+                                                <a (click)="downloadFile(fileName, filePath2)">
+                                                    <i class="fa fa-file-pdf-o text-danger"
+                                                        aria-hidden="true"></i><strong> Download PDF</strong>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-12 col-lg-12 col-md-12 col-sm-12 text-x-small d-flex align-items-center mb-2"
+                                    *ngIf="fileName != null && filePath2 != null">
+                                    <!-- Display the selected file name if showFileInput is false -->
+                                    <div *ngIf="!showFileInput" class="mr-2">
+                                        <div style="display: inline-block; margin-right: 10px;">
+                                            <strong>File Name: </strong>{{ selectedFileName || 'No file selected' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Checkbox and its label -->
+                                    <div class="form-check form-check-inline mr-2">
+                                        <input type="checkbox" class="form-check-input" (change)="toggleFileInput()"
+                                            id="showFileInput" />
+                                        <label for="showFileInput" class="form-check-label">Update File</label>
+                                    </div>
+
+
+                                    <div *ngIf="showFileInput">
+                                        <input type="file" (change)="fileUpload($event)" formControlName="file"
+                                            accept=".pdf,.doc,.docs" />
+                                    </div>
+
+                                    <!-- File input when showFileInput is true -->
+                                    <!-- <div *ngIf="showFileInput">
+                                      <input type="file" (change)="fileUpload($event)" formControlName="File" accept=".pdf,.doc,.docs" />
+                                    </div> -->
+                                </div>
+
+                                <div class="col-12 col-lg-12 col-md-12 col-sm-12 text-x-small mb-2"
+                                    *ngIf="(leaveSettingInfo?.fileAttachedOption == 'Optional' || leaveSettingInfo?.fileAttachedOption == 'Mandatory') && fileName == null && filePath2 == null">
+                                    <label for="File" class="control-label">
+                                        <strong>Upload File</strong>
+                                    </label>
+
+
+                                    <div class="input-group">
+                                        <input type="file" (change)="fileUpload($event)" formControlName="file"
+                                            accept=".pdf,.doc,.docs" />
+                                    </div>
+
+                                    <div *ngIf="employeeLeaveTypeForm.get('file').invalid || (employeeLeaveTypeForm.get('file').touched || employeeLeaveTypeForm.get('file').dirty)"
+                                        class="text-danger small">
+                                        <div *ngIf="employeeLeaveTypeForm.get('file').errors?.required">
+                                            File attachment is required.
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+
+
+                            <div class="form-group col-md-6 col-sm-12"
+                                *ngIf="(leaveSettingInfo?.fileAttachedOption == 'Optional' || leaveSettingInfo?.fileAttachedOption == 'Mandatory') && leaveTypeDisabled == false">
+                                <label for="File" class="control-label">
+                                    <strong>Upload File</strong>
+                                </label>
+
+
+                                <div class="input-group">
+                                    <input type="file" (change)="fileUpload($event)" formControlName="file"
+                                        accept=".pdf,.doc,.docs" />
+                                </div>
+
+                                <div *ngIf="employeeLeaveTypeForm.get('file').invalid || (employeeLeaveTypeForm.get('file').touched || employeeLeaveTypeForm.get('file').dirty)"
+                                    class="text-danger small">
+                                    <div *ngIf="employeeLeaveTypeForm.get('file').errors?.required">
+                                        File attachment is required.
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- <div class="form-group col-md-6 col-sm-12" *ngIf="(leaveSettingInfo?.fileAttachedOption == 'Optional' || leaveSettingInfo?.fileAttachedOption == 'Mandatory') && leaveTypeDisabled == true && fileName == null && filePath2 == null">
+                                <label for="File" class="control-label">
+                                    <strong>Upload File</strong>
+                                </label>
+
+                                
+                                <div class="input-group">
+                                    <input type="file" (change)="fileUpload($event)" formControlName="file" accept=".pdf,.doc,.docs" />
+                                </div>
+                            
+                                <div *ngIf="employeeLeaveTypeForm.get('file').invalid || (employeeLeaveTypeForm.get('file').touched || employeeLeaveTypeForm.get('file').dirty)"
+                                    class="text-danger small">
+                                    <div *ngIf="employeeLeaveTypeForm.get('file').errors?.required">
+                                        File attachment is required.
+                                    </div>       
+                                </div>
+                            </div> -->
+
+
+
+                            <!-- Upload File
+                            -- End
+                            -->
+
+
+                            <!-- Recommender & Final Approver 
+                            -- Start
+                            -->
+                            <div class="form-group col-md-6 col-sm-12"
+                                *ngIf="hierarchyInfo != null && (hierarchyInfo.supervisorId??0) != (hierarchyInfo.headOfDepartmentId??0)">
+                                <label for="leavePurpose" class="control-label">
+                                    <strong>Recommender</strong>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="icofont-check" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="supervisorName" id="supervisorName"
+                                        class="form-control form-control-sm rounded" disabled
+                                        [value]="hierarchyInfo.supervisorName">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6 col-sm-12"
+                                *ngIf="hierarchyInfo != null && (hierarchyInfo.supervisorId??0) != (hierarchyInfo.headOfDepartmentId??0)">
+                                <label for="headOfDepartmentName" class="control-label">
+                                    <strong>Final Approver</strong>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="icofont-check" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="headOfDepartmentName" id="headOfDepartmentName"
+                                        class="form-control form-control-sm rounded" disabled
+                                        [value]="hierarchyInfo.headOfDepartmentName">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-12 col-sm-12"
+                                *ngIf="hierarchyInfo != null && (hierarchyInfo.supervisorId??0) == (hierarchyInfo.headOfDepartmentId??0)">
+                                <label for="leavePurpose" class="control-label">
+                                    <strong>Recommender & Final Approver</strong>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="supervisorName" id="supervisorName"
+                                        class="form-control form-control-sm rounded" disabled
+                                        [value]="hierarchyInfo.supervisorName">
+                                </div>
+                            </div>
+
+                            <!-- Recommender & Final Approver 
+                            -- End
+                            -->
+                        </div>
+
+
+
+
+                        <div class="form-row eligibleLeaveHeight" *ngIf="listOfeligibleLeaveDay.length > 0">
+                            <div class="form-group col-md-12 col-sm-12 p-1">
+                                <div class="table-responsive">
+
+                                    <table class="table table-bordered table-sm table-responsive-sm border-radius">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th>#SL</th>
+                                                <th>Date</th>
+                                                <th>Day</th>
+                                                <th>Shift Name</th>
+                                                <th>Leave</th>
+                                                <th>Remarks</th>
+                                                <th
+                                                    *ngIf="leaveSettingInfo != null && leaveSettingInfo?.acquiredViaOffDayWork == true">
+                                                    Replacement Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center">
+                                            <tr *ngFor="let item of listOfeligibleLeaveDay ; let i =index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.Date | date:"dd MMM yyyy"}}</td>
+                                                <td>{{item.DayName}}</td>
+                                                <td>{{item.WorkShiftName}}</td>
+                                                <td>
+                                                    <span class="text-success" *ngIf="item.Status == 'Leave'">
+                                                        <i class="icofont icofont-check-circled"></i>
+                                                    </span>
+                                                    <span class="text-danger" *ngIf="item.Status != 'Leave'">
+                                                        <i class="icofont icofont-close-circled"></i>
+                                                    </span>
+                                                </td>
+                                                <td>{{item.Remarks}}</td>
+                                                <td
+                                                    *ngIf="leaveSettingInfo != null && leaveSettingInfo?.acquiredViaOffDayWork == true">
+                                                    <input type="text" class="text-center form-control rounded"
+                                                        bsDatepicker [bsConfig]="replacementDatePickerConfig"
+                                                        id="{{'replacementsDate'+i}}" readonly
+                                                        [(ngModel)]="listOfeligibleLeaveDay[i].ReplacementDate"
+                                                        autocomplete="off" #replacementDate{{i}}="ngModel"
+                                                        [ngModelOptions]="{standalone: true}" />
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="employeeLeaveTypeForm.invalid || btnEmployeeLeaveRequest">
+                    <i class="fa fa-paper-plane"></i> |
+                    {{this.employeeLeaveTypeForm.get("employeeLeaveRequestId").value
+                    == 0?
+                    'Submit':'Update'}}
+                    <span [hidden]="!btnEmployeeLeaveRequest" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="closeModal('Cross click')"
+                    [disabled]="btnEmployeeLeaveRequest == true"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+
+
+        </form>
+    </div>
+
+</ng-template>

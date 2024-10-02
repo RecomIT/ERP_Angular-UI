@@ -1,0 +1,25 @@
+
+/* .custom-modal-styles {
+   display: none;
+} */
+
+
+.stylish-container {
+    padding: 5px;
+    background-color: #FBEC5D;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .stylish-container h3 {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    color: #d80808;
+    margin: 0;
+ }
+ 
+ .text-center {
+    text-align: center;
+ }
+ 
+ 

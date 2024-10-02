@@ -1,0 +1,155 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Overtime Approval Level</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Overtime</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Approver Level</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li><a href="#approvalLevel" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Approver Level
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="approvalLevel" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openOvertimeApprovalLevelModal(0,'Create')">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                id="tblAllowanceHeads">
+                                <thead class="text-dark text-white">
+                                    <tr class="text-center font-bold">
+                                        <th>#SL</th>
+                                        <th>Minimum Level</th>
+                                        <th>Maximum Level</th>
+                                        <th>Created Date</th>
+                                        <th>Updated Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center font-bold" *ngFor="let item of overtimeApprovalLevelList; let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item?.minimumLevel}}</td>
+                                        <td>{{item?.maximumLevel}}</td>
+                                        <td>{{item?.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>{{item?.updatedDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button type="button" (click)="openOvertimeApprovalLevelModal(item?.overtimeApprovalLevelId,'Edit')"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                            <button type="button" (click)="openOvertimeApprovalLevelModal(item?.overtimeApprovalLevelId,'Delete')"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #overtimeApprovalLevelModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #overtimeApprovalLevelForm="ngForm" (submit)="submitOvertimeApprovalLevelForm(overtimeApprovalLevelForm)">
+            <fieldset [disabled]="fieldsetDisabled">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="minimumLevel" class="control-label"> Minimum Level
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span
+                                    class="input-group-addon text-dark">
+                                    <i class="fa fa-list" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="number" class="form-control form-control-sm" id="minimumLevel"
+                                name="minimumLevel" #minimumLevel="ngModel"
+                                [(ngModel)]="overtimeApprovalLevel.minimumLevel" required min="1"> 
+                               
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="minimumLevel.invalid && minimumLevel.touched">
+                                <span *ngIf="minimumLevel.errors?.required">Minimum Level is required</span>
+                                <span *ngIf="minimumLevel.errors?.min">Minimum Value is 1</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="maximumLevel" class="control-label"> Maximum Level
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span
+                                    class="input-group-addon text-dark">
+                                    <i class="fa fa-list" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="number" class="form-control form-control-sm" id="maximumLevel"
+                                name="maximumLevel" #maximumLevel="ngModel"
+                                [(ngModel)]="overtimeApprovalLevel.maximumLevel" required min="1">   
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="maximumLevel.invalid && maximumLevel.touched">
+                                <span *ngIf="maximumLevel.errors?.required">Maximum Level is required</span>
+                                <span *ngIf="maximumLevel.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </fieldset>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="overtimeApprovalLevelForm.invalid || btnApprovalLevel">
+                    <i class="fa fa-paper-plane"></i> | {{this.buttonAction}} 
+                    <span [hidden]="!btnApprovalLevel" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

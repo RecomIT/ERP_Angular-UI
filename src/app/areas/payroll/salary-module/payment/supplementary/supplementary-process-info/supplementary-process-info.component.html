@@ -1,0 +1,179 @@
+<div class="ibox shadow-sm">
+    <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark">
+        <form [formGroup]="searchForm">
+            <div class="form-row">
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="searchByMonth" class="control-label font-bold">Search By Month & Year</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-calendar"></i>
+                            </span>
+                        </div>
+                        <select name="searchByMonth" id="searchByMonth" class="form-control form-control-sm"
+                            formControlName="paymentMonth">
+                            <option [value]="0" selected>--Month--</option>
+                            <option [value]="item.monthNo" *ngFor="let item of ddlMonths">{{item.month}}</option>
+                        </select>
+                        <div class="input-group-prepend">
+                            <select name="searchByYear" id="searchByYear" class="form-control form-control-sm"
+                                formControlName="paymentYear">
+                                <option [value]="0" selected>--Year--</option>
+                                <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="searchByStatus" class="control-label font-bold">Search By Status</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-opposite"></i>
+                            </span>
+                        </div>
+                        <!-- form control -->
+                        <select name="searchByStatus" id="searchByStatus" class="form-control form-control-sm"
+                            formControlName="stateStatus">
+                            <option [value]="''" selected>--Status--</option>
+                            <option [value]="item" *ngFor="let item of ddlStatus">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                </div>
+                <div class="form-group col-md-2 col-sm-12 mt-sm-4 mt-4">
+                    <button type="button" tooltip="Process"
+                        class="btn btn-sm btn-outline-primary btn-rounded pull-right" (click)="openProcessModal()">
+                        <i class="fa fa-cogs"></i> | Run Process
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="ibox shadow-sm">
+    <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover table-responsive-lg">
+                <thead class="text-center">
+                    <tr>
+                        <th>#SL</th>
+                        <th>Allowance</th>
+                        <th>Income Year</th>
+                        <th>Total Employee</th>
+                        <th>Month & Year</th>
+                        <th>Total Amount</th>
+                        <th>Total Tax</th>
+                        <th>Tax Deducted</th>
+                        <th>Disbursed</th>
+                        <th>Payment Date</th>
+                        <th>Status</th>
+                        <th>Process Type</th>
+                        <th>Show Is Payslip</th>
+                        <th>Show Is Salary Sheet</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr *ngFor="let item of list | paginate:pageConfig;let i=index">
+                        <td class="font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>
+                        <td>{{item.allowanceName}}</td>
+                        <td>{{item.fiscalYearRange}}</td>
+                        <td class="font-bold">
+                            <span class="btn btn-xs btn-rounded btn-info">{{item.totalEmployees}}</span>
+                        </td>
+                        <td>{{item.paymentMonthName}} - {{item.paymentYear}}</td>
+                        <td>{{item.totalAmount}}</td>
+                        <td>{{item?.totalTax}}</td>
+                        <td>{{item.totalOnceOffAmount}}</td>
+                        <td>
+                            <span class="label label-info" *ngIf="item.isDisbursed">
+                                {{ 'Yes' }}
+                            </span>
+                            <span class="label label-warning" *ngIf="!item.isDisbursed">
+                                <i class="fa fa-backward"></i> {{ 'No' }}
+                            </span>
+                        </td>
+                        <td>{{item.paymentDate | date:"dd MMM yyyy"}}</td>
+                        <td>
+                            <span class="label label-warning" *ngIf="item.stateStatus=='Pending'">{{item.stateStatus +
+                                '...'}}</span>
+                            <span class="label label-primary"
+                                *ngIf="item.stateStatus=='Approved'">{{item.stateStatus}}</span>
+                            <span class="label label-success" *ngIf="item.stateStatus=='Processed'"> <i
+                                    class="fa fa-cogs"></i> {{item.stateStatus}}</span>
+                            <span class="label label-info" *ngIf="item.stateStatus=='Disbursed'"> <i
+                                    class="fa fa-check"></i> {{item.stateStatus}}</span>
+                        </td>
+                        <td>{{item.processType}}</td>
+                        <td>
+                            <span class="label label-info" *ngIf="item.showInPayslip">
+                                {{ 'Yes' }}
+                            </span>
+                            <span class="label label-warning" *ngIf="!item.showInPayslip">
+                                <i class="fa fa-backward"></i> {{ 'No' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="label label-info" *ngIf="item.showInSalarySheet">
+                                {{ 'Yes' }}
+                            </span>
+                            <span class="label label-warning" *ngIf="!item.showInSalarySheet">
+                                <i class="fa fa-backward"></i> {{ 'No' }}
+                            </span>
+                        </td>
+                        <td>
+                            <!-- <button type="button" class="btn btn-xs"><i class="fa fa-eye" title="Details"></i></button> -->
+                            <button type="button" class="btn btn-xs text-success faa-parent animated-hover"
+                                (click)="downloadSupplementaryPaymentSheet(item.batchNo,item.paymentProcessInfoId, item.fiscalYearId, item.paymentMonth, item.paymentYear, 'xlsx')"
+                                tooltip="Payment Sheet">
+                                <i class="fa fa-file-excel-o fa-3x"></i>
+                            </button>
+                            <button type="button" class="btn btn-xs text-info faa-parent animated-hover"
+                                (click)="downloadSupplementaryTaxSheetDetailsExcel(item.batchNo,item.paymentProcessInfoId, item.fiscalYearId, item.paymentMonth, item.paymentYear, 'xlsx')"
+                                tooltip="108 Sheet">
+                                <i class="fa fa-file-excel-o fa-3x"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm" *ngIf="item.stateStatus=='Pending'"
+                                (click)="openDisbursedModal(item.paymentProcessInfoId)">
+                                <i class="fa fa-hand-pointer-o"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm" *ngIf="item.stateStatus=='Disbursed'"
+                                (click)="openDisbursedModal(item.paymentProcessInfoId)">
+                                <i class="fa fa-hand-pointer-o"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm" *ngIf="item.stateStatus=='Disbursed'"
+                                (click)="openEmailingModal(item)">
+                                <i class="fa fa-envelope"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <pagination-controls (pageChange)="page_Changed($event)" [responsive]="true" [autoHide]="true"
+                    id="info_list"></pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- closeModalEvent -->
+<ng-container *ngIf="isShowingProcessModal == true">
+    <app-payroll-supplementary-payment-process-modal [id]="0"
+        (closeModalEvent)="clossProcessModal($event)"></app-payroll-supplementary-payment-process-modal>
+</ng-container>
+
+<ng-container *ngIf="isShowingDisbursedModal == true">
+    <app-supplementary-payment-disbursed-modal [id]="id"
+        (closeModalEvent)="clossDisbursedModal($event)"></app-supplementary-payment-disbursed-modal>
+</ng-container>
+
+<ng-container *ngIf="showEmailingModal == true">
+    <app-onceoff-payment-emailing [id]="id" [allowanceName]="allowanceName" [processId]="processId"
+        [paymentMonth]="paymentMonth" [paymentYear]="paymentYear"
+        (closeModalEvent)="clossEmailingModal($event)"></app-onceoff-payment-emailing>
+</ng-container>

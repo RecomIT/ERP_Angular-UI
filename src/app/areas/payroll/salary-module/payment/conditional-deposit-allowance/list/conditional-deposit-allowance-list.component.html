@@ -1,0 +1,147 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 class="mt-2">Accrued Allowance Config</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Accrued Allowance</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-8 col-sm-6">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded"
+                (click)="openDepositPaymentModal(0)" title="Add New Employee"><i class="fa fa-plus"></i>|
+                Add Accrued Allowance
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3 animated fadeInRight mb-4 pt-sm-1">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#configInfos" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-info"></i> | Accured Allowance Config
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#paymentInfos" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-list"></i> | Payment Infos
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="configInfos" class="tab-pane active">
+                        <div class="ibox shadow-sm">
+                            <form [formGroup]="configSearchForm" (ngSubmit)="1==1">
+                                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-12">
+                                            <label for="fiscalYearId" class="control-label font-bold">Search By Fiscal Year</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon animated-hover">
+                                                    <i class="fa fa-search faa-pulse"></i>
+                                                </span>
+                                                <select id="fiscalYearId" name="fiscalYearId" class="form-control form-control-sm">
+                                                    <option [value]="0" selected>---Select Fiscal Year---</option>
+                                                    <option [value]="item.id" *ngFor="let item of ddlFiscalYearDropdown">{{item.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th>#SL</th>
+                                                <th>Config Code</th>
+                                                <th>Allowance Name</th>
+                                                <th>Service Length</th>
+                                                <th>Job Type</th>
+                                                <th>Religion</th>
+                                                <th>Marital Status</th>
+                                                <th>Citizen</th>
+                                                <th>Gender</th>
+                                                <th>Physical Condition</th>
+                                                <th>Deposit Type</th>
+                                                <th>Base Pay</th>
+                                                <th>Percentage</th>
+                                                <th>Amount</th>
+                                                <th>Activation Date</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center">
+                                            <tr *ngFor="let item of list; let i=index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{ 'Code-'+item.code }}</td>
+                                                <td>{{ item.allowanceName }}</td>
+                                                <td>{{ item.serviceLength?? 'N/A'}}</td>
+                                                <td>{{ item.jobType?? 'N/A' }}</td>
+                                                <td>{{ item.religion?? 'N/A' }}</td>
+                                                <td>{{ item.maritalStatus?? 'N/A' }}</td>
+                                                <td>{{ item.citizen?? 'N/A' }}</td>
+                                                <td>{{ item.gender?? 'N/A' }}</td>
+                                                <td>{{ item.physicalCondition?? 'N/A' }}</td>
+                                                <td>{{ item.depositType?? 'N/A' }}</td>
+                                                <td>{{ item.baseOfPayment }}</td>
+                                                <td>{{ item.percentage }} <span *ngIf="item.percentage??0 > 0">%</span></td>
+                                                <td>{{ item.amount??0}}</td>
+                                                <td>{{ item.activationFrom | date:'dd-MMM-yyyy'}}</td>
+                                                <td>
+                                                    <span class="label label-warning" *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                        + '...'}}</span>
+                                                    <span class="label label-primary" *ngIf="item.stateStatus=='Approved'"> <i
+                                                            class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                    <span class="label label-danger" *ngIf="item.stateStatus=='Cancelled'"><i
+                                                            class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                                    <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                            class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-xs text-primary" (click)="openProcessModal(item.id)"
+                                                        title="Payment">
+                                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-xs text-primary" (click)="openDepositPaymentModal(item.id)"
+                                                        *ngIf="item.stateStatus=='Pending'" title="Payment">
+                                                        <i class="fa fa-edit" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                    
+                                        </tbody>
+                                    </table>
+                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="paymentInfos" class="tab-pane"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-container *ngIf="showAddConfigModal">
+    <app-payroll-conditional-deposit-allowance (closeModalEvent)="closeDepositPaymentModal($event)" [id]="itemIdInEdit">
+    </app-payroll-conditional-deposit-allowance>
+</ng-container>
+
+
+<ng-container *ngIf="showProcessModal">
+    <app-payroll-deposit-payment (closeModalEvent)="closeProcessModal($event)" [Id]="configId">
+    </app-payroll-deposit-payment>
+</ng-container>

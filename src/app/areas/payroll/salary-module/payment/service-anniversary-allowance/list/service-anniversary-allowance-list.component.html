@@ -1,0 +1,98 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12">
+        <h2 class="mt-2">Service Yearly Allowance</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Service Yearly Allowance</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3 animated fadeInRight mb-4 pt-sm-1">
+
+    <div class="ibox shadow-sm">
+        <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+
+            <div class="form-group col-md-12 col-sm-12 mt-sm-12 mt-2">
+                <div class="clearfix">
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-rounded pull-right ml-1"
+                        (click)="openServiceAnniversaryModal()">
+                        <i class="icofont-plus"></i> | Add New
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-hover table-responsive-lg">
+                    <thead class="text-center">
+                        <tr>
+                            <th>#SL</th>
+                            <th>Config Code</th>
+                            <th>Allowance Name</th>
+                            <th>Job Type</th>
+                            <th>Religion</th>
+                            <th>Marital Status</th>
+                            <th>Citizen</th>
+                            <th>Gender</th>
+                            <th>Physical Condition</th>
+                            <th>Base Pay</th>
+                            <th>Deposit Type</th>
+                            <th>Percentage</th>
+                            <th>Amount</th>
+                            <th>Activation From</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <tr *ngFor="let item of list; let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{ 'Code-'+item.code }}</td>
+                            <td>{{ item.allowanceName }}</td>
+                            <td>{{ item.jobType?? 'N/A' }}</td>
+                            <td>{{ item.religion?? 'N/A' }}</td>
+                            <td>{{ item.maritalStatus?? 'N/A' }}</td>
+                            <td>{{ item.citizen?? 'N/A' }}</td>
+                            <td>{{ item.gender?? 'N/A' }}</td>
+                            <td>{{ item.physicalCondition?? 'N/A' }}</td>
+                            <td>{{ item.depositType?? 'N/A' }}</td>
+                            <td>{{ item.baseOfPayment }}</td>
+                            <td>{{ item.percentage }} <span *ngIf="item.percentage??0 > 0">%</span></td>
+                            <td>{{ item.amount??0}}</td>
+                            <td>{{ item.activationFrom | date:'dd-MMM-yyyy'}}</td>
+                            <td>{{ item.stateStatus}}</td>
+                            <td class="text-center">
+                                <div class="text-center align-middle mt-2">
+                                    <button class="btn btn-xs text-success" type="button" title="Edit">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </button>
+                                    <button class="btn btn-xs text-info" title="Details" type="button">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-xs text-danger" title="Cancel Request" type="button">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<ng-container *ngIf="showAddServiceAnniversaryModal">
+    <app-service-anniversary-allowance (closeModalEvent)="closeServiceAnniversaryModal($event)">
+    </app-service-anniversary-allowance>
+</ng-container>

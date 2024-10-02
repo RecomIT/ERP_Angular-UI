@@ -1,0 +1,308 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-cogs" aria-hidden="true"></i>|
+            {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnDelete == true || btnSubmit == true"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                    <div class="ibox">
+                        <div
+                            class="ibox-content shadow-sm bg-white text-x-small border-radius-5 pt-2 text-x-small font-bold text-dark">
+                            <form (ngSubmit)="1==1">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12"
+                                        *ngIf="info!= null && this.info.paymentMonth > 0 && this.info.paymentYear > 0">
+                                        <label for="paymentDate" class="control-label">Payment Date <span
+                                                class="text-danger">*</span></label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" bsDatepicker [bsConfig]="datePickerConfig"
+                                                    name="paymentDate" id="paymentDate" (blur)="true"
+                                                    placeholder="Enter Payment Here."
+                                                    class="form-control form-control-sm" #paymentDateRef="ngModel"
+                                                    [(ngModel)]="paymentDate" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12"
+                                        style="min-height: 360px;max-height: 360px; overflow: scroll;">
+                                        <div class="activity-stream">
+                                            <div class="stream pb-0">
+                                                <div class="stream-badge">
+                                                    <i class="icofont-money-bag"></i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Allowance
+                                                        </a>
+                                                    </div>
+                                                    {{this.info?.allowanceName}}
+                                                </div>
+                                            </div>
+                                            <div class="stream pb-0">
+                                                <div class="stream-badge">
+                                                    <i class="icofont-calendar"></i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Income Year
+                                                        </a>
+                                                    </div>
+                                                    {{this.info?.fiscalYearRange}}
+                                                </div>
+                                            </div>
+                                            <div class="stream pb-0">
+                                                <div class="stream-badge">
+                                                    <i class="icofont-settings"></i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Process Type
+                                                        </a>
+                                                    </div>
+                                                    {{this.info?.processType}}
+                                                </div>
+                                            </div>
+                                            <div class="stream pb-0">
+                                                <div class="stream-badge">
+                                                    <i class="icofont-pay"></i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Payment Mode
+                                                        </a>
+                                                    </div>
+                                                    {{this.info?.paymentMode}}
+                                                </div>
+                                            </div>
+                                            <div class="stream pb-0">
+                                                <div class="stream-badge">
+                                                    <i class="icofont-calendar"></i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Month - Year
+                                                        </a>
+                                                    </div>
+                                                    {{this.paymentMonth}} - {{this.info?.paymentYear}}
+                                                </div>
+                                            </div>
+                                            <div class="stream pb-0">
+                                                <div class="stream-badge">
+                                                    <i>&#2547;</i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Amount
+                                                        </a>
+                                                    </div>
+                                                    {{this.info?.totalAmount | number}}
+                                                </div>
+                                            </div>
+                                            <div class="stream pb-0">
+                                                <div class="stream-badge">
+                                                    <i>&#2547;</i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Tax
+                                                        </a>
+                                                    </div>
+                                                    {{this.info?.totalOnceOffAmount | number}}
+                                                </div>
+                                            </div>
+                                            <div class="stream pb-0">
+                                                <div class="stream-badge">
+                                                    <i>&#2547;</i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Disbursed Amount
+                                                        </a>
+                                                    </div>
+                                                    {{(this.info?.totalAmount - this.info?.totalOnceOffAmount) |
+                                                    number}}
+                                                </div>
+                                            </div>
+                                            <div class="stream pb-0 hide">
+                                                <div class="stream-badge">
+                                                    <i class="icofont-ui-file"></i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Is visible in payslip?
+                                                        </a>
+                                                    </div>
+                                                    {{(this.info?.showInPayslip??false) == true? "Yes":"No"}}
+                                                </div>
+                                            </div>
+                                            <div class="stream pb-0 hide">
+                                                <div class="stream-badge">
+                                                    <i class="icofont-ui-file"></i>
+                                                </div>
+                                                <div class="stream-panel">
+                                                    <div class="stream-info font-normal">
+                                                        <a class="text-info">
+                                                            Is visible in Salary sheet?
+                                                        </a>
+                                                    </div>
+                                                    {{(this.info?.showInSalarySheet??false) == true? "Yes":"No"}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-9 col-lg-9">
+                    <div class="ibox">
+                        <div
+                            class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark">
+                            <div class="form-row" *ngIf="this.info?.stateStatus =='Pending'">
+                                <div class="form-group mb-2 col-sm-12 col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="filter"
+                                            onkeyup="tableFilter('#tbl tbody tr',this)" />
+                                        <div class="input-group-prepend hide">
+                                            <span class="input-group-addon text-dark text-dark text-dark">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-2 col-sm-12 col-md-6">
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input id="excelFileUpload" type="file" class="custom-file-input"
+                                                (change)="excelFileUpload($event)" accept=".xls,.xlsx">
+                                            <label class="custom-file-label" for="excelFileUpload">
+                                                {{excelFileName}}
+                                            </label>
+                                        </div>
+                                        <div class="input-group-prepend" *ngIf="excelFile != null">
+                                            <button class="btn btn-sm btn-rounded btn-outline-primary font-bold"
+                                                (click)="uplaodExcel()" [disabled]="btnSubmit || btnDelete">
+                                                <i class="fa fa-upload"></i> Upload file</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row" style="min-height: 400px;max-height: 400px; overflow: scroll;">
+                                <div class="form-group mb-2 col-sm-12 col-md-12">
+                                    <div class="table-responsive" *ngIf="this.list_getSupplementaryAmount != null;">
+                                        <table class="table table-sm table-striped table-hover table-responsive-lg"
+                                            id="tbl">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">#SL</th>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Designation</th>
+                                                    <th class="text-center">Amount</th>
+                                                    <th class="text-center">Tax</th>
+                                                    <th class="text-center">Disbursable Amount</th>
+                                                    <th class="text-center"
+                                                        *ngIf="this.list_getSupplementaryAmount != null && this.list_getSupplementaryAmount.length > 1">
+                                                        Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <ng-container
+                                                    *ngFor="let item of list_getSupplementaryAmount; let i = index">
+                                                    <tr>
+                                                        <td class="text-center">{{i + 1}}</td>
+                                                        <td>{{item.employeeCode}}</td>
+                                                        <td>{{item.employeeName}}</td>
+                                                        <td>{{item?.designation}}</td>
+                                                        <td class="text-center">
+                                                            {{item?.amount | number}}
+                                                        </td>
+                                                        <td class="text-center">{{item.onceOffAmount | number}}</td>
+                                                        <td class="text-center">{{item?.disbursedAmount | number}}</td>
+                                                        <td class="text-center"
+                                                            *ngIf="this.list_getSupplementaryAmount != null && this.list_getSupplementaryAmount.length > 0">
+                                                            <button title="Payslip" class="btn btn-xs"
+                                                                (click)="downloadPayslip(item)">
+                                                                <i class="fa fa-file-pdf-o text-info"></i>
+                                                            </button>
+                                                            <button title="Tax-Card" class="btn btn-xs"
+                                                                (click)="downloadTaxCard(item)"><i
+                                                                    class="fa fa-file-pdf-o text-danger"></i></button>
+                                                            <button title="Re-Process" class="btn btn-xs hide"><i
+                                                                    class="icofont-ui-reply text-success"></i></button>
+                                                            <button type="button" class="btn btn-sm text-danger"
+                                                                (click)="delete(item)"
+                                                                *ngIf="item.stateStatus=='Pending'"
+                                                                [disabled]="btnSubmit || btnDelete">
+                                                                <i class="fa fa fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-x-small pb-2" *ngIf="this.info?.stateStatus =='Pending'">
+            <button class="btn btn-sm btn-primary btn-rounded btn-outline pull-right" type="submit"
+                (click)="submit('Disbursed')" [disabled]="btnSubmit || btnDelete">
+                <i class="fa fa-hand-pointer-o"></i> | Disbursed
+            </button>
+            <button class="btn btn-sm btn-info btn-rounded btn-outline pull-right" type="submit"
+                (click)="submit('Undo')" [disabled]="btnSubmit || btnDelete">
+                <i class="fa fa-undo"></i> | Undo
+            </button>
+            <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button"
+                (click)="closeModal('Cancel click')" [disabled]="btnSubmit || btnDelete">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+<div class="spinner-div" *ngIf="btnSubmit == true || btnDelete == true">
+    <div class="sk-spinner sk-spinner-cube-grid spinner text-success">
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+    </div>
+    <div class="col-md-12 col-sm-12 spinner-text">
+        <h4 class="text-center text-danger">Please don't close this tab.</h4>
+        <h5 class="text-info">{{process_message}}...</h5>
+    </div>
+</div>

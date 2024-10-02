@@ -1,0 +1,119 @@
+<ng-template #blukApporvalModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title pl-2 mt-1" id="modal-basic-title"> Bulk Salary Review Approval
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="1==1">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="employeeId" class="control-label font-bold">Employee</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div class="d-inline" style="width: 90%;">
+                                <ng-select2 [data]="ddlEmployees" name="employeeId" id="employeeId"
+                                    formControlName="employeeId" [placeholder]="'Search Employee...'"
+                                    [options]="select2Options" [allowClear]="true">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="status" class="control-label font-bold">Status <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <select name="status" id="status" formControlName="status"
+                                class="form-control form-control-sm">
+                                <option [value]="''" selected>--Select Status--</option>
+                                <option [value]="item" *ngFor="let item of types_of_status">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <p>Total rows: <span class="label label-info"
+                                *ngIf="this.rows.length > 0">{{this.rows.length}}</span></p>
+                        <div class="table-responsive" style="max-height: 500px; overflow: scroll;">
+                            <table class="table table-sm table-bordered table-striped table-responsive-xl">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>
+                                            <input type="checkbox" formControlName="isCheckedAll" title="Check All"
+                                                (change)="checkAll($event)">
+                                        </th>
+                                        <th>#SL</th>
+                                        <th>Name</th>
+                                        <th>Current Salary</th>
+                                        <th>Proposal Salary</th>
+                                        <th>Growth Amt</th>
+                                        <th>Growth %</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr formArrayName="rows" *ngFor="let item of formArray; let i = index">
+                                        <ng-container [formGroupName]="i">
+                                            <td class="text-center">
+                                                <input type="checkbox" formControlName="isChecked" title="Singel Check"
+                                                    (change)="item_Checked($event)">
+                                            </td>
+                                            <td class="text-center">{{i+1}}</td>
+                                            <td>
+                                                <span>{{item.get('employeeName').value}}</span>
+                                            </td>
+                                            <td class="text-right">
+                                                <span>{{item.get('currentSalary').value | number}}</span>
+                                            </td>
+                                            <td class="text-right">
+                                                <span>{{item.get('proposalSalary').value | number}}</span>
+                                            </td>
+
+                                            <td class="text-right">
+                                                {{(item.get('proposalSalary').value - item.get('currentSalary').value) |
+                                                number}}
+                                            </td>
+                                            <td class="text-right">
+                                                {{((item.get('proposalSalary').value -
+                                                item.get('currentSalary').value)/item.get('currentSalary').value*100) |
+                                                number:'1.2-2'}} %
+                                            </td>
+                                            <td>
+                                                <span>{{item.get('reason').value}}</span>
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2  text-x-small">
+                <button type="button" class="btn btn-sm btn-outline btn-rounded btn-primary" (click)="submit()"
+                    [disabled]="this.btnSubmit">
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    <i class="fa fa-file-excel-o" title="Download"></i> | Submit
+
+                </button>
+                <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                    (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

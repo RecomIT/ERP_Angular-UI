@@ -1,0 +1,69 @@
+<ng-template #employeeInfoModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      <i class="fa fa-info btn btn-sm btn-success btn-circle" aria-hidden="true"></i> Employee Info
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeEmployeeInfoModal('close click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <div class="modal-body text-x-small">
+    <div class="ibox ibox-content border-radius-5">
+      <!-- Image Row -->
+      <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-start">
+          <img [src]="photoPath" (error)="setDefaultPhoto()" alt="Photo" class="profile-image">
+        </div>
+      </div>
+
+      <!-- Details Row -->
+      <div class="row mt-2">
+        <div class="col-12">
+          <ng-container *ngIf="employeeDetails">
+            <div id="employeeDetails">
+              <div class="row text-center">
+                <!-- Details content goes here -->
+                <div class="col-12 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center mb-2">
+                  <div class="">
+                    <h4><strong>Grade: </strong>{{ employeeDetails.gradeName }}</h4>
+                    <h4><strong>Branch: </strong>{{ employeeDetails.branchName }}</h4>
+                    <h4><strong>Department: </strong>{{ employeeDetails.departmentName }}</h4>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center mb-2">
+                  <div class="">
+                    <h4><strong>Employee Code: </strong>{{ employeeDetails.employeeCode }}</h4>
+                    <h4><strong>Name: </strong>{{ employeeDetails.fullName }}</h4>
+                    <h4><strong>Designation: </strong>{{ employeeDetails.designationName }}</h4>
+                    <h4><strong>Service Length: </strong>{{ serviceLength }}</h4>
+                    <small>
+                      <span *ngIf="employeeDetails.isActive"><i class="fa fa-circle text-navy mr-1"></i>{{ employeeDetails.jobType }}</span>
+                      <span *ngIf="!employeeDetails.isActive"><i class="fa fa-circle text-danger mr-1"></i> Inactive</span>
+                    </small>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center align-items-center mb-2">
+                  <div class="">
+                    <h4><strong>Office Phone: </strong>{{ employeeDetails.officeMobile }}</h4>
+                    <h4><strong>Office Email: </strong>{{ employeeDetails.officeEmail }}</h4>
+                    <h4><strong>Personal Phone: </strong>{{ employeeDetails.personalMobileNo }}</h4>
+                    <h4><strong>Personal Email: </strong>{{ employeeDetails.personalEmailAddress }}</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-xm btn-danger btn-rounded shadow-lg" type="button" (click)="closeEmployeeInfoModal('Close Click')">
+      <i class="fa fa-times"></i> | Cancel
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,183 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Individual Monthly Allowances</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Allowance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Individual Monthly Allowances</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight pt-3" id="page-container">
+    <div class="row mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#monthlyAllowance" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-info"></i> | Monthly Allowances
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="monthlyAllowance" class="tab-pane active">
+                        <div class="ibox">
+                            <div class="ibox-content pb-3 text-x-small font-bold">
+                                <form [formGroup]="serach_list_form">
+                                    <div class="form-row">
+                                        <div class="form-group mb-0 col-md-4 col-sm-12">
+                                            <label for="searchByFiscalYear" class="control-label">Search By
+                                                Employee</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark text-white">
+                                                        <i class="fa fa-users"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 85%;">
+                                                    <ng-select2 [data]="ddlEmployees" name="employees"
+                                                        id="searchByEmployee" formControlName="employeeId"
+                                                        [placeholder]="'Employee...'" [options]="select2Config"
+                                                        [allowClear]="true" required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-0 col-md-4 col-sm-12">
+                                            <label for="searchByFiscalYear" class="control-label">Search By
+                                                Allowance</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon text-dark text-white">
+                                                        <i class="fa fa-money"></i>
+                                                    </span>
+                                                </div>
+                                                <div style="width: 85%;">
+                                                    <ng-select2 [data]="ddlAllowances" name="allowanceNameId"
+                                                        id="searchByAllowance" formControlName="allowanceNameId"
+                                                        [placeholder]="'Allowance...'" [options]="select2Config"
+                                                        [allowClear]="true" required>
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-0 col-md-4 col-sm-12">
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="ibox">
+                            <div class="ibox-content text-x-small">
+                                <table class="table table-sm table-striped table-hover table-responsive-lg" id="tbl">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th class="font-bold">#SL</th>
+                                            <th>Name</th>
+                                            <th>Allowance</th>
+                                            <th>Base</th>
+                                            <th>Amt/Per</th>
+                                            <th>Appearance</th>
+                                            <th>Active</th>
+                                            <th>Activation</th>
+                                            <th>Status</th>
+                                            <th>Remarks</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <ng-container *ngIf="list != null && list.length > 0">
+                                            <tr *ngFor="let item of list | paginate: list_page_config;let i =index">
+                                                <td class="font-bold">{{i+1}}</td>
+                                                <td>{{item.employeeName + " ["+item.employeeCode+"]"}}</td>
+                                                <td>{{item.allowanceName}}</td>
+                                                <td>{{item.baseOfPayment}}</td>
+                                                <td *ngIf="item.baseOfPayment == 'Flat'">
+                                                    {{item?.amount}} &#2547;
+                                                </td>
+                                                <td *ngIf="item.baseOfPayment != 'Flat'">
+                                                    {{item?.percentage}} %
+                                                </td>
+                                                <td *ngIf="item.isVisibleInSalarySheet ==true">
+                                                    <span class="label label-info"><i class="fa fa-file-pdf-o"></i>
+                                                        Payslip</span>
+                                                </td>
+                                                <td *ngIf="item.isVisibleInSalarySheet ==false">
+                                                    <span class="label label-danger"><i class="fa fa-file-pdf-o"></i>
+                                                        Tax
+                                                        Card</span>
+                                                </td>
+                                                <td>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item?.isActive == true">Yes</span>
+                                                    <span class="label label-danger"
+                                                        *ngIf="item?.isActive == false">No</span>
+                                                </td>
+                                                <td
+                                                    *ngIf="item.activationFrom != null && item.activationFrom !=''&& item.activationTo != null && item.activationTo !=''">
+                                                    {{item.activationFrom | date:"dd MMM yyy"}} - {{item.activationTo |
+                                                    date:"dd MMM yyy"}}
+                                                </td>
+                                                <td
+                                                    *ngIf="(item.activationFrom != null && item.activationFrom !='') && (item.activationTo == null || item.activationTo =='')">
+                                                    {{item.activationFrom | date:"dd MMM yyy"}}
+                                                </td>
+                                                <td>
+                                                    <span class="label label-warning"
+                                                        *ngIf="item.stateStatus=='Pending'">{{item.stateStatus +
+                                                        '...'}}</span>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.stateStatus=='Approved'"><i class="fa fa-check"></i>
+                                                        {{item.stateStatus}}</span>
+                                                    <span class="label label-success"
+                                                        *ngIf="item.stateStatus=='Disbursed'"><i
+                                                            class="fa fa-check-circle-o"></i> {{item.stateStatus}} -
+                                                        {{item.count}}</span>
+                                                    <span class="label label-info"
+                                                        *ngIf="item.stateStatus=='Processed'">
+                                                        <i class="fa fa-backward"></i> {{item.stateStatus}} -
+                                                        {{item.count}}
+                                                    </span>
+                                                </td>
+                                                <td>{{item.remarks}}</td>
+                                                <td>
+                                                    <button class="btn btn-xs text-navy"
+                                                        *ngIf="item.stateStatus=='Approved'" tooltip="Details">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                        <tr *ngIf="list == null">
+                                            <td class="text-center font-bold" colspan="15">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                                Loading...
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="list != null && list.length == 0">
+                                            <td class="text-center font-bold" colspan="15">
+                                                No row(s) found
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="d-flex justify-content-end">
+                                    <pagination-controls (pageChange)="pageChanged($event)" [responsive]="true"
+                                        [autoHide]="true" id="list_pager"></pagination-controls>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

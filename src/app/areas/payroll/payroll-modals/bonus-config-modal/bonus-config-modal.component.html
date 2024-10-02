@@ -1,0 +1,255 @@
+<ng-template #bonusConfigModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-success btn-circle icofont-money-bag" aria-hidden="true"></i>| Bonus &
+            Config
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Close Click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="bonusConfigForm" (submit)="submit()">
+            <div class="modal-body">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="Bonus" class="control-label font-bold">Bonus <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-gift"></i>
+                                </span>
+                            </div>
+                            <select name="bonusId" id="bonusId" formControlName="bonusId"
+                                class="form-control form-control-sm">
+                                <option [value]="0" selected>---Select Bonus----</option>
+                                <option [value]="item.bonusId" *ngFor="let item of listOfBonus">{{item.bonusName}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="isReligious" class="control-label font-bold">IS RELIGIOUS?</label>
+                        <div class="input-group">
+                            <!-- <select name="isReligious" id="isReligious" formControlName="isReligious" class="form-control form-control-sm">
+                                <option [value]="true">Yes</option>
+                                <option [value]="false">No</option>
+                            </select> -->
+
+                            <input type="radio" name="isReligious" [value]="true" class="mr-2"
+                                formControlName="isReligious"> Yes
+                            <input type="radio" name="isReligious" [value]="false" class="ml-2 mr-1"
+                                formControlName="isReligious"> No
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-12 col-sm-12"
+                        [class.hide]="this.bonusConfigForm.controls.isReligious.value==false">
+                        <label for="religionName" class="control-label font-bold">RELIGION <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-moon-o"></i>
+                                </span>
+                            </div>
+                            <select name="religionName" id="religionName" class="form-control form-control-sm"
+                                formControlName="religionName">
+                                <option [value]="''" selected>---Select Religion---</option>
+                                <option [value]="item" *ngFor="let item of ddlReligion">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="fiscalYearId" class="control-label font-bold">FISCAL YEAR<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="fiscalYearId" id="fiscalYearId" class="form-control form-control-sm"
+                                formControlName="fiscalYearId">
+                                <option [value]="0">--Select Fiscal Year--</option>
+                                <option [value]="item.id" *ngFor="let item of ddlFiscalyear">{{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="isFestival" class="control-label font-bold">IS FESTIVAL BONUS?</label>
+                        <div class="input-group">
+                            <!-- <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="isFestival" id="isFestival" class="form-control form-control-sm"
+                                formControlName="isFestival">
+                                <option [value]="true" selected>Yes</option>
+                                <option [value]="false">No</option>
+                            </select> -->
+                            <input type="radio" name="isFestival" [value]="true" class="mr-2"
+                                formControlName="isFestival"> Yes
+                            <input type="radio" name="isFestival" [value]="false" class="ml-2 mr-1"
+                                formControlName="isFestival"> No
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="isConfirmedEmployee" class="control-label font-bold">IS BONUS FOR CONFIRMED
+                            EMPLOYEE?<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input type="radio" name="isConfirmedEmployee" [value]="true" class="mr-2"
+                                formControlName="isConfirmedEmployee"> Yes
+                            <input type="radio" name="isConfirmedEmployee" [value]="false" class="ml-2 mr-1"
+                                formControlName="isConfirmedEmployee"> No
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-md-4 col-sm-6">
+                        <label for="isTaxable" class="control-label font-bold">IS TAXABLE?</label>
+                        <div class="input-group">
+                            <!-- <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <select name="isTaxable" id="isTaxable" class="form-control form-control-sm"
+                                formControlName="isTaxable">
+                                <option [value]="''">--Select One--</option>
+                                <option [value]="'true'">Yes</option>
+                                <option [value]="'false'">No</option>
+                            </select> -->
+                            <input type="radio" name="isTaxable" [value]="true" class="mr-2"
+                                formControlName="isTaxable"> Yes
+                            <input type="radio" name="isTaxable" [value]="false" class="ml-2 mr-1"
+                                formControlName="isTaxable"> No
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-6"
+                        [class.hide]="this.bonusConfigForm.controls.isTaxable.value == 'false' || this.bonusConfigForm.controls.isTaxable.value == ''">
+                        <label for="taxConditionType" class="control-label font-bold">Tax Type</label>
+                        <div class="input-group">
+                            <input type="checkbox" name="isPaymentProjected" class="mr-2"
+                                formControlName="isPaymentProjected"> Projection
+                            <input type="checkbox" name="isTaxDistributed" class="ml-2 mr-1"
+                                formControlName="isTaxDistributed"> Tax Distributed
+                            <input type="checkbox" name="isOnceOff" class="ml-2 mr-1" formControlName="isOnceOff"> Once
+                            Off
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-6" *ngIf="this.bonusConfigForm.controls.isOnceOff.value">
+                        <label for="taxConditionType" class="control-label font-bold">Is Exclude From Salary?</label>
+                        <div class="input-group">
+                            <input type="radio" name="isExcludeFromSalary" [value]="true" class="ml-2 mr-1"
+                                formControlName="isExcludeFromSalary"> Yes
+                            <input type="radio" name="isExcludeFromSalary" [value]="false" class="ml-2 mr-1"
+                                formControlName="isExcludeFromSalary"> No
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-6"
+                        *ngIf="this.bonusConfigForm.controls.isExcludeFromSalary.value">
+                        <label for="taxConditionType" class="control-label font-bold">Is Tax Adjusted With
+                            Salary?</label>
+                        <div class="input-group">
+                            <input type="radio" name="isTaxAdjustedWithSalary" [value]="true" class="ml-2 mr-1"
+                                formControlName="isTaxAdjustedWithSalary"> Yes
+                            <input type="radio" name="isTaxAdjustedWithSalary" [value]="false" class="ml-2 mr-1"
+                                formControlName="isTaxAdjustedWithSalary"> No
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-6">
+                        <label for="basedOn" class="control-label">BONUS BASED ON<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-arrow-circle-o-down"></i>
+                                </span>
+                            </div>
+                            <select name="basedOn" id="basedOn" class="form-control form-control-sm"
+                                formControlName="basedOn">
+                                <option [value]="'Basic'">Basic</option>
+                                <option [value]="'Gross'">Gross</option>
+                                <option [value]="'Flat'">Flat</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12"
+                        *ngIf="this.bonusConfigForm.controls.basedOn.value == 'Basic' || this.bonusConfigForm.controls.basedOn.value == 'Gross'">
+                        <label for="percentage" class="control-label text-uppercase">Bonus Percentage
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" name="percentage" id="percentage" formControlName="percentage"
+                                placeholder="ENTER PERCENTAGE" class="form-control form-control-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                   %
+                                </span>
+                            </div>
+                        </div>
+                        <!-- <span class="label label-primary">
+                            {{this.bonusConfigForm.controls?.percentage.value}}%
+                        </span> -->
+                    </div>
+                    <div class="form-group col-md-4 col-sm-6"
+                        [class.hide]="bonusConfigForm.controls.basedOn.value == 'Flat'">
+                        <label for="bonusCount" class="control-label">Bonus Count<span class="text-danger">*</span>
+                            &nbsp;
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                            </div>
+                            <input type="number" name="bonusCount" id="bonusCount" formControlName="bonusCount"
+                                placeholder="ENTER Count" class="form-control form-control-sm" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-6"
+                        [class.hide]="bonusConfigForm.controls.basedOn.value == 'Gross' || bonusConfigForm.controls.basedOn.value == 'Basic'">
+                        <label for="amount" class="control-label">AMOUNT<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    &#2547;
+                                </span>
+                            </div>
+                            <input type="number" name="amount" id="amount" formControlName="amount"
+                                placeholder="ENTER AMOUNT" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-6">
+                        <label for="amount" class="control-label">MAX AMOUNT<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    &#2547;
+                                </span>
+                            </div>
+                            <input type="number" name="maximumAmount" id="maximumAmount" formControlName="maximumAmount"
+                                placeholder="ENTER MAX AMT" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Close Click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="this.bonusConfigForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <!-- <span [hidden]="!btnInsertBonus" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span> -->
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

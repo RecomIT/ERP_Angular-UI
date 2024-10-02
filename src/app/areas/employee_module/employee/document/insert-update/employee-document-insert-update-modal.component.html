@@ -1,0 +1,66 @@
+<ng-template #documentModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-file-document pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="documentForm" (ngSubmit)="submitForm()">
+        <div class="modal-body text-x-small text-dark">
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="" class="control-label font-bold">Document Type <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-file-zip-o"></i>
+                            </span>
+                        </div>
+                        <select name="documentName" id="documentName" class="form-control form-control-sm"
+                            formControlName="documentName">
+                            <option [value]="''" selected>---Select Document Type---</option>
+                            <option [value]="item" *ngFor="let item of documents">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="documentNumber" class="control-label font-bold">
+                        {{this.documentForm.get('documentName').value == '' 
+                        || this.documentForm.get('documentName').value == null ?  'Document Number': this.documentForm.get('documentName').value+' Number'}} <span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-id-badge"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" name="documentNumber" autocomplete="off"
+                            id="documentNumber" formControlName="documentNumber">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="file" class="control-label font-bold">File Uploader <span class="text-danger"> [File size must be less then or equal 300 KB]</span></label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input id="file" type="file" class="custom-file-input" name="file"
+                                (change)="fileUpload($event)" accept=".pdf,.jpg,.png,.jpeg">
+                            <label class="custom-file-label" for="file">
+                                {{uploadFileName}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" [disabled]="this.documentForm.invalid">
+                <i class="fa fa-paper-plane"></i> | {{document.id > 0 ? 'Update': 'Submit'}}
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                (click)="closeModal('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>

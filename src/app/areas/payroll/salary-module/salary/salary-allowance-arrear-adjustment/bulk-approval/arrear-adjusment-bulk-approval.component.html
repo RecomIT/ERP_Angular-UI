@@ -1,0 +1,170 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle" aria-hidden="true">&#2547;</i>| Bulk Approval
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body text-x-small">
+                <div class="ibox-content pb-1 shadow-sm border-radius-5">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="employeeId" class="control-label font-bold">
+                                Employee <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-users"></i>
+                                    </span>
+                                </div>
+                                <div style="width:85%">
+                                    <ng-select2 [data]="ddlEmployees" name="employeeId" formControlName="employeeId"
+                                        [placeholder]="'Employee...'" [options]="select2Options" [allowClear]="true"
+                                        required>
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="allowanceName" class="control-label font-bold">
+                                Allowance <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-money"></i>
+                                    </span>
+                                </div>
+                                <div style="width:85%">
+                                    <ng-select2 [data]="ddlAllowances" name="allowanceNames"
+                                        formControlName="allowanceNameId" [placeholder]="'Allowance...'"
+                                        [options]="select2Options" [allowClear]="true" required>
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="year" class="control-label font-bold">
+                                Amount type <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon">
+                                        &#2547;
+                                    </span>
+                                </div>
+                                <select name="flag" id="flag" class="form-control form-control-sm"
+                                    formControlName="flag">
+                                    <option [value]="''">--Amount type--</option>
+                                    <option [value]="'Arrear'">Arrear</option>
+                                    <option [value]="'Adjustment'">Adjustment</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="year" class="control-label font-bold">
+                                Salary Month <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                                <select name="salaryMonth" id="salaryMonth" class="form-control form-control-sm"
+                                    formControlName="salaryMonth">
+                                    <option [value]="0">--Month--</option>
+                                    <option [value]="m.monthNo" *ngFor="let m of ddlMonths">{{m.month}}</option>
+                                </select>
+                                <div class="input-group-prepend">
+                                    <select name="salaryYear" id="salaryYear" class="form-control form-control-sm"
+                                        formControlName="salaryYear">
+                                        <option [value]="0">--Year--</option>
+                                        <option [value]="year" *ngFor="let year of ddlYears">{{year}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content pb-1 shadow-sm border-radius-5 mt-1">
+                    <div class="row" *ngIf="data != null && data.length > 0">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="table-responsive"
+                                style="min-height: 200px;max-height: 200px; overflow-y: scroll;">
+                                <table class="table table-bordered table-striped table-responsive-xl text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" formControlName="isCheckedAll"
+                                                    (change)="checkAll($event)">
+                                            </th>
+                                            <th>#SL</th>
+                                            <th>Name</th>
+                                            <th>Allowance</th>
+                                            <th>Month</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr formArrayName="items" *ngFor="let item of formArray; let i = index">
+                                            <ng-container [formGroupName]="i">
+                                                <td>
+                                                    <input type="checkbox" formControlName="isChecked"
+                                                        (change)="item_Checked($event)">
+                                                </td>
+                                                <td>
+                                                    {{i+1}}
+                                                </td>
+                                                <td>
+                                                    {{item.get('name').value + " ["+item.get('code').value+"]"}}
+                                                </td>
+                                                <td>
+                                                    {{item.get('allowance').value}}
+                                                </td>
+                                                <td>
+                                                    {{utilityService.getMonthNameFull(item.get('month').value) +
+                                                    "-"+item.get('year').value}}
+                                                </td>
+                                                <td class="text-right">
+                                                    {{item.get('amount').value | number}}
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <div class="form-row">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-list"></i>
+                            </span>
+                        </div>
+                        <select name="stateStatus" id="stateStatus" class="form-control form-control-sm" formControlName="stateStatus">
+                            <option [value]="'Approved'">Approved</option>
+                            <option [value]="'Cancelled'">Cancelled</option>
+                        </select>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                                [disabled]="form.invalid || btnSubmit">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

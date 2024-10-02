@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools</title>
+</head>
+
+<body>
+    <div class="login-wrapper-bg form-login-body bg-white" @fadeIn>
+        <div class="container" style="padding-top: 5%;">
+            <div class="row">
+                <div class="col-lg-10 mx-auto login-desk">
+                    <div class="row">
+                        <div class="col-md-7 detail-box">
+                            <br> <br>
+                            <div class="detailsh">
+                                <h2>Are You Paying <b>Extra Tax?</b> <br> Satisfied with Your <b>Tax Calculation?</b>
+                                    <br><br> Let's Evaluate with
+                                    <b>Easy Tax</b>
+                                </h2>
+                                <!-- <img class="" src="assets/img/easy-tax.png"> -->
+                            </div>
+                            <div class="col d-flex justify-content-center">
+                                <div class="row my-4">
+                                    <button type="button" class="btn" style="width: 250px;
+                                    background-color: #132b59;
+                                    border-radius: 50px;color: white;"
+                                        (click)="openEasyTaxyModal()"> Calculate </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 loginform d-flex align-items-center justify-content-center" style="opacity: 00;">
+                            <div class="login-det">
+                                <div class="">
+                                    <div class="row">
+                                        <h2>Are you feeling overwhelmed by TDS in Bangladesh?</h2>
+                                    </div>
+                                    <div class="row">
+                                        <br><br>
+                                    </div>
+
+                                    <div class="row my-4">
+                                        <p>Take a deep breath! This quick guide will untangle the complexities and get
+                                            you back on track.
+                                            No more sweat, just clarity and confidence.</p>
+                                    </div>
+
+                                    <div class="row my-4">
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                            (click)="openEasyTaxyModal()"> Calculate </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<ng-template #easyTaxModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | Easy Tax Calculation
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+
+        <!-- <form #easyTaxForm="ngForm" (submit)="easyTaxCalculationForm(easyTaxForm)">
+            <fieldset [disabled]="fieldsetDisabled">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="overtimeName" class="control-label"> Overtime Name
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" id="overtimeName" placeholder="Overtime Name"
+                                    name="overtimeName" required  #overtimeName="ngModel" [(ngModel)]="policy.overtimeName">
+                            </div>
+                            <div class="text-danger" *ngIf="overtimeName.touched && overtimeName.invalid">
+                                <span *ngIf="overtimeName.errors?.required"> Overtime Name is required</span>
+                            </div>
+                           
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="unit" class="control-label"> Overtime Unit <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                
+                                <div style="width:90%">
+                                    <ng-select2 name="unit" id="unit" [placeholder]="'Select Unit'" [options]="select2Options" [data]="units"
+                                    #unit ="ngModel" [(ngModel)]="policy.unit" (ngModelChange)="onUnitChange()" required [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="amountType" class="control-label"> Amount Type <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                
+                                <div style="width:90%">
+                                    <ng-select2 name="amountType" id="amountType" [placeholder]="'Select Amount Type'" [options]="select2Options" [data]="amountTypes"
+                                    #amountType ="ngModel" [(ngModel)]="policy.amountType" (ngModelChange)="onAmountTypeChange()" required [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="amount" class="control-label"> Amount
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="amount" name="amount" required
+                                 #amount="ngModel" [(ngModel)]="policy.amount" [disabled]="!policy.isFlatAmountType" [min]="policy.isFlatAmountType ? 1 : 0">
+                            </div>
+                            <div class="text-danger" *ngIf="amount.touched && amount.invalid">
+                                <span *ngIf="amount.errors?.required">Amount is required</span>
+                                <span *ngIf="amount.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="amountRate" class="control-label"> Amount Rate
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-registered" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="amountRate" name="amountRate" required  
+                                [disabled]="policy.isFlatAmountType" [min]="policy.isFlatAmountType ? 0 : 1"  #amountRate="ngModel" [(ngModel)]="policy.amountRate">
+                            </div>
+                            <div class="text-danger" *ngIf="amountRate.touched && amountRate.invalid">
+                                <span *ngIf="amountRate.errors?.required">Amount Rate is required</span>
+                                <span *ngIf="amountRate.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="limitationOfUnit" class="control-label"> Limitation of Unit
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+
+                                <select name="limitationOfUnit" id="limitationOfUnit" class="form-control form-control-sm" #limitationOfUnit="ngModel" [(ngModel)]="policy.limitationOfUnit" (change)="onLimitationOfUnit()">
+                                    <option [value]=false>No</option>
+                                    <option [value]=true>Yes</option>
+                                </select>
+                            </div>
+                            <div class="text-danger">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="maxUnit" class="control-label"> Max. Unit
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-medium" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="maxUnit"
+                                    name="maxUnit" required  [min]="policy.limitationOfUnit ? 1 : 0" #maxUnit="ngModel" [(ngModel)]="policy.maxUnit" [disabled]="!policy.limitationOfUnit">
+                            </div>
+                            <div class="text-danger" *ngIf="maxUnit.touched && maxUnit.invalid">
+                                <span *ngIf="maxUnit.errors?.required">Max. Unit is required</span>
+                                <span *ngIf="maxUnit.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="minUnit" class="control-label"> Min. Unit
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-maxcdn" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="minUnit"
+                                    name="minUnit" required  [min]="0"  #minUnit="ngModel" [(ngModel)]="policy.minUnit" [disabled]="!policy.limitationOfUnit">
+                            </div>
+                            <div class="text-danger" *ngIf="minUnit.touched && minUnit.invalid">
+                                <span *ngIf="minUnit.errors?.required">Min. Unit is required</span>
+                                <span *ngIf="minUnit.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="limitationOfAmount" class="control-label">Limitation of Amount
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+
+                                <select name="limitationOfAmount" id="limitationOfAmount" class="form-control form-control-sm" #limitationOfAmount="ngModel" [(ngModel)]="policy.limitationOfAmount" (change)="onLimitationOfAmount()">
+                                    <option [value]=false>No</option>
+                                    <option [value]=true>Yes</option>
+                                </select>
+                            </div>
+                            <div class="text-danger">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="maxAmount" class="control-label"> Max. Amount
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-medium" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="maxAmount"
+                                    name="maxAmount" required  [min]="policy.limitationOfAmount ? 1 : 0" #maxAmount="ngModel" [(ngModel)]="policy.maxAmount" [disabled]="!policy.limitationOfAmount">
+                            </div>
+                            <div class="text-danger" *ngIf="maxAmount.touched && maxAmount.invalid">
+                                <span *ngIf="maxAmount.errors?.required">Max. Amount is required</span>
+                                <span *ngIf="maxAmount.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="minAmount" class="control-label"> Min. Amount
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-maxcdn" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="minAmount"
+                                    name="minAmount" required  [min]="0"  #minAmount="ngModel" [(ngModel)]="policy.minAmount" [disabled]="!policy.limitationOfAmount">
+                            </div>
+                            <div class="text-danger" *ngIf="minAmount.touched && minAmount.invalid">
+                                <span *ngIf="minAmount.errors?.required">Min. Unit is required</span>
+                                <span *ngIf="minAmount.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded" [disabled]="easyTaxForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form> -->
+
+        <div class="">
+            <div class="ibox-content">
+                <div id="easyTax-stepper" class="bs-stepper">
+                    <div class="bs-stepper-header">
+
+                        <div class="line"></div>
+                        <div class="step" data-target="#personal-Info">
+                            <button class="step-trigger p-2">
+                                <span class="bs-stepper-circle faa-parent animated-hover"><i
+                                        class="fa fa-users faa-shake"></i></span>
+                                <span class="bs-stepper-label">Personal Info</span>
+                            </button>
+                        </div>
+                        <!-- <div class="line"></div> -->
+
+                        <div class="step" data-target="#income-details">
+                            <button class="step-trigger p-2">
+                                <span class="bs-stepper-circle faa-parent animated-hover"><i
+                                        class="fa fa-briefcase faa-shake"></i></span>
+                                <span class="bs-stepper-label">Income Details</span>
+                            </button>
+                        </div>
+
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="bs-stepper-content">
+                        <form #easyTaxForm="ngForm" (submit)="easyTaxCalculationForm(easyTaxForm)">
+
+                            <div id="personal-Info" class="content pt-2 mb-4">
+
+                                <div class="form-row">
+                                    
+                                    <div class="form-group col-md-6">
+                                        <label for="employeeName" class="control-label"> Name
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="employeeName"
+                                                placeholder="Employee Name" name="employeeName" required
+                                                #employeeName="ngModel" [(ngModel)]="easyTax.employeeName">
+                                        </div>
+                                        <div class="text-danger" *ngIf="employeeName.touched && employeeName.invalid">
+                                            <span *ngIf="employeeName.errors?.required"> Name is Required</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="designation" class="control-label"> Designation
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="designation"
+                                                placeholder="Designation" name="designation" required
+                                                #designation="ngModel" [(ngModel)]="easyTax.designation">
+                                        </div>
+                                        <div class="text-danger" *ngIf="designation.touched && designation.invalid">
+                                            <span *ngIf="designation.errors?.required"> Designation is Required</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-6">
+                                        <label for="gender" class="control-label"> Gender <span
+                                                class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div style="width:100%">
+                                                <ng-select2 name="gender" id="gender" [placeholder]="'Select Gender'"
+                                                    [options]="select2Options" [data]="genders" #gender="ngModel"
+                                                    [(ngModel)]="easyTax.gender" (ngModelChange)="onGenderChange()"
+                                                    required [disabled]="fieldsetDisabled" value="gender">
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="tin" class="control-label"> TIN
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm" id="tin"
+                                                placeholder="TIN" name="tin" #tin="ngModel"
+                                                [(ngModel)]="easyTax.tin">
+                                        </div>
+                                        <div class="text-danger" *ngIf="tin.touched && tin.invalid">
+                                            <span *ngIf="tin.errors?.required"> TIN is Required</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-3">
+                                        <label for="region" class="control-label"> Select Region <span
+                                                class="text-danger"></span></label>
+                                        <div class="input-group">
+                                            <div style="width:100%">
+                                                <ng-select2 name="region" id="region" [placeholder]="'Select region'"
+                                                    [options]="select2Options" [data]="regions" #gender="ngModel"
+                                                    [(ngModel)]="easyTax.region" (ngModelChange)="onRegionChange()"
+                                                    required [disabled]="fieldsetDisabled" value="region">
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="freedomFighters" class="control-label"> Freedom Fighters
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+
+                                            <select name="freedomFighters" id="freedomFighters" class="form-control form-control-sm" #freedomFighters="ngModel" [(ngModel)]="easyTax.freedomFighters" (change)="onFreedomFightersChanged()">
+                                                <option [value]=false>No</option>
+                                                <option [value]=true>Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="overAged" class="control-label"> Age 65 or Over
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+
+                                            <select name="overAged" id="overAged" class="form-control form-control-sm" #overAged="ngModel" [(ngModel)]="easyTax.overAged" (change)="onOverAgedChanged()">
+                                                <option [value]=false>No</option>
+                                                <option [value]=true>Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="physicallyChallenged" class="control-label"> Physically Challenged
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+
+                                            <select name="physicallyChallenged" id="physicallyChallenged" class="form-control form-control-sm" #physicallyChallenged="ngModel" [(ngModel)]="easyTax.physicallyChallenged" (change)="onPhysicallyChallengedChanged()">
+                                                <option [value]=false>No</option>
+                                                <option [value]=true>Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+
+                                <button [disabled]="easyTaxForm.invalid" (click)="next()" type="button"
+                                    class="btn btn-rounded btn-outline btn-success float-right">Next <i
+                                        class="fa fa-arrow-right"></i></button>
+
+                            </div>
+
+
+                            <div id="income-details" class="content pt-2 mb-4">
+
+                                <div class="ibox-title mb-2">
+                                    <h4><i class="fa fa-money"></i> | Incomes (Yearly)</h4>
+                                </div>
+
+                                <div class="form-row">
+                                    
+                                    <div class="form-group col-md-12">
+                                        <label for="grossIncome" class="control-label"> Gross Income
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="grossIncome"
+                                                placeholder="Gross Income" name="grossIncome" required min="0"
+                                                #grossIncome="ngModel" [(ngModel)]="easyTax.grossIncome" (keyup)="onGrossIncomeChanged()">
+                                        </div>
+                                        <div class="text-danger" *ngIf="grossIncome.touched && grossIncome.invalid">
+                                            <span *ngIf="grossIncome.errors?.required"> Gross Income is Required</span>
+                                            <span *ngIf="grossIncome.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    
+                                    <div class="form-group col-md-3">
+                                        <label for="basic" class="control-label"> Basic Salary
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="basic"
+                                                placeholder="Basic Salary" name="basic" required min="0"
+                                                #basic="ngModel" [(ngModel)]="easyTax.basic.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="basic.touched && basic.invalid">
+                                            <span *ngIf="basic.errors?.required"> Basic Salary is Required</span>
+                                            <span *ngIf="basic.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="houseRent" class="control-label"> House Rent Allowance
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="houseRent"
+                                                placeholder="House Rent Allowance" name="houseRent" required min="0"
+                                                #houseRent="ngModel" [(ngModel)]="easyTax.houseRent.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="houseRent.touched && houseRent.invalid">
+                                            <span *ngIf="houseRent.errors?.required"> House Rent Allowance is Required</span>
+                                            <span *ngIf="houseRent.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="medical" class="control-label">Medical Allowance
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="medical"
+                                                placeholder="Medical Allowance" name="medical" required min="0"
+                                                #medical="ngModel" [(ngModel)]="easyTax.medical.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="medical.touched && medical.invalid">
+                                            <span *ngIf="medical.errors?.required"> Medical Allowance is Required</span>
+                                            <span *ngIf="medical.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="conveyance" class="control-label">Conveyance
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="conveyance"
+                                                placeholder="Conveyance" name="conveyance" required min="0"
+                                                #conveyance="ngModel" [(ngModel)]="easyTax.conveyance.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="conveyance.touched && conveyance.invalid">
+                                            <span *ngIf="conveyance.errors?.required"> Conveyance is Required</span>
+                                            <span *ngIf="conveyance.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-3">
+                                        <label for="bonus" class="control-label">Bonus
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="bonus"
+                                                placeholder="Bonus" name="bonus" required min="0"
+                                                #bonus="ngModel" [(ngModel)]="easyTax.bonus.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="bonus.touched && bonus.invalid">
+                                            <span *ngIf="bonus.errors?.required"> Bonus is Required</span>
+                                            <span *ngIf="bonus.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="pf" class="control-label"> Company Contribution to PF (CCPF)
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="pf"
+                                                placeholder="Company Contribution to PF (CCPF)" name="pf" required min="0"
+                                                #pf="ngModel" [(ngModel)]="easyTax.pf.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="pf.touched && pf.invalid">
+                                            <span *ngIf="pf.errors?.required"> CCPF is Required</span>
+                                            <span *ngIf="pf.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="form-group col-md-3">
+                                        <label for="gf" class="control-label">Gratuity Fund
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="gf"
+                                                placeholder="Gratuity Fund" name="gf" required min="0"
+                                                #gf="ngModel" [(ngModel)]="easyTax.gf.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="gf.touched && gf.invalid">
+                                            <span *ngIf="gf.errors?.required"> Gratuity Fund is Required</span>
+                                            <span *ngIf="gf.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div> -->
+
+                                    <div class="form-group col-md-3">
+                                        <label for="otherAllowances" class="control-label">Other Incomes
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="otherAllowances"
+                                                placeholder="Other Allowances" name="otherAllowances" required min="0"
+                                                #otherAllowances="ngModel" [(ngModel)]="easyTax.otherAllowances.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="otherAllowances.touched && otherAllowances.invalid">
+                                            <span *ngIf="otherAllowances.errors?.required"> Other Allowances is Required</span>
+                                            <span *ngIf="otherAllowances.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <!-- <div class="form-row">
+                                    
+                                    <div class="form-group col-md-3">
+                                        <label for="transportation" class="control-label"> Transportation
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="transportation"
+                                                placeholder="Transportation" name="transportation" required min="0"
+                                                #transportation="ngModel" [(ngModel)]="easyTax.transportation.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="transportation.touched && transportation.invalid">
+                                            <span *ngIf="transportation.errors?.required"> Transportation is Required</span>
+                                            <span *ngIf="transportation.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="incentive" class="control-label"> Incentive
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="incentive"
+                                                placeholder="Incentive" name="incentive" required min="0"
+                                                #incentive="ngModel" [(ngModel)]="easyTax.incentive.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="incentive.touched && incentive.invalid">
+                                            <span *ngIf="incentive.errors?.required"> Incentive is Required</span>
+                                            <span *ngIf="incentive.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="carAllowance" class="control-label"> Car Allowance
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="carAllowance"
+                                                placeholder="Car Allowance" name="carAllowance" required min="0"
+                                                #carAllowance="ngModel" [(ngModel)]="easyTax.carAllowance.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="carAllowance.touched && carAllowance.invalid">
+                                            <span *ngIf="carAllowance.errors?.required"> Car Allowance is Required</span>
+                                            <span *ngIf="carAllowance.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="earnLeave" class="control-label">Earn Leave
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="earnLeave"
+                                                placeholder="Earn Leave" name="earnLeave" required min="0"
+                                                #earnLeave="ngModel" [(ngModel)]="easyTax.earnLeave.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="earnLeave.touched && earnLeave.invalid">
+                                            <span *ngIf="earnLeave.errors?.required"> Earn Leave is Required</span>
+                                            <span *ngIf="earnLeave.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                </div> -->
+
+                                <!-- <br>
+                                <div class="ibox-title mb-2">
+                                    <h4><i class="fa fa-money"></i> | Deductions</h4>
+                                </div>
+
+                                <div class="form-row">
+                                    
+                                    <div class="form-group col-md-3">
+                                        <label for="lwp" class="control-label"> Leave Without Pay (LWP)
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="lwp"
+                                                placeholder="Leave Without Pay (LWP)" name="lwp" required min="0"
+                                                #lwp="ngModel" [(ngModel)]="easyTax.lwp.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="lwp.touched && lwp.invalid">
+                                            <span *ngIf="lwp.errors?.required"> Leave Without Pay (LWP) is Required</span>
+                                            <span *ngIf="lwp.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="suspension" class="control-label"> Suspension
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="suspension"
+                                                placeholder="Suspension" name="pf" required min="0"
+                                                #suspension="ngModel" [(ngModel)]="easyTax.suspension.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="suspension.touched && suspension.invalid">
+                                            <span *ngIf="suspension.errors?.required"> Suspension is Required</span>
+                                            <span *ngIf="suspension.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="otherDeductions" class="control-label">Other Deductions
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="otherDeductions"
+                                                placeholder="Other Deductions" name="otherDeductions" required min="0"
+                                                #otherDeductions="ngModel" [(ngModel)]="easyTax.otherDeductions.amount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="otherDeductions.touched && otherDeductions.invalid">
+                                            <span *ngIf="otherDeductions.errors?.required"> Other Deductions is Required</span>
+                                            <span *ngIf="otherDeductions.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                </div> -->
+
+                                <br>
+                                <div class="ibox-title mb-2">
+                                    <h4><i class="fa fa-money"></i> | Investments | AIT |  Refund</h4>
+                                </div>
+
+                                 <div class="form-row">
+                                    
+                                    <div class="form-group col-md-3">
+                                        <label for="actualInvestmentAmount" class="control-label"> Actual Investment
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="actualInvestmentAmount"
+                                                placeholder="Actual Investment" name="actualInvestmentAmount" required min="0"
+                                                #actualInvestmentAmount="ngModel" [(ngModel)]="easyTax.actualInvestmentAmount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="actualInvestmentAmount.touched && actualInvestmentAmount.invalid">
+                                            <span *ngIf="actualInvestmentAmount.errors?.required">Investment Amount is Required</span>
+                                            <span *ngIf="actualInvestmentAmount.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="aitAmount" class="control-label"> AIT
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="aitAmount"
+                                                placeholder="AIT" name="aitAmount" required min="0"
+                                                #aitAmount="ngModel" [(ngModel)]="easyTax.aitAmount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="aitAmount.touched && aitAmount.invalid">
+                                            <span *ngIf="aitAmount.errors?.required"> AIT Amount is Required</span>
+                                            <span *ngIf="aitAmount.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="refundAmount" class="control-label"> Refund
+                                            <span class="text-danger"></span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control form-control-sm" id="refundAmount"
+                                                placeholder="Refund Amount" name="refundAmount" required min="0"
+                                                #refundAmount="ngModel" [(ngModel)]="easyTax.refundAmount">
+                                        </div>
+                                        <div class="text-danger" *ngIf="refundAmount.touched && refundAmount.invalid">
+                                            <span *ngIf="refundAmount.errors?.required"> Refund Amount is Required</span>
+                                            <span *ngIf="refundAmount.errors?.min"> Minimum Amount is Zero</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-rounded float-right mr-2" [disabled]="easyTaxForm.invalid" [hidden]="easyTaxForm.invalid">
+                                    <i class="fa fa-paper-plane"></i> | Submit
+                                </button>
+
+                                <button (click)="previous()" type="button"
+                                    class="btn btn-rounded btn-outline btn-secondary float-right mr-2"><i
+                                        class="fa fa-arrow-left"></i>
+                                    Previous</button>
+
+                                    
+                                    
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="modal-footer" [hidden]="easyTaxForm.invalid">
+            <button type="submit" class="btn btn-sm btn-primary btn-rounded" [disabled]="easyTaxForm.invalid">
+                <i class="fa fa-paper-plane"></i> | Submit
+            </button>
+            <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                    class="fa fa-times"></i> | Cancel</button>
+        </div>                      -->
+    </div>
+
+</ng-template>
+
+
+
+

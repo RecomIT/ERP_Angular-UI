@@ -1,0 +1,114 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle icofont-ui-settings"></i>| Final Tax Process
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+            <div class="ibox-content pb-1 shadow-sm text-x-small">
+                <div class="form-row">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="fiscalYear" class="control-label font-bold">Income year<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon faa-parent animated-hover">
+                                    <i class="fa fa-calendar faa-pulse"></i>
+                                </span>
+                            </div>
+                            <div style="width: 85%;">
+                                <ng-select2 [data]="ddlEmployees" name="employeeId" id="searchByEmployee"
+                                    formControlName="employeeId" [placeholder]="'Employee...'" [options]="select2Config"
+                                    [allowClear]="true" required>
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="fiscalYear" class="control-label font-bold">Branch/Company</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon faa-parent animated-hover">
+                                    <i class="fa fa-building"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm">
+                                {{branchName}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content pb-1 shadow-sm text-x-small">
+                <div class="table-responsive" style="min-height: 400px;max-height: 400px;">
+                    <table
+                        class="table table-sm table-striped table-bordered table-responsive-sm table-responsive-md table-responsive-xl">
+                        <thead class="text-center">
+                            <tr class="text-x-small font-bold">
+                                <th>#SL</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Fiscal Year</th>
+                                <th>Month-Year</th>
+                                <th>Taxable Income</th>
+                                <th>Tax Payable</th>
+                                <th>AIT</th>
+                                <th>Refund Amount</th>
+                                <th>Yearly Tax</th>
+                                <th>Paid Tax</th>
+                                <th class="hide">Projection Amount</th>
+                                <th class="hide">OnceOff Amount</th>
+                                <th>Projection Tax</th>
+                                <th>OnceOff Tax</th>
+                                <th>Monthly Tax</th>
+                                <th>Tax Deducted</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr *ngFor="let item of list_of_detail; let i = index">
+                                <td class="font-bold">{{i+1}}</td>
+                                <td>{{item.employeeName +"- ["+item.employeeCode+"]"}}</td>
+                                <td>{{item.designation}}</td>
+                                <td>{{item.department}}</td>
+                                <td>{{item.fiscalYearRange}}</td>
+                                <td>{{this.utilityService.getMonthName(item.salaryMonth) + " "+item.salaryYear}}</td>
+                                <td>{{item.yearlyTaxableIncome | number}}</td>
+                                <td>{{item.totalTaxPayable | number}}</td>
+                                <td>{{item.aitAmount | number}}</td>
+                                <td>{{item.excessTaxPaidRefundAmount | number}}</td>
+                                <td>{{item.yearlyTax | number}}</td>
+                                <td>{{item.paidTotalTax | number}}</td>
+                                <td>{{item.projectionAmount | number}}</td>
+                                <td class="hide">{{item.onceOffAmount | number}}</td>
+                                <td class="hide">{{item.projectionTax | number}}</td>
+                                <td>{{item.onceOffTax | number}}</td>
+                                <td>{{item.monthlyTax | number}}</td>
+                                <td>{{item.actualTaxDeductionAmount | number}}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-xs text-danger" (click)="downloadReport(item.employeeId)"
+                                        tooltip="Download Report">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="list_of_detail == null">
+                                <td colspan="20" class="text-center">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

@@ -1,0 +1,254 @@
+
+<ng-template #employeeLeaveRequestDeleteModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="icofont-beach fa-2x"></i>| Cancel Approved Leave
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-12 col-md-4 col-sm-12">
+                <div class="activity-stream">
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-id"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Request ID</span>
+                                </a>
+                            </div>
+                            {{approvedLeaveItem?.employeeLeaveCode}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-user"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Employee</span>
+                                </a>
+                            </div>
+                            {{approvedLeaveItem?.employeeName}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-briefcase"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Designation</span>
+                                </a>
+                            </div>
+                            {{approvedLeaveItem?.designationName}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-beach"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Leave Type</span>
+                                </a>
+                            </div>
+                            {{approvedLeaveItem?.leaveTypeName}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-wall-clock"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Day Leave Type </span>
+                                </a>
+                            </div>
+                            {{approvedLeaveItem?.dayLeaveType}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-calendar"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>From-To Date</span>
+                                </a>
+                            </div>
+                            {{approvedLeaveItem?.appliedFromDate | date:"dd MMM yyyy"}} -
+                            {{approvedLeaveItem?.appliedToDate | date:"dd MMM yyyy" }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 col-sm-12">
+                <div class="activity-stream">
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-sun"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Total Leave</span>
+                                </a>
+                            </div>
+                            {{approvedLeaveItem?.appliedTotalDays}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-list"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Leave Purpose</span>
+                                </a>
+                            </div>
+                            {{approvedLeaveItem?.leavePurpose}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-opposite"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Status</span>
+                                </a>
+                            </div>
+                            <span class="label label-warning"
+                                *ngIf="approvedLeaveItem?.stateStatus=='Pending'">{{approvedLeaveItem.stateStatus
+                                + '...'}}</span>
+                            <span class="label label-primary"
+                                *ngIf="approvedLeaveItem?.stateStatus=='Approved'">
+                                <i class="fa fa-check"></i> {{approvedLeaveItem?.stateStatus}}</span>
+                            <span class="label label-danger"
+                                *ngIf="approvedLeaveItem?.stateStatus=='Cancelled'"><i
+                                    class="fa fa-times"></i>
+                                {{approvedLeaveItem?.stateStatus}}</span>
+                            <span class="label label-info"
+                                *ngIf="approvedLeaveItem?.stateStatus=='Recheck'"><i
+                                    class="fa fa-backward"></i> {{approvedLeaveItem?.stateStatus}}</span>
+                            <span class="label label-info"
+                                *ngIf="approvedLeaveItem?.stateStatus=='Recommended'"><i
+                                    class="fa fa-check"></i> {{approvedLeaveItem.stateStatus}}</span>
+                        </div>
+                    </div>
+
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-check"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Recommended By</span>
+                                    <p class="text-dark font-bold">
+                                        {{approvedLeaveItem?.checkerInfo}}
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-check"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Approved By</span>
+                                    <p class="text-dark font-bold">
+                                        {{approvedLeaveItem?.approverInfo}}
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stream pb-0"
+                        *ngIf="approvedLeaveItem?.checkRemarks != null && approvedLeaveItem?.checkRemarks !=''">
+                        <div class="stream-badge">
+                            <i class="icofont-comment"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info">
+                                <a class="text-info">
+                                    <span>Comment</span>
+                                </a>
+                                <p class="text-dark font-bold">
+                                    {{approvedLeaveItem?.checkRemarks}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-5 col-sm-12"
+                *ngIf="approvedLeaveHistories != null && approvedLeaveHistories.length > 0">
+                <div class="form-row">
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <div class="border-section">
+                            <div class="border-label">Leave Day(s)</div>
+                            <div class="table-responsive text-center">
+                                <table class="table table-sm table-hover table-striped table-responsive-sm table-responsive-md table-responsive-lg">
+                                    <thead>
+                                        <tr>
+                                            <th>#SL</th>
+                                            <th>Day</th>
+                                            <th>Date</th>
+                                            <th class="hide">Replacement Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of approvedLeaveHistories, let i =index">
+                                            {{i+1}}
+                                            <td>{{item?.dayName}}</td>
+                                            <td class="text-center">{{item?.leaveDate | date:"dd MMM yyyy"}}</td>
+                                            <td class="hide"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-12 col-sm-12 text-small">
+                        <label for="reasonOfCancel" class="control-label font-bold">Reason of Cancel <span class="text-danger">*</span> </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-comment"></i>
+                            </div>
+                            <textarea name="reasonOfCancel" id="reasonOfCancel" cols="30" rows="3" class="form-control form-control-sm" [(ngModel)]="reasonOfCancel" #reasonOfCancelRef="ngModel"></textarea>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <h5>Are you sure you want to cancel <span class="text-info">{{employeeDeleteItem?.leaveTypeName}}</span>
+            of <span class="text-warning">{{employeeDeleteItem?.appliedFromDate | date:"dd MMM yyyy"}}-
+                {{employeeDeleteItem?.appliedToDate | date:"dd MMM yyyy"}}</span>
+        </h5> -->
+    </div>
+    <div class="modal-footer p-2">
+        <button type="button" class="btn btn-xs btn-outline-danger" (click)="closeModal('Cancel click')">
+            <i class="fa fa-times"></i> | Cancel</button>
+        <button type="submit" class="btn btn-xs btn-outline-warning" (click)="confirmDelete()">
+            <i class="fa fa-check"></i> | Ok <span class="spinner-border spinner-border-sm hide" role="status"
+                aria-hidden="true"></span>
+        </button>
+    </div>
+</ng-template>

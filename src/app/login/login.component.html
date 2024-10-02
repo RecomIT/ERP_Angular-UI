@@ -1,0 +1,96 @@
+<div class="login-wrapper-bg form-login-body bg-white" @fadeIn>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 mx-auto login-desk">
+                <div class="row">
+                    <div class="col-md-6 detail-box">
+                        <img class="logo" src="assets/img/Svg/recom_logo.svg" alt="">
+                        <div class="detailsh">
+                            <img class="help" src="assets/img/undraw_unlock_re_a558.png" height="350">
+                            <h5>© Copyright 2021-{{year}}, All rights reserved</h5>
+                            <p class="text-dark">Developed & Maintained By <a href="http://localhost:4200"
+                                    target="_blank"> <i>Recom Consulting Limited</i></a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 loginform">
+                        <h4>Welcome Back</h4>
+                        <p class="mb-0">Singnin to your account</p>
+                        <div class="justify-content-center">
+                            <img class="rounded-circle img-lg" src="assets/img/undraw_profile_pic_ic5t.png" />
+                        </div>
+                        <div class="login-det">
+                            <form [formGroup]="userloginForm" (ngSubmit)="login()">
+                                <div class="form-row">
+                                    <label for="username">Username</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" id="basic-addon1">
+                                                <i class="fa fa-user-o"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" id="username" formControlName="username"
+                                            class="form-control mb-0" placeholder="Enter Username" aria-label="Username"
+                                            aria-describedby="basic-addon1" autocomplete="off"
+                                            (input)="username_changed()" (keyup)="username_changed()">
+                                    </div>
+                                    <span class="text-danger"
+                                        *ngIf="userloginForm.get('username').touched &&  userloginForm.get('username').value ==''">Username
+                                        is required</span>
+                                </div>
+                                <div class="form-row">
+                                    <label for="password">Password</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">
+                                                <i class="fa fa-lock"></i>
+                                            </span>
+                                        </div>
+                                        <input type="password" formControlName="password" id="password"
+                                            class="form-control mb-0" placeholder="Enter Password" aria-label="Username"
+                                            aria-describedby="basic-addon1" autocomplete="off"
+                                            (input)="password_changed()" (keyup)="password_changed()">
+                                    </div>
+                                    <span class="text-danger"
+                                        *ngIf="userloginForm.get('password').touched &&  userloginForm.get('password').value ==''">Password
+                                        is required</span>
+                                    <span class="text-danger" *ngIf="userloginForm.valid && 
+                                        invalidLogin">
+                                        {{loginErrorMsg}}
+                                    </span>
+                                </div>
+                                <p class="forget"><a [routerLink]="['/forget-password']">Forget Password?</a></p>
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                    [disabled]="userloginForm.invalid || btnLogin">
+                                    Login <span [hidden]="!btnLogin" class="spinner-border spinner-border-sm"
+                                        role="status" aria-hidden="true"></span>
+                                </button>
+                            </form>
+                            <div class="social-link">
+                                <ul class="socil-icon">
+                                    <li>
+                                        <a href="#"><i class="fa fa-facebook-f"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-twitter"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-instagram"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-dribbble"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-behance"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

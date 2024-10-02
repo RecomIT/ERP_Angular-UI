@@ -1,0 +1,145 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Periodical Variable Allowance</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Allowance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Periodical Allowance</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-4 col-md-4 col-sm-4">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-outline-primary btn-rounded btn-sm ml-1"
+                *ngIf="(pagePrivilege?.add??false)==true" (click)="showModal()">
+                <i class="fa fa-plus"></i> | Add
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#periodicallyVariable" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Periodically Variable Allowance
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="periodicallyVariable" class="tab-pane active">
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content font-bold pb-1 shadow-lg text-x-small">
+
+                            </div>
+                        </div>
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content font-bold pb-1 shadow-lg text-x-small">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th class="text-center">Specify For</th>
+                                                <th class="text-center">Base On</th>
+                                                <th class="text-center">Amt/Per</th>
+                                                <th class="text-center">Effective</th>
+                                                <th>Allowance</th>
+                                                <th class="text-center">Head Count</th>
+                                                <th class="text-center">Status</th>
+                                                <th class="text-center">Entry Date</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of list | paginate:list_page_config;let i = index">
+                                                <td class="text-center">{{i+1}}</td>
+                                                <td class="text-center">{{item.specifyFor}}</td>
+                                                <td class="text-center">{{item.amountBaseOn}}</td>
+                                                <td class="text-center">
+                                                    <span class="label label-info cursor-pointer" (click)="openPrincipleInfoModal(item.id)" tooltip="Click See"
+                                                        *ngIf="item?.amountBaseOn == 'Principal Amount'">
+                                                        {{item.amount}} &#2547;
+                                                    </span>
+                                                    <span class="label label-info"
+                                                    *ngIf="item?.amountBaseOn == 'Flat'">
+                                                    {{item.amount}} &#2547;
+                                                </span>
+                                                    <span class="label label-info"
+                                                        *ngIf="item?.percentage == 'Gross' || item?.percentage == 'Basic'">
+                                                        {{item.percentage}} %
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{item.effectiveFrom | date:"dd MMM yyyy"}}
+                                                    ~
+                                                    {{item.effectiveTo | date:"dd MMM yyyy"}}
+                                                </td>
+                                                <td>
+                                                    {{item.allowanceName}}
+                                                </td>
+                                                <td class="text-center">
+                                                    <span *ngIf="item?.headCount > 0" tooltip="Click See"
+                                                        class="label label-info cursor-pointer"
+                                                        (click)="openHeadInfoModal(item.id)">
+                                                        {{item.headCount}}
+                                                    </span>
+                                                    <span *ngIf="item?.headCount == 0" class="label label-info">
+                                                        -
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="label label-warning"
+                                                        *ngIf="item.stateStatus=='Pending'">{{item.stateStatus +
+                                                        '...'}}</span>
+                                                    <span class="label label-primary"
+                                                        *ngIf="item.stateStatus=='Approved'"> <i
+                                                            class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                    <span class="label label-danger"
+                                                        *ngIf="item.stateStatus=='Cancelled'"><i
+                                                            class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                                    <span class="label label-info"
+                                                        *ngIf="item.stateStatus=='Recheck'"><i
+                                                            class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{item.createdDate | date:"dd MMM yyyy hh:mm"}}
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <pagination-controls (pageChange)="list_page_changed($event)" [responsive]="true"
+                                        [autoHide]="true" id="list_of_info"></pagination-controls>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showInsertUpdateModal == true">
+    <payroll-periodical-variable-allowance-insert-update-modal (closeModalEvent)="closeModal($event)" [id]="0">
+    </payroll-periodical-variable-allowance-insert-update-modal>
+</ng-container>
+
+<ng-container *ngIf="showHeadInfo == true">
+    <app-payroll-periodical-head-info-modal (closeModalEvent)="closeHeadInfoModal($event)" [id]="itemId">
+    </app-payroll-periodical-head-info-modal>
+</ng-container>
+
+<ng-container *ngIf="showPrincipleInfo == true">
+    <app-payroll-principle-amount-modal (closeModalEvent)="closePrincipleInfoModal($event)" [id]="itemId">
+    </app-payroll-principle-amount-modal>
+</ng-container>

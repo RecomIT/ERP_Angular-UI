@@ -1,0 +1,30 @@
+
+
+.employee-detail-item {
+    margin-bottom: 5px;
+  }
+  
+  .property {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #333;
+  }
+  
+  .value {
+    color: #555;
+  }
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header-shadow{
+    margin-bottom: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+  

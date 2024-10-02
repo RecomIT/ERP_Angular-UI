@@ -1,0 +1,195 @@
+<ng-template #quarterlyIncentiveProcessDetailsViewOrDeleteModal let-modal>
+
+
+  <div class="modal-header">
+
+      <h4 class="modal-title" id="modal-basic-title">
+          <i class="btn btn-sm btn-success btn-circle 
+          fa fa-clock-o"></i>| Individual Quarterly Incentive Process Details
+      </h4>
+
+      <button type="button" class="close" aria-label="Close" (click)="closeQuarterlyIncentiveProcessDetailsViewOrDeleteModal('Cross click')"><span
+              aria-hidden="true">×</span>
+      </button>
+
+  </div>
+
+  <div class="text-x-small font-bold text-dark">
+      <div class="modal-body p-0">
+
+        <ng-container *ngIf="flag === 'view' || flag === 'delete'">
+          <div *ngFor="let item of listOfQuarterlyIncentiveDetails;" class="card mb-3">
+            <div class="card-header">
+              <h5 class="text-center mb-0">Quarterly Incentive - {{item.IncentiveQuarterNumber}}, {{item.IncentiveYear}}</h5>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="col-md-12 mt-2">
+                  <ul class="list-group">
+                    <li class="list-group-item"><strong class="float-left">Employee Code:</strong> <span class="float-right">{{item.EmployeeCode}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Name:</strong> <span class="float-right">{{item.EmployeeName}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Designation:</strong> <span class="float-right">{{item.Designation}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Department:</strong> <span class="float-right">{{item.Department}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Division:</strong> <span class="float-right">{{item.Division}}</span></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="form-row mt-2 text-x-small">
+                <div class="col-md-4">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong class="float-left">Eligible Quarterly Incentive:</strong> <span class="float-right">{{item.EligibleQuarterlyIncentive}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Total KPI Company Score:</strong> <span class="float-right">{{item.TotalKpiCompanyScore}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Total KPI Divisional/Individual Score:</strong> <span class="float-right">{{item.TotalKpiDivisionalIndividualScore}}</span></li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong class="float-left">Quarterly Incentive Tax:</strong> <span class="float-right">{{item.QuarterlyIncentiveTax}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Total Deduction:</strong> <span class="float-right">{{item.TotalDeduction}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Net Pay:</strong> <span class="float-right">{{item.NetPay}}</span></li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong class="float-left">Bank Name:</strong> <span class="float-right">{{item.BankName}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Bank Account No:</strong> <span class="float-right">{{item.BankAccountNumber}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Bank Transfer Amount:</strong> <span class="float-right">{{item.BankTransferAmount}}</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <ng-container *ngIf="flag === 'delete'">
+                <div class="text-center">
+                  <div class="p-2">
+                    <h5 class="card-title">Are you sure you want to delete <strong>EmployeeCode {{listOfQuarterlyIncentiveDetails[0]?.EmployeeCode}}?</strong></h5>
+                    <button class="btn btn-danger shadow" (click)="deleteQuarterlyIncentiveDetails()">Delete</button>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        
+        
+      
+        <!-- <ng-container *ngIf="flag === 'view' || flag === 'delete'">
+
+            <div class="" *ngFor="let item of listOfQuarterlyIncentiveDetails;">
+                <div class="p-1">
+                <h5 class=" text-center">
+                    <strong>Quarterly Incentive - {{item.IncentiveQuarterNumber}}, {{item.IncentiveYear}}</strong>
+                </h5>
+            
+                <div class="form-row">
+                  <div class="col-md-12 mt-2">
+                      <ul class="list-group">
+                          <li class="list-group-item"><strong class="float-left">Employee Code:</strong> <span class="float-right">{{item.EmployeeCode}}</span></li>
+                          <li class="list-group-item"><strong class="float-left">Designation:</strong> <span class="float-right">{{item.Designation}}</span></li>
+                          <li class="list-group-item"><strong class="float-left">Department:</strong> <span class="float-right">{{item.Department}}</span></li>
+                          <li class="list-group-item"><strong class="float-left">Division:</strong> <span class="float-right">{{item.Division}}</span></li>
+                      </ul>
+                  </div>
+                </div>
+
+              <div class="form-row mt-2">
+                <div class="col-md-6">
+                  <ul class="list-group">
+                    
+                    <li class="list-group-item"><strong class="float-left">Eligible Quarterly Incentive:</strong> <span class="float-right">{{item.EligibleQuarterlyIncentive}}</span></li>
+
+                    <li class="list-group-item"><strong class="float-left">Total KPI Company Score:</strong> <span class="float-right">{{item.TotalKpiCompanyScore}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Total KPI Divisional/Individual Score:</strong> <span class="float-right">{{item.TotalKpiDivisionalIndividualScore}}</span></li>
+                    
+                    
+                    <li class="list-group-item"><strong class="float-left">Quarterly Incentive Tax:</strong> <span class="float-right">{{item.QuarterlyIncentiveTax}}</span></li>
+                    <li class="list-group-item"><strong class="float-left">Total Deduction:</strong> <span class="float-right">{{item.TotalDeduction}}</span></li>
+                      
+                    
+                    <li class="list-group-item"><strong class="float-left">Net Pay:</strong> <span class="float-right">{{item.NetPay}}</span></li>
+                  </ul>
+                </div>
+          
+                <div class="col-md-6">
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong class="float-left">Bank Name:</strong> <span class="float-right">{{item.BankName}}</span></li>
+                        <li class="list-group-item"><strong class="float-left">Bank Account No:</strong> <span class="float-right">{{item.BankAccountNo}}</span></li>
+                        <li class="list-group-item"><strong class="float-left">Bank Transfer Amount:</strong> <span class="float-right">{{item.BankTransferAmount}}</span></li>
+                        <li class="list-group-item"><strong class="float-left">Coc In Wallet Transfer:</strong> <span class="float-right">{{item.CocInWalletTransfer}}</span></li>
+                        <li class="list-group-item"><strong class="float-left">Wallet Transfer Amount:</strong> <span class="float-right">{{item.WalletTransferAmount}}</span></li>
+                        <li class="list-group-item"><strong class="float-left">Wallet No:</strong> <span class="float-right">{{item.WalletNo}}</span></li>
+                    </ul>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
+        </ng-container> -->
+
+        <ng-container *ngIf="flag === 'update'">
+          <div *ngFor="let item of listOfQuarterlyIncentiveDetails;" class="card mb-3">
+            <div class="card-header">
+              <h5 class="text-center mb-0">Quarterly Incentive - {{item.IncentiveQuarterNumber}}, {{item.IncentiveYear}}</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Eligible Quarterly Incentive:</strong> <input type="text" class="form-control" [(ngModel)]="item.EligibleQuarterlyIncentive"></li>
+                    <li class="list-group-item"><strong>Net Pay:</strong> <input type="text" class="form-control" [(ngModel)]="item.NetPay"></li>
+                    <li class="list-group-item"><strong>Quarterly Incentive Tax:</strong> <input type="text" class="form-control" [(ngModel)]="item.QuarterlyIncentiveTax"></li>
+                    <li class="list-group-item"><strong>Total Deduction:</strong> <input type="text" class="form-control" [(ngModel)]="item.TotalDeduction"></li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Bank Account No:</strong> <input type="text" class="form-control" [(ngModel)]="item.BankAccountNumber"></li>
+                    <li class="list-group-item"><strong>Bank Name:</strong> <input type="text" class="form-control" [(ngModel)]="item.BankName"></li>
+                    <li class="list-group-item"><strong>Bank Transfer Amount:</strong> <input type="text" class="form-control" [(ngModel)]="item.BankTransferAmount"></li>
+                    <li class="list-group-item"><strong>COC In Wallet Transfer:</strong> <input type="text" class="form-control" [(ngModel)]="item.COCInWalletTransfer"></li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Total KPI Company Score:</strong> <input type="text" class="form-control" [(ngModel)]="item.TotalKpiCompanyScore"></li>
+                    <li class="list-group-item"><strong>Total KPI Divisional/Individual Score:</strong> <input type="text" class="form-control" [(ngModel)]="item.TotalKpiDivisionalIndividualScore"></li>
+                    <li class="list-group-item"><strong>Wallet No:</strong> <input type="text" class="form-control" [(ngModel)]="item.WalletNumber"></li>
+                    
+                    <li class="list-group-item"><strong>Wallet Transfer Amount:</strong> <input type="text" class="form-control" [(ngModel)]="item.WalletTransferAmount"></li>
+                  
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-center">
+              <button class="btn btn-primary" (click)="updateQuarterlyIncentiveDetail(item)">Update</button>
+            </div>
+          </div>
+        </ng-container>
+        
+
+
+<!-- 
+        <ng-container *ngIf="flag === 'delete'">
+            <div class="text-center">
+                <div class="p-2">
+                    <h5 class="card-title">Are you sure you want to delete <strong>EmployeeCode {{listOfQuarterlyIncentiveDetails[0]?.EmployeeCode}} ?</strong></h5>
+                    <button class="btn btn-danger shadow-lg" (click)="deleteQuarterlyIncentiveDetails()">Delete</button>
+                </div>
+            </div>
+
+        </ng-container> -->
+
+      </div>
+
+      <div class="modal-footer">
+          <button class="btn btn-sm btn-danger btn-rounded shadow-lg" type="button" (click)="closeQuarterlyIncentiveProcessDetailsViewOrDeleteModal('Close Click')">
+              <i class="fa fa-times"></i> | Cancel
+          </button>
+          
+      </div>
+  </div>
+
+</ng-template>
+

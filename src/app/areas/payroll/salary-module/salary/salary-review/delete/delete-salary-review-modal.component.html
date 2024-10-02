@@ -1,0 +1,93 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm fa fa-money" aria-hidden="true"></i>|
+            {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="info">
+                <tr>
+                    <td>Employee Name</td>
+                    <td>{{data?.fullName + '~' + data?.employeeCode}}</td>
+                    <td>Designation</td>
+                    <td>{{data?.designationName}}</td>
+                    <td>Salary Config Category</td>
+                    <td>{{data?.salaryConfigCategory}}</td>
+                </tr>
+                <tr>
+                    <td>Reason</td>
+                    <td>{{data?.incrementReason}}</td>
+                    <td>Activation Date</td>
+                    <td>{{data?.activationDate | date:"dd-MMM-yyyy"}}</td>
+                    <td>Gross Amount</td>
+                    <td>{{data?.currentSalaryAmount}}</td>
+
+                </tr>
+                <tr>
+                    <td>Base Amount</td>
+                    <td>{{data?.salaryBaseAmount}}</td>
+                    <td>Status</td>
+                    <td>
+                        <span class="label label-warning" *ngIf="data?.stateStatus=='Pending'">
+                            {{data?.stateStatus + '...'}}</span>
+                        <span class="label label-primary" *ngIf="data?.stateStatus=='Approved'">
+                            <i class="fa fa-check"></i> {{data?.stateStatus}}</span>
+                        <span class="label label-danger" *ngIf="data?.stateStatus=='Cancelled'"><i
+                                class="fa fa-times"></i> {{data?.stateStatus}}</span>
+                        <span class="label label-info" *ngIf="data?.stateStatus=='Recheck'"><i
+                                class="fa fa-backward"></i> {{data?.stateStatus}}</span>
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="detail">
+                <thead>
+                    <tr>
+                        <td class="text-center">#SL</td>
+                        <td>Allowance Name</td>
+                        <td class="text-center">Base</td>
+                        <td class="text-center">Percentage/Amount</td>
+                        <td class="text-right">Proposal Amount</td>
+                        <td *ngIf="data?.incrementReason != 'Joining'">Current Amount</td>
+                        <td class="text-right">Max Amount</td>
+                    </tr>
+                </thead>
+                <tr *ngFor="let item of data?.salaryReviewDetails; let i=index">
+                    <td class="text-center">{{i+1}}</td>
+                    <td>{{item.allowanceName}}</td>
+                    <td class="text-center">{{item.allowanceBase}}</td>
+                    <td class="text-center">
+                        <span *ngIf="item.allowancePercentage > 0" class="label label-warning text-dark">
+                            {{item.allowancePercentage}} %
+                        </span>
+                        <span *ngIf="item.allowanceAmount > 0" class="label label-primary">
+                            {{item.allowanceAmount}} &#2547;
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        {{item.currentAmount}}
+                    </td>
+                    <td *ngIf="data?.incrementReason != 'Joining'">{{item.previousAmount}}</td>
+                    <td class="text-right">
+                        {{item.maxAmount > 0 ? item.maxAmount.toString(): 'N/A'}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger" [disabled]="this.btnSubmit"
+                (click)="closeModal('Cancel click')">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-warning" (click)="confirmDelete()"
+                [disabled]="this.btnSubmit">
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                </span>
+                <i class="fa fa-trash" title="Download"></i> | Delete
+            </button>
+        </div>
+    </div>
+</ng-template>

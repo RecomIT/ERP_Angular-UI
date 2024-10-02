@@ -1,0 +1,1527 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12 col-12">
+        <h2 @slideInUp class="mt-2">Orgranization Init</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Administration</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Org Init</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row m-t-sm text-x-small">
+    <div class="col-md-12 mb-4">
+        <div class="tabs-container">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link active" data-toggle="tab" href="#tab1">
+                        <i class="fa fa-building"></i> | Organization
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" data-toggle="tab" href="#tab2">
+                        <i class="fa fa-briefcase" aria-hidden="true"></i> | Company/Firm
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" data-toggle="tab" href="#tab3">
+                        <i class="fa fa-linode"></i> | Division
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link hide" data-toggle="tab" href="#tab4">
+                        <i class="fa fa-road"></i> | District
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link hide" data-toggle="tab" href="#tab5">
+                        <i class="fa fa-location-arrow"></i> | Zone
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" data-toggle="tab" href="#tab6">
+                        <i class="fa fa-map-marker"></i> | Branch
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab1" class="tab-pane active">
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm 
+                                font-bold" placeholder="Search By Anything" id="orgfilter"
+                                        onkeyup="tableFilter('#tblOrg tbody tr',this)" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-sm btn-rounded btn-outline-primary float-right"
+                                    (click)="openOrgModal()"><i class="fa fa-plus"></i>|Create</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped table-hover table-responsive-lg" id="tblOrg">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th colspan="2">Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                    </th>
+                                    <th>Short Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Address&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Email&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Phone</th>
+                                    <th>Mobile</th>
+                                    <th>Website</th>
+                                    <th>Used Application&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                    </th>
+                                    <th>Report Logo</th>
+                                    <th>Status</th>
+                                    <th>Contract Date&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Expire Date&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let org of orgList;let i =index">
+                                    <td class="text-center font-bold">{{i+1}}</td>
+                                    <td class="client-avatar">
+                                        <img src="{{imagePath+org?.orgLogoPath}}" alt="Org Logo">
+                                    </td>
+                                    <td class="font-bold">
+                                        {{org.organizationName}}
+                                    </td>
+                                    <td>{{org.shortName}}</td>
+                                    <td>{{org.address}}</td>
+                                    <td>{{org.email}}</td>
+                                    <td>{{org.phoneNumber}}</td>
+                                    <td>{{org.mobileNumber}}</td>
+                                    <td>{{org.website}}</td>
+                                    <td class="font-bold">
+                                        <span class="badge badge-secondary">{{org.appName}}</span>
+                                    </td>
+                                    <td class="client-avatar">
+                                        <img src="{{imagePath+org?.reportLogoPath}}" alt="Report Logo">
+                                    </td>
+                                    <td>
+                                        <span
+                                            [class]="org.isActive? 'label label-primary':'label label-danger'">{{org.isActive
+                                            ? "Active":"Inactive"}}</span>
+                                    </td>
+                                    <td>{{org.contractStartDate | date:"dd-MMM-yyyy"}}</td>
+                                    <td>{{org.contractExpireDate | date:"dd-MMM-yyyy"}}</td>
+                                    <td>
+                                        <button class="btn btn-xs" title="Edit"
+                                            (click)="editOrganization(org.organizationId)">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </button> &nbsp;
+                                        <button class="btn btn-xs" title="Delete"
+                                            (click)="deleteOrganization(org.organizationId,org.organizationName)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="orgList == null" class="text-center">
+                                    <td colspan="15">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr *ngIf="orgList != null && orgList.length == 0" class="text-center font-bold">
+                                    <td colspan="15">No data found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="tab2" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm font-bold"
+                                        placeholder="Search By Anything" id="comfilter"
+                                        onkeyup="tableFilter('#tblCom tbody tr',this)" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-search"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-sm btn-rounded btn-outline-primary float-right"
+                                    (click)="openCompanyModal()"><i class="fa fa-plus"></i>|Create</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped table-hover table-responsive-lg" id="tblCom">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th colspan="2">Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                    </th>
+                                    <th>Address&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Email&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Phone</th>
+                                    <th>Mobile</th>
+                                    <th>Website</th>
+                                    <th>Organization&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Report Logo</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let com of companyList;let i =index">
+                                    <td class="text-center font-bold">{{i+1}}</td>
+                                    <td class="client-avatar">
+                                        <img src="{{com.companyBase64Pic}}" alt="Image not found"
+                                            onerror="this.src='assets/img/image_not_found.png';">
+                                    </td>
+                                    <td class="font-bold">
+                                        {{com.companyName}}
+                                    </td>
+                                    <td>{{com.address}}</td>
+                                    <td>{{com.email}}</td>
+                                    <td>{{com.phoneNumber}}</td>
+                                    <td>{{com.mobileNumber}}</td>
+                                    <td>{{com.website}}</td>
+                                    <td class="font-bold">
+                                        <span class="badge badge-secondary">{{com.organizationName}}</span>
+                                    </td>
+                                    <td class="client-avatar">
+                                        <img src="{{com.reportBase64Pic}}" alt="Image not found"
+                                            onerror="this.src='assets/img/image_not_found.png';">
+                                    </td>
+                                    <td>
+                                        <span [class]="com.isActive? 'label label-primary':'label 
+                                        label-danger'">{{com.isActive
+                                            ? "Active":"Inactive"}}</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-xs" title="Edit" (click)="editCompany(com.companyId)">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </button> &nbsp;
+                                        <button class="btn btn-xs" title="Delete"
+                                            (click)="deleteCompany(com.companyId,com.companyName)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="companyList == null" class="text-center">
+                                    <td colspan="11">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr *ngIf="companyList != null && companyList.length == 0"
+                                    class="text-center font-bold">
+                                    <td colspan="11">No data found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="tab3" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm  font-bold"
+                                        placeholder="Search By Anything" id="orgfilter"
+                                        onkeyup="tableFilter('#tblDiv tbody tr',this)" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-sm btn-rounded btn-outline-primary float-right"
+                                    (click)="openDivisionModal()">
+                                    <i class="fa fa-plus"></i>|Create
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblDiv">
+                            <thead>
+                                <tr>
+                                    <th>#SL</th>
+                                    <th>Division Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Short Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Company&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th class="hide">Division</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let div of divisionList;let i = index">
+                                    <td class="font-bold">{{i+1}}</td>
+                                    <td>{{div.divisionName}}</td>
+                                    <td>{{div.shortName}}</td>
+                                    <td>{{div.companyName}}</td>
+                                    <td class="hide">{{div.divCode}}</td>
+                                    <td>
+                                        <span [class]="div.isActive? 'label label-primary':'label label-danger'">
+                                            {{div.isActive ? "Active":"Inactive"}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-xs" (click)="editDivision(div.divisionId)">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </button> &nbsp;
+                                        <button class="btn btn-xs" title="Delete"
+                                            (click)="deleteDivision(div.divisionId,div.divisionName)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="divisionList == null" class="text-center">
+                                    <td colspan="6">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr *ngIf="divisionList != null && divisionList.length == 0"
+                                    class="text-center font-bold">
+                                    <td colspan="6">No data found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="tab4" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm 
+                                font-bold" placeholder="Search By Anything" id="orgfilter"
+                                        onkeyup="tableFilter('#tblDist tbody tr',this)" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-sm btn-rounded btn-outline-primary float-right"
+                                    (click)="openDistrictModal()"><i class="fa fa-plus"></i>|Create</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblDist">
+                            <thead>
+                                <th>#SL</th>
+                                <th>District Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                <th>Short Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                <th>Status</th>
+                                <th>Division&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let dist of districtList;let i = index">
+                                    <td class="font-bold">{{i+1}}</td>
+                                    <td>{{dist.districtName}}</td>
+                                    <td>{{dist.shortName}}</td>
+                                    <td>
+                                        <span [class]="dist.isActive? 'label label-primary':'label 
+label-danger'">
+                                            {{dist.isActive ? "Active":"Inactive"}}
+                                        </span>
+                                    </td>
+                                    <td>{{dist.divisionName}}</td>
+                                    <td>
+                                        <button type="submit" class="btn btn-xs"
+                                            (click)="editDistrict(dist.districtId)">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </button> &nbsp;
+                                        <button class="btn btn-xs" title="Delete" (click)="deleteDistrict(dist.districtId,dist.
+districtName)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="districtList == null" class="text-center">
+                                    <td colspan="6">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr *ngIf="districtList != null && districtList.length == 0"
+                                    class="text-center font-bold">
+                                    <td colspan="6">No data found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="tab5" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm  
+                        font-bold" placeholder="Search By Anything" id="zonefilter"
+                                        onkeyup="tableFilter('#tblZone tbody tr',this)" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-sm btn-rounded btn-outline-primary float-right"
+                                    (click)="openZoneModal()">
+                                    <i class="fa fa-plus"></i>|Create
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblZone">
+                            <thead>
+                                <th>#SL</th>
+                                <th>Zone Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                <th>Short Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                <th>Status</th>
+                                <th>District&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let zn of zoneList;let i =index">
+                                    <td class="font-bold">{{i+1}}</td>
+                                    <td>{{zn.zoneName}}</td>
+                                    <td>{{zn.shortName}}</td>
+                                    <td>
+                                        <span [class]="zn.isActive? 'label label-primary':'label 
+                                        label-danger'">
+                                            {{zn.isActive ? "Active":"Inactive"}}
+                                        </span>
+                                    </td>
+                                    <td>{{zn.districtName}}</td>
+                                    <td>
+                                        <button type="submit" class="btn btn-xs" (click)="editZone(zn.zoneId)">
+                                            <i class="fa fa-pencil-square-o" title="Edit"></i>
+                                        </button> &nbsp;
+                                        <button class="btn btn-xs" title="Delete"
+                                            (click)="deleteZone(zn.zoneId,zn.zoneName)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="zoneList == null" class="text-center">
+                                    <td colspan="6">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr *ngIf="zoneList != null && zoneList.length == 0" class="text-center font-bold">
+                                    <td colspan="6">No data found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="tab6" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm 
+                                font-bold" placeholder="Search By Anything" id="branchfilter"
+                                        onkeyup="tableFilter('#tblBranch tbody tr',this)" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-search"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-sm btn-rounded btn-outline-primary float-right"
+                                    (click)="openBranchModal()"><i class="fa fa-plus"></i>|Create</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblBranch">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Branch Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Short Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Address&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Mobile</th>
+                                    <th>Email&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Status</th>
+                                    <th>Zone&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let b of branchList,let i = index">
+                                    <td class="font-bold">{{i+1}}</td>
+                                    <td>{{b.branchName}}</td>
+                                    <td>{{b.shortName}}</td>
+                                    <td>{{b.address}}</td>
+                                    <td>{{b.mobileNo}}</td>
+                                    <td>{{b.email}}</td>
+                                    <td>
+                                        <span [class]="b.isActive? 'label label-primary':'label
+                                        label-danger'">
+                                            {{b.isActive ? "Active":"Inactive"}}
+                                        </span>
+                                    </td>
+                                    <td>{{b.zoneName}}</td>
+                                    <td>
+                                        <button type="submit" class="btn btn-xs" (click)="editBranch
+                                        (b.branchId)">
+                                            <i class="fa fa-pencil-square-o" title="Edit"></i>
+                                        </button> &nbsp;
+                                        <button class="btn btn-xs" title="Delete"
+                                            (click)="deleteBranch(b.branchId,b.branchName)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="branchList == null" class="text-center">
+                                    <td colspan="8">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr *ngIf="branchList != null && branchList.length == 0" class="text-center font-bold">
+                                    <td colspan="9">No data found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #orgModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i
+                class="btn btn-sm btn-rounded btn-outline-primary btn-circle fa fa-building"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small">
+        <form #orgForm="ngForm" (submit)="submitOrganization()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="organizationName" class="control-label font-bold">Organization Name
+                            <!-- <div class="form-check abc-checkbox abc-checkbox-success form-check-inline">
+                                
+                            </div> -->
+                            <input class="form-check-input ml-2" type="checkbox" id="isActive" name="isActive"
+                                [value]="organization.isActive" [checked]="organization.isActive" #orgIsActive="ngModel"
+                                [(ngModel)]="organization.isActive">
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-building"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="organizationName" id="organizationName"
+                                class="form-control form-control-sm" #organizationName="ngModel"
+                                [(ngModel)]="organization.organizationName" maxlength="150" minlength="3" required />
+                        </div>
+                        <div *ngIf="organizationName.invalid && organizationName.touched" class="text-danger font-bold">
+                            <span *ngIf="organizationName.errors?.required">Organization Name is required</span>
+                            <span *ngIf="organizationName.errors?.maxlength">Max length is 150</span>
+                            <span *ngIf="organizationName.errors?.minlength">Min length is 3</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="orgShortName" class="control-label font-bold">Short Name
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-sort-alpha-asc"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="orgShortName" id="orgShortName"
+                                class="form-control form-control-sm" #orgShortName="ngModel"
+                                [(ngModel)]="organization.shortName" maxlength="50" minlength="3" required />
+                        </div>
+                        <div *ngIf="orgShortName.invalid && orgShortName.touched" class="text-danger font-bold">
+                            <span *ngIf="orgShortName.errors?.required">Short Name is required</span>
+                            <span *ngIf="orgShortName.errors?.maxlength">Max length is 50</span>
+                            <span *ngIf="orgShortName.errors?.minlength">Min length is 3</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="orgAddress" class="control-label font-bold">Address
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-address-book"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="orgAddress" id="orgAddress" class="form-control form-control-sm"
+                                #orgAddress="ngModel" [(ngModel)]="organization.address" maxlength="150" minlength="3"
+                                required />
+                        </div>
+                        <div *ngIf="orgAddress.invalid && orgAddress.touched" class="text-danger font-bold">
+                            <span *ngIf="orgAddress.errors?.required">Address is required </span>
+                            <span *ngIf="orgAddress.errors?.maxlength">Max length is 50</span>
+                            <span *ngIf="orgAddress.errors?.minlength">Min length is 4</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="orgEmail" class="control-label font-bold">Email</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-envelope-square"></i>
+                                </span>
+                            </div>
+                            <input type="email" name="orgEmail" id="orgEmail" class="form-control 
+form-control-sm" #orgEmail="ngModel" [(ngModel)]="organization.email" maxlength="150" required />
+                        </div>
+                        <div *ngIf="orgEmail.invalid && orgEmail.touched" class="text-danger font-bold">
+                            <span *ngIf="orgEmail.errors?.required">Email is required</span>
+                            <!-- <span *ngIf="orgEmail.errors?.pattern">Email is invalid</span> -->
+                            <span *ngIf="orgEmail.errors?.maxlength">Maxlength is 150</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="orgPhone" class="control-label font-bold">Phone</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-phone"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="orgPhone" id="orgPhone" class="form-control 
+form-control-sm" #orgPhone="ngModel" [(ngModel)]="organization.phoneNumber" maxlength="14" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="orgMobile" class="control-label font-bold">Mobile
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-mobile"></i>
+                                </span>
+                                <span class="input-group-addon">
+                                    <strong>+88</strong>
+                                </span>
+                            </div>
+                            <input type="text" name="orgMobile" id="orgMobile" class="form-control 
+form-control-sm" #orgMobile="ngModel" [(ngModel)]="organization.mobileNumber" maxlength="11" required />
+                        </div>
+                        <div *ngIf="orgMobile.invalid && orgMobile.touched" class="text-danger 
+font-bold">
+                            <!-- <span *ngIf="orgMobile.errors?.pattern">Mobile number is invalid</span> pattern="/[0-9]/"-->
+                            <span *ngIf="orgMobile.errors?.required">Mobile number is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="orgWeb" class="control-label font-bold">Website</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-globe"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="orgWeb" id="orgWeb" class="form-control 
+form-control-sm" #orgWeb="ngModel" [(ngModel)]="organization.website"
+                                pattern="@^(http\:\/\/|https\:\/\/)?([a-z0-9][a-z0-9\-]*\.)+[a-z0-9][a-z0-9\-]*$@i"
+                                maxlength="100" />
+                        </div>
+                        <div *ngIf="orgWeb.invalid && orgWeb.touched" class="text-danger font-bold">
+                            <span *ngIf="orgWeb.errors?.pattern">Website is invalid</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="orgCode" class="control-label font-bold">Code <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-fax"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="orgCode" id="orgCode" class="form-control 
+form-control-sm" #orgCode="ngModel" required [(ngModel)]="organization.orgCode" maxlength="20" />
+                            <div *ngIf="orgCode.invalid && orgCode.touched" class="text-danger 
+font-bold">
+                                <span *ngIf="orgCode.errors?.required">Org Code is required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 hide">
+                        <label for="orgFax" class="control-label font-bold">Fax</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-fax"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="orgFax" id="orgFax" class="form-control 
+form-control-sm" #orgFax="ngModel" [(ngModel)]="organization.fax" maxlength="50" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="orgContractStartDate" class="control-label font-bold">Contract Start Date
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-plus-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="orgContractStartDate" id="orgContractStartDate"
+                                class="form-control form-control-sm bg-white" #orgContractStartDate="ngModel"
+                                [(ngModel)]="organization.contractStartDate" bsDatepicker required autocomplete="off"
+                                [bsConfig]="datePickerConfig" readonly />
+                        </div>
+                        <div *ngIf="orgContractStartDate.invalid && orgContractStartDate.touched"
+                            class="text-danger font-bold">
+                            <span *ngIf="orgContractStartDate.errors?.required">Start Date is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="orgContractEndDate" class="control-label font-bold">Contract End Date
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-minus-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="orgContractEndDate" id="orgContractEndDate"
+                                class="form-control form-control-sm bg-white" #orgContractEndDate="ngModel"
+                                [(ngModel)]="organization.contractExpireDate" required bsDatepicker
+                                [bsConfig]="datePickerConfig" readonly />
+                        </div>
+                        <div *ngIf="orgContractEndDate.invalid && orgContractEndDate.touched"
+                            class="text-danger font-bold">
+                            <span *ngIf="orgContractEndDate.errors?.required">End Date is
+                                required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="orgApplication" class="control-label font-bold">Application<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-desktop"></i>
+                                </span>
+                            </div>
+                            <select name="orgApplication" id="orgApplication" class="form-control 
+form-control-sm" #orgApplication="ngModel" [(ngModel)]="organization.appId">
+                                <option [value]="0" selected>---Select Application---</option>
+                                <option [value]="app.applicationId" *ngFor="let app of appList">{{app.applicationName}}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="orgApplication.value ==0 && orgApplication.touched" class="text-danger font-bold">
+                            <span *ngIf="orgApplication.value == 0">Application is
+                                required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="orgRemarks" class="control-label font-bold">Remarks</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="orgRemarks" id="orgRemarks" class="form-control form-control-sm"
+                                #orgRemarks="ngModel" [(ngModel)]="organization.remarks" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <div class="text-center bg-secondary">
+                            <img [src]="organization.orgBase64Pic" class="rounded-circle m-t-xs img-fluid"
+                                style="height: 100px;width: 110px;" />
+                        </div>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input id="orgImage" type="file" accept="image/*" class="custom-file-input"
+                                    (change)="showPreview($event,'orgPic')" />
+                                <label class="custom-file-label font-bold" for="orgImage">Choose Organization
+                                    Logo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="text-center bg-secondary">
+                            <img [src]="organization.reportBase64Pic" class="rounded-circle m-t-xs 
+                        img-fluid" style="height: 100px;width: 110px;" />
+                        </div>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input id="rptImage" type="file" accept="image/*" class="custom-file-input"
+                                    (change)="showPreview($event,'orgRptPic')">
+                                <label class="custom-file-label font-bold" for="rptImage">
+                                    Choose Report Logo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3"></div>
+                    <div class="form-group col-md-3"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-outline-success"
+                    [disabled]="orgForm.invalid ||(orgApplication.value == 0)">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel 
+click')"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #companyModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i
+                class="btn btn-sm btn-rounded btn-outline-primary btn-circle fa fa-briefcase"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="text-x-small">
+        <form #companyForm="ngForm" (submit)="submitCompany()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="companyName" class="control-label font-bold">Company Name
+                            <input class="form-check-input ml-2" type="checkbox" id="isActive" name="isActive"
+                                [value]="company.isActive" [checked]="company.isActive" #orgIsActive="ngModel"
+                                [(ngModel)]="company.isActive">
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-briefcase"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="companyName" id="companyName" class="form-control form-control-sm"
+                                #companyName="ngModel" [(ngModel)]="company.companyName" maxlength="100" minlength="3"
+                                required />
+                        </div>
+                        <div *ngIf="companyName.invalid && companyName.touched" class="text-danger font-bold">
+                            <span *ngIf="companyName.errors?.required">Name is required</span>
+                            <span *ngIf="companyName.errors?.minlength">Min length is 3</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="companyAddress" class="control-label font-bold">Address<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-address-book"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="companyAddress" id="companyAddress"
+                                class="form-control form-control-sm" #companyAddress="ngModel"
+                                [(ngModel)]="company.address" required maxlength="150" minlength="4" />
+                        </div>
+                        <div *ngIf="companyAddress.invalid && companyAddress.touched" class="text-danger font-bold">
+                            <span *ngIf="companyAddress.errors?.required">Address is required</span>
+                            <span *ngIf="companyAddress.errors?.minlength">Min length is 4</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="companyEmail" class="control-label font-bold">Email<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-envelope-square"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="companyEmail" id="companyEmail"
+                                class="form-control form-control-sm" #companyEmail="ngModel" [(ngModel)]="company.email"
+                                maxlength="150" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" required />
+                        </div>
+                        <div *ngIf="companyEmail.invalid && companyEmail.touched" class="text-danger font-bold">
+                            <span *ngIf="companyEmail.errors?.required">Email is required</span>
+                            <span *ngIf="companyEmail.errors?.pattern">Invalid email</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="companyMobile" class="control-label font-bold">Mobile<span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-mobile-phone"></i>
+                                </span>
+                                <span class="input-group-addon">
+                                    <strong>+88</strong>
+                                </span>
+                            </div>
+                            <input type="text" name="companyMobile" id="companyMobile"
+                                class="form-control form-control-sm" #companyMobile="ngModel"
+                                [(ngModel)]="company.mobileNumber" required maxlength="11" />
+                        </div>
+                        <div *ngIf="companyMobile.invalid && companyMobile.touched" class="text-danger font-bold">
+                            <span *ngIf="companyMobile.errors?.required">Mobile is required</span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="companyPhone" class="control-label font-bold">Phone</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-phone"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="companyPhone" id="companyPhone"
+                                class="form-control form-control-sm" #companyPhone="ngModel"
+                                [(ngModel)]="company.phoneNumber" />
+                        </div>
+                        <div *ngIf="" class="text-danger font-bold">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="companyOrg" class="control-label font-bold">Organization
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-building"></i>
+                                </span>
+                            </div>
+                            <select type="text" name="companyOrg" id="companyOrg" class="form-control form-control-sm"
+                                required #companyOrg="ngModel" [(ngModel)]="company.organizationId">
+                                <option [value]="0" selected>---Select Organization---</option>
+                                <option value="{{org.organizationId}}" *ngFor="let org of orgList">
+                                    {{org.organizationName}}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="companyOrg.value ==0 && companyOrg.touched" class="text-danger font-bold">
+                            <span *ngIf="companyOrg.value == 0">Organization is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="companyWeb" class="control-label font-bold">Website</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-globe"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="companyWeb" id="companyWeb" class="form-control form-control-sm"
+                                #companyWeb="ngModel" [(ngModel)]="company.website" />
+                        </div>
+                        <div *ngIf="" class="text-danger font-bold">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="companyRemark" class="control-label font-bold">Remarks</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="companyRemark" id="companyRemark"
+                                class="form-control form-control-sm" #companyRemark="ngModel"
+                                [(ngModel)]="company.remarks" />
+                        </div>
+                        <div *ngIf="" class="text-danger font-bold">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <div class="text-center bg-secondary">
+                            <img [src]="company.companyBase64Pic" class="rounded-circle m-t-xs img-fluid"
+                                style="height: 100px;width: 110px;" />
+                        </div>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input id="companyImage" type="file" accept="image/*" class="custom-file-input"
+                                    (change)="showPreview($event,'comPic')" />
+                                <label class="custom-file-label font-bold" for="companyImage">Choose Company
+                                    Logo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="text-center bg-secondary">
+                            <img [src]="company.reportBase64Pic" class="rounded-circle m-t-xs 
+                        img-fluid" style="height: 100px;width: 110px;" />
+                        </div>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input id="rptImage" type="file" accept="image/*" class="custom-file-input"
+                                    (change)="showPreview($event,'comRptPic')">
+                                <label class="custom-file-label font-bold" for="rptImage">
+                                    Choose Report Logo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3"></div>
+                    <div class="form-group col-md-3"></div>
+                </div>
+                <div class="form-row hide">
+                    <div class="form-group col-md-3">
+                        <label for="" class="control-label font-bold"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class=""></i>
+                                </span>
+                            </div>
+                            <input type="text" name="" id="" class="form-control form-control-sm" />
+                        </div>
+                        <div *ngIf="" class="text-danger font-bold">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="" class="control-label font-bold"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class=""></i>
+                                </span>
+                            </div>
+                            <input type="text" name="" id="" class="form-control form-control-sm" />
+                        </div>
+                        <div *ngIf="" class="text-danger font-bold">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="" class="control-label font-bold"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class=""></i>
+                                </span>
+                            </div>
+                            <input type="text" name="" id="" class="form-control form-control-sm" />
+                        </div>
+                        <div *ngIf="" class="text-danger font-bold">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="" class="control-label font-bold"></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class=""></i>
+                                </span>
+                            </div>
+                            <input type="text" name="" id="" class="form-control form-control-sm" />
+                        </div>
+                        <div *ngIf="" class="text-danger font-bold">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row hide">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-outline-success"
+                    [disabled]="companyForm.invalid || (companyOrg.value == 0)">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #divisionModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i
+                class="btn btn-sm btn-rounded btn-outline-primary btn-circle fa fa-linode"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="text-x-small">
+        <form #divisionForm="ngForm" (submit)="submitDivision()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="divisionName" class="control-label font-bold">Division Name
+                            <input class="form-check-input" type="checkbox" id="divisionIsActive"
+                                name="divisionIsActive" [value]="division.isActive" [checked]="division.isActive"
+                                #divisionIsActive="ngModel" [(ngModel)]="division.isActive">
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-linode"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="divisionName" id="divisionName"
+                                class="form-control form-control-sm" #divisionName="ngModel"
+                                [(ngModel)]="division.divisionName" required maxlength="100" />
+                        </div>
+                        <div *ngIf="divisionName.invalid && divisionName.touched" class="text-danger font-bold">
+                            <span *ngIf="divisionName.errors?.required">Name is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="divisionShortName" class="control-label font-bold">Short name
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-sort-alpha-asc"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="divisionShortName" id="divisionShortName"
+                                class="form-control form-control-sm" #divisionShortName="ngModel"
+                                [(ngModel)]="division.shortName" required maxlength="5" />
+                        </div>
+                        <div *ngIf="divisionShortName.invalid && divisionShortName.touched"
+                            class="text-danger font-bold">
+                            <span *ngIf="divisionShortName.errors?.required">Short name is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="divisionCompanyName" class="control-label font-bold">Company Name</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-briefcase"></i>
+                                </span>
+                            </div>
+                            <select name="divisionCompanyName" id="divisionCompanyName"
+                                class="form-control form-control-sm" #divisionCompanyName="ngModel"
+                                [(ngModel)]="division.companyId">
+                                <option [value]="0" selected>{{companyList == null ? "--Loading
+                                    Company---":(companyList.length== 0 ? "No Company Found" : "---Select Company---")}}
+                                </option>
+                                <option [value]="com.companyId" *ngFor="let com of companyList">{{com.companyName + '-'
+                                    +com.organizationName}}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="divisionCompanyName.value ==0 && divisionCompanyName.touched"
+                            class="text-danger font-bold">
+                            <span *ngIf="divisionCompanyName.value == 0">Company is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-outline-success"
+                    [disabled]="divisionForm.invalid || (divisionCompanyName.value == 0)">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #districtModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-rounded btn-outline-primary btn-circle 
+    fa fa-road"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')
+    ">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="text-x-small">
+        <form #districtForm="ngForm" (submit)="submitDistrict()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="districtName" class="control-label font-bold">
+                            District Name
+                            <input class="form-check-input" type="checkbox" id="districtIsActive"
+                                name="districtIsActive" [value]="district.isActive" [checked]="district.isActive"
+                                #districtIsActive="ngModel" [(ngModel)]="district.isActive">
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-road"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="districtName" id="districtName" #districtName="ngModel"
+                                class="form-control form-control-sm" [(ngModel)]="district.districtName" required
+                                maxlength="100" />
+                        </div>
+                        <div *ngIf="districtName.invalid && districtName.touched" class="text-danger font-bold">
+                            <span *ngIf="districtName.errors?.required">District name is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="districtShortName" class="control-label font-bold">
+                            Short Name<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-linode"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="districtShortName" id="districtShortName"
+                                class="form-control form-control-sm" #districtShortName="ngModel"
+                                [(ngModel)]="district.shortName" required maxlength="5">
+                        </div>
+                        <div *ngIf="districtShortName.invalid && districtShortName.touched"
+                            class="text-danger font-bold">
+                            <span *ngIf="districtShortName.errors?.required">District name is required</ span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="districtDivision" class="control-label font-bold">
+                            Division<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-briefcase"></i>
+                                </span>
+                            </div>
+                            <select name="districtDivision" id="districtDivision" class="form-control form-control-sm"
+                                required #districtDivision="ngModel" [(ngModel)]="district.divisionId">
+                                <option [value]="0" selected>---Select Division---</option>
+                                <option value="{{div.divisionId}}" *ngFor="let div of divisionList">
+                                    {{div.divisionName+"-"+div.companyName}}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="districtDivision.value == 0 && districtDivision.touched"
+                            class="text-danger font-bold">
+                            <span *ngIf="districtDivision.value == 0">Division is required</ span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-outline-success"
+                    [disabled]="districtForm.invalid || districtDivision.value == 0">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel 
+click')"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #zoneModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-rounded btn-outline-primary btn-circle fa fa-location-arrow"></i>
+            | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+    click') ">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="text-x-small">
+        <form #zoneForm="ngForm" (submit)="submitZone()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="zoneName" class="control-label font-bold">
+                            Zone Name
+                            <div class="form-check abc-checkbox abc-checkbox-success form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="zoneIsActive" name="zoneIsActive"
+                                    [value]="zone.isActive" [checked]="zone.isActive" #zoneIsActive="ngModel"
+                                    [(ngModel)]="zone.isActive">
+                            </div>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-location-arrow"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="zoneName" id="zoneName" class="form-control form-control-sm"
+                                #zoneName="ngModel" [(ngModel)]="zone.zoneName" required maxlength="100">
+                        </div>
+                        <div class="text-danger font-bold" *ngIf="zoneName.invalid && zoneName.touched">
+                            <span *ngIf="zoneName.errors?.required">Zone is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="zoneShortName" class="control-label font-bold">Short Name</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-sort-alpha-asc"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="zoneShortName" id="zoneShortName" #zoneShortName="ngModel" required
+                                maxlength="5" [(ngModel)]="zone.shortName" class="form-control form-control-sm">
+                        </div>
+                        <div class="text-danger font-bold" *ngIf="zoneShortName.invalid && zoneShortName.
+touched">
+                            <span *ngIf="zoneShortName.errors?.required">Short name is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="zoneDistrict" class="control-label font-bold">District</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-road"></i>
+                                </span>
+                            </div>
+                            <select name="zoneDistrict" id="zoneDistrict" class="form-control form-control-sm"
+                                #zoneDistrict="ngModel" required [(ngModel)]="zone.districtId">
+                                <option [value]="0" selected>---Select District---</option>
+                                <option [value]="item.value" *ngFor="let item of ddlDistrict">
+                                    {{item.text}}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="zoneDistrict.value == 0 && zoneDistrict.touched" class="text-danger font-bold">
+                            <span *ngIf="zoneDistrict.value == 0">District is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-outline-success"
+                    [disabled]="zoneForm.invalid || zoneDistrict.value == 0">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel 
+click')"><i class="fa fa-times"></i> | Cancel</button>
+
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #branchModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-rounded btn-outline-primary btn-circle fa fa-location-arrow"></i>
+            | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click') ">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="text-x-small">
+        <form #branchForm="ngForm" (submit)="submitBranch()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="branchName" class="control-label font-bold">
+                            Branch Name
+                            <input class="form-check-input" type="checkbox" id="branchIsActive" name="branchIsActive"
+                                [value]="branch.isActive" [checked]="branch.isActive" #branchIsActive="ngModel"
+                                [(ngModel)]="branch.isActive">
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-map-marker"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="branchName" id="branchName" class="form-control form-control-sm"
+                                #branchName="ngModel" [(ngModel)]="branch.branchName" required maxlength="100">
+                        </div>
+                        <div *ngIf="branchName.invalid && branchName.touched" class="text-danger font-bold">
+                            <span *ngIf="branchName.errors?.required">Branch name is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="branchShortName" class="control-label font-bold">Short Name</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon">
+                                    <i class="fa fa-sort-alpha-asc"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="branchShortName" id="branchShortName"
+                                class="form-control form-control-sm" #branchShortName="ngModel" required
+                                [(ngModel)]="branch.shortName">
+                        </div>
+                        <div *ngIf="branchShortName.invalid && branchName.touched" class="text-danger font-bold">
+                            <span *ngIf="branchShortName.errors?.required">Short name is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="branchAddress" class="control-label 
+                    font-bold">Address</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-address-book"></i>
+                                    </ span>
+                            </div>
+                            <input type="text" name="branchAddress" id="branchAddress"
+                                class="form-control form-control-sm" #branchAddress="ngModel"
+                                [(ngModel)]="branch.address" maxlength="200" required>
+                        </div>
+                        <div *ngIf="branchAddress.invalid && branchAddress.touched" class="text-danger font-bold">
+                            <span *ngIf="branchAddress.errors?.required">Address is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="branchEmail" class="control-label font-bold">Email</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon">
+                                    <i class="fa fa-envelope-square"></i>
+                                </span></div>
+                            <input type="text" name="branchEmail" id="branchEmail" #branchEmail="ngModel"
+                                [(ngModel)]="branch.email" class="form-control form-control-sm" maxlength="200"
+                                required>
+                        </div>
+                        <div *ngIf="branchEmail.invalid && branchEmail.touched" class="text-danger font-bold">
+                            <span *ngIf="branchEmail.errors?.required">Email is required</span>
+                            <span *ngIf="branchEmail.errors?.pattern">Invalid is email</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="branchPhoneNo" class="control-label font-bold">Phone No</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-phone"></i>
+                                </span>
+                                <span class="input-group-addon">
+                                    <strong>+88</strong>
+                                </span>
+                            </div>
+                            <input type="text" name="branchPhoneNo" id="branchPhoneNo"
+                                class="form-control form-control-sm" #branchPhoneNo="ngModel"
+                                [(ngModel)]="branch.phoneNo" maxlength="11">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="branchMobileNo" class="control-label font-bold">Mobile No</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-mobile-phone"></i>
+                                </span>
+                                <span class="input-group-addon">
+                                    <strong>+88</strong>
+                                </span>
+                            </div>
+                            <input type="text" name="branchMobileNo" id="branchMobileNo" #branchMobileNo="ngModel"
+                                [(ngModel)]="branch.mobileNo" maxlength="11" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="branchZone" class="control-label font-bold">
+                            Division - Company
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon">
+                                    <i class="fa fa-location-arrow"></i>
+                                </span></div>
+                            <select type="text" name="branchZone" id="branchZone" class="form-control form-control-sm"
+                                #branchZone="ngModel" [(ngModel)]="branch.divisionId">
+                                <option [value]="0" selected>---Select Division---</option>
+                                <option value="{{item.value}}" *ngFor="let item of ddlDivisionList">{{item.text}}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="branchZone.value == 0 && branchZone.touched" class="text-danger font-bold">
+                            <span *ngIf="branchZone.value == 0">Division is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="branchRemarks" class="control-label font-bold">Remarks</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="branchRemarks" id="branchRemarks"
+                                class="form-control form-control-sm" #branchRemarks="ngModel"
+                                [(ngModel)]="branch.remarks">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row hide">
+                    <div class="form-group col-md-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon"></span></div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon"></span></div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon"></span></div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-outline-success"
+                    [disabled]="branchForm.invalid || branchZone.value == 0">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel 
+click')"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

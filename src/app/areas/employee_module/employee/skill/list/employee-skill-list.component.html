@@ -1,0 +1,75 @@
+<div class="ibox">
+    <div class="ibox-content text-x-small font-bold">
+        <div class="form-row">
+            <div class="form-group col-md-6 col-sm-12 mb-1">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm font-bold search-box"
+                        placeholder="Search By Anything" id="skillfilter"
+                        onkeyup="tableFilter('#tblSkill tbody tr',this)" />
+                    <div class="input-group-prepend">
+                        <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-6 col-sm-12 mb-0">
+                <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded pull-right" (click)="openModal(0)"><i class="icofont-brainstorming"></i> | Add Skill</button>
+            </div>
+        </div> 
+    </div>
+</div>
+<div class="ibox shadow-lg">
+    <div class="ibox-content text-x-small">
+        <div class="table-responsive">
+            <table class="table table-sm table-hover table-striped table-responsive-lg" id="tblSkill">
+                <thead>
+                    <tr>
+                        <th class="text-center">#SL</th>
+                        <th>Training Name</th>
+                        <th>Organization</th>
+                        <th>Location</th>
+                        <th>Topic Covers</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th class="text-center">Duration</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listOfEmployeeSkill; let i = index">
+                        <td class="text-center">{{i+1}}</td>
+                        <td>{{item.trainingName}}</td>
+                        <td>{{item.organization}}</td>
+                        <td>{{item.location}}</td>
+                        <td>{{item.topicCovers}}</td>
+                        <td>{{item.fromDate | date:"dd-MMM-yyyy"}}</td>
+                        <td>{{item.toDate | date:"dd-MMM-yyyy"}}</td>
+                        <td class="text-center">{{item.duration}}</td>
+                        <td>
+                            <button type="button" class="btn btn-xs" (click)="openModal(item.employeeSkillId)">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button type="button" class="btn btn-xs">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="listOfEmployeeSkill == null" class="text-center">
+                        <td colspan="13">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </td>
+                    </tr>
+                    <tr *ngIf="listOfEmployeeSkill != null && listOfEmployeeSkill.length == 0"
+                        class="text-center font-bold">
+                        <td colspan="13">No data found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showInsertUpdateModal == true && modalObj != null">
+    <app-employee-module-employee-skill-insert-update-modal [skill]="modalObj" (closeModalEvent)="closeModal($event)">
+    </app-employee-module-employee-skill-insert-update-modal>
+</ng-container>

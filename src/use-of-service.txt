@@ -1,0 +1,104 @@
+
+1. How to populate a control using employee service data
+code in component ts file :
+
+ddlEmployees: any[]; 
+loadEmployeeDropdown() {
+    this.employeeInfoService.loadDropdownData({});
+    this.employeeInfoService.ddl_employee_data$.subscribe(data => {
+    this.employeeInfoService.loadDropdown(data);
+    this.ddlEmployees = this.employeeInfoService.ddl$;
+    }, error => {
+    console.error('Error while fetching data:', error);
+    });
+}
+
+code in html file:
+<ng-select2 [data]="ddlEmployees" name="employees"
+    id="searchByEmployee" formControlName="employeeId"
+    [placeholder]="'Employee...'" [options]="select2Config"
+    [allowClear]="true" required>
+</ng-select2>
+
+
+2. How to use to fiscal Year dropdown?
+code in component ts file :
+
+    ddlFiscalYearDropdown: any[]=[];
+    loadFiscalYearDropdown(){
+        this.fiscalYearService.loadDropdown();
+        this.fiscalYearService.ddl$.subscribe(response=>{
+            this.ddlFiscalYearDropdown=response;
+        })
+    }
+code in html file:
+    <select name="searchByFiscalYear" id="searchByFiscalYear"
+        formControlName="fiscalYearId" class="form-control form-control-sm">
+        <option [value]="0" selected>--Select Fiscal-Year--</option>
+        <option [value]="item.id"
+            *ngFor="let item of ddlFiscalYearDropdown">{{item.text}}
+        </option>
+    </select>
+
+3. How to use to allowances dropdown?
+   
+code in component ts file :
+
+ddlAllowances: any[]=[];
+loadAllowancesDropdown(){
+    this.allowanceNameService.loadAllowanceNameDropdown();
+    this.allowanceNameService.ddl$.subscribe(data=>{
+        console.log("data >>>", data);
+        this.ddlAllowances = data;
+    },(error)=>{
+        console.log("error  while fetching data >>>", error);
+    })
+}
+
+code in html file:
+<ng-select2 [data]="ddlAllowances" name="allowanceNameId"
+    id="searchByAllowance" formControlName="allowanceNameId"
+    [placeholder]="'Allowance...'" [options]="select2Config"
+    [allowClear]="true" required>
+</ng-select2>
+
+
+4. How to use to Grade dropdown?
+code in component ts file :
+
+ddlGradesForConfig: any = [];
+loadGrades() {
+    this.gradeService.loadGradeDropdown();
+    this.gradeService.ddl$.subscribe(data => {
+        console.log("grade data>>>", data);
+        this.ddlGradesForConfig = data;
+    });
+}
+    
+5. How to use to Grade dropdown?
+code in component ts file :
+
+ddlDesignation: any;
+    loadDesignation() {
+        this.desingationService.loadDesignationDropdown();
+        this.desingationService.ddl$.subscribe(data => {
+            this.ddlDesignation = data;
+        });
+    }
+
+
+ddlDepartment: any;
+loadDropdown(){
+    this.departmentService.loadDepartmentDropdown();
+    this.ddlDepartment = this.departmentService.ddl$;
+}
+
+
+  loadEmployeeLeaveTypes() {
+    this.ddlEmployeeLeaveTypes = [];
+    this.leaveTypeSerive.loadLeaveTypeDropdown();
+    this.leaveTypeSerive.ddl$.subscribe(data=>{
+      this.ddlEmployeeLeaveTypes = data;
+    });
+  }
+

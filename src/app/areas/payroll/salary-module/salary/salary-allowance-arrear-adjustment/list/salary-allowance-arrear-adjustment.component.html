@@ -1,0 +1,462 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Arrear/Adjustment</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Allowance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Arrear Or Adjustment</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-4 col-md-4 col-sm-4">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-outline-success btn-rounded btn-sm mr-1"
+                *ngIf="pagePrivilege?.approval" (click)="openBulkApprovalModal()"><i class="fa fa-check"></i> | Bulk
+                Approval
+            </button>
+            <button type="button" class="btn btn-outline-info btn-rounded btn-sm" *ngIf="pagePrivilege?.upload"
+                (click)="openUploadExcelFileModal()"><i class="fa fa-arrow-up"></i> | Upload
+                Excel</button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#arrear" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-info"></i> | Arrear
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#adjustment" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-list"></i> | Adjustment
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="arrear" class="tab-pane active">
+                        <div class="panel-body bg-white pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <label for="searchByEmployee" class="control-label font-bold">Search By
+                                        Employee</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width:85%">
+                                            <ng-select2 [data]="ddlEmployees" name="searchByEmployee"
+                                                #searchByEmployeeRef="ngModel" [(ngModel)]="searchByEmployee_in_arrear"
+                                                id="searchByEmployee" [placeholder]="'Select Employee...'"
+                                                (ngModelChange)="getAllowanceArrear(1)" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <label for="searchByAllowance" class="control-label font-bold">Search By
+                                        Allowance</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-money"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width:85%">
+                                            <ng-select2 [data]="ddlAllowances" name="searchByAllowance"
+                                                id="searchByAllowance" #searchByAllowanceRef="ngModel"
+                                                [(ngModel)]="searchByAllowance_in_arrear"
+                                                (ngModelChange)="getAllowanceArrear(1)" [placeholder]="'Allowance...'"
+                                                [options]="select2Options" [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-2">
+                                    <label for="searchByStatus" class="control-label font-bold">Search By Status</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-list"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByStatus" id="searchByStatus"
+                                            class="form-control form-control-sm" #searchByStatusRef="ngModel"
+                                            [(ngModel)]="searchByStatus_in_arrear" (change)="getAllowanceArrear(1)">
+                                            <option [value]="''" selected>--Status--</option>
+                                            <option [value]="'Pending'">Pending</option>
+                                            <option [value]="'Approved'">Approved</option>
+                                            <option [value]="'Cancelled'">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <label for="salaryMonth" class="control-label font-bold">Search By Month &
+                                        Year</label>
+                                    <div class="input-group text-x-small">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                            <select name="salaryMonth" id="salaryMonth"
+                                                class="form-control form-control-sm" #salaryMonthRef="ngModel"
+                                                [(ngModel)]="salaryMonth_in_arrear" (change)="getAllowanceArrear(1)">
+                                                <option [value]="0" selected>--Month--</option>
+                                                <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                    {{item.month}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                            <select name="salaryYear" id="salaryYear"
+                                                class="form-control form-control-sm" #salaryYearRef="ngModel"
+                                                [(ngModel)]="salaryYear_in_arrear" (change)="getAllowanceArrear(1)">
+                                                <option [value]="0" selected>--Year--</option>
+                                                <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-1" *ngIf="pagePrivilege?.add">
+                                    <label for="" class="control-label font-bold" style="visibility: hidden;">Add
+                                        Arrear</label>
+                                    <button type="button"
+                                        class="btn btn-sm btn-outline-success btn-rounded btn-sm ml-1 pull-right"
+                                        (click)="openInsertModal('Arrear')">
+                                        <i class="fa fa-plus"></i> | Arrear
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl"
+                                    id="tblMonthlySalaryVariableAllowance">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center hide">Employee ID</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Allowance</th>
+                                            <th class="text-center hide">Allowance Status</th>
+                                            <th class="text-center">Month</th>
+                                            <th class="text-center">Amount</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listOfAllowanceArrear | paginate: pageConfig_arrear, let i =index">
+                                            <td class="text-center font-bold">{{i+1 + (pageSize_arrear
+                                                *(pageNumber_arrear-1))}}</td>
+                                            <td class="text-center hide">{{item.employeeCode}}</td>
+                                            <td class="text-center">{{item.employeeName + " ("+item.employeeCode+")"}}
+                                            </td>
+                                            <td class="text-center">{{item.allowanceName +"-"+item.flag}}</td>
+                                            <td class="text-center hide">{{item.flag}}</td>
+                                            <td class="text-center">{{item.salaryDate | date:"MMMM yyyy"}}</td>
+                                            <td class="text-center">
+                                                {{item.amount}}
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                    + '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs text-success" (click)="1==1">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-navy" title="Edit"
+                                                    (click)="openUpdateModal(item?.id)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-danger" title="Delete"
+                                                    (click)="openDeleteModal(item?.id, item?.salaryMonth, item?.salaryYear)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="listOfAllowanceArrear == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="listOfAllowanceArrear !=null && listOfAllowanceArrear.length ==0">
+                                            <td colspan="20" class="text-center font-bold">
+                                                No data found
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="allowancesPageChanged_in_arrear($event)"
+                                    [responsive]="true" [autoHide]="true" id="arrear_data_list"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="adjustment" class="tab-pane">
+                        <div class="panel-body bg-white pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <label for="searchByEmployee_adjustment" class="control-label font-bold">Search By
+                                        Employee</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width:85%">
+                                            <ng-select2 [data]="ddlEmployees" name="searchByEmployee_adjustment"
+                                                #searchByEmployeeRef="ngModel"
+                                                [(ngModel)]="searchByEmployee_in_adjustment"
+                                                id="searchByEmployee_adjustment" [placeholder]="'Select Employee...'"
+                                                (ngModelChange)="getAllowanceAdjustment(1)" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <label for="searchByAllowance_in_adjustment" class="control-label font-bold">Search
+                                        By Allowance</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-money"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width:85%">
+                                            <ng-select2 [data]="ddlAllowances" name="searchByAllowance_in_adjustment"
+                                                id="searchByAllowance_in_adjustment"
+                                                #searchByAllowanceAdjustmentRef="ngModel"
+                                                [(ngModel)]="searchByAllowance_in_adjustment"
+                                                (ngModelChange)="getAllowanceAdjustment(1)"
+                                                [placeholder]="'Allowance...'" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-1 hide">
+                                    <label for="searchByFlag" class="control-label font-bold">Search By Flag</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-dot-circle-o"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByAllowance_in_adjustment"
+                                            id="searchByAllowance_in_adjustment" class="form-control form-control-sm"
+                                            #searchByFlagAdjustmentRef="ngModel"
+                                            [(ngModel)]="searchByFlag_in_adjustment"
+                                            (change)="getAllowanceAdjustment(1)">
+                                            <option [value]="''" selected>-Flag-</option>
+                                            <option [value]="'Arrear'">Arrear</option>
+                                            <option [value]="'Adjustment'">Adjustment</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-2">
+                                    <label for="searchByStatus_in_adjustment" class="control-label font-bold">Search By
+                                        Status</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-list"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByStatus_in_adjustment" id="searchByStatus_in_adjustment"
+                                            class="form-control form-control-sm" #searchByStatusAdjustmentRef="ngModel"
+                                            [(ngModel)]="searchByStatus_in_adjustment"
+                                            (change)="getAllowanceAdjustment(1)">
+                                            <option [value]="''" selected>--Status--</option>
+                                            <option [value]="'Pending'">Pending</option>
+                                            <option [value]="'Approved'">Approved</option>
+                                            <option [value]="'Cancelled'">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <label for="salaryMonth_in_adjustment" class="control-label font-bold">Search By
+                                        Month & Year</label>
+                                    <div class="input-group text-x-small">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                            <select name="salaryMonth_in_adjustment" id="salaryMonth_in_adjustment"
+                                                class="form-control form-control-sm" #salaryMonthAdjustmentRef="ngModel"
+                                                [(ngModel)]="salaryMonth_in_adjustment"
+                                                (change)="getAllowanceAdjustment(1)">
+                                                <option [value]="0" selected>--Month--</option>
+                                                <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                    {{item.month}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                            <select name="salaryYear_in_adjustment" id="salaryYear_in_adjustment"
+                                                class="form-control form-control-sm" #salaryYearAdjustmentRef="ngModel"
+                                                [(ngModel)]="salaryYear_in_adjustment"
+                                                (change)="getAllowanceAdjustment(1)">
+                                                <option [value]="0" selected>--Year--</option>
+                                                <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-1" *ngIf="pagePrivilege?.add">
+                                    <label for="" class="control-label font-bold" style="visibility: hidden;">Add
+                                        Adjustment</label>
+                                    <button type="button"
+                                        class="btn btn-sm btn-outline-success btn-rounded btn-sm ml-1 pull-right"
+                                        (click)="openInsertModal('Adjustment')">
+                                        <i class="fa fa-plus"></i> | Adjustment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center hide">Employee ID</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Allowance</th>
+                                            <th class="text-center hide">Allowance Status</th>
+                                            <th class="text-center">Month</th>
+                                            <th class="text-center">Amount</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listOfAllowanceAdjustment | paginate: pageConfig_adjustment, let i =index">
+                                            <td class="text-center font-bold">{{i+1 + (pageSize_adjustment
+                                                *(pageNumber_adjustment-1))}}</td>
+                                            <td class="text-center hide">{{item.employeeCode}}</td>
+                                            <td class="text-center">{{item.employeeName + " ("+item.employeeCode+")"}}
+                                            </td>
+                                            <td class="text-center">{{item.allowanceName +"-"+item.flag}}</td>
+                                            <td class="text-center hide">{{item.flag}}</td>
+                                            <td class="text-center">{{item.salaryDate | date:"MMMM yyyy"}}</td>
+                                            <td class="text-center">
+                                                {{item.amount}}
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                    + '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs text-success" (click)="1==1">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-navy" title="Edit"
+                                                    (click)="openUpdateModal(item?.id)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-danger" title="Delete"
+                                                    (click)="openDeleteModal(item?.id, item?.salaryMonth, item?.salaryYear)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="listOfAllowanceAdjustment == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf="listOfAllowanceAdjustment!=null && listOfAllowanceAdjustment.length == 0">
+                                            <td colspan="20" class="text-center font-bold">
+                                                No data found
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="allowancesPageChanged_in_adjustment($event)"
+                                    [responsive]="true" [autoHide]="true"
+                                    id="adjustment_data_list"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showInsertModal">
+    <app-add-salary-allowance-arrear-adjustment-modal [flag]="insert_flag"
+        (closeModalEvent)="closeInsertModal($event)"></app-add-salary-allowance-arrear-adjustment-modal>
+</ng-container>
+
+<ng-container *ngIf="showUploadModal">
+    <app-salary-module-upload-salary-allowance-arrear-adjustment-modal [id]="0"
+        (closeModalEvent)="closeUploadExcelFileModal($event)"></app-salary-module-upload-salary-allowance-arrear-adjustment-modal>
+</ng-container>
+
+<ng-container *ngIf="showUpdateModal">
+    <app-salary-module-edit-salary-allowance-arrear-adjustment-modal [id]="id"
+        (closeModalEvent)="closeUpdateModal($event)"></app-salary-module-edit-salary-allowance-arrear-adjustment-modal>
+</ng-container>
+
+<ng-container *ngIf="showDeleteModal">
+    <app-salary-module-delete-salary-allowance-arrear-adjustment-modal [id]="id" [salaryMonth]="salaryMonth"
+        [salaryYear]="salaryYear"
+        (closeModalEvent)="closeDeleteModal($event)"></app-salary-module-delete-salary-allowance-arrear-adjustment-modal>
+</ng-container>
+
+<ng-container *ngIf="showBulkApprovalModal">
+    <app-payroll-arrear-adjustment-bulk-approval
+        (closeModalEvent)="closeBulkApprovalModal($event)"></app-payroll-arrear-adjustment-bulk-approval>
+</ng-container>

@@ -1,0 +1,4 @@
+STEP 1: Go 'AppConstants.ts' file change the 'app_environment' variable 'Local' to 'Public'
+STEP 2: Go To 'AreasHttpService.ts' file & check the both 'clientURL' & 'imageURL' variable URL;
+STEP 3: Then Run the command ng build on Command prompt
+STEP 3: After Publishing attach web.config in the publish folder.

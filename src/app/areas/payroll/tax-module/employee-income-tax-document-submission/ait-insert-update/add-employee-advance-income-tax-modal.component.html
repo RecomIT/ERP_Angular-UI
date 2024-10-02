@@ -1,0 +1,123 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-file-document pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="modal-body text-x-small">
+            <div class="form-row">
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="employeeId" class="control-label font-bold">
+                        Employee <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-ui-user-group"></i>
+                            </span>
+                        </div>
+                        <div class="d-inline" style="width: 90%;">
+                            <ng-select2 [data]="ddlEmployees" name="employeesSearchRef" formControlName="employeeId"
+                                id="employeesSearchRef" [placeholder]="'Search Employee...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                    <div *ngIf="formErrors?.employeeId" class="text-danger">
+                        {{formErrors?.employeeId}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="fiscalYearId" class="control-label font-bold">
+                        Fiscal year <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon faa-parent animated-hover">
+                                <i class="fa fa-clock-o"></i>
+                            </span>
+                        </div>
+                        <select name="fiscalYearId" id="fiscalYearId" class="form-control form-control-sm"
+                            formControlName="fiscalYearId">
+                            <option [value]="0" selected>---Select Fiscal year---</option>
+                            <option [value]="item.id" *ngFor="let item of ddlFiscalYears">
+                                {{item.text}}
+                            </option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors?.fiscalYearId" class="text-danger">
+                        {{formErrors?.fiscalYearId}}
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="certificateType" class="control-label font-bold">
+                        Certificate Type <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="icofont-certificate-alt-1"></i>
+                            </span>
+                        </div>
+                        <select name="certificateType" id="certificateType" formControlName="certificateType"
+                            class="form-control form-control-sm">
+                            <option [value]="'AIT'" selected>AIT</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors?.certificateType" class="text-danger">
+                        {{formErrors?.certificateType}}
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="amount" class="control-label font-bold">
+                        Amount <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i>&#2547;</i>
+                            </span>
+                        </div>
+                        <input type="number" class="form-control form-control-sm" id="amount" name="amount"
+                            formControlName="amount">
+                    </div>
+                    <div *ngIf="formErrors?.amount" class="text-danger">
+                        {{formErrors?.amount}}
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="file" class="control-label font-bold">File Uploader (Pdf/Png/jpg/jpeg)</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input id="file" type="file" class="custom-file-input" name="file"
+                                (change)="fileUpload($event)" accept=".pdf,.jpg,.png,.jpeg">
+                            <label class="custom-file-label" for="file">
+                                {{uploadFileName}}
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-row">
+
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" [disabled]="form.invalid || btnSubmit">
+                <i class="fa fa-paper-plane"></i> | {{this.id > 0 ? 'Update': 'Submit'}}
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                (click)="closeModal('Cancel click')" [disabled]="btnSubmit"><i class="fa fa-times"></i> |
+                Cancel</button>
+        </div>
+    </form>
+</ng-template>

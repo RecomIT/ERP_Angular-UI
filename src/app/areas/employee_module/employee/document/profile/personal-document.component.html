@@ -1,0 +1,59 @@
+<div class="ibox">
+    <div class="ibox-content bg-white border-radius-5">
+        <div class="row">
+            <div class="col-10 col-sm-10 col-md-10">
+                <h3>Personal Documents</h3>
+            </div>
+            <div class="col-2 col-sm-2 col-md-2">
+                <button type="button" class="btn btn-sm btn-outline btn-circle pull-right" (click)="openModal(0)"
+                    title="Upload Your Document">
+                    <i class="icofont-cloud-upload fa-2x"></i>
+                </button>
+            </div>
+        </div>
+        <ul class="list-unstyled file-list">
+            <li *ngFor="let item of documents">
+                <button type="button" class="btn p-0 text-danger" (click)="showFile(item.filePath)"
+                    *ngIf="item.fileFormat =='pdf'">
+                    <i class="icofont icofont-file-pdf"></i>
+                    <span class="text-dark"> &nbsp;&nbsp;{{item.documentName+'.'+item.fileFormat}}</span></button>
+                <button type="button" class="btn p-0 text-info" (click)="showFile(item.filePath)"
+                    *ngIf="item.fileFormat !='pdf'">
+                    <i class="icofont icofont-image"></i>
+                    <span class="text-dark"> &nbsp;&nbsp;{{item.documentName+'.'+item.fileFormat}}</span></button>
+                &nbsp; &nbsp; <button type="button" class="btn btn-xs pull-right"
+                    (click)="openModal(item.documentId)"><i class="fa fa-pencil"></i></button>
+            </li>
+            <li *ngIf="documents == null || documents.length == 0 " class="border  text-center">
+                <span>No file found</span>
+            </li>
+        </ul>
+        <div class="row" *ngIf="documents != null && documents.length > 0">
+            <div class="col-12 col-sm-12 col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-bordered table-responsive-lg text-center">
+                        <thead>
+                            <tr>
+                                <th>#SL</th>
+                                <th>Doc Name</th>
+                                <th>Doc Number</th>
+                            </tr>  
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of documents; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{item.documentName}}</td>
+                                <td>{{item.documentNumber}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showInsertUpdateModal == true && modalObj != null">
+    <app-employee-module-document-insert-update-modal [document]="modalObj"
+        (closeModalEvent)="closeModal($event)"></app-employee-module-document-insert-update-modal>
+</ng-container>

@@ -1,0 +1,114 @@
+
+
+<ng-template  #approvalDetails let-modal>
+    <div class="modal-header">
+        <div class="d-flex w-100 justify-content-between">
+            <div class="ml-3 mr-3" id="modal-basic-title">
+                <h4 class="modal-title">{{ employeeDetails.name }}</h4>  
+                <h6 class="label label-warning">{{ employeeDetails.designationName }}</h6>
+            </div>
+            
+            <div class="mr-3" id="modal-basic-title">
+                <h4 class="modal-title">{{ employeeDetails.title }}</h4>  
+                <h6 class="label label-success">Balance: {{ employeeDetails.remainingLeave }}</h6>
+            </div>
+        </div>
+    
+        <button type="button" class="close" aria-label="Close" (click)="closeApprovalModal('close click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    
+    
+    
+    <div class="modal-body">
+        
+        <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+            <div class="border-section">
+                <div class="border-label">Applied Information
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="col-12 col-lg-6 col-md-6 col-sm-12 mb-1">
+                        <div class="employee-detail-item ">
+                            <span class="property">Applied From Date:</span>
+                            <span class="value">{{ employeeDetails.appliedFromDate | date:'dd MMM, yyyy' }}</span>
+                        </div>
+            
+                        <div class="employee-detail-item">
+                            <span class="property">Applied To Date:</span>
+                            <span class="value">{{ employeeDetails.appliedToDate | date:'dd MMM, yyyy' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6 col-md-6 col-sm-12 mb-1">
+
+                        <div class="employee-detail-item">
+                            <span class="property">Total Days:</span>
+                            <span class="value">{{ employeeDetails.appliedTotalDays }}</span>
+                        </div>
+
+                        <div class="employee-detail-item">
+                            <span class="property">Day Leave Type:</span>
+                            <span class="value label label-info text-light">{{ employeeDetails.title }}</span>
+                        </div>
+                        
+
+                    </div>
+
+                    <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1">
+                        <div class="employee-detail-item">
+                            <span class="property">Leave Purpose:</span>
+                            <span class="value">{{ employeeDetails.leavePurpose }}</span>
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-12">
+            <div class="border-section">
+                <div class="border-label"> Leave Balance Information
+                </div>
+
+                <div class="employee-detail-item">
+                    <span class="property">Allotted Leave:</span>
+                    <span class="value">{{ employeeDetails.totalLeave }}</span>
+                </div>
+
+                <div class="employee-detail-item hide">
+                    <span class="property">Leave Availed:</span>
+                    <span class="value">{{ employeeDetails.leaveAvailed }}</span>
+                </div>
+                <div class="employee-detail-item">
+                    <span class="property">Leave Applied:</span>
+                    <span class="value">{{ employeeDetails.leaveApplied }}</span>
+                </div>
+
+                <div class="employee-detail-item">
+                <span class="property">Remaining Balance:</span>
+                <span class="value">{{ employeeDetails.remainingLeave }}</span>
+                </div>
+
+            </div>
+        </div>  
+
+    </div>
+    
+
+    <div class="modal-footer">
+      <button class="btn btn-xs btn-danger btn-rounded shadow" type="button" (click)="closeApprovalModal('Close Click')">
+          <i class="fa fa-times"></i> | Cancel
+      </button>
+    </div>
+  </ng-template>
+  
+  
+    
+  
+  

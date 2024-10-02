@@ -1,0 +1,431 @@
+<ng-template #addSettlementSetupModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        <i class="icofont-ui-settings btn btn-sm btn-success btn-circle"></i>
+        {{ modalTitle }}
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeAddSettlementSetupModal('close click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+  
+    <div class="modal-body">
+
+      <div class="container-fluid" *ngIf="this.ExecutionFlag === 'C'">
+  
+        <form [formGroup]="settlementSetupForm" (ngSubmit)="submit()" class="container p-3 shadow text-x-small bg-white rounded">
+    
+            <div class="col-12">
+                <div class="mb-3 form-check form-check-inline">
+                    <input type="radio" class="form-check-input" formControlName="separatedWithSalary" id="separatedWithSalaryYes" [value]="true" (change)="onSeparatedWithSalaryChange(true)"/>
+                    <label class="form-check-label" for="separatedWithSalaryYes">Separated With Salary</label>
+                </div>
+                
+                <div class="mb-3 form-check form-check-inline">
+                    <input type="radio" class="form-check-input" formControlName="separatedWithSalary" id="separatedWithSalaryNo" [value]="false" 
+                    [checked]="settlementSetupForm.get('separatedWithSalary').value === false" 
+                    (change)="onSeparatedWithSalaryChange(false)"/>
+                    <label class="form-check-label" for="separatedWithSalaryNo">Separated Without Salary</label>
+                </div>
+                </div>
+                
+            <div class="col-12 mb-3">
+                <div class="form-check form-check-inline">
+                    <label class="form-label">Salary Disbursed With Settlement Process:</label>
+                </div>
+                
+                <div class="mb-3 form-check form-check-inline">
+                    <input type="radio" class="form-check-input" formControlName="isSalaryDisbursedWithSettlementProcess" id="salaryDisbursedYes" [value]="true" 
+                    />
+                    <label class="form-check-label" for="salaryDisbursedYes">Yes</label>
+                    </div>
+                    
+                    <div class="mb-3 form-check form-check-inline">
+                    <input type="radio" class="form-check-input" formControlName="isSalaryDisbursedWithSettlementProcess" id="salaryDisbursedNo" [value]="false" 
+                    />
+                    <label class="form-check-label" for="salaryDisbursedNo">No</label>
+                    </div>
+            </div>
+        
+            
+            <div class="col-12">
+
+                <div class="mb-3 form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" formControlName="isGotPunishment" id="isGotPunishment" 
+                    />
+                    <label class="form-check-label" for="isGotPunishment">Is Got Punishment</label>
+                </div>
+                
+        
+                
+                <div class="mb-3 form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" formControlName="withExtraBasic" id="withExtraBasic" />
+                    <label class="form-check-label" for="withExtraBasic">With Extra Basic</label>
+                    </div>
+                    
+                    <div class="mb-3" *ngIf="settlementSetupForm.get('withExtraBasic').value === true">
+                    <label for="noOfExtraBasic" class="form-label">Number of extra basic:</label>
+                    <input type="number" class="form-control" formControlName="noOfExtraBasic" 
+                    style="border-radius: 5px;"/>
+                </div>
+                    
+            </div>
+                
+            <div class="mb-3">
+                <label for="remarks" class="form-label">Remarks:</label>
+                <textarea class="form-control" formControlName="remarks"
+                    style="border-radius: 5px;"
+                ></textarea>
+            </div>
+        
+
+            <div class="mb-3">
+          
+                <button class="btn btn-xs btn-primary  p-1 shadow mr-2" type="submit" [disabled]="settlementSetupForm.invalid">
+                    <i class="fa fa-paper-plane" aria-hidden="true"></i> | {{ editData ? 'Update' : 'Submit' }}
+                  </button>   
+            </div>
+            
+        </form>
+      </div>
+
+
+      <div class="edit-modal-container"  *ngIf="this.ExecutionFlag === 'U'">
+        <div class="container-fluid" *ngIf="editData">
+
+          <form [formGroup]="settlementSetupForm" (ngSubmit)="submit()" class="container p-3 shadow text-x-small bg-white rounded">
+      
+              <div class="col-12">
+                  <div class="mb-3 form-check form-check-inline">
+                      <input type="radio" class="form-check-input" formControlName="separatedWithSalary" id="separatedWithSalaryYes" [value]="true" (change)="onSeparatedWithSalaryChange(true)"/>
+                      <label class="form-check-label" for="separatedWithSalaryYes">Separated With Salary</label>
+                  </div>
+                  
+                  <div class="mb-3 form-check form-check-inline">
+                      <input type="radio" class="form-check-input" formControlName="separatedWithSalary" id="separatedWithSalaryNo" [value]="false" 
+                      [checked]="settlementSetupForm.get('separatedWithSalary').value === false" 
+                      (change)="onSeparatedWithSalaryChange(false)"/>
+                      <label class="form-check-label" for="separatedWithSalaryNo">Separated Without Salary</label>
+                  </div>
+
+                  </div>
+                  
+              <div class="col-12 mb-3">
+                  <div class="form-check form-check-inline">
+                      <label class="form-label">Salary Disbursed With Settlement Process:</label>
+                  </div>
+                  
+                  <div class="mb-3 form-check form-check-inline">
+                      <input type="radio" class="form-check-input" formControlName="isSalaryDisbursedWithSettlementProcess" id="salaryDisbursedYes" [value]="true" 
+                      />
+                      <label class="form-check-label" for="salaryDisbursedYes">Yes</label>
+                      </div>
+                      
+                      <div class="mb-3 form-check form-check-inline">
+                      <input type="radio" class="form-check-input" formControlName="isSalaryDisbursedWithSettlementProcess" id="salaryDisbursedNo" [value]="false" 
+                      />
+                      <label class="form-check-label" for="salaryDisbursedNo">No</label>
+                      </div>
+              </div>
+          
+              
+              <div class="col-12">
+
+                  <div class="mb-3 form-check form-check-inline">
+                      <input type="checkbox" class="form-check-input" formControlName="isGotPunishment" id="isGotPunishment" 
+                      />
+                      <label class="form-check-label" for="isGotPunishment">Is Got Punishment</label>
+                  </div>
+                  
+          
+                  
+                  <div class="mb-3 form-check form-check-inline">
+                      <input type="checkbox" class="form-check-input" formControlName="withExtraBasic" id="withExtraBasic" />
+                      <label class="form-check-label" for="withExtraBasic">With Extra Basic</label>
+                      </div>
+                      
+                      <div class="mb-3" *ngIf="settlementSetupForm.get('withExtraBasic').value === true">
+                      <label for="noOfExtraBasic" class="form-label">Number of extra basic:</label>
+                      <input type="number" class="form-control" formControlName="noOfExtraBasic" 
+                      style="border-radius: 5px;"/>
+                  </div>
+                      
+              </div>
+                  
+              <div class="mb-3">
+                  <label for="remarks" class="form-label">Remarks:</label>
+                  <textarea class="form-control" formControlName="remarks"
+                      style="border-radius: 5px;"
+                  ></textarea>
+              </div>
+          
+  
+              <div class="mb-3">
+              
+                  <button class="btn btn-xs btn-primary  p-1 shadow mr-2" type="submit" [disabled]="settlementSetupForm.invalid">
+                      <i class="fa fa-paper-plane" aria-hidden="true"></i> | {{ editData ? 'Update' : 'Submit' }}
+                    </button>   
+              </div>
+              
+          </form>
+        </div>
+      </div>
+   
+
+      <!-- <div class="delete-modal-container" *ngIf="this.ExecutionFlag === 'D'">
+          <div class="container-fluid" *ngIf="deleteData">
+
+            <p class="confirmation-text">Are you sure you want to delete?</p>
+        
+            <div class="row details-row">
+              <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="detail-item" *ngIf="deleteData.name">
+                  <p><strong>Name:</strong> {{ deleteData.name }}</p>
+                </div>
+                <div class="detail-item" *ngIf="deleteData.departmentName">
+                  <p><strong>Department:</strong> {{ deleteData.departmentName }}</p>
+                </div>
+                <div class="detail-item" *ngIf="deleteData.designationName">
+                  <p><strong>Designation:</strong> {{ deleteData.designationName }}</p>
+                </div>
+                
+              </div>
+              
+            </div>
+
+            <div class="row details-row">
+              <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+
+                  <div class="detail-item" *ngIf="deleteData.separatedWithSalary !== null">
+                      <p><strong>Separated With Salary:</strong> {{ deleteData.separatedWithSalary ? 'Yes' : 'No' }}</p>
+                  </div>
+
+                  <div class="detail-item" *ngIf="deleteData.isSalaryDisbursedWithSettlementProcess !== null">
+                      <p><strong>Is Salary Disbursed With Settlement Process:</strong> {{ deleteData.isSalaryDisbursedWithSettlementProcess ? 'Yes' : 'No' }}</p>
+                  </div>
+
+                  <div class="detail-item" *ngIf="deleteData.isGotPunishment !== null">
+                      <p><strong>Is Got Punishment:</strong> {{ deleteData.isGotPunishment ? 'Yes' : 'No' }}</p>
+                  </div>
+
+                  <div class="detail-item" *ngIf="deleteData.withExtraBasic !== null">
+                      <p><strong>With Extra Basic:</strong> {{ deleteData.withExtraBasic }}</p>
+                  </div>
+
+                  <div class="detail-item" *ngIf="deleteData.noOfExtraBasic !== null">
+                      <p><strong>No of Extra Basic:</strong> {{ deleteData.noOfExtraBasic }}</p>
+                  </div>
+                    
+                  <div class="detail-item" *ngIf="deleteData.shortfallInNoticePeriod !== null">
+                      <p><strong>Shortfall In Notice Period:</strong> {{ deleteData.shortfallInNoticePeriod }}</p>
+                  </div>
+                  
+              </div>
+
+            
+
+
+            </div>
+
+            <form [formGroup]="settlementSetupForm" (ngSubmit)="submit()" class="container p-3 shadow text-x-small bg-white rounded">
+              <button *ngIf="ExecutionFlag === 'D'" class="btn btn-xs btn-primary  btn-rounded shadow-lg px-2 mr-2" type="submit" [disabled]="settlementSetupForm.invalid" >
+                <i class="fa fa-paper-plane" aria-hidden="true"></i> | Yes, Delete
+            </button>
+    
+            </form>
+            
+
+          </div>
+      </div> -->
+
+
+      <div class="delete-modal-container" *ngIf="ExecutionFlag === 'D'">
+        <div class="container-fluid delete-modal-content" *ngIf="deleteData">
+            <p class="confirmation-text">Are you sure you want to delete?</p>
+    
+            <div class="row details-row">
+                <div class="col-md-6">
+                    <div class="detail-item" *ngIf="deleteData.name">
+                        <p><strong>Name:</strong> {{ deleteData.name }}</p>
+                    </div>
+                    <div class="detail-item" *ngIf="deleteData.departmentName">
+                        <p><strong>Department:</strong> {{ deleteData.departmentName }}</p>
+                    </div>
+                    <div class="detail-item" *ngIf="deleteData.designationName">
+                        <p><strong>Designation:</strong> {{ deleteData.designationName }}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="detail-item" *ngIf="deleteData.separatedWithSalary !== null">
+                        <p><strong>Separated With Salary:</strong> {{ deleteData.separatedWithSalary ? 'Yes' : 'No' }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="deleteData.isSalaryDisbursedWithSettlementProcess !== null">
+                        <p><strong>Is Salary Disbursed With Settlement Process:</strong> {{ deleteData.isSalaryDisbursedWithSettlementProcess ? 'Yes' : 'No' }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="deleteData.isGotPunishment !== null">
+                        <p><strong>Is Got Punishment:</strong> {{ deleteData.isGotPunishment ? 'Yes' : 'No' }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="deleteData.withExtraBasic !== null">
+                        <p><strong>With Extra Basic:</strong> {{ deleteData.withExtraBasic }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="deleteData.noOfExtraBasic !== null">
+                        <p><strong>No of Extra Basic:</strong> {{ deleteData.noOfExtraBasic }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="deleteData.shortfallInNoticePeriod !== null">
+                        <p><strong>Shortfall In Notice Period:</strong> {{ deleteData.shortfallInNoticePeriod }}</p>
+                    </div>
+                </div>
+            </div>
+    
+            
+              <!-- <button *ngIf="ExecutionFlag === 'D'" class="btn btn-xs btn-primary  btn-rounded shadow-lg px-2 mr-2" type="submit" [disabled]="settlementSetupForm.invalid" >
+                <i class="fa fa-paper-plane" aria-hidden="true"></i> | Yes, Delete
+              </button> -->
+
+              <div class="mb-3 text-left">
+                <form [formGroup]="settlementSetupForm" (ngSubmit)="submit()">
+                  <button class="btn btn-xs btn-primary  p-1 shadow mr-2" type="submit" [disabled]="settlementSetupForm.invalid">
+                    <i class="fa fa-paper-plane" aria-hidden="true"></i> | Yes, Delete
+                  </button>  
+                </form>
+              </div>
+             
+    
+           
+
+        </div>
+    </div>
+    
+    
+        
+<!--         
+      <div class="delete-modal-container" *ngIf="this.ExecutionFlag === 'I'">
+          <div class="container-fluid" *ngIf="detailsData">
+
+            <div class="row details-row">
+              <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="detail-item" *ngIf="detailsData.name">
+                  <p><strong>Name:</strong> {{ detailsData.name }}</p>
+                </div>
+                <div class="detail-item" *ngIf="detailsData.departmentName">
+                  <p><strong>Department:</strong> {{ detailsData.departmentName }}</p>
+                </div>
+                <div class="detail-item" *ngIf="detailsData.designationName">
+                  <p><strong>Designation:</strong> {{ detailsData.designationName }}</p>
+                </div>
+                
+              </div>
+              
+            </div>
+
+            <div class="row details-row">
+              <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+
+                  <div class="detail-item" *ngIf="detailsData.separatedWithSalary !== null">
+                      <p><strong>Separated With Salary:</strong> {{ detailsData.separatedWithSalary ? 'Yes' : 'No' }}</p>
+                  </div>
+
+                  <div class="detail-item" *ngIf="detailsData.isSalaryDisbursedWithSettlementProcess !== null">
+                      <p><strong>Is Salary Disbursed With Settlement Process:</strong> {{ detailsData.isSalaryDisbursedWithSettlementProcess ? 'Yes' : 'No' }}</p>
+                  </div>
+
+                  <div class="detail-item" *ngIf="detailsData.isGotPunishment !== null">
+                      <p><strong>Is Got Punishment:</strong> {{ detailsData.isGotPunishment ? 'Yes' : 'No' }}</p>
+                  </div>
+
+                  <div class="detail-item" *ngIf="detailsData.withExtraBasic !== null">
+                      <p><strong>With Extra Basic:</strong> {{ detailsData.withExtraBasic }}</p>
+                  </div>
+
+                  <div class="detail-item" *ngIf="detailsData.noOfExtraBasic !== null">
+                      <p><strong>No of Extra Basic:</strong> {{ detailsData.noOfExtraBasic }}</p>
+                  </div>
+                    
+                  <div class="detail-item" *ngIf="detailsData.shortfallInNoticePeriod !== null">
+                      <p><strong>Shortfall In Notice Period:</strong> {{ detailsData.shortfallInNoticePeriod }}</p>
+                  </div>
+                  
+              </div>
+
+            
+
+
+            </div>
+
+            
+
+          </div>
+      </div> -->
+
+
+
+      <div class="delete-modal-container" *ngIf="ExecutionFlag === 'I'">
+        <div class="container-fluid delete-modal-content" *ngIf="detailsData">
+    
+            <div class="row details-row">
+                <div class="col-md-6">
+                    <div class="detail-item" *ngIf="detailsData.name">
+                        <p><strong>Name:</strong> {{ detailsData.name }}</p>
+                    </div>
+                    <div class="detail-item" *ngIf="detailsData.departmentName">
+                        <p><strong>Department:</strong> {{ detailsData.departmentName }}</p>
+                    </div>
+                    <div class="detail-item" *ngIf="detailsData.designationName">
+                        <p><strong>Designation:</strong> {{ detailsData.designationName }}</p>
+                    </div>
+                </div>
+    
+                <div class="col-md-6">
+                    <div class="detail-item" *ngIf="detailsData.separatedWithSalary !== null">
+                        <p><strong>Separated With Salary:</strong> {{ detailsData.separatedWithSalary ? 'Yes' : 'No' }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="detailsData.isSalaryDisbursedWithSettlementProcess !== null">
+                        <p><strong>Is Salary Disbursed With Settlement Process:</strong> {{ detailsData.isSalaryDisbursedWithSettlementProcess ? 'Yes' : 'No' }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="detailsData.isGotPunishment !== null">
+                        <p><strong>Is Got Punishment:</strong> {{ detailsData.isGotPunishment ? 'Yes' : 'No' }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="detailsData.withExtraBasic !== null">
+                        <p><strong>With Extra Basic:</strong> {{ detailsData.withExtraBasic }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="detailsData.noOfExtraBasic !== null">
+                        <p><strong>No of Extra Basic:</strong> {{ detailsData.noOfExtraBasic }}</p>
+                    </div>
+    
+                    <div class="detail-item" *ngIf="detailsData.shortfallInNoticePeriod !== null">
+                        <p><strong>Shortfall In Notice Period:</strong> {{ detailsData.shortfallInNoticePeriod }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+          
+
+    </div>
+  
+    <div class="modal-footer">
+
+       
+        <button class="btn btn-xs btn-danger btn-rounded shadow-lg px-2" type="button" (click)="closeAddSettlementSetupModal('Close Click')">
+            <i class="fa fa-times"></i> | Cancel
+        </button>
+
+    </div>
+</ng-template>
+  
+
+
+
+
+
+

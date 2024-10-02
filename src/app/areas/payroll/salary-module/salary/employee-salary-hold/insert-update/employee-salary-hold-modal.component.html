@@ -1,0 +1,117 @@
+<ng-template #employeeSalaryHoldModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-secondary btn-circle icofont-stop" aria-hidden="true"></i>| Employee Salary Hold
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark text-x-small">
+        <form [formGroup]="salaryHoldForm" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-12 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="employeeId" class="control-label font-bold text-dark">Employee <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-user-suited"></i>
+                                </span>
+                            </div>
+                            <div style="width:80%">
+                                <ng-select2 [data]="ddlEmployees" name="employeeId" id="employeeId" formControlName="employeeId"
+                                    [placeholder]="'Select Employee...'" [options]="select2Options" [allowClear]="true">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="month" class="control-label font-bold text-dark">Salary Month & Year <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="month" id="month" class="form-control form-control-sm" formControlName="month">
+                                <option [value]="0" selected>---Select Month ---</option>
+                                <option [value]="item.monthNo" *ngFor="let item of months">{{item.month}}</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <select name="years" id="years" class="form-control form-control-sm" formControlName="year">
+                                    <option [value]="0" selected>---Select Year ---</option>
+                                    <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-12 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="holdReason" class="control-label font-bold text-dark">Hold Reason <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-list"></i>
+                                </span>
+                            </div>
+                            <select name="holdReason" id="holdReason" class="form-control form-control-sm" formControlName="holdReason">
+                                <option [value]="item" *ngFor="let item of holdReasons">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="holdDates" class="control-label font-bold text-dark">From ~ To <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-ui-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="holdDates" id="holdDates" class="form-control form-control-sm" formControlName="holdDates"
+                                bsDaterangepicker [bsConfig]="datePickerConfig" autocomplete="off"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="form-group col-md-3 col-sm-4">
+                        <div class="custom-control custom-switch pl-5" style="vertical-align: middle;">
+                            <input type="checkbox" class="custom-control-input" name="chkWithSalary" id="chkWithSalary" formControlName="withSalary">
+                            <label class="custom-control-label custom-switch-lable pull-left mb-0 mt-2"
+                                for="chkWithSalary"> With Salary</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-4">
+                        <div class="custom-control custom-switch pl-5" style="vertical-align: middle;">
+                            <input type="checkbox" class="custom-control-input" name="chkIsPFContinue"
+                                id="chkIsPFContinue" formControlName="pfContinue">
+                            <label class="custom-control-label custom-switch-lable pull-left mb-0 mt-2"
+                                for="chkIsPFContinue"> PF Continue</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-4">
+                        <div class="custom-control custom-switch pl-5" style="vertical-align: middle;">
+                            <input type="checkbox" class="custom-control-input" name="chkIsGContinue" formControlName="gfContinue"
+                                id="chkIsGContinue">
+                            <label class="custom-control-label custom-switch-lable pull-left mb-0 mt-2"
+                                for="chkIsGContinue"> GF Continue</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Close Click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="this.salaryHoldForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | {{this.salaryHoldForm.get('salaryHoldId').value == 0 ? 'Submit' : 'Update'}}
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

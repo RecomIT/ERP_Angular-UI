@@ -1,0 +1,617 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Holiday</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Attendance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Holiday</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3 animated fadeInRight" id="page-container">
+    <div class="row m-t-sm mt-0 text-x-small">
+        <div class="col-md-12 mb-4">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#yearlyHolidays" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-umbrella"></i> | Yearly Holidays
+                        </a></li>
+                    <li><a href="#publicHolidays" data-toggle="tab" class="nav-link ">
+                            <i class="fa fa-umbrella"></i> | Public Holidays
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="yearlyHolidays" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm 
+                                    font-bold" placeholder="Search By Anything" id="yearlySetup"
+                                            onkeyup="tableFilter('#tblYearlySetup tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openYearlyHolidayModal()">
+                                        <i class="fa fa-plus"></i> | Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblYearlySetup">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Title</th>
+                                            <th>Title In Bengali</th>
+                                            <th class="text-center">Start Date ~ End Date</th>
+                                            <th class="text-center">Specified For</th>
+                                            <th class="text-center">Company</th>
+                                            <th class="text-center">Type</th>
+                                            <th>Remarks</th>
+                                            <th class="text-center hide">StateStatus</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let yh of yearlyHolidayList;let i =index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{yh.title}}</td>
+                                            <td>{{yh.titleInBengali}}</td>
+                                            <td class="text-center">{{yh.startDate | date:"dd-MMM-yyyy"}}
+                                                <b>~</b> {{yh.endDate | date:"dd-MMM-yyyy"}}
+                                            </td>
+                                            <td class="text-center">{{yh.specifiedFor}}</td>
+                                            <td class="text-center">{{yh.companyName}}</td>
+                                            <td class="text-center">
+                                                <span [hidden]="yh.type=='Public'" class="label label-primary">
+                                                    <i class="fa fa-laptop" aria-hidden="true"></i> {{yh.type}}
+                                                </span>
+                                                <span [hidden]="yh.type=='Official'" class="label label-warning">
+                                                    <i class="fa fa-users" aria-hidden="true"></i> {{yh.type}}
+                                                </span>
+                                            </td>
+                                            <td>{{yh.remarks}}</td>
+                                            <td class="text-center hide">
+                                                <span [hidden]="yh.stateStatus=='Approved'" class="label label-success">
+                                                    <i class="fa fa-arrow-down"></i> {{yh.stateStatus}}
+                                                </span>
+                                                <span [hidden]="yh.stateStatus=='Entered'" class="label label-primary">
+                                                    <i class="fa fa-check"></i> {{yh.stateStatus}}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">{{yh.createdDate | date:"dd-MMM-yyyy hh:mm a"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs"
+                                                    (click)="edityearlyHoliday(yh.yearlyHolidayId)"
+                                                    *ngIf="yh.publicHolidayId == 0">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="yearlyHolidayList == null" class="text-center">
+                                            <td colspan="11">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                                Loading...
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="yearlyHolidayList != null && yearlyHolidayList.length == 0"
+                                            class="text-center font-bold">
+                                            <td colspan="11">No data found.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="publicHolidays" class="tab-pane ">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm 
+                                    font-bold" placeholder="Search By Anything" id="publicHolidayFilter"
+                                            onkeyup="tableFilter('#tblGovtHoliday tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openPublicHolidayModal()">
+                                        <i class="fa fa-plus"></i> | Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblGovtHoliday">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Title</th>
+                                            <th>Title In Bengali</th>
+                                            <th>Description</th>
+                                            <th class="text-center">Month & Date</th>
+                                            <th class="text-center">Is Depandent On Moon</th>
+                                            <th class="text-center">Type</th>
+                                            <th>Religion Name</th>
+                                            <th class="text-center hide">StateStatus</th>
+                                            <th>Remarks</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let ph of publicHolidayList; let i=index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{ph.title}}</td>
+                                            <td>{{ph.titleInBengali}}</td>
+                                            <td>{{ph.description}}</td>
+                                            <td class="text-center"> <span
+                                                    [hidden]="ph.isDepandentOnMoon">{{ph.monthName}}
+                                                    - {{ph.date}}</span></td>
+                                            <td class="text-center">
+                                                <span
+                                                    [class]="ph.isDepandentOnMoon ? 'label label-primary' :'label label-danger'">
+                                                    {{ph.isDepandentOnMoon ? 'Yes':'No'}}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span [hidden]="ph.type =='Religious'" class="label label-warning">
+                                                    <i class="fa fa-flag text-dark" aria-hidden="true"></i>
+                                                    {{ph.type}}</span>
+                                                <span [hidden]="ph.type =='National'" class="label label-primary">
+                                                    <i class="fa fa-moon-o text-dark" aria-hidden="true"></i>
+                                                    {{ph.type}}</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span [hidden]="ph.religionName =='' || ph.religionName == null"
+                                                    class="label label-success">{{ph.religionName}}</span>
+                                            </td>
+                                            <td class="text-center hide">
+                                                <span [hidden]="ph.stateStatus=='Approved'" class="label label-success">
+                                                    <i class="fa fa-arrow-down"></i> {{ph.stateStatus}}
+                                                </span>
+                                                <span [hidden]="ph.stateStatus=='Entered'" class="label label-primary">
+                                                    <i class="fa fa-check"></i> {{ph.stateStatus}}
+                                                </span>
+                                            </td>
+                                            <td>{{ph.remarks}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs"
+                                                    (click)="editPublicHoliday(ph.publicHolidayId)">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #publicHolidayModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle 
+            fa fa-umbrella"></i>
+            | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #publicHolidayForm="ngForm" (submit)="submitPublicHoliday(publicHolidayForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="title" class="coontrol-label">Title
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="title" id="title" class="form-control form-control-sm"
+                                #title="ngModel" [(ngModel)]="publicHoliday.title" required maxlength="200"
+                                minlength="2" />
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="title.invalid && title.touched">
+                                <span *ngIf="title.errors?.required">Title is required</span>
+                                <span *ngIf="title.errors?.minlength">Minlength is 4</span>
+                                <span *ngIf="title.errors?.maxlength">Maxlength is 200</span>
+                            </div>
+                            <span>{{duplicatePublicHoliday}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="titleInBangali" class="coontrol-label">Title In Bangali
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-language" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="titleInBangali" id="titleInBangali"
+                                class="form-control form-control-sm" #titleInBangali="ngModel"
+                                [(ngModel)]="publicHoliday.titleInBengali" maxlength="200" />
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="titleInBangali.invalid && titleInBangali.touched">
+                                <span *ngIf="titleInBangali.errors?.maxlength">Maxlength is 200</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="description" class="coontrol-label">Description
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-info" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="description" id="description" class="form-control form-control-sm"
+                                #description="ngModel" [(ngModel)]="publicHoliday.description" maxlength="200" />
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="description.invalid && description.touched">
+                                <span *ngIf="description.errors?.maxlength">Maxlength is 200</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="monthAndDate" class="coontrol-label">Month & Date
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-prepend">
+                                <select name="month" id="month" class="form-control form-control-sm"
+                                    [(ngModel)]="publicHoliday.month" #month="ngModel"
+                                    [required]="isDepandentOnMoon.value == false"
+                                    [disabled]="publicHoliday.isDepandentOnMoon || (publicHoliday.publicHolidayId > 0 ? publicHoliday.isDepandentOnMoon: false)"
+                                    (change)="[publicHoliday.date=0,getDatesOfMonth(month.value),publicHoliday.isDepandentOnMoon=false]">
+                                    <option [value]="0" selected>--Select Month---</option>
+                                    <option [value]="m.monthNo" *ngFor="let m of months">{{m.month}}</option>
+                                </select>
+                            </div>
+                            <div class="input-group-prepend">
+                                <select name="date" id="date" #date="ngModel" [(ngModel)]="publicHoliday.date"
+                                    class="form-control form-control-sm" [required]="isDepandentOnMoon.value == false"
+                                    (change)="[publicHoliday.date > 0 ? (publicHoliday.isDepandentOnMoon=false):true]"
+                                    [disabled]="publicHoliday.isDepandentOnMoon || (publicHoliday.publicHolidayId > 0 ?publicHoliday.isDepandentOnMoon: false)">
+                                    <option [value]="0" selected>--Select Date--</option>
+                                    <option [value]="day" *ngFor="let day of days">{{day}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-danger">
+                            <span *ngIf="isDepandentOnMoon.value == false && month.touched && month.value == 0">Month is
+                                required </span>
+                            <span *ngIf="isDepandentOnMoon.value == false && date.touched && date.value == 0">Date is
+                                required </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="religionId" class="coontrol-label">Religion</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <select name="religionName" id="religionName" #religionId="ngModel"
+                                [(ngModel)]="publicHoliday.religionName" class="form-control form-control-sm"
+                                [required]="isDepandentOnMoon.value == true">
+                                <option [value]="''" selected>--Select Religion--</option>
+                                <option [value]="item" *ngFor="let item of ddlReligion">{{item}}</option>
+                            </select>
+                        </div>
+                        <div class="text-danger">
+                            <span
+                                *ngIf="isDepandentOnMoon.value == true && religionId.touched && religionId.value == 0">
+                                Religion is required
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="IsDepandentOnMoon" class="coontrol-label hidden">IsDepandentOnMoon</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-moon-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon my-input-group-addon-padding">
+                                    <input type="checkbox" name="isDepandentOnMoon" id="isDepandentOnMoon"
+                                        [disabled]="publicHoliday.publicHolidayId>0 || publicHoliday.month > 0 || publicHoliday.date > 0"
+                                        #isDepandentOnMoon="ngModel" [(ngModel)]="publicHoliday.isDepandentOnMoon"
+                                        (change)="[publicHoliday.month=0,publicHoliday.date=0]">
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm text-small font-bold">
+                                Is Depandent On Moon?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label for="remarks" class="coontrol-label">Remarks
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="remarks" id="remarks" class="form-control form-control-sm"
+                                #remarks="ngModel" [(ngModel)]="publicHoliday.remarks" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="publicHolidayForm.invalid || (isDepandentOnMoon.value == false && month.value== 0) || (isDepandentOnMoon.value == false && date.value== 0) || (isDepandentOnMoon.value == true && religionId.value== 0) || btnPublicHoliday">
+                    <i class="fa fa-paper-plane"></i> | {{this.publicHoliday.publicHolidayId == 0? 'Submit':'Update' }}
+                    <span [hidden]="!btnPublicHoliday" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #yearlyHolidayModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle 
+            fa fa-umbrella"></i>
+            | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #yearlyHolidayForm="ngForm" (submit)="submitYearlyHoliday(yearlyHolidayForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="yearlyHolidayType" class="control-label">Type</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-dot-circle-o"></i>
+                                </span>
+                            </div>
+                            <select name="yearlyHolidayType" #yearlyHolidayType="ngModel" id="yearlyHolidayType"
+                                [(ngModel)]="yearlyHoliday.type" class="form-control form-control-sm" required
+                                (change)="[yearlyHoliday.type == 'Public'? assignYearlyHoliday(): 0]"
+                                [disabled]="yearlyHoliday.yearlyHolidayId > 0">
+                                <option [value]="''" selected>--Select Type--</option>
+                                <option [value]="t" *ngFor="let t of yearlyHolidayTypes">{{t}}</option>
+                            </select>
+                        </div>
+                        <div class="text-danger" *ngIf="yearlyHolidayType.invalid && yearlyHolidayType.touched">
+                            <span *ngIf="yearlyHolidayType.errors?.required">Type is required</span>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12" [hidden]="yearlyHoliday.type !='Public'">
+                        <table class="table table-sm table-striped table-hover table-resposive-lg">
+                            <thead>
+                                <tr>
+                                    <th>#SL</th>
+                                    <th>Title</th>
+                                    <th>Title In Bengali</th>
+                                    <th>Remarks</th>
+                                    <th>Start Date ~ End Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of assignYearlyHolidayList; let i = index">
+                                    <td class="text-center">{{i+1}}</td>
+                                    <td>{{item.title}}
+                                        &nbsp; <span [hidden]="!item.isDepandentOnMoon" class="text-success"
+                                            [title]="'This holiday depends on moon'">
+                                            <i class="fa fa-moon-o"></i>
+                                        </span>
+                                    </td>
+                                    <td>{{item.titleInBengali}}</td>
+                                    <td>
+                                        <input type="text" name="{{'remarks-'+i.toString()}}"
+                                            id="{{'remarks-'+i.toString()}}" #remarks{{i.toString()}}="ngModel"
+                                            [(ngModel)]="assignYearlyHolidayList[i].remarks"
+                                            class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="{{'assignYearlystartAndEndDate'+i.toString()}}"
+                                            id="{{'assignYearlystartAndEndDate'+i.toString()}}"
+                                            #assignYearlystartAndEndDate{{i.toString()}}="ngModel"
+                                            [(ngModel)]="assignYearlyHolidayDate[i]"
+                                            [disabled]="!item.isDepandentOnMoon" [readonly]="item.isDepandentOnMoon"
+                                            class="form-control form-control-sm bg-white"
+                                            [required]="item.isDepandentOnMoon"
+                                            bsDaterangepicker autocomplete="off" [bsConfig]="datePickerConfig">
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        <button type="button" class="btn btn-xs btn-danger"
+                                            (click)="removePublicHolidayItem(i)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [hidden]="yearlyHoliday.type =='Public' || yearlyHoliday.type==''">
+                        <label for="title" class="control-label">Title
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="title" id="title" #holidayTitle="ngModel"
+                                [(ngModel)]="yearlyHoliday.title" class="form-control form-control-sm"
+                                placeholder="Enter Holiday Title Here.."
+                                [minlength]="yearlyHoliday.type =='Official' || yearlyHoliday.type =='Emergency' ? 4 : 0"
+                                maxlength="200" />
+                        </div>
+                        <div class="text-danger" *ngIf="holidayTitle.invalid && holidayTitle.touched">
+                            <span *ngIf="holidayTitle.errors?.required">Title is required</span>
+                            <span *ngIf="holidayTitle.errors?.minlength">Minlength is 4</span>
+                            <span *ngIf="holidayTitle.errors?.maxlength">Maxlength is 200</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [hidden]="yearlyHoliday.type =='Public' || yearlyHoliday.type==''">
+                        <label for="titleInBengali" class="control-label">Title In Bengali
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="titleInBengali" id="titleInBengali" #titleInBengali="ngModel"
+                                [(ngModel)]="yearlyHoliday.titleInBengali" class="form-control form-control-sm"
+                                placeholder="টাইটেল বাংলায় লেখুন.."
+                                [required]="yearlyHoliday.type =='Official' || yearlyHoliday.type =='Emergency'"
+                                [minlength]="yearlyHoliday.type =='Official' || yearlyHoliday.type =='Emergency' ? 4 : 0"
+                                maxlength="200" />
+                        </div>
+                        <div class="text-danger" *ngIf="titleInBengali.invalid && titleInBengali.touched">
+                            <span *ngIf="titleInBengali.errors?.required">Bengali Title is required</span>
+                            <span *ngIf="titleInBengali.errors?.minlength">Minlength is 4</span>
+                            <span *ngIf="titleInBengali.errors?.maxlength">Maxlength is 200</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [hidden]="yearlyHoliday.type =='Public' || yearlyHoliday.type==''">
+                        <label for="startAndEndDate" class="control-label">Start ~ End
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="startAndEndDate" id="startAndEndDate" #startAndEndDate="ngModel"
+                                [(ngModel)]="yearlyHolidayStartAndEndDate" readonly
+                                class="form-control form-control-sm bg-white" bsDaterangepicker autocomplete="off"
+                                [bsConfig]="datePickerConfig">
+                        </div>
+                        <div class="text-danger" *ngIf="startAndEndDate.invalid && startAndEndDate.touched">
+                            <span *ngIf="startAndEndDate.errors?.required">Date is required</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [hidden]="yearlyHoliday.type =='Public' || yearlyHoliday.type==''">
+                        <label for="specifiedFor" class="control-label">Specified For <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-dot-circle-o"></i>
+                                </span>
+                            </div>
+                            <select name="specifiedFor" id="specifiedFor" class="form-control form-control-sm"
+                                #specifiedFor="ngModel" [(ngModel)]="yearlyHoliday.specifiedFor"
+                                [required]="yearlyHoliday.type =='Official' || yearlyHoliday.type =='Emergency'">
+                                <!-- <option [value]="'ALL'">ALL</option> -->
+                                <option [value]="'Company'" selected>Company</option>
+                                <option [value]="'Division'">Division</option>
+                                <option [value]="'Branch'">Branch</option>
+                                <option [value]="'Department'">Department</option>
+                                <option [value]="'Section'">Section</option>
+                                <option [value]="'Unit'">Unit</option>
+                                <option [value]="'Designation'">Designation</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [hidden]="yearlyHoliday.type =='Public' || yearlyHoliday.type==''">
+                        <label for="remarks" class="control-label">Remarks</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" autocomplete="off" name="remarks" id="remarks" #remarks="ngModel"
+                                placeholder="Write your comment here..." [(ngModel)]="yearlyHoliday.remarks"
+                                class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [hidden]="(yearlyHoliday.type =='Public' || yearlyHoliday.type=='')"
+                        *ngIf="specifiedFor.value=='Branch'">
+                        <label for="branches" class="control-label">Branches</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-university"></i>
+                                </span>
+                            </div>
+                            <div style="width: 80%;">
+                                <ng-select2 [(ngModel)]="yearlyHoliday.branchlist" [data]="branchData" name="branches"
+                                    #branches="ngModel" id="branches" [placeholder]="'Select Branches...'"
+                                    [required]="specifiedFor.value=='Branch'" [options]="select2Options"
+                                    (click)="touchedSelect2(branches)"
+                                    (ngModelChange)="yearlyHoliday.branchlist.length  > 0 ? yearlyHoliday.branchNames = yearlyHoliday.branchlist.join(','): 0">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded">
+                    <i class="fa fa-paper-plane"></i> | {{this.yearlyHoliday.yearlyHolidayId == 0? 'Submit':'Update' }}
+                    <span [hidden]="!btnYearlyHoliday" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

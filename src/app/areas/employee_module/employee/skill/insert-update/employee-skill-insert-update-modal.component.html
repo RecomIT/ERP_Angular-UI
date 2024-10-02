@@ -1,0 +1,120 @@
+<ng-template #skillModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-brainstorming pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"
+            [disabled]="btnSubmit"><span aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="skillForm" (ngSubmit)="submitForm()">
+        <div class="modal-body text-x-small font-bold">
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="trainingName" class="control-label">Training Name <span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-certificate"></i>
+                            </span>
+                        </div>
+                        <input id="trainingName" name="trainingName" class="form-control form-control-sm"
+                            formControlName="trainingName">
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="organization" class="control-label">Organization/Institution <span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-university"></i>
+                            </span>
+                        </div>
+                        <input id="organization" name="organization" class="form-control form-control-sm"
+                            formControlName="organization">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="location" class="control-label">Location
+                        <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-map-marker"></i>
+                            </span>
+                        </div>
+                        <input id="location" name="location" class="form-control form-control-sm"
+                            formControlName="location">
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="topicCovers" class="control-label">
+                        Topics Coveres <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-th-list"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="topicCovers" formControlName="topicCovers" id="topicCovers"
+                            class="form-control form-control-sm">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="fromDate" class="control-label">From
+                        Date <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="fromDate" id="fromDate" class="form-control form-control-sm bg-white"
+                            formControlName="fromDate" bsDatepicker [bsConfig]="datePickerConfig">
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="toDate" class="control-label">To Date<span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="toDate" id="toDate" class="form-control form-control-sm bg-white"
+                            bsDatepicker autocomplete="off" formControlName="toDate" readonly
+                            [bsConfig]="datePickerConfig">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="duration" class="control-label font-bold">Duration(Years)</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" name="duration" id="duration"
+                            formControlName="duration" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" [disabled]="btnSubmit">
+                <i class="fa fa-paper-plane"></i> | {{skill.id > 0 ? 'Update': 'Submit'}}
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger" [disabled]="btnSubmit"
+                (click)="closeModal('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>

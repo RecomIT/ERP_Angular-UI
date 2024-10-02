@@ -1,0 +1,194 @@
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+/* ------------------------ */
+.sans-serif-font{
+    font-family: Arial, sans-serif;
+}
+
+
+/* ----------------------------------
+ */
+ 
+.shift-details {
+    font-family: Arial, sans-serif;
+    padding: 5px;
+}
+
+
+
+.in-time, .out-time {
+    margin: 2px 0;
+    color: #686868;
+    font-weight: bold;
+}
+
+
+.current-time {
+   
+    font-weight: bold;
+    text-align: end;
+}
+
+
+
+.current-time-value {
+    margin: 0;
+    color: #0b67f5; 
+    font-size: 1.7rem;
+}
+
+.date{
+    color: #4f6d9b; 
+}
+
+.fa-clock-o {
+    color: #3498db; 
+}
+
+
+
+.button-3d {
+    height: 80px;
+    width: 80px;
+    border-radius: 30%;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff; 
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); 
+    transition: box-shadow 0.3s ease; 
+    position: relative; 
+}
+
+
+
+.button-3d:hover {
+    background-color: rgb(9, 153, 158);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); 
+}
+
+
+.punch-out-bg{
+    background: #ED5565
+
+}
+
+.bg-danger:hover {
+    background-color: rgb(9, 153, 158);
+}
+
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.5; 
+}
+
+.button-3d i {
+    font-size: 24px; 
+    position: absolute;
+    top: 10px; 
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.button-3d .subtitle {
+    font-size: 12px; 
+    position: absolute;
+    bottom: 10px; 
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.location{
+    min-height: 60px;
+}
+
+/* ---------------------------------------------------
+--------------------------- */
+.toggle-icon{
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+
+.toggle-icon:hover .fa {
+    color: blue; 
+}
+
+
+.flip-animation {
+    animation: flip 0.5s;
+}
+
+@keyframes flip {
+    from {
+        transform: perspective(400px) rotateY(0);
+    }
+    50% {
+        transform: perspective(400px) rotateY(180deg);
+    }
+    to {
+        transform: perspective(400px) rotateY(0);
+    }
+}
+
+
+.flipped {
+    transform: rotate(180deg);
+    transition: transform 0.5s ease; /* Add transition for smooth rotation */
+}
+
+.unflipped {
+    transform: rotate(0deg); 
+    transition: transform 0.5s ease; 
+  }
+
+  
+
+.attendance-container {
+    height: 250px;
+    max-height: 250px; 
+}
+
+
+@media screen and (max-width: 768px) {
+    .attendance-container {
+        height: 350px;
+        max-height: 350px;
+        overflow: auto;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .attendance-container {
+        height: 266px;
+        max-height: 266px;
+    }
+}
+
+
+
+
+.tooltip-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.tooltip-icon i {
+   
+    font-size: 1.5rem; 
+    color: #007bff; 
+}
+
+.tooltip-icon:hover i {
+    color: #ff4500;
+}

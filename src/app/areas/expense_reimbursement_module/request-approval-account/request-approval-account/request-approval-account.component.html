@@ -1,0 +1,84 @@
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-1"><i class="fa fa-diamond"></i> | Expense Request Approval</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Expense & Reimbursement</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Expense Request Approval</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight pt-2">
+  <h3 class="dashboard-heading">Advance Payment Request</h3>
+  <div class="row mt-2">
+    <div Id="AdvanceDashboard" class="col-md-4" *ngFor="let item of dashboardDataAdvance">      
+      <div class="row" id="additional-values">
+        <div class="col-md-12 m-auto p-1 dashboard-card">
+          <!-- item?.value !== 0 &&  -->
+          <div class="dashboard-item p-3" (click)="onDashboardItemClick(item?.title,'AdvanceDashboard')">
+            <div class="icon-container text-center mb-3">
+              <i class="fa" [ngClass]="item.icon"></i>
+            </div>
+            <div class="text-container text-center">
+              <h5 class="title m-0 text-uppercase text-muted">
+                ❝ {{ item?.title }} ❞
+              </h5>
+              <div class="value-container d-flex justify-content-center align-items-center">
+                <i class="fa fa-bell notification-icon mr-2 ring-animation"></i> 
+                <h2 class="value m-0 font-weight-bold">{{ item?.value }}</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+</div>
+
+ <hr color="#007bff" size="15px"/>
+
+ <div class="wrapper wrapper-content animated fadeInRight pt-2">
+  <h3 class="dashboard-heading">Reimbursement Request</h3>
+  <div class="row mt-2">
+    <div id="ReimbursementDashboard" class="col-md-4" *ngFor="let item of dashboardDataReimbursement">      
+      <div class="row" id="additional-values">
+        <div class="col-md-12 m-auto p-1 dashboard-card">
+          <!-- item?.value !== 0 &&  -->
+          <div class="dashboard-item p-3" (click)="onDashboardItemClick(item?.title,'ReimbursementDashboard')">
+            <div class="icon-container text-center mb-3">
+              <i class="fa" [ngClass]="item.icon"></i>
+            </div>
+            <div class="text-container text-center">
+              <h5 class="title m-0 text-uppercase text-muted">
+                ❝ {{ item?.title }} ❞
+              </h5>
+              <div class="value-container d-flex justify-content-center align-items-center">
+                <i class="fa fa-bell notification-icon mr-2 ring-animation"></i> 
+                <h2 class="value m-0 font-weight-bold">{{ item?.value }}</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+ </div>
+
+ <div class="wrapper wrapper-content animated fadeInRight pt-3">
+ </div>
+
+<ng-container *ngIf="showingModal">
+  <expense-reimbursement-module-request-approval-account-modal [transactionType]="transactionType" [dashboardId]="dashboardId"
+    (closeModalEvent)="closeModal($event)" (openDetailsModalEvent)="handleOpenDetailsModal($event)">
+  </expense-reimbursement-module-request-approval-account-modal>
+</ng-container>
+
+<ng-container *ngIf="showingDetailsModal">
+  <expense-reimbursement-module-request-approval-account-details-modal [transactionType]="transactionType" 
+    [requestId]="requestId" [employeeId]="employeeId" [stateStatus]="stateStatus" [spendMode]="spendMode" (closeModalEvent)="closeRequestDetailsModal($event)">
+  </expense-reimbursement-module-request-approval-account-details-modal>
+</ng-container>

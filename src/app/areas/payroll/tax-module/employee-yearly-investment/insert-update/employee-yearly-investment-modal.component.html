@@ -1,0 +1,74 @@
+<ng-template #yearinvestmentmodal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-secondary btn-circle" aria-hidden="true">&#2547;</i>| {{ modalTitle }}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="saveForm" (submit)="submit()">
+        <div class="modal-body text-dark">
+            <div class="form-row text-x-small">
+                <div class="form-group col-12 col-md-12 col-sm-12">
+                    <label for="employeeId" class="control-label font-bold">Employee<span
+                            class="text-danger"> * </span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user-circle-o"></i>
+                            </span>
+                        </div>
+                        <div style="width: 90%" *ngIf="id == 0">
+                            <ng-select2 [data]="ddlEmployees" name="employees" id="employeeId"
+                                formControlName="employeeId" [placeholder]="'Select Employee...'"
+                                [options]="select2Config" [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                        <ng-container *ngIf="id > 0">
+                            <input type="text" id="employeeName" name="employeeName"
+                                class="form-control form-control-sm" [disabled]="true" [value]="employeeName"/>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row text-x-small">
+                <div class="form-group col-12 col-md-12 col-sm-12">
+                    <label for="fiscalYearId" class="control-label font-bold">Fiscal Year</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm">{{fiscal_year_range}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row text-x-small">
+                <div class="form-group col-12 col-md-12 col-sm-12">
+                    <label for="investmentAmount" class="control-label font-bold">Investment Amount<span
+                            class="text-danger"> * </span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <span>&#2547;</span>
+                            </span>
+                        </div>
+                        <input type="number" class="form-control form-control-sm" formControlName="investmentAmount"
+                            name="investmentAmount" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-x-small">
+            <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="saveForm.invalid || btnSave">
+                <span [hidden]="!btnSave" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+                <i class="fa fa-paper-plane"></i> | Submit
+            </button>
+            <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </form>
+</ng-template>

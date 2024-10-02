@@ -1,0 +1,194 @@
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-1"><i class="icofont-users-alt-1"></i>| Discontinued Employees</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Discontinued Employees</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-4 col-sm-6 text-x-small">
+        <div class="title-action pt-3">
+            <button (click)="showModal(0)" class="btn btn-sm btn-outline-info btn-rounded pull-right"
+                tooltip="Discontinued An Employee">
+                <i class="fa fa-plus"></i> | Add Employee
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight p-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content pt-2 pb-2 text-x-small text-dark border-radius-5 shadow-sm">
+                    <form [formGroup]="searchForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label for="searchByEmployee" class="control-label font-bold">Search By Employee</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="icofont-users"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width: 80%;">
+                                        <ng-select2 [data]="ddlEmployees" name="searchByEmployee" id="searchByEmployee"
+                                            [placeholder]="'Select Employee...'" [allowClear]="true"
+                                            [options]="select2Config" formControlName="employeeId">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label for="searchByStatus" class="control-label font-bold">Search By Status</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-flag"></i>
+                                        </span>
+                                    </div>
+                                    <select id="searchByStatus" name="searchByStatus" formControlName="stateStatus"
+                                        class="form-control form-control-sm">
+                                        <option [value]="''" selected>--Select Status--</option>
+                                        <option [value]="item" *ngFor="let item of ddstatus">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label for="searchByStatus" class="control-label font-bold">Search By Release type</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-flag"></i>
+                                        </span>
+                                    </div>
+                                    <select id="searchByReleaseType" name="searchByReleaseType" formControlName="releasetype"
+                                        class="form-control form-control-sm">
+                                        <option [value]="''" selected>--Select Type--</option>
+                                        <option [value]="'Voluntary'">Voluntary</option>
+                                        <option [value]="'Nonvoluntary'">Nonvoluntary</option>
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12 hide">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-content pt-2 pb-2 text-x-small text-dark border-radius-5 shadow-sm">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover table-striped table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th class="text-center">Employee ID</th>
+                                    <th>Employee</th>
+                                    <th>Last Working Date</th>
+                                    <th class="text-center">Prorated Festival Bonus Tax</th>
+                                    <th class="text-center">Prorated Projection Tax</th>
+                                    <th class="text-center">Release Type</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Submit Date</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list; let i =index">
+                                    <td class="text-center font-bold">{{i+1 + (pageSize*(pageNo-1))}}</td>
+                                    <td class="text-center font-bold">{{item.employeeCode}}</td>
+                                    <td>{{item.employeeName}}</td>
+                                    <td>{{item.lastWorkingDate | date:"dd MMM yyyy"}}</td>
+                                    <td class="text-center">
+                                        <span class="label label-info"
+                                            *ngIf="item.calculateFestivalBonusTaxProratedBasis == true">Yes</span>
+                                        <span class="label label-danger"
+                                            *ngIf="item.calculateFestivalBonusTaxProratedBasis == false">No</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="label label-info"
+                                            *ngIf="item.calculateProjectionTaxProratedBasis == true">Yes</span>
+                                        <span class="label label-danger"
+                                            *ngIf="item.calculateProjectionTaxProratedBasis == false">No</span>
+                                    </td>
+                                    <td class="text-center">{{item?.releasetype}}</td>
+                                    <td class="text-center">
+                                        <span class="label label-warning"
+                                            *ngIf="item.stateStatus=='Pending'">{{item.stateStatus + '...'}}</span>
+                                        <span class="label label-primary" *ngIf="item.stateStatus=='Approved'"> <i
+                                                class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-danger" *ngIf="item.stateStatus=='Cancelled'"><i
+                                                class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                    </td>
+                                    <td class="text-center">{{item.createdDate | date:"dd MMM yyyy"}}</td>
+                                    <td class="text-center">
+                                        <button type="submit" class="btn btn-xs"
+                                            (click)="showModal(item.discontinuedId)" *ngIf="item.stateStatus == 'Pending'">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button type="submit" class="btn btn-xs text-info"
+                                            (click)="showApprovalModal(item.discontinuedId)" *ngIf="item.stateStatus == 'Pending'">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                        <button type="submit" class="btn btn-xs text-info"
+                                            (click)="showUndoModal(item)" *ngIf="item.stateStatus == 'Approved'">
+                                            <i class="fa fa-undo"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf=" list.length ==0 && list_loading_label == null">
+                                    <td colspan="15" class="text-center">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </td>
+                                </tr>
+                                <tr *ngIf=" list.length ==0 && list_loading_label != null">
+                                    <td colspan="15" class="text-center font-bold">
+                                        {{list_loading_label}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <pagination-controls (pageChange)="list_pageChanged($event)" [responsive]="true"
+                            [autoHide]="true" id="data_list"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="isShowingInsertUpdateModal == true">
+    <employee-module-discontinued-employee-insert-update-modal [id]="this.itemId" (closeModalEvent)="closeModal($event)">
+    </employee-module-discontinued-employee-insert-update-modal>
+</ng-container>
+
+<ng-container *ngIf="isShowingApprovalModal == true">
+    <employee-module-approval-discontinued-employee-modal [id]="this.itemId"
+        (closeModalEvent)="closeApprovalModal($event)">
+    </employee-module-approval-discontinued-employee-modal>
+</ng-container>
+
+
+<ng-container *ngIf="isShowingUndoModal == true">
+    <employee-module-undo-discontinued-employee [item]="this.item"
+        (closeModalEvent)="closeUndoModal($event)">
+    </employee-module-undo-discontinued-employee>
+</ng-container>

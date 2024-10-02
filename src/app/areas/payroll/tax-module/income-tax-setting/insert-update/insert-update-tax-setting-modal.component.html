@@ -1,0 +1,499 @@
+<ng-template #modal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle icofont-settings" aria-hidden="true"></i>|
+            {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="incomeTaxSettingForm" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <input type="hidden" formControlName="incomeTaxSettingId">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox mb-0">
+                            <div class="ibox-title">
+                                <h5><i class="fa fa-wrench" aria-hidden="true"></i> | Basic Tax Setting</h5>
+                            </div>
+                            <div class="ibox-content shadow-sm text-x-small">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <label for="fiscalYearId" class="control-label font-bold mb-0">
+                                            Fiscal Year <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="fiscalYearId" id="fiscalYearId"
+                                                class="form-control form-control-sm" formControlName="fiscalYearId">
+                                                <option [value]="0">---Select One---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlFiscalYear">
+                                                    {{item.text}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <label for="impliedCondition" class="control-label font-bold  mb-0">
+                                            Implied Condition <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-th-list" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <select name="impliedCondition" id="impliedCondition"
+                                                class="form-control form-control-sm" formControlName="impliedCondition">
+                                                <option [value]="''">---Select One---</option>
+                                                <option [value]="item" *ngFor="let item of ddlImpliedCondition">{{item}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label for="monthlyTaxDeductionPercentage" class="control-label font-bold mb-0">
+                                            Monthly Tax Deduction %
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-percent" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="monthlyTaxDeductionPercentage"
+                                                id="monthlyTaxDeductionPercentage" name="monthlyTaxDeductionPercentage"
+                                                autocomplete="off" class="form-control form-control-sm"
+                                                formControlName="monthlyTaxDeductionPercentage" placeholder="Enter here"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label for="minTaxAmount" class="control-label font-bold  mb-0">
+                                            Min Tax Amt
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="icofont icofont-money-bag" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="minTaxAmount" id="minTaxAmount" name="minTaxAmount"
+                                                autocomplete="off" class="form-control form-control-sm"
+                                                formControlName="minTaxAmount" placeholder="Enter Min Tax Amt"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label for="maxTaxAge" class="control-label font-bold  mb-0">
+                                            Max tax age
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" id="maxTaxAge" name="maxTaxAge" autocomplete="off"
+                                                class="form-control form-control-sm" formControlName="maxTaxAge"
+                                                placeholder="Enter max tax age" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label for="exemptionAmountOfAnnualIncome" class="control-label font-bold mb-0">
+                                            Annual Income Exemp Amt.
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="icofont icofont-money-bag" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="exemptionAmountOfAnnualIncome"
+                                                id="exemptionAmountOfAnnualIncome" name="exemptionAmountOfAnnualIncome"
+                                                autocomplete="off" class="form-control form-control-sm"
+                                                formControlName="exemptionAmountOfAnnualIncome"
+                                                placeholder="Enter annual Inc Exem. Amt" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label for="exemptionPercentageOfAnnualIncome"
+                                            class="control-label font-bold mb-0">
+                                            Annual Income Exemp Per.
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-percent" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="exemptionPercentageOfAnnualIncome"
+                                                id="exemptionPercentageOfAnnualIncome"
+                                                name="exemptionPercentageOfAnnualIncome" autocomplete="off"
+                                                class="form-control form-control-sm"
+                                                formControlName="exemptionPercentageOfAnnualIncome"
+                                                placeholder="Enter Annual Income Exemp Per." autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label for="freeCarCCMinimumLimit" class="control-label font-bold mb-0">
+                                            Free Car CC Limit
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-car" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="freeCarCCMinimumLimit" id="freeCarCCMinimumLimit"
+                                                name="freeCarCCMinimumLimit" autocomplete="off"
+                                                class="form-control form-control-sm"
+                                                formControlName="freeCarCCMinimumLimit" placeholder="Enter here"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label for="freeCarMinTaxableAmount" class="control-label font-bold mb-0">
+                                            Free Car Min Tax
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="freeCarMinTaxableAmount" id="freeCarMinTaxableAmount"
+                                                name="freeCarMinTaxableAmount" autocomplete="off"
+                                                class="form-control form-control-sm"
+                                                formControlName="freeCarMinTaxableAmount" placeholder="Enter here"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label for="freeCarMaxTaxableAmount" class="control-label font-bold mb-0">
+                                            Free Car Max Tax
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <input type="freeCarMaxTaxableAmount" id="freeCarMaxTaxableAmount"
+                                                name="freeCarMaxTaxableAmount" autocomplete="off"
+                                                class="form-control form-control-sm"
+                                                formControlName="freeCarMaxTaxableAmount" placeholder="Enter here."
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label for="isFlatRebate" class="control-label font-bold mb-0 hidden">
+                                            Is Flat Rebate?
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="form-control form-control-sm">
+                                                <input type="checkbox" formControlName="isFlatRebate"> <span
+                                                    class="font-bold"> Is Flat Rebate?
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label class="control-label font-bold">Calculate Arrear Onceoff</label>
+                                        <div>
+                                            <div class="form-check abc-radio abc-radio-info form-check-inline">
+                                                <input class="form-check-input" type="radio"
+                                                    id="calculateTaxOnArrearAmount1" [value]="true"
+                                                    name="calculateTaxOnArrearAmount"
+                                                    formControlName="calculateTaxOnArrearAmount">
+                                                <label class="form-check-label" for="calculateTaxOnArrearAmount1"> Yes
+                                                </label>
+                                            </div>
+                                            <div class="form-check abc-radio abc-radio-danger form-check-inline">
+                                                <input class="form-check-input" type="radio"
+                                                    id="calculateTaxOnArrearAmount2" [value]="false"
+                                                    name="calculateTaxOnArrearAmount"
+                                                    formControlName="calculateTaxOnArrearAmount">
+                                                <label class="form-check-label" for="calculateTaxOnArrearAmount2"> No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2 col-sm-12">
+                                        <label class="control-label font-bold">PF Both Part Exemption</label>
+                                        <div>
+                                            <div class="form-check abc-radio abc-radio-info form-check-inline">
+                                                <input class="form-check-input" type="radio"
+                                                    id="pfBothPartExemption1" [value]="true"
+                                                    name="pfBothPartExemption"
+                                                    formControlName="pfBothPartExemption">
+                                                <label class="form-check-label" for="pfBothPartExemption1"> Yes
+                                                </label>
+                                            </div>
+                                            <div class="form-check abc-radio abc-radio-danger form-check-inline">
+                                                <input class="form-check-input" type="radio"
+                                                    id="pfBothPartExemption2" [value]="false"
+                                                    name="pfBothPartExemption"
+                                                    formControlName="pfBothPartExemption">
+                                                <label class="form-check-label" for="pfBothPartExemption2"> No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-2">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5><i class="fa fa-database"></i> | Exemption Slab</h5>
+                                    </div>
+                                    <div class="ibox-content text-x-small shadow-sm">
+                                        <div formArrayName="taxExemptionSettings"
+                                            *ngFor="let examptionSlab of examptionSlabsFormArray; let i = index">
+                                            <div class="form-row" [formGroupName]="i">
+                                                <div class="form-group col-md-2 col-sm-12">
+                                                    <label for="" class="control-label font-bold hide">Allowance</label>
+                                                    <div class="input-group">
+                                                        <select name="allowanceName" id="allowanceName"
+                                                            class="form-control form-control-sm"
+                                                            formControlName="allowanceName">
+                                                            <option [value]="''">--Select Allowance--</option>
+                                                            <option [value]="'HR'">HOUSE RENT</option>
+                                                            <option [value]="'MEDICAL'">MEDICAL</option>
+                                                            <option [value]="'CONVEYANCE'">CONVEYANCE</option>
+                                                            <option [value]="'LFA'">LFA</option>
+                                                            <option [value]="'WPPF'">WPPF</option>
+                                                            <option [value]="'CAR'">CAR</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2 col-sm-12">
+                                                    <label for="" class="control-label font-bold hide">Max Exemp
+                                                        %</label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control form-control-sm"
+                                                            id="maxExemptionPercentage" name="maxExemptionPercentage"
+                                                            formControlName="maxExemptionPercentage"
+                                                            placeholder="MAX EXEM. %" autocomplete="off">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2 col-sm-12">
+                                                    <label for="" class="control-label font-bold hide">Base
+                                                        Allowance</label>
+                                                    <div class="input-group">
+                                                        <select name="baseallowance" id="baseAllowance"
+                                                            formControlName="baseAllowance"
+                                                            class="form-control form-control-sm">
+                                                            <option [value]="''">--Base Allowance--</option>
+                                                            <option [value]="'Annual Basic'">Annual Basic</option>
+                                                            <option [value]="'Self'">Self</option>
+                                                            <option [value]="''">N/A</option>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group col-md-3 col-sm-12">
+                                                    <label for="" class="control-label font-bold hide">Max Exemp
+                                                        Amt.</label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control form-control-sm"
+                                                            id="maxExemptionAmount" name="maxExemptionAmount"
+                                                            formControlName="maxExemptionAmount" autocomplete="off"
+                                                            placeholder="MAX EXEM. AMT">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-3 col-sm-12">
+                                                    <label for="" class="control-label font-bold hide">Exemp
+                                                        Remarks</label>
+                                                    <div class="input-group">
+                                                        <select name="exemptionRemarks" id="exemptionRemarks"
+                                                            class="form-control form-control-sm"
+                                                            formControlName="exemptionRemarks">
+                                                            <option [value]="''">--Select Remarks--</option>
+                                                            <option [value]="'Which is Lower'">Which is Lower
+                                                            </option>
+                                                            <option [value]="'Upto Amount'">Upto Amount</option>
+                                                            <option [value]="'Upto Percentage'">Upto %</option>
+                                                        </select>
+                                                        <div class="input-group-prepend cursor-pointer"
+                                                            (click)="addNewSlab('exemption')">
+                                                            <span class="input-group-addon text-primary">
+                                                                <i class="fa fa-plus"></i></span>
+                                                        </div>
+                                                        <div class="input-group-prepend cursor-pointer"
+                                                            (click)="removeExemptionSlab(i)">
+                                                            <span class="input-group-addon text-danger">
+                                                                <i class="fa fa-trash"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5><i class="fa fa-database"></i> | Investment Slab</h5>
+                                    </div>
+                                    <div class="ibox-content text-x-small shadow-sm">
+                                        <div formArrayName="taxInvestmentSettings"
+                                            *ngFor="let investmentSlab of investmentSlabFormArray; let i = index">
+                                            <div class="form-row" [formGroupName]="i">
+                                                <div class="form-group col-md-2 col-sm-12">
+                                                    <label for="" class="control-label font-bold">Implied
+                                                        Condition</label>
+                                                    <div class="input-group">
+                                                        <select name="invImpliedCondition" id="invImpliedCondition"
+                                                            class="form-control form-control-sm"
+                                                            formControlName="investmentImpliedCondition">
+                                                            <option [value]="item"
+                                                                *ngFor="let item of ddlImpliedCondition">
+                                                                {{item}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2 col-sm-12">
+                                                    <label for="" class="control-label font-bold">% Of Annual
+                                                        Income</label>
+                                                    <div class="input-group">
+                                                        <input type="number" name="maxinvper" id="maxinvper"
+                                                            class="form-control form-control-sm" placeholder="Max Inv %"
+                                                            autocomplete="off"
+                                                            formControlName="maxInvestmentPercentage">
+                                                        <span class="ml-1 font-bold">
+                                                            <span class="label label-info">=</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2 col-sm-12">
+                                                    <label for="" class="control-label font-bold">Invs.
+                                                        Amt.</label>
+                                                    <div class="input-group">
+                                                        <input type="number" name="rebateAmount" id="rebateAmount"
+                                                            class="form-control form-control-sm" autocomplete="off"
+                                                            formControlName="rebateAmount" placeholder="Rebate Amt">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2 col-sm-12">
+                                                    <label for="" class="control-label font-bold">Operator</label>
+                                                    <div class="input-group">
+                                                        <select name="operator" id="operator" formControlName="operator"
+                                                            class="form-control form-control-sm">
+                                                            <option [value]="item" *ngFor="let item of ddlOperators">
+                                                                {{item}}</option>
+                                                        </select>
+                                                        <span class="ml-1 font-bold">
+                                                            <span class="label label-info">THEN</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2 col-sm-12">
+                                                    <label for="" class="control-label font-bold">% Of Inv
+                                                        Amt.</label>
+                                                    <div class="input-group">
+                                                        <input type="number" name="minRebate" id="minRebate"
+                                                            class="form-control form-control-sm" autocomplete="off"
+                                                            placeholder="Min Rebate%" formControlName="minRebate">
+                                                        <span class="ml-1 font-bold">
+                                                            <span class="label label-warning">Else</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2 col-sm-12">
+                                                    <label for="" class="control-label font-bold">% Of Inv
+                                                        Amt.</label>
+                                                    <div class="input-group">
+                                                        <input type="number" name="maxRebate" id="maxRebate"
+                                                            class="form-control form-control-sm" autocomplete="off"
+                                                            placeholder="Max Rebate%" formControlName="maxRebate">
+                                                        <div class="input-group-prepend cursor-pointer hide"
+                                                            (click)="addNewSlab('investment')">
+                                                            <span class="input-group-addon text-primary">
+                                                                <i class="fa fa-plus"></i></span>
+                                                        </div>
+                                                        <div class="input-group-prepend cursor-pointer hide">
+                                                            <span class="input-group-addon text-danger">
+                                                                <i class="fa fa-trash"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div formArrayName="taxInvestmentFlatSettings"
+                                            *ngFor="let investmentFlatSlab of investmentSlabFlatFormArray; let i = index">
+                                            <div class="form-row" [formGroupName]="i">
+                                                <div class="form-group col-md-3 col-sm-12">
+                                                    <label for="" class="control-label font-bold">Implied
+                                                        Condition</label>
+                                                    <div class="input-group">
+                                                        <select name="investmentImpliedCondition"
+                                                            id="investmentImpliedCondition"
+                                                            class="form-control form-control-sm"
+                                                            formControlName="investmentImpliedCondition">
+                                                            <option [value]="item"
+                                                                *ngFor="let item of ddlImpliedCondition">
+                                                                {{item}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-3 col-sm-12">
+                                                    <label for="" class="control-label font-bold">Inv. % Of Annual
+                                                        Income</label>
+                                                    <div class="input-group">
+                                                        <input type="number" name="maxinvper" id="maxinvper"
+                                                            class="form-control form-control-sm" placeholder="Max Inv %"
+                                                            autocomplete="off"
+                                                            formControlName="maxInvestmentPercentage">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-3 col-sm-12">
+                                                    <label for="" class="control-label font-bold">Flat Rebate %</label>
+                                                    <div class="input-group">
+                                                        <input type="number" name="rebate" id="rebate"
+                                                            class="form-control form-control-sm" autocomplete="off"
+                                                            formControlName="minRebate" placeholder="Rebate %">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-3 col-sm-12">
+                                                    <label for="" class="control-label font-bold">Max Rebate Amt</label>
+                                                    <div class="input-group">
+                                                        <input type="number" name="rebate" id="rebateAmount"
+                                                            class="form-control form-control-sm" autocomplete="off"
+                                                            formControlName="rebateAmount" placeholder="Max Rebate Amt">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="clearfix text-x-small">
+                    <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="closeModal('Close Click')">
+                        <i class="fa fa-times"></i> | Cancel
+                    </button> &nbsp;
+                    <button type="submit" class="btn btn-sm btn-primary btn-rounded">
+                        <i class="fa fa-paper-plane"></i> | Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

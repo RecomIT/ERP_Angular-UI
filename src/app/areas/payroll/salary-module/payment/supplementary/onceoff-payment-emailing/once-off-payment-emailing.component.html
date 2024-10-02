@@ -1,0 +1,106 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-envelope" aria-hidden="true"></i>| Emailing
+            Payslip/TaxCard
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="emailingForm" (ngSubmit)="submit()">
+            <div class="modal-body text-x-small">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label class="control-label font-bold">
+                            Allowance
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-file-archive-o"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm">
+                                {{emailingForm.get('allowanceName').value}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label class="control-label font-bold">
+                            Month & Year
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-file-archive-o"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm">
+                                {{month +"-"+this.paymentYear}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="reportFileName" class="control-label font-bold">
+                            File Name
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-file-archive-o"></i>
+                                </span>
+                            </div>
+                            <select name="reportFileName" id="reportFileName" formControlName="reportFileName"
+                                class="form-control form-control-sm">
+                                <option [value]="'Payslip'" selected>Payslip</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="fileFormat" class="control-label font-bold">
+                            File Format
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-file-archive-o"></i>
+                                </span>
+                            </div>
+                            <select name="fileFormat" id="fileFormat" formControlName="fileFormat"
+                                class="form-control form-control-sm">
+                                <option [value]="'PDF'" selected>PDF</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="fileFormat" class="control-label font-bold">
+                            File should be encrypted?
+                        </label>
+                        <div class="input-group">
+                            <input type="radio" name="withPasswordProtected" id="withPasswordProtectedYes"
+                                formControlName="withPasswordProtected" [value]="true"> Yes &nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="withPasswordProtected" id="withPasswordProtectedNo"
+                                formControlName="withPasswordProtected" [value]="false"> No
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary"
+                    [disabled]="emailingForm.invalid || btnSubmit">
+                    <i class="fa fa-paper-plane"></i> | <span [hidden]="!btnSubmit"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Send Email
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

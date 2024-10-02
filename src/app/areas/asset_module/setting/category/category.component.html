@@ -1,0 +1,245 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2"> <i class="fa fa-bars"></i> | Category & Detail</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Asset</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Setting</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Category & Detail</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#category" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-list" aria-hidden="true"></i> | Category
+                        </a></li>
+                    <li><a href="#subCategory" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-th-list" aria-hidden="true"></i> | Sub Category
+                        </a></li>
+                    <li><a href="#brand" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-gg" aria-hidden="true"></i> | Brand
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="category" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="categoryFilter"
+                                            onkeyup="tableFilter('#tblCategory tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i
+                                                    class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="showCategoryModal(0)">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                    id="tblCategory">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Category</th>
+                                            <th>Category In Bengali</th>
+                                            <th class="text-center">Status</th>
+                                            <th>Remarks</th>                                            
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of categoryList; let i = index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{item.categoryName}}</td>
+                                            <td>{{item.categoryInBengali}}</td>                                            
+                                            <td class="text-center">
+                                                <span class="label label-danger" *ngIf="item.categoryIsActive == false">Inactive</span>
+                                                <span class="label label-info" *ngIf="item.categoryIsActive==true">Active</span>
+                                            </td>
+                                            <td>{{item.categoryRemarks}}</td>                                            
+                                            
+                                            <td class="text-center">
+                                                <button type="button" (click)="showCategoryModal(item.categoryId)"
+                                                    class="btn btn-xs">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf=" categoryList.length == 0 && list_loading_label == null">
+                                            <td colspan="15" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="categoryList.length == 0 && list_loading_label == ''">
+                                            <td colspan="15" class="text-center font-bold">
+                                                {{list_loading_label}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="subCategory" class="tab-pane">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="subCategoryFilter"
+                                            onkeyup="tableFilter('#tblSubCategory tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i
+                                                    class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="showSubCategoryModal(0)">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                    id="tblSubCategory">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Category</th>
+                                            <th>Sub Category</th>
+                                            <th>Sub Category In Bengali</th>                                            
+                                            <th class="text-center">Status</th>
+                                            <th>Remarks</th>                                            
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of subCategoryList; let i =index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{item.categoryName}}</td>
+                                            <td>{{item.subCategoryName}}</td>
+                                            <td>{{item.subCategoryInBengali}}</td>                                          
+                                            <td class="text-center">
+                                                <span class="label label-danger" *ngIf="item.subCategoryIsActive == false">Inactive</span>
+                                                <span class="label label-info" *ngIf="item.subCategoryIsActive==true">Active</span>
+                                            </td>
+                                            <td>{{item.subCategoryRemarks}}</td>                                                                                   
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs"
+                                                    (click)="showSubCategoryModal(item.subCategoryId)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="brand" class="tab-pane">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold" placeholder="Search By Anything" id="brandFilter"
+                                            onkeyup="tableFilter('#tblBrand tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="showBrandModal(0)">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                    id="tblBrand">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Sub Category</th>
+                                            <th>Brand</th>
+                                            <th>Brand In Bengali</th>                                            
+                                            <th class="text-center">Status</th>
+                                            <th>Remarks</th>                                            
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of brandList; let i =index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{item.subCategoryName}}</td>
+                                            <td>{{item.brandName}}</td>
+                                            <td>{{item.brandInBengali}}</td>                                          
+                                            <td class="text-center">
+                                                <span class="label label-danger" *ngIf="item.brandIsActive == false">Inactive</span>
+                                                <span class="label label-info" *ngIf="item.brandIsActive==true">Active</span>
+                                            </td>
+                                            <td>{{item.brandRemarks}}</td>                                                                                   
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs"
+                                                    (click)="showBrandModal(item.brandId)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-container *ngIf="showingCategoryModal == true">
+    <asset-module-category-modal [id]="itemId" (closeModalEvent)="closeCategoryModal($event)">
+    </asset-module-category-modal >
+</ng-container>
+
+<ng-container *ngIf="showingSubCategoryModal == true">
+    <asset-module-sub-category-modal [id]="itemId" (closeModalEvent)="closeSubModal($event)">
+    </asset-module-sub-category-modal >
+</ng-container>
+
+
+<ng-container *ngIf="showingBrandModal == true">
+    <asset-module-brand-modal [id]="itemId" (closeModalEvent)="closeBrandModal($event)">
+    </asset-module-brand-modal >
+</ng-container>

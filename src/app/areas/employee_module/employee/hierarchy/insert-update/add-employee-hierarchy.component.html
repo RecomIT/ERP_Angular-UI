@@ -1,0 +1,174 @@
+<ng-template #employeeHierarchyModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-users-alt-4 pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <form [formGroup]="employeeHierarchyForm" (ngSubmit)="submitEmployeeHierarchy()" >
+        <div class="modal-body text-x-small text-dark">
+            
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Employee ID<span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-list-ul"></i>
+                            </span>
+                        </div>
+                        <div class="d-inline" style="width: 90%;">
+                            <ng-select2 [data]="ddlSearchByEmployee" name="employeesSearchRef" formControlName="employeeId"
+                                id="employeesSearchRef" [placeholder]="'Search Employee...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="activationDate" class="control-label font-bold">
+                        Effective Date <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-ui-calendar"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="activationDate" id="activationDate" readonly [disabled]="true"
+                            [bsConfig]="datePickerConfig" class="form-control form-control-sm bg-white"
+                            formControlName="activationDate" bsDatepicker autocomplete="off">
+
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                            <input type="checkbox" name="isActive" id="isActive" formControlName="isActive">
+                            </span>
+                        </div>
+                    </div>
+                 
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Supervisor <span class="text-danger">*</span> </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-cc"></i>
+                            </span>
+                        </div>
+                        <div class="d-inline" style="width: 90%;">
+                            <ng-select2 [data]="ddlSearchByEmployee" name="supervisorId" formControlName="supervisorId"
+                                id="supervisorId" [placeholder]="'Search Supervisor...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Line Manager</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-cc"></i>
+                            </span>
+                        </div>
+                        <div class="d-inline" style="width: 90%;">
+                            <ng-select2 [data]="ddlSearchByEmployee" name="lineManagerId" formControlName="lineManagerId"
+                                id="lineManagerId" [placeholder]="'Search Line Manager...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Manager</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-cc"></i>
+                            </span>
+                        </div>
+                        <div class="d-inline" style="width: 90%;">
+                            <ng-select2 [data]="ddlSearchByEmployee" name="managerId" formControlName="managerId"
+                                id="managerId" [placeholder]="'Search Manager...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Head Of Department <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-briefcase"></i>
+                            </span>
+                        </div>
+                        <div class="d-inline" style="width: 90%;">
+                            <ng-select2 [data]="ddlSearchByEmployee" name="headOfDepartmentId" formControlName="headOfDepartmentId"
+                                id="headOfDepartmentId" [placeholder]="'Search Head Of Department...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-6 hide">
+                    <label for="" class="control-label font-bold">HR Authority</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-briefcase"></i>
+                            </span>
+                        </div>
+                        <div class="d-inline" style="width: 90%;">
+                            <ng-select2 [data]="ddlSearchByEmployee" name="hrAuthorityId" formControlName="hrAuthorityId"
+                                id="hrAuthorityId" [placeholder]="'Search HR Authority...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+            <div class="blink">{{objErrorMsg?.exist}}</div>
+
+        </div>
+
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary">
+                <i class="fa fa-paper-plane"></i> | {{this.id > 0 ? 'Update': 'Submit'}} <span 
+                role="status" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger" (click)="closeModal('Cancel click')"><i
+                    class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>
+
+<style>
+
+    .blink {
+                animation: blinker 2.5s linear infinite;
+                color: red;
+                font-family: sans-serif;     
+                /* font-size: 30px; */
+                font-weight: bold;
+            }
+            @keyframes blinker {
+                50% {
+                    opacity: 0;
+                }
+            }
+    
+    
+</style>

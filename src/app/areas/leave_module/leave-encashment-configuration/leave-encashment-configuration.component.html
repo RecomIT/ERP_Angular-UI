@@ -1,0 +1,86 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Leave Encashment Setup</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Leave</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Leave Encashment Setup</strong>
+            </li>
+        </ol>
+    </div>  
+</div>
+
+<div class="pt-2" id="page-container">
+    <div class="ibox">
+        <div class="font-bold">
+            <div class="form-row">
+                <div class="col-md-10 m-auto shadow-lg ">
+
+                    <h2 class="text-center">Leave Encashment Setup</h2>
+
+                    <form [formGroup]="encashmentForm" class="mb-3 p-5 text-x-small">
+
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="minServiceLength">Min Service Length (Year):</label>
+                                    <input type="number" id="minServiceLength" formControlName="minServiceLength" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="baseType">Encashment Base On:</label>
+                                    <select id="baseType" formControlName="baseType" class="form-control">
+                                        <option value="Basic" >Basic</option>
+                                        <option value="Gross" selected>Gross</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="maxPercentage">Max Leave Encashed (%):</label>
+                                    <input type="number" id="maxPercentage" formControlName="maxPercentage" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="maxLeaves"><strong>Or, </strong> Leave Encashed (days):</label>
+                                    <input type="number" id="maxLeaves" formControlName="maxLeaves" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                      
+                        
+                        <div class="form-group">
+                            <p class="form-text">Formula: (Last Gross Salary / 30) * No of days applied for encashment by Employee</p>
+                        </div>
+                        
+                        <div class="form-group form-check">
+                            <input type="checkbox" id="includeAllDays" formControlName="includeAllDays" class="form-check-input">
+                            <label for="includeAllDays" class="form-check-label small-checkbox-label">Include all days until last working day</label>
+                        </div>
+                        
+                        <div class="form-group form-check">
+                            <input type="checkbox" id="encashmentBasedOnRequest" formControlName="encashmentBasedOnRequest" class="form-check-input">
+                            <label for="encashmentBasedOnRequest" class="form-check-label small-checkbox-label">Encashment based on Employee's request</label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,871 @@
+<ng-template #expenseRequestModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-diamond"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <form [formGroup]="transactionForm">
+                        <div class="modal-body">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-4">
+                                        <label for="transactionDate" class="control-label">
+                                            Transaction Date <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar-times-o"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" id="transactionDate" class="form-control form-control-sm bg-white"
+                                                formControlName="transactionDate" placeholder="Choose a date from picker" bsDatepicker
+                                                [ngClass]="{'is-invalid':((transactionForm.get('transactionDate').touched || transactionForm.get('transactionDate').dirty) && transactionForm.get('transactionDate').errors)}"
+                                                [class.is-valid]="transactionForm.get('transactionDate').valid"
+                                                [bsConfig]="datePickerConfig" readonly autocomplete="off">
+                                            <div class="input-group-prepend cursor-pointer"
+                                                *ngIf="this.transactionForm.get('transactionDate').value != null && this.transactionForm.get('transactionDate').value !=''"
+                                                (click)="this.transactionForm.get('transactionDate').setValue(null)">
+                                                <span class="input-group-addon text-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="((transactionForm.get('transactionDate').touched ||
+                                                                                transactionForm.get('transactionDate').dirty) && transactionForm.get('transactionDate').errors)"
+                                            class="text-danger">
+                                            <span>Field is required</span>
+                                        </div>
+                                    </div>                                  
+                                    <div class="form-group col-12 col-md-4">
+                                        <label>Spend Mode</label>                 
+                                        <div class="input-group">
+                                            <!-- [attr.disabled]="isSpendModeDisabled" -->
+                                              <!-- [attr.disabled]="!transactionForm.get('transactionDate').value ? true : null"    -->
+                                            <select name="spendMode" id="spendMode" class="form-control form-control-sm"                                           
+                                            [attr.disabled]="emailFlag === 'Edit' || !transactionForm.get('transactionDate').value ? true : null"                                         
+                                             formControlName="spendMode"  >
+                                                <option [value]="''" selected>---Select Spend Mode---</option>
+                                                <option [value]="item" *ngFor="let item of ddlSpendMode">{{item}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div *ngIf="transactionForm.get('spendMode').invalid && transactionForm.get('spendMode').touched"
+                                            class="text-danger">
+                                            <div *ngIf="transactionForm.get('spendMode').errors.required">Spend Mode is required.</div>
+                                        </div>
+                                    </div> 
+                                    <div class="form-group col-12 col-md-4">
+                                        <label for="transactionType" class="control-label"> Transaction Type
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-caret-square-o-down"></i>
+                                                </span>
+                                            </div>
+                                            <!-- [attr.disabled]="isTransactionTypeDisabled" -->
+                                                <!-- [attr.disabled]="!transactionForm.get('spendMode').value ? true : null" -->
+                                            <select name="transactionType" id="transactionType"                                         
+                                            [attr.disabled]="emailFlag === 'Edit' || !transactionForm.get('spendMode').value ? true : null"
+                                                class="form-control form-control-sm" formControlName="transactionType">
+                                                <option [value]="''" selected>---Select Type---</option>
+                                                <option [value]="item" *ngFor="let item of ddlTransactionType">{{item}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form [formGroup]="requestFormConveyance" *ngIf="this.transactionForm.controls.transactionType.value == 'Conveyance'">
+                        <div class="modal-body">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-3">
+                                        <label>Reference No</label>
+                                        <div class="input-group">
+                                            <input type="text" formControlName="refNo" readonly="true" class="form-control form-control-sm"
+                                                name="refNo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-3">
+                                        <label for="requestDate" class="control-label">
+                                            Date of Expense
+                                            <!-- <span class="text-danger">*</span> -->
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar-times-o"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" id="requestDate" class="form-control form-control-sm bg-white"
+                                                formControlName="requestDate" placeholder="Choose a date from picker" bsDatepicker
+                                                [ngClass]="{'is-invalid':((requestFormConveyance.get('requestDate').touched || requestFormConveyance.get('requestDate').dirty) && requestFormConveyance.get('requestDate').errors)}"
+                                                [class.is-valid]="requestFormConveyance.get('requestDate').valid"
+                                                [bsConfig]="datePickerConfig" readonly autocomplete="off">
+                                            <div class="input-group-prepend cursor-pointer"
+                                                *ngIf="this.requestFormConveyance.get('requestDate').value != null && this.requestFormConveyance.get('requestDate').value !=''"
+                                                (click)="this.requestFormConveyance.get('requestDate').setValue(null)">
+                                                <span class="input-group-addon text-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="((requestFormConveyance.get('requestDate').touched ||
+                                                                                requestFormConveyance.get('requestDate').dirty) && requestFormConveyance.get('requestDate').errors)"
+                                            class="text-danger">
+                                            <span>Field is required</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12" [ngClass]="{
+                                        'col-md-6': this.transactionForm.controls.spendMode.value !== 'Advance',
+                                        'col-md-3': this.transactionForm.controls.spendMode.value === 'Advance'
+                                    }">
+                                        <label>Company Name</label>                                        
+                                        <div class="input-group">
+                                            <input type="text" formControlName="companyName" class="form-control form-control-sm"
+                                                name="companyName">
+                                        </div>
+                                        <div *ngIf="requestFormConveyance.get('companyName').invalid && requestFormConveyance.get('companyName').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormConveyance.get('companyName').errors.required">Company Name is required.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-3" *ngIf="this.transactionForm.controls.spendMode.value == 'Advance'">
+                                        <label>Advance Amount</label>
+                                        <div class="input-group">
+                                            <input type="number" formControlName="advanceAmount" class="form-control form-control-sm"
+                                                name="advanceAmount">
+                                        </div>
+                                        <div *ngIf="requestFormConveyance.get('advanceAmount').invalid && requestFormConveyance.get('advanceAmount').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormConveyance.get('advanceAmount').errors.required">Advance Amount is required.</div>                                          
+                                        </div>
+                                    </div>
+                                </div>              
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-12">
+                                        <label>Purpose</label>                                        
+                                        <div class="input-group">
+                                            <textarea formControlName="purpose" class="form-control form-control-sm" name="purpose"></textarea>
+                                        </div>
+                                        <div *ngIf="requestFormConveyance.get('purpose').invalid && requestFormConveyance.get('purpose').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormConveyance.get('purpose').errors.required">Purpose is required.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small" *ngIf="this.transactionForm.controls.spendMode.value != 'Advance'">
+                                    <div class="form-group col-12 col-md-12 text-x-small">
+                                        <label>Transportation</label><span class="text-danger">*</span>
+                                        <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                            <div formArrayName="transportation" *ngFor="let transportation of formArray; let i = index">
+                                                <div [formGroupName]="i">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-12 col-md-5">
+                                                            <label>Destination (From-To)</label>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon text-dark font-bold">{{i
+                                                                    + 1}}</span>
+                                                                <input type="text" formControlName="place" class="form-control form-control-sm"
+                                                                    name="place">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 col-md-3">
+                                                            <label>Mode</label>
+                                                            <div class="input-group">
+                                                                <select name="type" id="type" class="form-control form-control-sm"
+                                                                    formControlName="type">
+                                                                    <option [value]="''" selected>---Select Type---
+                                                                    </option>
+                                                                    <option [value]="item" *ngFor="let item of ddlTransportation">{{item}}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 col-md-2 text-right">
+                                                            <label>Cost (BDT)</label>
+                                                            <div class="input-group">
+                                                                <input type="number" formControlName="cost" class="form-control form-control-sm text-right"
+                                                                    name="cost">
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex justify-content-end">
+                                                            <div class="form-group col-12 col-md-2">
+                                                                <label>Action</label>
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-prepend cursor-pointer text-small" (click)="addClick()">
+                                                                        <span class="input-group-addon text-primary"><i class="fa fa-plus"></i></span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend cursor-pointer text-small" (click)="removeClick(i)">
+                                                                        <span class="input-group-addon text-danger"><i class="fa fa-trash"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>                                                
+                                            </div> 
+                                            <div class="form-row text-x-small" *ngIf="this.transactionForm.controls.spendMode.value != 'Advance'">                                  
+                                                <div class="form-group col-12 col-md-2 offset-md-8 text-right">
+                                                    <label>Total Amount</label>                                        
+                                                    <div class="input-group">
+                                                        <input type="number" formControlName="totalAmount" class="form-control form-control-sm text-right"
+                                                        name="totalAmount">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-12 col-md-2">                                                    
+                                                    <div class="input-group">                                                       
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                         </div>
+                                    </div>
+                                </div>                              
+                                <div class="form-row text-x-small">                                  
+                                    <div class="form-group col-12 col-md-12 text-x-small">
+                                        <label>Description</label>                                        
+                                        <div class="input-group">
+                                            <textarea formControlName="description" class="form-control form-control-sm" name="description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form [formGroup]="requestFormTravels" *ngIf="this.transactionForm.controls.transactionType.value == 'Travels'">
+                        <div class="modal-body">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Reference No</label>
+                                        <div class="input-group">
+                                            <input type="text" formControlName="refNo" readonly="true" class="form-control form-control-sm"
+                                                name="refNo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-6 col-sm-12">
+                                        <label for="requestDate" class="control-label">
+                                            Date of Travels
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark text-white">
+                                                    <i class="fa fa-calendar-check-o"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" name="requestDate" id="requestDate" autocomplete="off"
+                                                formControlName="requestDate" class="form-control form-control-sm bg-white" readonly
+                                                placeholder="Enter From & To Date" bsDaterangepicker [bsConfig]="datePickerConfig">
+                                            <div class="input-group-prepend cursor-pointer"
+                                                *ngIf="this.requestFormTravels.get('requestDate').value != null"
+                                                (click)="this.requestFormTravels.get('requestDate').setValue(null)">
+                                                <span class="input-group-addon text-dark text-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="requestFormTravels.get('requestDate').invalid && (requestFormTravels.get('requestDate').touched || requestFormTravels.get('requestDate').dirty)"
+                                            class="text-danger">
+                                            Date of Travels is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Spend Mode</label>
+                                        <div class="input-group">
+                                            <select name="spendMode" id="spendMode" class="form-control form-control-sm"
+                                                formControlName="spendMode">
+                                                <option [value]="''" selected>---Select Spend Mode---</option>
+                                                <option [value]="item" *ngFor="let item of ddlSpendMode">{{item}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div *ngIf="requestFormTravels.get('spendMode').invalid && requestFormTravels.get('spendMode').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTravels.get('spendMode').errors.required">Spend Mode is required.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Destination City</label>
+                                        <input type="text" id="location" formControlName="location" class="form-control form-control-sm"
+                                            [typeahead]="location" typeaheadOptionField="text" placeholder="Write Location Name Here..."
+                                            [typeaheadMinLength]="0" [typeaheadScrollable]="true">
+                                        <div *ngIf="requestFormTravels.get('location').invalid && requestFormTravels.get('location').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTravels.get('location').errors.required">Destination City is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-12">
+                                        <label>Purpose</label>
+                                        <div class="input-group">
+                                            <textarea formControlName="purpose" class="form-control form-control-sm"
+                                                name="purpose"></textarea>
+                                        </div>
+                                        <div *ngIf="requestFormTravels.get('purpose').invalid && requestFormTravels.get('purpose').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTravels.get('purpose').errors.required">Purpose is required.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Transportation</label>
+                                        <div class="input-group">
+                                            <select name="type" id="transportationTravels" class="form-control form-control-sm"
+                                                formControlName="transportationTravels">
+                                                <option [value]="''" selected>---Select Type---
+                                                </option>
+                                                <option [value]="item" *ngFor="let item of ddlTransportationTravels">{{item}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div *ngIf="requestFormTravels.get('transportationTravels').invalid && requestFormTravels.get('transportationTravels').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTravels.get('transportationTravels').errors.required">Transportation is
+                                                required.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Transportation Costs</label>
+                                        <div class="input-group">
+                                            <input type="number" formControlName="transportationCosts" class="form-control form-control-sm"
+                                                name="transportationCosts">
+                                        </div>
+                                        <div *ngIf="requestFormTravels.get('transportationCosts').invalid && requestFormTravels.get('transportationCosts').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTravels.get('transportationCosts').errors.required">Transportation Costs
+                                                is required.</div>
+                                            <div *ngIf="requestFormTravels.get('transportationCosts').errors.pattern">Only numeric values
+                                                are allowed.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-4">
+                                        <label>Accommodation Costs</label>
+                                        <div class="input-group">
+                                            <input type="number" formControlName="accommodationCosts" class="form-control form-control-sm"
+                                                name="accommodationCosts">
+                                        </div>
+                                        <div *ngIf="requestFormTravels.get('accommodationCosts').invalid && requestFormTravels.get('accommodationCosts').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTravels.get('accommodationCosts').errors.required">Accommodation Costs is
+                                                required.</div>
+                                            <div *ngIf="requestFormTravels.get('accommodationCosts').errors.pattern">Only numeric values are
+                                                allowed.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-4">
+                                        <label>Subsistence Costs</label>
+                                        <div class="input-group">
+                                            <input type="number" formControlName="subsistenceCosts" class="form-control form-control-sm"
+                                                name="subsistenceCosts">
+                                        </div>
+                                        <div *ngIf="requestFormTravels.get('subsistenceCosts').invalid && requestFormTravels.get('subsistenceCosts').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTravels.get('subsistenceCosts').errors.required">Subsistence Costs is
+                                                required.</div>
+                                            <div *ngIf="requestFormTravels.get('subsistenceCosts').errors.pattern">Only numeric values are
+                                                allowed.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-4">
+                                        <label>Other Costs</label>
+                                        <div class="input-group">
+                                            <input type="number" formControlName="otherCosts" class="form-control form-control-sm"
+                                                name="otherCosts">
+                                        </div>
+                                        <div *ngIf="requestFormTravels.get('otherCosts').invalid && requestFormTravels.get('otherCosts').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTravels.get('otherCosts').errors.required">Other Costs is required.</div>
+                                            <div *ngIf="requestFormTravels.get('otherCosts').errors.pattern">Only numeric values are
+                                                allowed.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-12">
+                                        <label>Description</label>
+                                        <div class="input-group">
+                                            <textarea formControlName="description" class="form-control form-control-sm"
+                                                name="description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form [formGroup]="requestFormEntertainment" *ngIf="this.transactionForm.controls.transactionType.value == 'Entertainment' || this.transactionForm.controls.transactionType.value == 'Purchase'">
+                        <div class="modal-body">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12" [ngClass]="{
+                                        'col-md-6': this.transactionForm.controls.spendMode.value !== 'Advance',
+                                        'col-md-4': this.transactionForm.controls.spendMode.value === 'Advance'
+                                    }">
+                                        <label>Reference No</label>
+                                        <div class="input-group">
+                                            <input type="text" formControlName="refNo" readonly="true" class="form-control form-control-sm"
+                                                name="refNo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12" [ngClass]="{
+                                        'col-md-6': this.transactionForm.controls.spendMode.value !== 'Advance',
+                                        'col-md-4': this.transactionForm.controls.spendMode.value === 'Advance'
+                                    }">
+                                        <label for="requestDate" class="control-label">
+                                            Date of Expense <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar-times-o"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" id="requestDate" class="form-control form-control-sm bg-white"
+                                                formControlName="requestDate" placeholder="Choose a date from picker" bsDatepicker
+                                                [ngClass]="{'is-invalid':((requestFormEntertainment.get('requestDate').touched || requestFormEntertainment.get('requestDate').dirty) && requestFormEntertainment.get('requestDate').errors)}"
+                                                [class.is-valid]="requestFormEntertainment.get('requestDate').valid"
+                                                [bsConfig]="datePickerConfig" readonly autocomplete="off">
+                                            <div class="input-group-prepend cursor-pointer"
+                                                *ngIf="this.requestFormEntertainment.get('requestDate').value != null && this.requestFormEntertainment.get('requestDate').value !=''"
+                                                (click)="this.requestFormEntertainment.get('requestDate').setValue(null)">
+                                                <span class="input-group-addon text-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="((requestFormEntertainment.get('requestDate').touched ||
+                                        requestFormEntertainment.get('requestDate').dirty) && requestFormEntertainment.get('requestDate').errors)"
+                                            class="text-danger">
+                                            <span>Field is required</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-4" *ngIf="this.transactionForm.controls.spendMode.value == 'Advance'">
+                                        <label>Advance Amount</label>
+                                        <div class="input-group">
+                                            <input type="number" formControlName="advanceAmount" class="form-control form-control-sm"
+                                                name="advanceAmount">
+                                        </div>
+                                        <div *ngIf="requestFormEntertainment.get('advanceAmount').invalid && requestFormEntertainment.get('advanceAmount').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormEntertainment.get('advanceAmount').errors.required">Advance Amount is required.</div>                                          
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-12">
+                                        <label>Purpose</label><span class="text-danger">*</span>
+                                        <div class="input-group">
+                                            <textarea formControlName="purpose" class="form-control form-control-sm"
+                                                name="purpose"></textarea>
+                                        </div>
+                                        <div *ngIf="requestFormEntertainment.get('purpose').invalid && requestFormEntertainment.get('purpose').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormEntertainment.get('purpose').errors.required">Purpose is required.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small" *ngIf="this.transactionForm.controls.spendMode.value != 'Advance'">
+                                    <div class="form-group col-12 col-md-12 text-x-small">
+                                        <label>Description</label><span class="text-danger">*</span>
+                                        <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                            <div formArrayName="entertainment" *ngFor="let entertainment of formArray; let i = index">
+                                                <div [formGroupName]="i">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-12 col-md-4">
+                                                            <label>Item</label>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon text-dark font-bold">{{i
+                                                                    + 1}}</span>
+                                                                <input type="text" formControlName="item"
+                                                                    class="form-control form-control-sm" name="item">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 col-md-2">
+                                                            <label>Quantity</label>
+                                                            <div class="input-group">
+                                                                <input type="number" formControlName="quantity" (input)="calculateAmount(i)"
+                                                                    class="form-control form-control-sm" name="quantity">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 col-md-2">
+                                                            <label>Price (BDT)</label>
+                                                            <div class="input-group">
+                                                                <input type="number" formControlName="price" (input)="calculateAmount(i)"
+                                                                    class="form-control form-control-sm" name="price">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 col-md-2">
+                                                            <label>Amount (BDT)</label>
+                                                            <div class="input-group">
+                                                                <input type="number" formControlName="amount" readonly
+                                                                    class="form-control form-control-sm" name="amount">
+                                                            </div>
+                                                        </div>                                                        
+                                                        <div class="form-group col-12 col-md-2">
+                                                            <label>Action</label>
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-prepend cursor-pointer text-small"
+                                                                    (click)="entertainmentAddClick()">
+                                                                    <span class="input-group-addon text-primary"><i
+                                                                            class="fa fa-plus"></i></span>
+                                                                </div>
+                                                                <div class="input-group-prepend cursor-pointer text-small"
+                                                                    (click)="entertainmentRemoveClick(i)">
+                                                                    <span class="input-group-addon text-danger"><i
+                                                                            class="fa fa-trash"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>                                                        
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                            <div class="form-row text-x-small" *ngIf="this.transactionForm.controls.spendMode.value != 'Advance'">                                  
+                                                <div class="form-group col-12 col-md-2 offset-md-8">
+                                                    <label>Total Amount</label>                                        
+                                                    <div class="input-group">
+                                                        <input type="number" formControlName="totalAmount" class="form-control form-control-sm"
+                                                        name="totalAmount">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-12 col-md-2">                                                    
+                                                    <div class="input-group">                                                       
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small" *ngIf="this.transactionForm.controls.spendMode.value != 'Advance'">                                    
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Attachment (Only Pdf, Jpg, Png File)</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input id="file" type="file" class="custom-file-input" name="file"
+                                                    (change)="fileUpload($event)" accept=".pdf,.jpg,.png">
+                                                <label class="custom-file-label" for="file">
+                                                    {{uploadFileName}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form [formGroup]="requestExpatForm" *ngIf="this.transactionForm.controls.transactionType.value == 'Expat'">
+                        <div class="modal-body">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Reference No</label>
+                                        <div class="input-group">
+                                            <input type="text" formControlName="refNo" readonly="true" class="form-control form-control-sm"
+                                                name="refNo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-6">
+                                        <label for="requestDate" class="control-label">
+                                            Date of Expense <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar-times-o"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" id="requestDate" class="form-control form-control-sm bg-white"
+                                                formControlName="requestDate" placeholder="Choose a date from picker" bsDatepicker
+                                                [ngClass]="{'is-invalid':((requestExpatForm.get('requestDate').touched || requestExpatForm.get('requestDate').dirty) && requestExpatForm.get('requestDate').errors)}"
+                                                [class.is-valid]="requestExpatForm.get('requestDate').valid" [bsConfig]="datePickerConfig"
+                                                readonly autocomplete="off">
+                                            <div class="input-group-prepend cursor-pointer"
+                                                *ngIf="this.requestExpatForm.get('requestDate').value != null && this.requestExpatForm.get('requestDate').value !=''"
+                                                (click)="this.requestExpatForm.get('requestDate').setValue(null)">
+                                                <span class="input-group-addon text-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="((requestExpatForm.get('requestDate').touched ||
+                                                            requestExpatForm.get('requestDate').dirty) && requestExpatForm.get('requestDate').errors)"
+                                            class="text-danger">
+                                            <span>Field is required</span>
+                                        </div>
+                                    </div>                                   
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-12 text-x-small">
+                                        <label>Description</label><span class="text-danger">*</span>
+                                        <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                            <div formArrayName="expat" *ngFor="let expat of formArray; let i = index">
+                                                <div [formGroupName]="i">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-12 col-sm-3">
+                                                            <label>Company Name</label>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon text-dark font-bold">{{i + 1}}</span>
+                                                                <input type="text" id="companyName" formControlName="companyName"
+                                                                    class="form-control form-control-sm" [typeahead]="companyName"
+                                                                    typeaheadOptionField="text" placeholder="Write Company Name Here..."
+                                                                    [typeaheadMinLength]="0" [typeaheadScrollable]="true">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 col-sm-4">
+                                                            <label>Particulars</label>
+                                                            <div class="input-group">
+                                                                <input type="text" formControlName="particular"
+                                                                    class="form-control form-control-sm" name="particular">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 col-sm-2">
+                                                            <label>Type of Bill</label>
+                                                            <div class="input-group">
+                                                                <input type="text" id="billType" formControlName="billType"
+                                                                    class="form-control form-control-sm" [typeahead]="billType"
+                                                                    typeaheadOptionField="text" placeholder="Write Bill Type Here..."
+                                                                    [typeaheadMinLength]="0" [typeaheadScrollable]="true">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 col-sm-1 text-right">
+                                                            <label>Cost (BDT)</label>
+                                                            <div class="input-group">
+                                                                <input type="number" formControlName="cost"
+                                                                    class="form-control form-control-sm text-right" name="cost">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-12 col-sm-2">
+                                                            <label>Action</label>
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-prepend cursor-pointer text-small"
+                                                                    (click)="expatAddClick()">
+                                                                    <span class="input-group-addon text-primary"><i
+                                                                            class="fa fa-plus"></i></span>
+                                                                </div>
+                                                                <div class="input-group-prepend cursor-pointer text-small"
+                                                                    (click)="expatRemoveClick(i)">
+                                                                    <span class="input-group-addon text-danger"><i
+                                                                            class="fa fa-trash"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row text-x-small">                                  
+                                                <div class="form-group col-12 col-sm-2 offset-md-8 text-right">
+                                                    <label>Total Amount</label>                                        
+                                                    <div class="input-group">
+                                                        <input type="number" formControlName="totalAmount" class="form-control form-control-sm text-right"
+                                                        name="totalAmount">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-12 col-sm-2">                                                    
+                                                    <div class="input-group">                                                       
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-12">
+                                        <label>Remarks</label>
+                                        <div class="input-group">
+                                            <textarea formControlName="description" class="form-control form-control-sm"
+                                                name="description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form [formGroup]="requestFormTraining" *ngIf="this.transactionForm.controls.transactionType.value == 'Training'">
+                        <div class="modal-body">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 font-bold text-dark">
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Reference No</label>
+                                        <div class="input-group">
+                                            <input type="text" formControlName="refNo" readonly="true" class="form-control form-control-sm"
+                                                name="refNo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-6 col-sm-12">
+                                        <label for="requestDate" class="control-label">
+                                            Date of Request
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar-times-o"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" id="requestDate" class="form-control form-control-sm bg-white"
+                                                formControlName="requestDate" placeholder="Choose a date from picker" bsDatepicker
+                                                [ngClass]="{'is-invalid':((requestFormTraining.get('requestDate').touched || requestFormTraining.get('requestDate').dirty) && requestFormTraining.get('requestDate').errors)}"
+                                                [class.is-valid]="requestFormTraining.get('requestDate').valid"
+                                                [bsConfig]="datePickerConfig" readonly autocomplete="off">
+                                            <div class="input-group-prepend cursor-pointer"
+                                                *ngIf="this.requestFormTraining.get('requestDate').value != null && this.requestFormTraining.get('requestDate').value !=''"
+                                                (click)="this.requestFormTraining.get('requestDate').setValue(null)">
+                                                <span class="input-group-addon text-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="((requestFormTraining.get('requestDate').touched ||
+                                                                                requestFormTraining.get('requestDate').dirty) && requestFormTraining.get('requestDate').errors)"
+                                            class="text-danger">
+                                            <span>Field is required</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Institution Name</label>
+                                        <div class="input-group">
+                                            <input type="text" id="institution" formControlName="institution"
+                                                class="form-control form-control-sm" [typeahead]="institution" typeaheadOptionField="text"
+                                                placeholder="Write Institution Name Here..." [typeaheadMinLength]="0"
+                                                [typeaheadScrollable]="true">
+                                        </div>
+                                        <div *ngIf="requestFormTraining.get('institution').invalid && requestFormTraining.get('institution').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTraining.get('institution').errors.required">Institution Name is
+                                                required.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Course Name</label>
+                                        <input type="text" id="course" formControlName="course" class="form-control form-control-sm"
+                                            [typeahead]="course" typeaheadOptionField="text" placeholder="Write Course Name Here..."
+                                            [typeaheadMinLength]="0" [typeaheadScrollable]="true">
+                                        <div *ngIf="requestFormTraining.get('course').invalid && requestFormTraining.get('course').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTraining.get('course').errors.required">Course Name is required.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-12">
+                                        <div class="form-group col-12 col-md-12">
+                                            <label>Description</label>
+                                            <div class="input-group">
+                                                <textarea formControlName="description" class="form-control form-control-sm"
+                                                    name="description"></textarea>
+                                            </div>
+                                            <div *ngIf="requestFormTraining.get('description').invalid && requestFormTraining.get('description').touched"
+                                                class="text-danger">
+                                                <div *ngIf="requestFormTraining.get('description').errors.required">Description is required.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <div class="form-group col-12 col-md-4">
+                                        <label for="admissionDate" class="control-label">
+                                            Date of Admission
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar-times-o"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" id="admissionDate" class="form-control form-control-sm bg-white"
+                                                formControlName="admissionDate" placeholder="Choose a date from picker" bsDatepicker
+                                                [ngClass]="{'is-invalid':((requestFormTraining.get('admissionDate').touched || requestFormTraining.get('admissionDate').dirty) && requestFormTraining.get('admissionDate').errors)}"
+                                                [class.is-valid]="requestFormTraining.get('admissionDate').valid"
+                                                [bsConfig]="datePickerConfig" readonly autocomplete="off">
+                                            <div class="input-group-prepend cursor-pointer"
+                                                *ngIf="this.requestFormTraining.get('admissionDate').value != null && this.requestFormTraining.get('admissionDate').value !=''"
+                                                (click)="this.requestFormTraining.get('admissionDate').setValue(null)">
+                                                <span class="input-group-addon text-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="((requestFormTraining.get('admissionDate').touched ||
+                                                                                requestFormTraining.get('admissionDate').dirty) && requestFormTraining.get('admissionDate').errors)"
+                                            class="text-danger">
+                                            <span>Field is required</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-4">
+                                        <label>Duration</label>
+                                        <div class="input-group">
+                                            <input type="text" formControlName="duration" class="form-control form-control-sm"
+                                                name="duration">
+                                        </div>
+                                        <div *ngIf="requestFormTraining.get('duration').invalid && requestFormTraining.get('duration').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTraining.get('duration').errors.required">Duration is required.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-md-4">
+                                        <label>Costs</label>
+                                        <div class="input-group">
+                                            <input type="number" formControlName="costs" class="form-control form-control-sm" name="costs">
+                                        </div>
+                                        <div *ngIf="requestFormTraining.get('costs').invalid && requestFormTraining.get('costs').touched"
+                                            class="text-danger">
+                                            <div *ngIf="requestFormTraining.get('costs').errors.required">Costs is required.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row text-x-small">
+                                    <label>Purpose</label>
+                                    <div class="input-group">
+                                        <textarea formControlName="purpose" class="form-control form-control-sm" name="purpose"></textarea>
+                                    </div>
+                                    <div *ngIf="requestFormTraining.get('purpose').invalid && requestFormTraining.get('purpose').touched"
+                                        class="text-danger">
+                                        <div *ngIf="requestFormTraining.get('purpose').errors.required">Purpose is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>         
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-x-small pb-2">
+            <button class="btn btn-sm btn-primary btn-rounded btn-outline pull-right" type="submit"
+            [disabled]="(this.transactionForm.controls.transactionType.value == 'Conveyance' && requestFormConveyance.invalid) || 
+            (this.transactionForm.controls.transactionType.value == 'Travels' && requestFormTravels.invalid) 
+            || (this.transactionForm.controls.transactionType.value == 'Entertainment' && requestFormEntertainment.invalid) " (click)="submit('Request')" >
+                <i class="fa fa-cogs"></i> | {{this.transactionForm.get("requestId").value == 0? 'Submit':'Update'}}
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button"
+                (click)="closeModal('Cancel click')">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+

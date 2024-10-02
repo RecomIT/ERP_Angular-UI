@@ -1,0 +1,68 @@
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-1"><i class="fa fa-diamond"></i> | Employee Asset List</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Asset</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Employee Asset List</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg"
+                            id="tbl">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th class="text-center">Transaction Date</th>                                 
+                                    <th>Brand</th>
+                                    <th>Asset Name</th>
+                                    <th>Product ID</th>
+                                    <th>Number</th>
+                                    <th class="text-center">Warranty Date</th>
+                                    <th class="text-center">Condition</th>                                                                     
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list ; let i=index">
+                                    <td class="text-center font-bold">{{i+1}}</td>
+                                    <td class="text-center">{{item.transactionDate | date: "dd-MMM-yyyy"}}</td>
+                                    <td>{{ item.brand }}</td>
+                                    <td>{{ item.assetName }}</td>
+                                    <td>{{ item.productId }}</td>
+                                    <td>{{ item.number }}</td>                                    
+                                    <td class="text-center">{{item.warrantyDate | date: "dd-MMM-yyyy"}}</td>
+                                    <td class="text-center">{{ item.condition }}</td>                           
+                                </tr>
+                                <tr *ngIf=" list.length == 0 && list_loading_label == null">
+                                    <td colspan="15" class="text-center">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="list.length == 0 && list_loading_label == ''">
+                                    <td colspan="15" class="text-center font-bold">
+                                        {{list_loading_label}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+  

@@ -1,0 +1,228 @@
+<!-- 
+
+<ng-template  #editInterviewModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        <i class="fa fa-info-circle btn btn-sm btn-success btn-circle" aria-hidden="true"></i> Edit Interview Date
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeEditInterviewDateBySupervisorModal('close click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="ibox ibox-content">
+    
+
+        <div class="container-fluid" *ngFor="let res of resignationRequestList">
+
+        <form [formGroup]="resignationForm" (ngSubmit)="submitInterviewDate()">
+        
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1 text-x-small">
+                <div class="form-row">
+                    <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1 p-0">
+
+
+
+                
+                    <div class="form-row">
+                        <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1 p-0">
+                            <label for="SupervisorExitInterviewDate" class="control-label font-bold">
+                                Reschedule Interview Date<span class="text-danger">*</span>
+                            </label>
+                
+                
+
+
+                            <div class="form-group">
+                                <div class="custom-control custom-switch pl-0"
+                                    style="vertical-align: middle;">
+
+                                    <label for="RescheduleExitInterviewBySupervisor" class="custom-switch-lable  pull-left mb-0 mt-2">
+                                        <strong>Set Interview Date is Employee Exit Interview Date</strong>
+                                    </label>
+                                    
+                                    <input type="checkbox" class="custom-control-input"
+                                    formControlName="RescheduleExitInterviewBySupervisor" (change)="toggleSupervisorExitInterviewDate()" id="RescheduleExitInterviewBySupervisor">
+                                    <label for="RescheduleExitInterviewBySupervisor"
+                                        class="custom-control-label custom-switch-lable pull-right mb-0 mt-2"
+                                    >{{ showSupervisorExitInterviewDate ? 'Yes' : 'No' }}</label>
+                                </div>
+                            </div>
+                
+
+
+                
+                            <div class="input-group" *ngIf="!resignationForm.get('RescheduleExitInterviewBySupervisor').value">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar-check-o"></i>
+                                    </span>
+                                </div>
+                                
+                                <input type="text" formControlName="SupervisorExitInterviewDate" id="SupervisorExitInterviewDate"
+                                    class="form-control form-control-sm bg-white" readonly
+                                    placeholder="Select Interview Date .." title="Select Interview Date" bsDatepicker
+                                    [bsConfig]="datePickerConfig">
+                                <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date"
+                                    [hidden]="!resignationForm.get('SupervisorExitInterviewDate').value"
+                                    (click)="clearSupervisorExitInterviewDate()">
+                
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+                        
+
+
+                            <div class="form-row p-1" *ngIf="resignationForm.get('RescheduleExitInterviewBySupervisor').value">
+                                <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                                    <div class="label"><strong>Interview Date:</strong></div>
+                                </div>
+                                <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                                    <div class="value">{{ res.EmployeeExitInterviewDate | date:'dd MMM, yyyy' }}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row mt-3">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary" >Submit</button>
+            </div>
+            </div>
+
+        </form>
+                        
+        </div>
+
+  
+      
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn btn-sm btn-danger btn-rounded shadow-lg" type="button" (click)="closeEditInterviewDateBySupervisorModal('Close Click')">
+          <i class="fa fa-times"></i> | Cancel
+      </button>
+    </div>
+  </ng-template>
+  
+  
+    
+  
+   -->
+
+
+
+
+
+   <ng-template #editInterviewModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="fa fa-pencil-square-o btn btn-sm btn-success btn-circle" aria-hidden="true"></i> Edit Interview Date
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeEditInterviewDateBySupervisorModal('close click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+
+        <form [formGroup]="resignationForm" (ngSubmit)="submitInterviewDate()">
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1 text-x-small">
+                <div class="form-row">
+                    <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1 p-0">
+                        <div class="form-row">
+                            <div class="col-12 col-lg-12 col-md-12 col-sm-12 mb-1 p-0">
+                                <label for="SupervisorExitInterviewDate" class="control-label font-bold">
+                                    Reschedule Interview Date<span class="text-danger">*</span>
+                                </label>
+
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch pl-0" style="vertical-align: middle;">
+                                        <label for="RescheduleExitInterviewBySupervisor" class="custom-switch-lable  pull-left mb-0 mt-2">
+                                            <strong>Set Interview Date is Employee Exit Interview Date</strong>
+                                        </label>
+                                        <input type="checkbox" class="custom-control-input"
+                                            formControlName="RescheduleExitInterviewBySupervisor"
+                                            (change)="toggleSupervisorExitInterviewDate()" id="RescheduleExitInterviewBySupervisor">
+                                        <label for="RescheduleExitInterviewBySupervisor"
+                                            class="custom-control-label custom-switch-lable pull-right mb-0 mt-2">
+                                            {{ showSupervisorExitInterviewDate ? 'Yes' : 'No' }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="input-group" *ngIf="!resignationForm.get('RescheduleExitInterviewBySupervisor').value">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar-check-o"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" formControlName="SupervisorExitInterviewDate" id="SupervisorExitInterviewDate"
+                                        class="form-control form-control-sm bg-white" readonly
+                                        placeholder="Select Interview Date .." title="Select Interview Date" bsDatepicker
+                                        [bsConfig]="datePickerConfig">
+                                    <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date"
+                                        [hidden]="!resignationForm.get('SupervisorExitInterviewDate').value"
+                                        (click)="clearSupervisorExitInterviewDate()">
+                                        <span class="input-group-addon text-danger">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row p-1" *ngIf="resignationForm.get('RescheduleExitInterviewBySupervisor').value">
+                                    <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                                        <div class="label"><strong>Interview Date:</strong></div>
+                                    </div>
+                                    <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                                        <div class="value">{{ resignationForm.get('EmployeeExitInterviewDate').value | date:'dd MMM, yyyy' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- <div class="form-row mt-3">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div> -->
+
+            <div class="form-row mt-2">
+
+                <div class="col-12">
+    
+                  <button class="btn btn-xs btn-primary  p-1 shadow mr-2" type="submit" [disabled]="resignationForm.invalid">
+                    <i class="fa fa-paper-plane" aria-hidden="true"></i> | Submit
+                  </button>
+      
+                </div>
+              </div>
+
+
+        </form>
+   
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-xs btn-danger btn-rounded shadow-lg" type="button"
+            (click)="closeEditInterviewDateBySupervisorModal('Close Click')">
+            <i class="fa fa-times"></i> | Cancel
+        </button>
+    </div>
+</ng-template>

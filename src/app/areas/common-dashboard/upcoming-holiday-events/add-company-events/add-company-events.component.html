@@ -1,0 +1,107 @@
+
+
+
+<ng-template  #addCompanyEvents let-modal>
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          <i class="fa fa-plus-square-o btn btn-sm btn-success btn-circle" aria-hidden="true"></i> {{modalTitle}}
+        </h4>
+       
+        <button type="button" class="close" aria-label="Close" (click)="closeAddCompanyEventModal('close click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+
+ 
+
+    
+    <div class="modal-body text-x-small font-bold text-dark">
+
+        <div class="ibox ibox-content rounded">
+
+            <form [formGroup]="companyEventsForm" (ngSubmit)="onSubmit()" class="container p-2">
+                
+            <div class="form-group" >
+                <label for="eventTitle" class="control-label font-bold">
+                  <strong>Event Title <span class="text-danger">*</span></strong>
+              </label>
+              
+              <input type="text" formControlName="eventTitle" id="eventTitle" class="form-control rounded" [ngClass]="{'has-error': companyEventsForm.get('eventTitle').touched &&  companyEventsForm.get('eventTitle').value ==''}">
+              <div *ngIf="companyEventsForm.get('eventTitle').invalid && companyEventsForm.get('eventTitle').touched" class="text-danger">
+                Event Title is required.
+              </div>
+            </div>
+              
+            <div class="form-group">
+              <label for="description" class="control-label font-bold">
+                <strong>Description</strong>
+            </label>
+              <textarea formControlName="description" id="description" class="form-control rounded"></textarea>
+            </div>
+
+
+            <div class="form-group" >
+              <label for="eventDate" class="control-label font-bold">
+                  <strong>Event Date <span class="text-danger">*</span></strong>
+              </label>
+              <div class="input-group" [ngClass]="{'has-error': companyEventsForm.get('eventDate').touched &&  companyEventsForm.get('eventDate').value ===''}">
+                  <div class="input-group-prepend">
+                      <span class="input-group-addon">
+                          <i class="icofont-ui-calendar"></i>
+                      </span>
+                  </div>
+                  <input type="text" name="eventDate" id="eventDate" readonly
+                      [bsConfig]="datePickerConfig" class="form-control form-control-sm bg-white rounded"
+                      formControlName="eventDate" bsDatepicker autocomplete="off">
+
+                
+
+                  <div class="input-group-prepend cursor-pointer" [hidden]="companyEventsForm.get('eventDate').value === null || companyEventsForm.get('eventDate').value === ''" (click)="clearEventDate()">
+                    <span class="input-group-addon text-danger">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                  </div>
+
+              </div>
+
+              <div *ngIf="companyEventsForm.get('eventDate').invalid && companyEventsForm.get('eventDate').touched" class="text-danger">
+                Event Date is required.
+              </div>
+
+            </div> 
+              
+
+
+            <div class="form-group" >
+              <label for="eventTime" class="control-label font-bold">
+                <strong>Event Time <span class="text-danger">*</span></strong>
+              </label>
+              <input type="time" formControlName="eventTime" id="eventTime" class="form-control rounded" [ngClass]="{'has-error': companyEventsForm.get('eventTime').touched &&  companyEventsForm.get('eventTime').value ==''}">
+              <div *ngIf="companyEventsForm.get('eventTime').invalid && companyEventsForm.get('eventTime').touched" class="text-danger">
+                Event Time is required.
+              </div>
+            </div>
+              
+            <button type="submit" [disabled]="companyEventsForm.invalid" class="btn btn-primary">Submit</button>
+          </form>
+              
+
+        </div>
+    </div>
+    
+
+    <div class="modal-footer">
+
+        
+      <button class="btn btn-xs btn-danger btn-rounded shadow" type="button" (click)="closeAddCompanyEventModal('Close Click')">
+          <i class="fa fa-times"></i> | Cancel
+      </button>
+    </div>
+  </ng-template>
+  
+  
+    
+  
+  
+

@@ -1,0 +1,91 @@
+<ng-template #categoryModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-list"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="categoryForm" (submit)="submit()">
+            <div class="modal-body">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="categoryName" class="control-label"> Category
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" (blur)="logFormErrors()" (input)="logFormErrors()"
+                            autofocus="true" autocomplete="off" id="categoryName" name="categoryName" formControlName="name" >
+                        </div>
+                        <div  class="text-danger">
+                            <span *ngIf="formErrors?.name">{{formErrors?.name}}</span>
+                            <span *ngIf="server_errors != null">{{server_errors?.exist}}</span>
+                        </div>                     
+                    </div>                    
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="categoryInBengali" class="control-label">Category In-Bengali</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm"  id="categoryInBengali"
+                                name="categoryInBengali" formControlName="nameInBengali">
+                        </div>                        
+                    </div>
+                </div>    
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="categoryIsActive" class="control-label"> Is Active                       
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-check-square" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon my-input-group-addon-padding">
+                                    <input type="checkbox" name="categoryIsActive" id="categoryIsActive" formControlName="isActive" />
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm text-small font-bold">
+                                Active ?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="categoryRemarks" class="control-label">Remarks</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon">
+                                    <i class="fa fa-text-height" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="categoryRemarks"
+                                name="categoryRemarks" formControlName="remarks">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="categoryForm.invalid || btnSubmit">
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    <i class="fa fa-paper-plane"></i> | {{this.categoryForm.get('categoryId').value == 0? 'Submit':'Update'
+                }}
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

@@ -1,0 +1,151 @@
+<ng-template #educationModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-education pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="educationForm" (ngSubmit)="submit()">
+        <div class="modal-body text-x-small">
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="levelOfEducationId" class="control-label font-bold">Level Of Education <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-book"></i>
+                            </span>
+                        </div>
+                        <select name="levelOfEducationId" id="levelOfEducationId" class="form-control form-control-sm" formControlName="levelOfEducationId" (blur)="logFormErrors()">
+                            <option [value]="0" selected>---Select Education---</option>
+                            <option [value]="item.id" *ngFor="let item of ddlEducationLevel">{{item.text}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.levelOfEducationId" class="text-danger">
+                        <span>{{formErrors.levelOfEducationId}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="degreeId" class="control-label font-bold">Degrees <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-certificate"></i>
+                            </span>
+                        </div>
+                        <select name="degreeId" id="degreeId" class="form-control form-control-sm" formControlName="degreeId" (blur)="logFormErrors()">
+                            <option [value]="0"  selected>---Select Degree---</option>
+                            <option [value]="item.id" *ngFor="let item of ddlDegrees">{{item.text}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.degreeId" class="text-danger">
+                        <span>{{formErrors.degreeId}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="major" class="control-label font-bold">Concentration/Major/Group <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-graduation-cap"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" name="major" id="major" formControlName="major" (blur)="logFormErrors()" (input)="logFormErrors()" >
+                    </div>
+                    <div *ngIf="formErrors.major" class="text-danger">
+                        <span>{{formErrors.major}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="institutionName" class="control-label font-bold">Institution Name <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-graduation-cap"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" name="institutionName" id="institutionName" formControlName="institutionName" (blur)="logFormErrors()" (input)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.institutionName" class="text-danger">
+                        <span>{{formErrors.institutionName}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="result" class="control-label font-bold">Result <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-file-text-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" name="result" id="result" formControlName="result" (blur)="logFormErrors()" (input)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.result" class="text-danger">
+                        <span>{{formErrors.result}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="scaleDivisionClass" class="control-label font-bold">Scale/Division/Class <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-balance-scale"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" name="scaleDivisionClass" id="scaleDivisionClass" formControlName="scaleDivisionClass" (blur)="logFormErrors()" (input)="logFormErrors()" />
+                    </div>
+                    <div *ngIf="formErrors.scaleDivisionClass" class="text-danger">
+                        <span>{{formErrors.scaleDivisionClass}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="" class="control-label font-bold">Year Of Passing <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" name="yearOfPassing" id="yearOfPassing" formControlName="yearOfPassing" (blur)="logFormErrors()" (input)="logFormErrors()" />
+                    </div>
+                    <div *ngIf="formErrors.yearOfPassing" class="text-danger">
+                        <span>{{formErrors.yearOfPassing}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="duration" class="control-label font-bold">Duration(Years)</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" name="duration" id="duration" formControlName="duration" (blur)="logFormErrors()" (input)="logFormErrors()" />
+                    </div>
+                    <div *ngIf="formErrors.duration" class="text-danger">
+                        <span>{{formErrors.duration}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" [disabled]="educationForm.invalid || btnSubmit">
+                <i class="fa fa-paper-plane"></i> |
+                    {{this.educationForm.get("employeeEducationId").value
+                    == 0?
+                    'Submit':'Update'}}
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger" (click)="closeModal('Cancel click')"><i
+                    class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>

@@ -1,0 +1,84 @@
+
+    <!-- ------------------------- >>> My Attendance Summary Popup with Calendar Start -->
+    <div class="popup-container" [ngClass]="{'visible': isMyAttendanceSummeryPopupVisible}">
+        <div class="header">
+            <div class="left-section">
+                <h4 class="popup-label">My Attendance Summery</h4>
+            </div>
+            <div class="right-section">
+                <ng-container *ngFor="let property of ListofValidProperties">
+                    <li>
+                        <span class="valid-property">{{ property.name }} : {{ property.value }}</span>
+                    </li>
+                  </ng-container>
+                <span id="close-popup" class="close-button" (click)="closeMyAttendanceSummeryPopup()">
+                    <i class="icofont-close-line"></i>
+                </span>
+            </div>
+        </div>
+
+
+        <div class="content-container">
+            <div class="calendar-container">
+                <full-calendar
+                    class="AttendaceCalender"
+                    #myAttendanceCalendarComponentRef
+                    [options]="myAttendanceCalendarOptions"
+                    [events]="myAttendnceCalendarEvents"
+                ></full-calendar>
+            </div>
+        </div>  
+        
+        
+    </div>
+
+
+    <!-- ------------------------- >>> My Attendance Summary Chart Start -->
+
+        <div class="ibox">
+            <div class="ibox-content bg-white border-radius-5">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h4 class="mb-2">My Attendance</h4>
+                    </div>
+
+
+                    <div class="col-sm-3 p-0">
+                        <select name="year" id="year" #mymyAttendanceSearchByYearRef="ngModel"
+                          [(ngModel)]="myAttendanceSearchByYear" class="form-control form-control-sm small-font border-radius-5"
+                          (change)="onYearSelect()">
+                          <option [value]="" disabled>--Select Year --</option>
+                          <option *ngFor="let yearObj of listOfAttendanceYearByEmployee" [value]="yearObj['Attendance Years']">
+                            {{ yearObj['Attendance Years'] }}
+                          </option>
+                        </select>
+                    </div>
+                      
+
+                    <div class="col-sm-4 text-x-small pl-1">
+                        <select name="month" id="month" #myAttendanceSearchByMonthRef="ngModel"
+                                [(ngModel)]="myAttendanceSearchByMonth" class="form-control form-control-sm border-radius-5"
+                                (change)="onMonthSelect()">
+                          <option [value]="0" disabled>Select Month</option>
+                          <option *ngFor="let month of listofAttendanceMonthWithDataByYear" [value]="month.MonthNumber">
+                            {{ month.MonthName }}
+                          </option>
+                        </select>
+                    </div>
+                      
+
+
+                </div>
+                <hr class="m-1">
+
+                <div class="attendanceDoughnut">
+                    <canvas id="myAttendanceSummeryChart" class="m-0"></canvas>
+                </div>
+
+               
+                
+            </div>
+        </div>
+
+    <!-- ------------------------- >>> My Attendance Summary Chart End -->
+

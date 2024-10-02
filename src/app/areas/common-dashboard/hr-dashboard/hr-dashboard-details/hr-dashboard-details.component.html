@@ -1,0 +1,201 @@
+<div class="col-12 col-md-12">
+        
+    <div class="row">
+
+        <!-- Total Head Count -->
+        <div class="col-md-4">
+
+            <div class="row">
+                <div class="col-md-12 m-auto p-1 border-radius-5">
+                    <div class="dashboard-item">
+               
+                        <div class="icon-container">
+                            <i class="icofont-users-social icon"></i>
+                        </div>
+                        
+                        <div class="text-container">
+                            <h4 class="title m-0">Head Count</h4>
+                            <h2 class="font-bold m-0">{{ getTotalHeadCount(getGenders()[0]) }}</h2>                             
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                            
+                <div class="col-md-12">
+                
+                 <div class="row">
+                    <div class="col-md-12">
+                        
+                        <div class="row">
+
+                            <div class="col-md-12 p-1">
+                                <h4 class="text-center bg-white shadow p-1 m-0" style="border-radius: 5px;">Gender</h4>
+                            </div>
+
+                            <div class="col-md-12 p-1">
+
+                                <ng-container *ngIf="this.totalEmployees && this.totalEmployees.length > 0">
+    
+                                <ng-container *ngIf="this.totalEmployees[0].Gender === null">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="text-center bg-white" style="border: 2px dashed #ccc; padding: 2px; margin-top: 5px;">
+                                                <h5 style="color: #555; font-size: 18px; font-weight: bold;">Gender Missing</h5>
+                                                <p style="color: #777; font-size: 12px;">There are no Gender.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+    
+                                <ng-container *ngIf="this.totalEmployees[0].Gender !== null">
+                                    <div class="row p-0 card-container">
+                                        <div class="col-md-6 p-1 border-radius-5" *ngFor="let gender of getGenders()">
+                                            <div class="dashboard-item" *ngFor="let genderDetails of getGenderDetails(gender)"> 
+                                        
+                                                <div class="icon-container">
+                                                    <i *ngIf="genderDetails.Gender === 'Male'" class="fa fa-male icon" aria-hidden="true"></i>
+                                                    <i *ngIf="genderDetails.Gender === 'Female'" class="fa fa-female icon" aria-hidden="true"></i>
+                                                </div>
+                                                
+                                        
+                                                <div class="text-container">
+                                                    <h6 class="title">{{ genderDetails.Gender }}</h6>
+                                                    <h4 class="value">{{ genderDetails.HeadCount }}</h4>
+                                                    <h6 class="title">{{ genderDetails.Percentage }}%</h6>
+                                                </div>
+                    
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                </ng-container>
+
+                                </ng-container>
+       
+                            </div>
+
+                            
+                     
+                        </div>
+                    </div>
+                 </div>
+                
+                </div>
+            </div>
+
+        </div>
+
+      
+        <!-- Religion -->
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-11 m-auto p-1">
+                    <div>
+                        <div class="col-md-12 bg-white text-center p-1 shadow" style="font-size: 14px; font-weight: 600; border-radius: 5px;">
+                            Religion
+                        </div>
+
+                        <ng-container *ngIf="this.religions && this.religions.length > 0">
+        
+                            <ng-container *ngIf="this.religions[0].Religion === null">
+          
+                                <div class="text-center bg-white" style="border: 2px dashed #ccc; padding: 30px; margin-top: 24px;">
+                                    <h5 style="color: #555; font-size: 24px; font-weight: bold;">Religion Missing</h5>
+                                    <p style="color: #777; font-size: 16px;">Religion data is not available</p>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="this.religions[0].Religion !== null">
+                                <div class="row p-0 card-container">
+                                    <div class="col-md-6 p-1 border-radius-5" *ngFor="let religion of getReligions()">
+                                        <div class="dashboard-item" *ngFor="let religionDetails of getReligionDetails(religion)">
+                                            <div class="icon-container">
+                                                <i *ngIf="religionDetails.Religion === 'ISLAM' || religionDetails.Religion === 'Islam'" class="icofont-user-suited icon icon-color"></i>
+                                                <i *ngIf="religionDetails.Religion === 'HINDU' || religionDetails.Religion === 'Hindu'" class="icofont-user-alt-4 icon icon-color"></i>
+                                                <i *ngIf="religionDetails.Religion === 'CHRISTIAN' || religionDetails.Religion === 'Christian'" class="icofont-user-alt-2 icon icon-color"></i>
+                                                <i *ngIf="religionDetails.Religion === 'BUDDHIST' || religionDetails.Religion === 'Buddhist'" class="icofont-user icon icon-color"></i>
+                                            </div>
+                                            <div class="text-container">
+                                                <h6 class="title">{{ religionDetails.Religion }}</h6>
+                                                <h4 class="value">{{ religionDetails.HeadCount }}</h4>
+                                                <h6 class="title">{{ religionDetails.Percentage }}%</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- Average Age / Average Tenure / Total Department -->
+        <div class="col-md-4">
+
+            <div class="row">
+
+                <div class="col-md-12 p-1">
+                    <h4 class="text-center bg-white shadow p-1 m-0" style="border-radius: 5px; font-size: 14px;"> Miscellaneous</h4>
+                </div>
+            
+                <div class="col-md-6 p-1 border-radius-5">
+                    <div class="dashboard-item">
+            
+                        <div class="icon-container">
+                            <i class="fa fa-birthday-cake fa-lg icon"></i>
+                        </div>
+            
+                        <div class="text-container">
+                            <h6 class="title">Average Employee Age</h6>
+                            <h4 class="value">{{ averageEmployeeDetails.averageAge ? averageEmployeeDetails.averageAge : '0' }} year(s)</h4>
+                        </div>
+            
+                    </div>
+                </div>
+            
+                <div class="col-md-6 p-1 border-radius-5">
+                    <div class="dashboard-item">
+            
+                        <div class="icon-container">
+                            <i class="icofont-support icon"></i>
+                        </div>
+            
+                        <div class="text-container">
+                            <h6 class="title">Average Employee Tenure</h6>
+                            <h4 class="value">{{ averageEmployeeDetails.averageTenure ? averageEmployeeDetails.averageTenure : '0' }} year(s)</h4>
+                        </div>
+            
+                    </div>
+                </div>
+            
+                <div class="col-md-12 p-1 border-radius-5">
+                    <div class="dashboard-item">
+            
+                        <div class="icon-container">
+                            <i class="fa fa-home icon" aria-hidden="true"></i>
+                        </div>
+            
+                        <div class="text-container">
+                            <h4 class="title m-0">Total Departments</h4>
+                            <h2 class="font-bold m-0">{{ averageEmployeeDetails.totalDepartments ? averageEmployeeDetails.totalDepartments : '0' }}</h2>
+                        </div>
+            
+                    </div>
+                </div>
+            
+            </div>
+            
+        </div>
+
+      
+    </div>
+
+</div>
+

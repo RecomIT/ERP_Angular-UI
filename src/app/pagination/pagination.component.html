@@ -1,0 +1,29 @@
+<div class="paginations">
+    <div>
+      <div class="btn-group" id="radioBtn">
+        <div class="mr-5" style="display: flex; align-items: center;">
+          <span style="margin-right: 15px; white-space: nowrap;">Total Pages: <strong>{{ totalPages }}</strong></span>
+          <span style="margin-right: 5px; white-space: nowrap;">Page Size</span>
+          <select class="form-control pagination-select" [(ngModel)]="pageSize" (change)="changePageSize($event)">
+            <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
+          </select>
+        </div>
+        <div>
+          <button class="btn btn-light pagination-btn" (click)="goToFirstPage()">
+            <i class="fa fa-angle-double-left"></i> First
+          </button>
+          <button class="btn btn-light pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage <= 1">
+            <i class="fa fa-angle-left"></i> Previous
+          </button>
+          <button *ngFor="let page of getPaginationArray()" [class.active]="page === currentPage" class="btn btn-light pagination-btn" (click)="goToPage(page)">{{ page }}</button>
+          <button class="btn btn-light pagination-btn" (click)="goToNextPage()" [disabled]="currentPage >= totalPages">
+            Next <i class="fa fa-angle-right"></i>
+          </button>
+          <button class="btn btn-light pagination-btn" (click)="goToLastPage()">
+            Last <i class="fa fa-angle-double-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

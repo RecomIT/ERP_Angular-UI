@@ -1,0 +1,421 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Allowance Head & Name</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Allowance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Allowance Head & Name</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#allowanceHead" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Allowance Head
+                        </a></li>
+                    <li><a href="#allowanceName" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Allowance Name
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="allowanceHead" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="allowanceHeadFilter"
+                                            onkeyup="tableFilter('#tblAllowanceHeads tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span
+                                                class="input-group-addon text-dark text-dark text-dark"><i
+                                                    class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openAllowanceHeadModal()">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                id="tblAllowanceHeads">
+                                <thead class="text-dark text-white">
+                                    <tr>
+                                        <th class="text-center">#SL</th>
+                                        <th class="font-bold">Allowance Head</th>
+                                        <th class="font-bold">In Bengali</th>
+                                        <th>Code</th>
+                                        <th>Created Date</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of allowanceHeadList; let i = index">
+                                        <td class="text-center font-bold">{{i+1}}</td>
+                                        <td>{{item.allowanceHeadName}}</td>
+                                        <td>{{item.allowanceHeadNameInBengali}}</td>
+                                        <td>{{item.allowanceHeadCode}}</td>
+                                        <td>{{item.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td class="text-center">
+                                            <button type="button" (click)="editAllowanceHead(item.allowanceHeadId)"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="allowanceName" class="tab-pane">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="allowanceNameFilter"
+                                            onkeyup="tableFilter('#tblAllowanceNames tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark"><i
+                                                    class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openAllowanceNameModal()">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                    id="tblAllowanceNames">
+                                    <thead>
+                                        <tr class="text-dark text-white">
+                                            <th class="text-center">#SL</th>
+                                            <th>Allowance Name</th>
+                                            <th>Name In Bengali</th>
+                                            <th>Allowance Head</th>
+                                            <th>GLCode</th>
+                                            <th>Description</th>
+                                            <th class="text-center">Type</th>
+                                            <th class="text-center">Flag</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of allowanceNameList; let i =index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{item.name}}</td>
+                                            <td>{{item.allowanceNameInBengali}}</td>
+                                            <td>{{item.allowanceHeadName}}</td>
+                                            <td>{{item.glCode}}</td>
+                                            <td>{{item.allowanceDescription}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-primary"
+                                                    [hidden]="item.allowanceType =='Salary'">
+                                                    {{item.allowanceType }}
+                                                </span>
+                                                <span class="label label-success"
+                                                    [hidden]="item.allowanceType =='General'">
+                                                    {{item.allowanceType}} {{item.isFixed != null ? (item.isFixed ==
+                                                    true ?
+                                                    ' - Fixed' : ' - Flexible') : '' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">{{item.flag}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs"
+                                                    (click)="editAllowanceName(item.allowanceNameId)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #allowanceHeadModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #allowanceHeadForm="ngForm" (submit)="submitAllowanceHead(allowanceHeadForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="allowanceHeadName" class="control-label">Allowance Head
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span
+                                    class="input-group-addon text-dark">
+                                    <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="allowanceHeadName"
+                                name="allowanceHeadName" #allowanceHeadName="ngModel"
+                                [(ngModel)]="allowanceHead.allowanceHeadName" required minlength="2" maxlength="200">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="allowanceHeadName.invalid && allowanceHeadName.touched">
+                                <span *ngIf="allowanceHeadName.errors?.required">Allowance Head is required</span>
+                                <span *ngIf="allowanceHeadName.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="allowanceHeadName.errors?.maxlength">Maxlength is 200</span>
+                            </div>
+                            <span *ngIf="duplicateAllowanceHeadName!=''">{{duplicateAllowanceHeadName}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="allowanceHeadCode" class="control-label">Allowance Head Code</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span
+                                    class="input-group-addon text-dark text-dark text-dark text-dark">
+                                    <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="allowanceHeadCode"
+                                name="allowanceHeadCode" #allowanceHeadCode="ngModel"
+                                [(ngModel)]="allowanceHead.allowanceHeadCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="allowanceHeadNameInBengali" class="control-label">In-Bengali</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span
+                                    class="input-group-addon text-dark text-dark text-dark text-dark">
+                                    <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="allowanceHeadNameInBengali"
+                                name="allowanceHeadNameInBengali" #allowanceHeadNameInBengali="ngModel"
+                                [(ngModel)]="allowanceHead.allowanceHeadNameInBengali">
+                        </div>
+                        <div class="text-danger">
+                            <span>{{duplicateAllowanceHeadNameInBengali}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="allowanceHeadForm.invalid || btnAllowanceHead">
+                    <i class="fa fa-paper-plane"></i> | {{this.allowanceHead.allowanceHeadId == 0? 'Submit':'Update' }}
+                    <span [hidden]="!btnAllowanceHead" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #allowanceNameModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #allowanceNameForm="ngForm" (submit)="submitAllowanceName(allowanceNameForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="allowanceName" class="control-label">
+                                Allowance Name <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span
+                                        class="input-group-addon text-dark text-dark text-dark text-dark">
+                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="allowanceName" id="allowanceName"
+                                    class="form-control form-control-sm" #allowanceNameRef="ngModel"
+                                    [(ngModel)]="allowanceName.name" required minlength="2" maxlength="200">
+                            </div>
+                            <div class="text-danger">
+                                <div *ngIf="allowanceNameRef.invalid && allowanceNameRef.touched">
+                                    <span *ngIf="allowanceNameRef.errors?.required">Name is required</span>
+                                    <span *ngIf="allowanceNameRef.errors?.minlength">Minlength is 2</span>
+                                    <span *ngIf="allowanceNameRef.errors?.maxlength">Minlength is 200</span>
+                                </div>
+                                <span *ngIf="this.duplicateAllowanceName != null">{{this.duplicateAllowanceName}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="allowanceNameInBengali" class="control-label">
+                                In Bengali<span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span
+                                        class="input-group-addon text-dark text-dark text-dark text-dark">
+                                        <i>অ</i>
+                                    </span>
+                                </div>
+                                <input type="text" name="allowanceNameInBengali" id="allowanceNameInBengali"
+                                    class="form-control form-control-sm" #allowanceNameInBengaliRef="ngModel"
+                                    [(ngModel)]="allowanceName.allowanceNameInBengali" minlength="2" maxlength="200">
+                            </div>
+                            <div class="text-danger">
+                                <div *ngIf="allowanceNameInBengaliRef.invalid && allowanceNameInBengaliRef.touched">
+                                    <span *ngIf="allowanceNameInBengaliRef.errors?.minlength">Minlength is 2</span>
+                                    <span *ngIf="allowanceNameInBengaliRef.errors?.maxlength">Minlength is 200</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="allowanceHeadId" class="control-label">
+                                Allowance Head<span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span
+                                        class="input-group-addon text-dark">
+                                        <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select name="allowanceHeadId" id="allowanceHeadId" class="form-control form-control-sm"
+                                    #allowanceHeadIdRef="ngModel" [(ngModel)]="allowanceName.allowanceHeadId">
+                                    <option [value]="0">--Select Option--</option>
+                                    <option [value]="ah.allowanceHeadId" *ngFor="let ah of allowanceHeadList">
+                                        {{ah.allowanceHeadName}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="text-danger"
+                                *ngIf="allowanceHeadIdRef.value == 0 && allowanceHeadIdRef.touched">
+                                <span *ngIf="allowanceHeadIdRef.value==0">Head is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="glCode" class="control-label">
+                                GLCode<span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span
+                                        class="input-group-addon text-dark">
+                                        <i class="fa fa-codepen" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="glCode" id="glCode" #glCodeRef="ngModel"
+                                    [(ngModel)]="allowanceName.glCode" class="form-control form-control-sm" required>
+                            </div>
+                            <div class="text-danger" *ngIf="glCodeRef.invalid && glCodeRef.touched">
+                                <span *ngIf="glCodeRef.errors?.required">GLCode is required</span>
+                            </div>
+                            <div class="text-danger">
+                                <span *ngIf="this.duplicateAllowanceGLCode != null">{{this.duplicateAllowanceGLCode}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="description" class="control-label">
+                                Description
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" id="description" name="description" #descriptionRef="ngModel"
+                                    [(ngModel)]="allowanceName.allowanceDescription" autocomplete="off"
+                                    class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="allowanceType" class="control-label">Type</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-list"></i>
+                                    </span>
+                                </div>
+                                <select name="allowanceType" id="allowanceType" class="form-control form-control-sm"
+                                    [(ngModel)]="allowanceName.allowanceType" (change)="allowanceName.isFixed = null">
+                                    <option [value]="'General'" selected>General</option>
+                                    <option [value]="'Salary'">Salary</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4" *ngIf="allowanceName.allowanceType =='Salary'">
+                            <label for="" class="control-label font-bold hidden">Is Fixed?</label>
+                            <div class="form-control form-control-sm" >
+                                <input type="checkbox" name="isFixed" id="isFixed" #isFixed="ngModel"
+                                    [(ngModel)]="allowanceName.isFixed"> <span class="font-bold">Is Fixed Salary Component?</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="allowanceFlag" class="control-label font-bold">Flag</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-flag"></i>
+                                    </span>
+                                </div>
+                                <select name="allowanceFlag" id="allowanceFlag" class="form-control form-control-sm" [(ngModel)]="allowanceName.allowanceFlag">
+                                    <option [value]="''" selected>---Select Flag---</option>
+                                    <option [value]="'BASIC'">Basic</option>
+                                    <option [value]="'HR'">House Rent</option>
+                                    <option [value]="'MEDICAL'">Medical</option>
+                                    <option [value]="'CONVEYANCE'">CONVEYANCE</option>
+                                    <option [value]="'FESTIVAL BONUS'">Festival Bonus</option>
+                                    <option [value]="'PF'">PF</option>
+                                    <option [value]="'GF'">GF</option>
+                                    <option [value]="'OT'">OT</option>
+                                </select>
+                            </div>
+                            <div class="text-danger">
+                                <span *ngIf="this.duplicateAllowanceNameFlag != null">{{this.duplicateAllowanceNameFlag}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="allowanceNameForm.invalid || btnAllowanceName">
+                    <i class="fa fa-paper-plane"></i> | {{this.allowanceHead.allowanceHeadId == 0? 'Submit':'Update' }}
+                    <span [hidden]="!btnAllowanceName" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

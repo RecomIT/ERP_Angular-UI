@@ -1,0 +1,332 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Overtime Policy</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Overtime</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Policy</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li><a href="#approver" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Policy
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="approver" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openOvertimePolicyModal(0, 'Create')">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                id="tblAllowanceHeads">
+                                <thead class="text-dark text-white">
+                                    <tr class="text-center font-bold">
+                                        <th>#SL</th>
+                                        <th>Overtime Name</th>
+                                        <th>Unit</th>
+                                        <th>Amount Type</th>
+                                        <!-- <th>isFlatAmountType</th>
+                                        <th>isPercentageAmountType</th> -->
+                                        <th>Amount</th>
+                                        <th>Amount Rate</th>
+                                        <th>Limitation of Unit</th>
+                                        <th>Max. Unit</th>
+                                        <th>Min. Unit</th>
+                                        <th>Limitation of Amount</th>
+                                        <th>Max. Amount</th>
+                                        <th>Min. Amount</th>
+                                        <th>Created Date</th>
+                                        <th>Updated Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center font-bold"
+                                        *ngFor="let item of policyList; let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item?.overtimeName}}</td>
+                                        <td>{{item?.unit}}</td>
+                                        <td>{{item?.amountType}}</td>
+                                        <!-- <td>{{item?.isFlatAmountType}}</td>
+                                        <td>{{item?.isPercentageAmountType}}</td> -->
+                                        <td>{{item?.amount || '-'}}</td>
+                                        <td>{{item?.amountRate}}x Time(s)</td>
+                                        <td>{{item?.limitationOfUnit ? "Yes" : "No"}}</td>
+                                        <td>{{item?.maxUnit || '-'}}</td>
+                                        <td>{{item?.minUnit || '-'}}</td>
+                                        <td>{{item?.limitationOfAmount? "Yes" : "No"}}</td>
+                                        <td>{{item?.maxAmount || '-'}}</td>
+                                        <td>{{item?.minAmount || '-'}}</td>
+                                        <td>{{item?.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>{{item?.updatedDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button type="button" (click)="openOvertimePolicyModal(item?.overtimeId, 'Edit')"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                            <button type="button" (click)="openOvertimePolicyModal(item?.overtimeId, 'Delete')"
+                                                class="btn btn-xs">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+<ng-template #overtimePolicyModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #overtimePolicyForm="ngForm" (submit)="overtimePolicyMappingForm(overtimePolicyForm)">
+
+            <fieldset [disabled]="fieldsetDisabled">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="overtimeName" class="control-label"> Overtime Name
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" id="overtimeName" placeholder="Overtime Name"
+                                    name="overtimeName" required  #overtimeName="ngModel" [(ngModel)]="policy.overtimeName">
+                            </div>
+                            <div class="text-danger" *ngIf="overtimeName.touched && overtimeName.invalid">
+                                <span *ngIf="overtimeName.errors?.required"> Overtime Name is required</span>
+                            </div>
+                           
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="unit" class="control-label"> Overtime Unit <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                
+                                <div style="width:90%">
+                                    <ng-select2 name="unit" id="unit" [placeholder]="'Select Unit'" [options]="select2Options" [data]="units"
+                                    #unit ="ngModel" [(ngModel)]="policy.unit" (ngModelChange)="onUnitChange()" required [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="amountType" class="control-label"> Amount Type <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                
+                                <div style="width:90%">
+                                    <ng-select2 name="amountType" id="amountType" [placeholder]="'Select Amount Type'" [options]="select2Options" [data]="amountTypes"
+                                    #amountType ="ngModel" [(ngModel)]="policy.amountType" (ngModelChange)="onAmountTypeChange()" required [disabled]="fieldsetDisabled">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="amount" class="control-label"> Amount
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-money" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="amount" name="amount" required
+                                 #amount="ngModel" [(ngModel)]="policy.amount" [disabled]="!policy.isFlatAmountType" [min]="policy.isFlatAmountType ? 1 : 0">
+                            </div>
+                            <div class="text-danger" *ngIf="amount.touched && amount.invalid">
+                                <span *ngIf="amount.errors?.required">Amount is required</span>
+                                <span *ngIf="amount.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="amountRate" class="control-label"> Amount Rate
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-registered" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="amountRate" name="amountRate" required  
+                                [disabled]="policy.isFlatAmountType" [min]="policy.isFlatAmountType ? 0 : 1"  #amountRate="ngModel" [(ngModel)]="policy.amountRate">
+                            </div>
+                            <div class="text-danger" *ngIf="amountRate.touched && amountRate.invalid">
+                                <span *ngIf="amountRate.errors?.required">Amount Rate is required</span>
+                                <span *ngIf="amountRate.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="limitationOfUnit" class="control-label"> Limitation of Unit
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+
+                                <select name="limitationOfUnit" id="limitationOfUnit" class="form-control form-control-sm" #limitationOfUnit="ngModel" [(ngModel)]="policy.limitationOfUnit" (change)="onLimitationOfUnit()">
+                                    <option [value]=false>No</option>
+                                    <option [value]=true>Yes</option>
+                                </select>
+                            </div>
+                            <div class="text-danger">
+                                <!-- <span *ngIf="overtimeApproverId.touched && overtimeApproverId.value == 0">Please Select Approver</span> -->
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="maxUnit" class="control-label"> Max. Unit
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-medium" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="maxUnit"
+                                    name="maxUnit" required  [min]="policy.limitationOfUnit ? 1 : 0" #maxUnit="ngModel" [(ngModel)]="policy.maxUnit" [disabled]="!policy.limitationOfUnit">
+                            </div>
+                            <div class="text-danger" *ngIf="maxUnit.touched && maxUnit.invalid">
+                                <span *ngIf="maxUnit.errors?.required">Max. Unit is required</span>
+                                <span *ngIf="maxUnit.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="minUnit" class="control-label"> Min. Unit
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-maxcdn" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="minUnit"
+                                    name="minUnit" required  [min]="0"  #minUnit="ngModel" [(ngModel)]="policy.minUnit" [disabled]="!policy.limitationOfUnit">
+                            </div>
+                            <div class="text-danger" *ngIf="minUnit.touched && minUnit.invalid">
+                                <span *ngIf="minUnit.errors?.required">Min. Unit is required</span>
+                                <span *ngIf="minUnit.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="limitationOfAmount" class="control-label">Limitation of Amount
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+
+                                <select name="limitationOfAmount" id="limitationOfAmount" class="form-control form-control-sm" #limitationOfAmount="ngModel" [(ngModel)]="policy.limitationOfAmount" (change)="onLimitationOfAmount()">
+                                    <option [value]=false>No</option>
+                                    <option [value]=true>Yes</option>
+                                </select>
+                            </div>
+                            <div class="text-danger">
+                                <!-- <span *ngIf="overtimeApproverId.touched && overtimeApproverId.value == 0">Please Select Approver</span> -->
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="maxAmount" class="control-label"> Max. Amount
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-medium" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="maxAmount"
+                                    name="maxAmount" required  [min]="policy.limitationOfAmount ? 1 : 0" #maxAmount="ngModel" [(ngModel)]="policy.maxAmount" [disabled]="!policy.limitationOfAmount">
+                            </div>
+                            <div class="text-danger" *ngIf="maxAmount.touched && maxAmount.invalid">
+                                <span *ngIf="maxAmount.errors?.required">Max. Amount is required</span>
+                                <span *ngIf="maxAmount.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="minAmount" class="control-label"> Min. Amount
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-maxcdn" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" id="minAmount"
+                                    name="minAmount" required  [min]="0"  #minAmount="ngModel" [(ngModel)]="policy.minAmount" [disabled]="!policy.limitationOfAmount">
+                            </div>
+                            <div class="text-danger" *ngIf="minAmount.touched && minAmount.invalid">
+                                <span *ngIf="minAmount.errors?.required">Min. Unit is required</span>
+                                <span *ngIf="minAmount.errors?.min">Minimum Value is 1</span> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="overtimePolicyForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | {{this.buttonAction}}
+                    <!-- teamApprovalMapping.approver.overtimeApproverId == 0 -->
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+
+    

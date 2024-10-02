@@ -1,0 +1,11 @@
+/* Adjust radio buttons to display horizontally */ 
+.form-check-inline { 
+    display: inline-block; 
+    margin-right: 10px; /* Adjust as needed */ 
+  } 
+   
+  /* Adjust radio buttons and labels to be vertically aligned in the middle */ 
+  .form-check-input, 
+  .form-check-label { 
+    vertical-align: middle; 
+  }

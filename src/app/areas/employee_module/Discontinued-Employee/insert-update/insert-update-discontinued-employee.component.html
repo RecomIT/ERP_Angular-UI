@@ -1,0 +1,131 @@
+<ng-template #discontinuedEmployeeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle icofont-users" aria-hidden="true"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="form" (submit)="submit()">
+            <div class="modal-body">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="employeeId" class="control-label font-bold">Employee</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-users"></i>
+                                </span>
+                            </div>
+                            <div style="width: 85%;">
+                                <ng-select2 [data]="ddlEmployees" name="employeeId" id="employeeId"
+                                    [placeholder]="'Select Employee...'" [allowClear]="true" [options]="select2Config"
+                                    formControlName="employeeId">
+                                </ng-select2>
+                            </div>
+                        </div>
+                        <div class="text-danger">
+                            <span *ngIf="formErrors?.employeeId">{{formErrors?.employeeId}}</span>
+                            <span *ngIf="server_errors != null">{{server_errors?.exist}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="lastWorkingDate" class="control-label font-bold">Last Wroking Date</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="lastWorkingDate" id="lastWorkingDate"
+                                formControlName="lastWorkingDate" (blur)="logFormErrors()" autocomplete="off"
+                                class="form-control form-control-sm" bsDatepicker [bsConfig]="datePickerConfig"
+                                placeholder="Enter Date Here" autofocus="true">
+                        </div>
+                        <div class="text-danger">
+                            <span *ngIf="formErrors?.lastWorkingDate">{{formErrors?.lastWorkingDate}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="releasetype" class="control-label font-bold">Release type</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <select name="releasetype" id="releasetype" formControlName="releasetype"
+                                class="form-control form-control-sm" (blur)="logFormErrors()">
+                                <option [value]="item" *ngFor="let item of types_of_releasetype">{{item}}</option>
+                            </select>
+                        </div>
+                        <div class="text-danger">
+                            <span *ngIf="formErrors?.releasetype">{{formErrors?.releasetype}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="custom-control custom-switch pl-0" style="vertical-align: middle;">
+                            <input type="checkbox" class="custom-control-input" name="chkIsAutoComplete"
+                                id="chkIsAutoComplete" formControlName="isFullMonthSalaryHold">
+                            <label class="custom-control-label custom-switch-lable pull-right mb-0 mt-2"
+                                for="chkIsAutoComplete"> Hold full month salary.</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="calculateFestivalBonusTaxProratedBasis" class="control-label font-bold">Calculate
+                            Festival Bonus Tax Prorated Basis</label>
+                        <div>
+                            <div class="form-check abc-radio abc-radio-info form-check-inline">
+                                <input class="form-check-input" type="radio"
+                                    id="calculateFestivalBonusTaxProratedBasis1" [value]="true"
+                                    name="calculateFestivalBonusTaxProratedBasis"
+                                    formControlName="calculateFestivalBonusTaxProratedBasis">
+                                <label class="form-check-label" for="calculateFestivalBonusTaxProratedBasis1"> Yes
+                                </label>
+                            </div>
+                            <div class="form-check abc-radio abc-radio-danger form-check-inline">
+                                <input class="form-check-input" type="radio"
+                                    id="calculateFestivalBonusTaxProratedBasis2" [value]="false"
+                                    name="calculateFestivalBonusTaxProratedBasis"
+                                    formControlName="calculateFestivalBonusTaxProratedBasis">
+                                <label class="form-check-label" for="calculateFestivalBonusTaxProratedBasis2"> No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-6 col-sm-12">
+                        <label for="CalculateProjectionTaxProratedBasis" class="control-label font-bold">Calculate
+                            Projection Tax Prorated Basis</label>
+                        <div class="d-block">
+                            <div class="form-check abc-radio abc-radio-info form-check-inline">
+                                <input class="form-check-input" type="radio" id="calculateProjectionTaxProratedBasis1"
+                                    [value]="true" name="calculateProjectionTaxProratedBasis"
+                                    formControlName="calculateProjectionTaxProratedBasis">
+                                <label class="form-check-label" for="calculateProjectionTaxProratedBasis1"> Yes </label>
+                            </div>
+                            <div class="form-check abc-radio abc-radio-danger form-check-inline">
+                                <input class="form-check-input" type="radio" id="calculateProjectionTaxProratedBasis2"
+                                    [value]="false" name="calculateProjectionTaxProratedBasis"
+                                    formControlName="calculateProjectionTaxProratedBasis">
+                                <label class="form-check-label" for="calculateProjectionTaxProratedBasis2"> No </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="form.invalid || btnSubmit">
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

@@ -1,0 +1,401 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Deduction Head & Name</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Deduction</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Deduction Head & Name</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#deductionHead" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Deduction Head
+                        </a></li>
+                    <li><a href="#deductionName" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Deduction Name
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="deductionHead" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="deductionHeadFilter"
+                                            onkeyup="tableFilter('#tblDeductionHeads tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i
+                                                    class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openDeductionHeadModal()">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                    id="tblDeductionHeads">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Deduction Head</th>
+                                            <th>In Bengali</th>
+                                            <th>Code</th>
+                                            <th class="text-center">Created Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of deductionHeadList; let i = index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{item.deductionHeadName}}</td>
+                                            <td>{{item.deductionHeadNameInBengali}}</td>
+                                            <td>{{item.deductionHeadCode}}</td>
+                                            <td class="text-center">{{item.createdDate | date:"dd-MMM-yyyy hh:mm:ss a"}}
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" (click)="editDeductionHead(item.deductionHeadId)"
+                                                    class="btn btn-xs">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="deductionName" class="tab-pane">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-8 col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="deductionNameFilter"
+                                            onkeyup="tableFilter('#tblDeductionNames tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i
+                                                    class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-4 col-md-4">
+                                    <button class="btn btn-sm btn-success float-right btn-rounded"
+                                        (click)="openDeductionNameModal()">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                    id="tblDeductionNames">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Deduction Name</th>
+                                            <th>Name In Bengali</th>
+                                            <th>Deduction Head</th>
+                                            <th>GLCode</th>
+                                            <th>Description</th>
+                                            <th class="text-center">Type</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of deductionNameList; let i =index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{item.name}}</td>
+                                            <td>{{item.deductionNameInBengali}}</td>
+                                            <td>{{item.deductionHeadName}}</td>
+                                            <td>{{item.glCode}}</td>
+                                            <td>{{item.deductionDescription}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-primary"
+                                                    [hidden]="item.deductionType =='Salary'">
+                                                    {{item.deductionType }}
+                                                </span>
+                                                <span class="label label-success"
+                                                    [hidden]="item.deductionType =='General'">
+                                                    {{item.deductionType}} {{item.isFixed != null ? (item.isFixed ==
+                                                    true ?
+                                                    ' - Fixed' : ' - Flexible') : '' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs"
+                                                    (click)="editDeductionName(item.deductionNameId)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #deductionHeadModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle 
+            fa fa-clock-o"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #deductionHeadForm="ngForm" (submit)="submitDeductionHead(deductionHeadForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="deductionHeadName" class="control-label">Deduction Head
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="deductionHeadName"
+                                name="deductionHeadName" #deductionHeadName="ngModel"
+                                [(ngModel)]="deductionHead.deductionHeadName" required minlength="2" maxlength="200">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="deductionHeadName.invalid && deductionHeadName.touched">
+                                <span *ngIf="deductionHeadName.errors?.required">Deduction Head is required</span>
+                                <span *ngIf="deductionHeadName.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="deductionHeadName.errors?.maxlength">Maxlength is 200</span>
+                            </div>
+                            <span *ngIf="duplicateDeductionHeadName!=''">{{duplicateDeductionHeadName}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="deductionHeadCode" class="control-label">Deduction Head Code</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon">
+                                    <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="deductionHeadCode"
+                                name="deductionHeadCode" #deductionHeadCode="ngModel"
+                                [(ngModel)]="deductionHead.deductionHeadCode">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="deductionHeadNameInBengali" class="control-label">In-Bengali</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="deductionHeadNameInBengali"
+                                name="deductionHeadNameInBengali" #deductionHeadNameInBengali="ngModel"
+                                [(ngModel)]="deductionHead.deductionHeadNameInBengali">
+                        </div>
+                        <div class="text-danger">
+                            <span>{{duplicateDeductionHeadNameInBengali}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="deductionHeadForm.invalid || btnDeductionHead">
+                    <i class="fa fa-paper-plane"></i> | {{this.deductionHead.deductionHeadId == 0? 'Submit':'Update' }}
+                    <span [hidden]="!btnDeductionHead" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #deductionNameModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle 
+            fa fa-clock-o"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #deductionNameForm="ngForm" (submit)="submitDeductionName(deductionNameForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="deductionName" class="control-label">
+                            Deduction Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="deductionName" id="deductionName"
+                                class="form-control form-control-sm" #deductionNameRef="ngModel"
+                                [(ngModel)]="deductionName.name" required minlength="2" maxlength="200">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="deductionNameRef.invalid && deductionNameRef.touched">
+                                <span *ngIf="deductionNameRef.errors?.required">Name is required</span>
+                                <span *ngIf="deductionNameRef.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="deductionNameRef.errors?.maxlength">Minlength is 200</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="deductionNameInBengali" class="control-label">
+                            In Bengali<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon">
+                                    <i>অ</i>
+                                </span>
+                            </div>
+                            <input type="text" name="deductionNameInBengali" id="deductionNameInBengali"
+                                class="form-control form-control-sm" #deductionNameInBengaliRef="ngModel"
+                                [(ngModel)]="deductionName.deductionNameInBengali" minlength="2" maxlength="200">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="deductionNameInBengaliRef.invalid && deductionNameInBengaliRef.touched">
+                                <span *ngIf="deductionNameInBengaliRef.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="deductionNameInBengaliRef.errors?.maxlength">Minlength is 200</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="deductionHeadId" class="control-label">
+                            Deduction Head<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon">
+                                    <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <select name="deductionHeadId" id="deductionHeadId" class="form-control form-control-sm"
+                                #deductionHeadIdRef="ngModel" [(ngModel)]="deductionName.deductionHeadId">
+                                <option [value]="0">--Select Option--</option>
+                                <option [value]="ah.deductionHeadId" *ngFor="let ah of deductionHeadList">
+                                    {{ah.deductionHeadName}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="text-danger" *ngIf="deductionHeadIdRef.value == 0 && deductionHeadIdRef.touched">
+                            <span *ngIf="deductionHeadIdRef.value==0">Head is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="glCode" class="control-label">
+                            GLCode<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-addon">
+                                    <i class="fa fa-codepen" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="glCode" id="glCode" #glCodeRef="ngModel"
+                                [(ngModel)]="deductionName.glCode" class="form-control form-control-sm" required>
+                        </div>
+                        <div class="text-danger" *ngIf="glCodeRef.invalid && glCodeRef.touched">
+                            <span *ngIf="glCodeRef.errors?.required">GLCode is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="description" class="control-label">
+                            Description
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="description" name="description" #descriptionRef="ngModel"
+                                [(ngModel)]="deductionName.deductionDescription" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="deductionType" class="control-label">Type</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <select name="deductionType" id="deductionType" class="form-control form-control-sm"
+                                [(ngModel)]="deductionName.deductionType" (change)="deductionName.isFixed = null">
+                                <option [value]="''">--Select One--</option>
+                                <option [value]="'General'">General</option>
+                                <option [value]="'Salary'">Salary</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4" *ngIf="deductionName.deductionType =='Salary'">
+                        <label for="deductionType" class="control-label hidden">Is Fixed?</label>
+                        <div class="form-control form-control-sm">
+                            <input type="checkbox" name="isFixed" id="isFixed" #isFixed="ngModel"
+                                [(ngModel)]="deductionName.isFixed"> Is Fixed Salary Component?
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="flag" class="control-label font-bold">Flag</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-flag"></i>
+                                </span>
+                            </div>
+                            <select name="flag" id="flag" class="form-control form-control-sm" #flagRef="ngModel" [(ngModel)]="deductionName.flag">
+                                <option [value]="''" selected>---Select One--</option>
+                                <option [value]="'PF'">PF</option>
+                                <option [value]="'TAX'">Tax</option>
+                                <option [value]="'PF Loan'">PF Loan</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="deductionNameForm.invalid || btnDeductionName">
+                    <i class="fa fa-paper-plane"></i> | {{this.deductionHead.deductionHeadId == 0? 'Submit':'Update' }}
+                    <span [hidden]="!btnDeductionName" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

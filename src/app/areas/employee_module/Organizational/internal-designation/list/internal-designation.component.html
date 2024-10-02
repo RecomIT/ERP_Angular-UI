@@ -1,0 +1,113 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12">
+        <h2 @slideInUp class="mt-2">Internal Designation</h2>       
+    </div>
+</div>
+<div id="page-container" class="wrapper wrapper-content pt-2">
+    <div class="row m-t-sm text-x-small">
+        <div class="col-md-12 mb-4">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs ">
+                 
+                    <li><a href="#internalDesignation" data-toggle="tab" class="nav-link active">
+                        <i class="icofont-briefcase"></i> | Internal Designation
+                        </a>
+                    </li>
+                 
+
+                </ul>
+                <div class="tab-content">
+                    
+                    <!-- Added by Monzur 21-Nov-2023 -->
+
+                    <div id="internalDesignation" class="tab-pane active">
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark">
+                                <form [formGroup]="internalDesignationForm">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-8">
+                                            <label for="SearchByInternalDesignation" class="control-label">SEARCH BY INTERNAL DESIGNATION</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-sm
+                                            font-bold" placeholder="Search By Internal Designation" id="internalDesignationFilter"
+                                                    onkeyup="tableFilter('#tblInternalDesignation tbody tr',this)" />
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   
+                                        <div class="form-group col-md-8 col-sm-12 mt-sm-4 mt-4">
+                                            <div class="clearfix">
+                                                <button type="button" class="btn btn-outline-secondary btn-rounded pull-right ml-1"
+                                                    (click)="openInternalDesignationModal(0)">
+                                                    <i class="icofont-plus"></i> | Create
+                                                </button>
+                                                <button type="button" class="btn btn-outline-primary btn-rounded pull-right" (click)="openUploadInternalDesignationModal()">
+                                                    <i class="fa fa-arrow-up"></i> | Upload
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>                
+                        
+                        <div class="ibox shadow-sm">
+                            <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblInternalDesignation">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th>#SL</th>                                           
+                                                <th>Internal DesignationName Name</th>
+                                                <th class="text-center">Status</th>
+                                                <th>Remarks</th>
+                                                <th>Action</th>
+                                            </tr> 
+                                        </thead>
+                                        <tbody class="text-center">
+                                            <tr *ngFor="let item of internalDesignationList | paginate:pageConfig;let i=index">
+                                                <td class="font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>                                              
+                                                <td>{{item.internalDesignationName}}</td>
+                                                <td class="text-center">
+                                                    <span [class]="item.isActive? 'label label-primary':'label label-danger'">
+                                                        {{item.isActive? "Active":"Inactive"}}</span>
+                                                </td>
+                                                <td>{{item.remarks}}</td>                                              
+                                               
+                                                <td>
+                                                    <button type="button" class="btn btn-xs" (click)="openInternalDesignationModal(item?.internalDesignationId)"><i class="fa fa-edit"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-end">
+                                        <pagination-controls (pageChange)="page_Changed($event)" [responsive]="true" [autoHide]="true"
+                                            id="data_list"></pagination-controls>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ended by Monzur -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Added by Monzur 22-Nov-2023 -->
+
+<ng-container *ngIf="isShowInternalDesignationModal == true"> 
+    <app-employee-module-insert-update-internal-designation [internalDesignationId]="internalDesignationId" (closeModalEvent)="closeInternalDesignationModal($event)" >        
+    </app-employee-module-insert-update-internal-designation>
+</ng-container>
+
+<ng-container *ngIf="isUploadInternalDesignationModal == true"> 
+    <app-employee-module-upload-internal-designation [internalDesignationId]="0" (closeModalEvent)="closeUploadInternalDesignationModal($event)" >        
+    </app-employee-module-upload-internal-designation>
+</ng-container>
+
+<!-- Ended by Monzur 22-Nov-2023 -->

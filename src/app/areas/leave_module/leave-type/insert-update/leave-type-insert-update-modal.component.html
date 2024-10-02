@@ -1,0 +1,94 @@
+<ng-template #leaveTypeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle 
+            fa fa-toggle-off"></i>
+            | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form [formGroup]="form" (submit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label for="title" class="control-label">Title
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-toggle-off" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="title" id="title" class="form-control form-control-sm"
+                                formControlName="title" />
+                        </div>
+                        <div class="text-danger">
+                            <span>{{duplicateLeaveTitle}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label for="leaveTypeNameBN" class="control-label">Title (Bangali)</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-toggle-off" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="titleInBangali" id="titleInBangali"
+                                class="form-control form-control-sm" formControlName="titleInBangali" />
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-4 col-md-4">
+                        <label for="shortName" class="control-label">
+                            Short Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="shortName" id="shortName" formControlName="shortName"
+                                class="form-control form-control-sm" />
+                        </div>
+                        <div class="text-danger">
+                            <span>{{duplicateLeaveShortName}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label for="leaveTypeIsActive" class="control-label hidden">
+                            Leave Is Active<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon my-input-group-addon-padding">
+                                    <input type="checkbox" name="isActive" id="isActive" formControlName="isActive" />
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm text-small font-bold">
+                                Is Active?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="form.invalid || btnSubmit">
+                    <i class="fa fa-paper-plane"></i> | {{this.id == 0? 'Submit':'Update' }}
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger"
+                    (click)="modal.close('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

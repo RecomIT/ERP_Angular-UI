@@ -1,0 +1,138 @@
+<ng-template #experienceModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-worker pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')" [disabled]="btnSubmit"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="experienceForm" (ngSubmit)="submitForm()">
+        <div class="modal-body text-x-small font-bold">
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="exCompanyname" class="control-label">Company Name <span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-building"></i>
+                            </span>
+                        </div>
+                        <input id="exCompanyname" name="exCompanyname" class="form-control form-control-sm"
+                            formControlName="exCompanyname">
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="exCompanyBusinees" class="control-label">Company Business<span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-briefcase"></i>
+                            </span>
+                        </div>
+
+                        <input id="exCompanyBusinees" name="exCompanyBusinees" class="form-control form-control-sm"
+                            formControlName="exCompanyBusinees">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="exCompanyLocation" class="control-label">Company
+                        Location<span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="exCompanyLocation" id="exCompanyLocation"
+                            class="form-control form-control-sm" formControlName="exCompanyLocation">
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="exCompanyDepartment" class="control-label">Department<span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-building-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="exCompanyDepartment" id="exCompanyDepartment"
+                            class="form-control form-control-sm" formControlName="exCompanyDepartment">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="exCompanyDesignation" class="control-label">Designation<span
+                            class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user-md"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="exCompanyDesignation" id="exCompanyDesignation"
+                            class="form-control form-control-sm" formControlName="exCompanyDesignation">
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="exCompanyExperience" class="control-label">Experiences
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-wrench"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="exCompanyExperience" id="exCompanyExperience"
+                            class="form-control form-control-sm" formControlName="exCompanyExperience">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="employmentFrom" class="control-label">
+                        Employment Period (From)<span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="employmentFrom" id="employmentFrom"
+                            class="form-control form-control-sm bg-white" bsDatepicker autocomplete="off"
+                            [bsConfig]="datePickerConfig" formControlName="employmentFrom">
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="employmentTo" class="control-label">Employment Period(To) <span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="employmentTo" id="employmentTo"
+                            class="form-control form-control-sm bg-white" bsDatepicker autocomplete="off" readonly
+                            [bsConfig]="datePickerConfig" formControlName="employmentTo">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" [disabled]="btnSubmit">
+                <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+                <i class="fa fa-paper-plane"></i> | {{experience.id > 0 ? 'Update': 'Submit'}}
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger" [disabled]="btnSubmit"
+                (click)="closeModal('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>

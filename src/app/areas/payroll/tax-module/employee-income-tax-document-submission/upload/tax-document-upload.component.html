@@ -1,0 +1,95 @@
+<ng-template #modal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-arrow-up" aria-hidden="true"></i> | Upload
+            AIT/Tax-Refund
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12 text-center">
+                        <div class="border-section">
+                            <div class="border-label">Please first download the file & then upload</div>
+                            <button type="button" class="text-dark btn btn-warning btn-rounded font-bold"
+                                (click)="download()"><i class="icofont-download"></i> | Download Format
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12 mt-2">
+                        <label for="fiscalYearId" class="control-label font-bold">Fiscal Year <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-minus-o"></i>
+                                </span>
+                            </div>
+                            <select name="fiscalYearId" id="fiscalYearId" class="form-control form-control-sm"
+                                formControlName="fiscalYearId" (blur)="logFormErrors()">
+                                <option [value]="0">---Select Fiscal Year---</option>
+                                <option [value]="item.id" selected *ngFor="let item of ddlFiscalYears">{{item.text}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="text-danger" *ngIf="formErrors.fiscalYearId">
+                            {{formErrors.fiscalYearId}}
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12 mt-2">
+                        <label for="certificateType" class="control-label font-bold">Certificate Type <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-minus-o"></i>
+                                </span>
+                            </div>
+                            <select name="certificateType" id="certificateType" class="form-control form-control-sm"
+                                formControlName="certificateType" (blur)="logFormErrors()">
+                                <option [value]="''">---Select Certificate ype---</option>
+                                <option [value]="item.value" selected *ngFor="let item of certificate_types">
+                                    {{item.text}}</option>
+                            </select>
+                        </div>
+                        <div class="text-danger" *ngIf="formErrors.certificateType">
+                            {{formErrors.certificateType}}
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12 mt-2">
+                        <label for="excelFileUpload" class="control-label font-bold">Excel File Only
+                            <span class="taxt-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="custom-file font-bold">
+                                <input id="excelFileUpload" type="file" class="custom-file-input"
+                                    (change)="fileUpload($event)" accept=".xls,.xlsx">
+                                <label class="custom-file-label" for="excelFileUpload">
+                                    {{excelFileName}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-danger" *ngIf="formErrors.file">
+                            {{formErrors.file}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="btnSubmit || form.invalid">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Upload File
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')"
+                    [disabled]="btnSubmit">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

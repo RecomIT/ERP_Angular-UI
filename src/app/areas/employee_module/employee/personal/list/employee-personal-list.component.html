@@ -1,0 +1,387 @@
+<div class="ibox">
+    <form [formGroup]="personalForm" (ngSubmit)="submitForm()">
+        <div class="ibox-content">
+            <div class="form-row text-x-small">
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="legalName" class="control-label  font-bold">Legal Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="legalName" id="legalName" class="form-control form-control-sm"
+                            formControlName="legalName">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="fatherName" class="control-label  font-bold">Father's
+                        Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-male"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="fatherName" id="fatherName" class="form-control form-control-sm"
+                            formControlName="fatherName">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="motherName" class="control-label  font-bold">Mother's
+                        Name</ label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-female"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="motherName" id="motherName" class="form-control form-control-sm"
+                                formControlName="motherName">
+                        </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="dateOfBirth" class="control-label  font-bold">Date Of Birth<span
+                            class="text-danger hide">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="dateOfBirth" id="dateOfBirth"
+                            class="form-control form-control-sm bg-white" bsDatepicker autocomplete="off" readonly
+                            [bsConfig]="datePickerConfig" formControlName="dateOfBirth">
+                        <div class="input-group-prepend cursor-pointer"
+                            *ngIf="personalForm.get('dateOfBirth').value != null"
+                            (click)="[personalForm.get('dateOfBirth').setValue(null)]" tooltip="Click to clear date of birth">
+                            <span class="input-group-addon">
+                                <i class="fa fa-times text-danger" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="empGender" class="control-label  font-bold">Gender <span
+                            class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-venus" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="empGender" id="empGender" class="form-control form-control-sm"
+                            formControlName="gender">
+                            <option [value]="''" selected>---Select Gender---</option>
+                            <option [value]="item" *ngFor="let item of ddlGender">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="religion" class="control-label  font-bold">Religion
+                        <span class="text-danger hide">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-moon-o" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="religion" id="religion" class="form-control form-control-sm"
+                            formControlName="religion">
+                            <option [value]="''" selected>---Select Religion---</option>
+                            <option [value]="item" *ngFor="let item of ddlReligions">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="maritalStatus" class="control-label  font-bold">Marital
+                        Status</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-diamond" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="maritalStatus" id="maritalStatus" class="form-control form-control-sm"
+                            formControlName="maritalStatus">
+                            <option [value]="'N/A'" selected>---Select Marital---</option>
+                            <option [value]="m" *ngFor="let m of maritals()">{{m}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="spouseName" class="control-label  font-bold">Spouse
+                        Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-venus-mars" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="spouseName" id="spouseName" class="form-control form-control-sm"
+                            formControlName="spouseName">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="numberOfChild" class="control-label ">Number Of Child</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-child" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="number" name="numberOfChild" id="numberOfChild"
+                            class="form-control form-control-sm" formControlName="numberOfChild">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3 hide">
+                    <label for="feet" class="control-label  font-bold">Height in Feet</label>
+                    <div class="input-group">
+                        <select name="feet" id="feet" class="form-control form-control-sm" formControlName="feet">
+                            <option [value]="'N/A'" selected>---Feet---</option>
+                            <option [value]="3">3</option>
+                            <option [value]="4">4</option>
+                            <option [value]="5">5</option>
+                            <option [value]="6">6</option>
+                            <option [value]="7">7</option>
+                        </select>
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-arrows-h" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="inch" id="inch" class="form-control form-control-sm" formControlName="inch">
+                            <option [value]="'N/A'" selected>---Inch---</option>
+                            <option [value]="0">0</option>
+                            <option [value]="1">1</option>
+                            <option [value]="2">2</option>
+                            <option [value]="3">3</option>
+                            <option [value]="4">4</option>
+                            <option [value]="5">5</option>
+                            <option [value]="6">6</option>
+                            <option [value]="7">7</option>
+                            <option [value]="8">8</option>
+                            <option [value]="9">9</option>
+                            <option [value]="10">10</option>
+                            <option [value]="11">11</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="bloodGroup" class="control-label  font-bold">Blood
+                        Group</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-tint" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="bloodGroup" id="bloodGroup" class="form-control form-control-sm"
+                            formControlName="bloodGroup">
+                            <option [value]="''" selected>---Select Blood Group---</option>
+                            <option [value]="item" *ngFor="let item of ddlBloodGroups">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="mobileNo" class="control-label  font-bold">Mobile
+                        No(Personal)</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-sort-alpha-asc"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="mobileNo" id="mobileNo" class="form-control form-control-sm"
+                            formControlName="personalMobileNo">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="email" class="control-label  font-bold">Email ID
+                        (Personal) </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="email" name="email" id="email" class="form-control form-control-sm"
+                            formControlName="personalEmailAddress">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3 text-uppercase">
+                    <label class="control-label  font-bold hidden" for="ResidentialStatus">Residentiality</label>
+                    <div class="input-group-prepend">
+                        <input type="checkbox" name="ResidentialStatus" id="ResidentialStatus"
+                            formControlName="isResidential"> &nbsp; &nbsp; Is Residential ?
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="presentAddress" class="control-label  font-bold">Present
+                        Address</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-book"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="presentAddress" id="presentAddress"
+                            class="form-control form-control-sm" formControlName="presentAddress" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="permanentAddress" class="control-label  font-bold">Permanent Address<span
+                            class="text-danger hide">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-card"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="permanentAddress" id="permanentAddress"
+                            class="form-control form-control-sm" formControlName="permanentAddress" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="EmergencyContactPerson" class="control-label">Emergency Contact Person-1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user-secret"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactPersonName" id="emergencyContactPersonName"
+                            formControlName="emergencyContactPerson" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="EmergencyRelation" class="control-label">Relation-1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-venus-mars"></i>
+                            </span>
+                        </div>
+                        <select type="text" name="EmergencyRelation" id="EmergencyRelation"
+                            class="form-control form-control-sm" formControlName="relationWithEmergencyContactPerson">
+                            <option [value]="''" selected>---Select Relation---</option>
+                            <option [value]="item" *ngFor="let item of ddlRelations">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="EmergencyContactNumber" class="control-label">Contact No-1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-phone"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="EmergencyContactNumber" id="EmergencyContactNumber"
+                            formControlName="emergencyContactNo" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="EmergencyAddress" class="control-label">Address-1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-card-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="EmergencyAddress" id="EmergencyAddress"
+                            class="form-control form-control-sm" formControlName="emergencyContactAddress" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="emergencyContactEmailAddress" class="control-label">Email-1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-card-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactEmailAddress" id="emergencyContactEmailAddress"
+                            class="form-control form-control-sm" formControlName="emergencyContactEmailAddress" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="emergencyContactPerson2" class="control-label">Emergency Contact Person-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user-secret"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactPersonName2" id="emergencyContactPerson2"
+                            formControlName="emergencyContactPerson2" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="relationWithEmergencyContactPerson2" class="control-label">Relation-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-venus-mars"></i>
+                            </span>
+                        </div>
+                        <select type="text" name="relationWithEmergencyContactPerson2"
+                            id="relationWithEmergencyContactPerson2" class="form-control form-control-sm"
+                            formControlName="relationWithEmergencyContactPerson2">
+                            <option [value]="''" selected>---Select Relation---</option>
+                            <option [value]="item" *ngFor="let item of ddlRelations">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="emergencyContactNo2" class="control-label">Contact No-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-phone"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactNo2" id="emergencyContactNo2"
+                            formControlName="emergencyContactNo2" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="emergencyContactAddress2" class="control-label">Address-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-card-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactAddress2" id="emergencyContactAddress2"
+                            class="form-control form-control-sm" formControlName="emergencyContactAddress2" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label for="emergencyContactEmailAddress2" class="control-label">Email-2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-address-card-o"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="emergencyContactEmailAddress2" id="emergencyContactEmailAddress2"
+                            class="form-control form-control-sm" formControlName="emergencyContactEmailAddress2" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ibox-footer">
+            <button type="submit" class="btn btn-primary btn-rounded btn-outline" [disabled]="personalForm.invalid">
+                <i class="fa fa-paper-plane faa-passing"></i>| Update
+            </button>
+        </div>
+    </form>
+</div>

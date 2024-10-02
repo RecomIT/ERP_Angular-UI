@@ -1,0 +1,70 @@
+
+
+.attendance-details{
+  
+    height: 250px;
+    max-height: 250px; 
+    overflow-y: auto;  
+}
+
+
+
+.attendance-table{
+    height: 197px;
+    max-height: 197px;
+    overflow-y: auto; 
+}
+
+
+thead th {
+    position: sticky; 
+    top: 0; 
+    color: #fff;
+    background-color: #808e93;
+    z-index: 1; 
+}
+
+
+.attendance-table td {
+    margin: 5px; 
+    padding: 10px; 
+}
+
+
+@media screen and (max-width: 768px) {
+
+    .attendance-details {
+        height: 350px;
+        max-height: 350px;
+    }
+
+    .attendance-table{
+        height: 297px;
+        max-height: 297px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+
+    .attendance-details {
+        height: 266px;
+        max-height: 266px;
+    }
+}
+
+
+
+.tooltip-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.tooltip-icon i {
+   
+    font-size: 1.0rem; 
+    color: #007bff; 
+}
+
+.tooltip-icon:hover i {
+    color: #ff4500;
+}

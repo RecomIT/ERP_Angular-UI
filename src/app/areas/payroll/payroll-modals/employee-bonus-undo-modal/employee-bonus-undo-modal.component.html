@@ -1,0 +1,155 @@
+<ng-template #EmployeeBonusUndoModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-success btn-circle icofont-money-bag" aria-hidden="true"></i>| Undo Employee
+            Bonus
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Close Click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="col-12 col-md-6 col-sm-12 font-bold">
+                    <div class="activity-stream">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="fa fa-dot-circle-o"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Bonus name
+                                    </a>
+                                </div>
+                                {{data?.bonusName}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-settings"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Config ID
+                                    </a>
+                                </div>
+                                {{data?.bonusConfigCode}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-id-card"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Batch No
+                                    </a>
+                                </div>
+                                {{data?.batchNo}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-users"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                         Employee ID
+                                    </a>
+                                </div>
+                                {{data?.employeeCode}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-users"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                         Employee Name
+                                    </a>
+                                </div>
+                                {{data?.employeeName}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-sm-12 font-bold">
+                    <div class="activity-stream">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="fa fa-calendar-check-o"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Fiscal Year
+                                    </a>
+                                </div>
+                                {{data?.fiscalYearRange}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-ui-calendar"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Bonus Month
+                                    </a>
+                                </div>
+                                {{data?.bonusMonthName}}-{{data?.bonusYear}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-money"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Amount
+                                    </a>
+                                </div>
+                                {{data?.amount}}
+                            </div>
+                        </div>
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-coins"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <a class="text-info">
+                                        Tax
+                                    </a>
+                                </div>
+                                {{data?.onceOffTax}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="bg-primary p-xs b-r-md">
+                    To undo this bonus process click on <strong> Confim </strong> Button
+                </div> -->
+            </div>
+        </div>
+        <form [formGroup]="undoForm" (submit)="submit()">
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Close Click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="this.undoForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | Undo
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

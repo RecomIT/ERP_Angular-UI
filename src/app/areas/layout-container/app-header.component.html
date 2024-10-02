@@ -1,0 +1,362 @@
+<div class="row border-bottom">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <!-- bg-white -->
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-success text-white">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <ul class="nav navbar-top-links navbar-right" *ngIf="userInfo != null">
+            <li class="dropdown hide">
+                <a class="dropdown-toggle count-info count-info-2" data-toggle="dropdown" href="#">
+                    <i class="fa fa-bell faa-ring animated faa-slow text-white"></i> <span
+                        class="label label-primary">8</span>
+                </a>
+                <ul class="dropdown-menu dropdown-alerts">
+                    <li>
+                        <a href="mailbox.html" class="dropdown-item">
+                            <div>
+                                <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                <span class="float-right text-muted small">4 minutes ago</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    <li>
+                        <a href="profile.html" class="dropdown-item">
+                            <div>
+                                <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                <span class="float-right text-muted small">12 minutes ago</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    <li>
+                        <a href="grid_options.html" class="dropdown-item">
+                            <div>
+                                <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                <span class="float-right text-muted small">4 minutes ago</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    <li>
+                        <div class="text-center link-block">
+                            <a href="notifications.html" class="dropdown-item">
+                                <strong>See All Alerts</strong>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="true">
+                    <img src="{{this.photoPath}}" class="img-sm img-circle">
+                    <!-- <img src="assets/img/yeasinahmed.jpg" class="img-sm img-circle"> -->
+                    <!-- <i class="fa fa-dot-circle-o text-primary"></i> -->
+                </a>
+
+                <ul class="dropdown-menu dropdown-messages">
+                    <li>
+                        <div class="dropdown-messages-box">
+                            <a class="dropdown-item float-left" href="profile.html">
+                                <img alt="image" class="rounded-circle" src="{{this.photoPath}}">
+                                <!-- <img alt="image" class="rounded-circle" src="assets/img/yeasinahmed.jpg"> -->
+                            </a>
+                            <div class="media-body">
+                                <strong>{{userInfo.name ?? userInfo.username}} <span
+                                        class="label label-warning">{{userInfo?.roleName}}</span></strong><br>
+                                <small class="text-muted">{{(userInfo?.gradeName??'') +' - '
+                                    + (userInfo?.designationName??'')}}</small>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="dropdown-divider"></li>
+                    <li>
+                        <a class="font-bold text-left" [routerLink]="['hrms/employee/employee-profile']">
+                            <strong><small><i class="fa fa-user" aria-hidden="false"></i> |
+                                    Profile</small></strong>
+                        </a>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    <li>
+                        <a class="font-bold text-left" (click)="openChangePasswordModal()">
+                            <strong><small><i class="fa fa-sliders" aria-hidden="false"></i> |
+                                    Change Password</small></strong>
+                        </a>
+                    </li>
+                    <!-- <li class="dropdown-divider"></li> -->
+                    <li class="hide">
+                        <a class="font-bold text-left" (click)="1==1">
+                            <strong><small><i class="fa fa-building-o" aria-hidden="false"></i> |
+                                    {{userInfo?.organizationName}}</small></strong>
+                        </a>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    <li>
+                        <p class="font-bold text-left" style="padding: 3px 22px;    font-size: 14px;">
+                            <strong><small><i class="fa fa-building" aria-hidden="false"></i> |
+                                    {{userInfo?.companyName}}</small></strong>
+                        </p>
+                    </li>
+                    <li (click)="logOut()" style="width: 100%;">
+                        <a class="text-center font-bold">
+                            <strong><small><i class="fa fa-sign-out"></i> Log out</small></strong>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<ng-template #changeDefaultPasswordModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-key" aria-hidden="true"></i>| Change Your Default
+            Password
+        </h4>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #changeDefaultPasswordForm="ngForm" (ngSubmit)="submitChangeDefaultPassword(changeDefaultPasswordForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="currentPasswordDefault" class="control-label font-bold">Current Password</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-key" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input
+                                [type]="(changePassword.currentPassword != null && changePassword.currentPassword !='' && isCurrentPasswordView) ? 'text':'password'"
+                                class="form-control form-control-sm" name="currentPasswordDefault"
+                                id="currentPasswordDefault" autocomplete="off" #currentPasswordDefaultRef="ngModel"
+                                [(ngModel)]="changePassword.currentPassword" required>
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="changePassword.currentPassword != null && changePassword.currentPassword !=''"
+                                (click)="click_CurrentPasswordView()">
+                                <span class="input-group-addon text-dark">
+                                    <i [class]="
+                                    (changePassword.currentPassword != null && changePassword.currentPassword !='' && isCurrentPasswordView) 
+                                    ? 'fa fa-eye':'fa fa-eye-slash'"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-danger" *ngIf="currentPasswordDefaultRef.touched">
+                            <span *ngIf="currentPasswordDefaultRef.errors?.required">Current password is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="newPasswordDefault" class="control-label font-bold">New Password</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <!-- <i class="fa fa-key" aria-hidden="true"></i> -->
+                                    <i class="icofont-key"></i>
+                                </span>
+                            </div>
+                            <input
+                                [type]="(changePassword.newPassword != null && changePassword.newPassword !='' && isNewPasswordView) ? 'text':'password'"
+                                class="form-control form-control-sm" name="newPasswordDefault"
+                                #newPasswordDefaultRef="ngModel" id="newPasswordDefault" autocomplete="off"
+                                [(ngModel)]="changePassword.newPassword"
+                                [pattern]="'^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{4,}$'" required
+                                minlength="6">
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="changePassword.newPassword != null && changePassword.newPassword !=''"
+                                (click)="click_NewPasswordView()">
+                                <span class="input-group-addon text-dark">
+                                    <i [class]="
+                                    (changePassword.newPassword != null && changePassword.newPassword !='' && isNewPasswordView) 
+                                    ? 'fa fa-eye':'fa fa-eye-slash'"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="newPasswordDefaultRef.touched" class="text-danger">
+                            <span *ngIf="newPasswordDefaultRef.errors?.required">Password is required</span>
+                            <span *ngIf="newPasswordDefaultRef.errors?.minlength">Minlength is 6</span>
+                            <span *ngIf="newPasswordDefaultRef.errors?.pattern && newPasswordDefaultRef.value != ''">
+                                Password must contain
+                                <ul class="p-0 m-0">One uppercase letter</ul>
+                                <ul class="p-0 m-0">One small letter</ul>
+                                <ul class="p-0 m-0">One special character</ul>
+                                <ul class="p-0 m-0">One numeric character</ul>
+                                <ul class="p-0 m-0 text-primary">Example:T</ul>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="confirmPasswordDefault" class="control-label font-bold">Confirm Password</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <!-- <i class="fa fa-key" aria-hidden="true"></i> -->
+                                    <i class="icofont-key"></i>
+                                </span>
+                            </div>
+                            <input
+                                [type]="(changePassword.confirmPassword != null && changePassword.confirmPassword !='' && isConfirmPasswordView) ? 'text':'password'"
+                                class="form-control form-control-sm" name="confirmPasswordDefault"
+                                id="confirmPasswordDefault" autocomplete="off" #confirmPasswordDefaultRef="ngModel"
+                                [(ngModel)]="changePassword.confirmPassword" required minlength="6">
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="changePassword.confirmPassword != null && changePassword.confirmPassword !=''"
+                                (click)="click_ConfirmPasswordView()">
+                                <span class="input-group-addon text-dark">
+                                    <i [class]="
+                                    (changePassword.confirmPassword != null && changePassword.confirmPassword !='' && isConfirmPasswordView) 
+                                    ? 'fa fa-eye':'fa fa-eye-slash'"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="confirmPasswordDefaultRef.touched" class="text-danger">
+                            <span *ngIf="confirmPasswordDefaultRef.errors?.required">
+                                Confirm Password is required
+                            </span>
+                            <span
+                                *ngIf="newPasswordDefaultRef.value != '' && confirmPasswordDefaultRef.value != '' && newPasswordDefaultRef.value!=confirmPasswordDefaultRef.value">
+                                Confirm password does not match
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="changeDefaultPasswordForm.invalid || btnChangePassword || (newPasswordDefaultRef.value != '' && confirmPasswordDefaultRef.value != '' && newPasswordDefaultRef.value!=confirmPasswordDefaultRef.value)">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Update Default Password
+                    <span [hidden]="!btnChangePassword" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #changePasswordModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-key" aria-hidden="true"></i>| Change Your Password
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
+            [disabled]="btnChangePassword">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #changePasswordForm="ngForm" (ngSubmit)="submitChangePassword(changePasswordForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="currentPassword" class="control-label font-bold">Current Password</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-key" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input
+                                [type]="(changePassword.currentPassword != null && changePassword.currentPassword !='' && isCurrentPasswordView) ? 'text':'password'"
+                                class="form-control form-control-sm" name="currentPassword" id="currentPassword"
+                                autocomplete="off" #currentPasswordRef="ngModel"
+                                [(ngModel)]="changePassword.currentPassword" required>
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="changePassword.currentPassword != null && changePassword.currentPassword !=''"
+                                (click)="click_CurrentPasswordView()">
+                                <span class="input-group-addon text-dark">
+                                    <i [class]="
+                                    (changePassword.currentPassword != null && changePassword.currentPassword !='' && isCurrentPasswordView) 
+                                    ? 'fa fa-eye':'fa fa-eye-slash'"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-danger" *ngIf="currentPasswordRef.touched">
+                            <span *ngIf="currentPasswordRef.errors?.required">Current password is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="newPassword" class="control-label font-bold">New Password</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <!-- <i class="fa fa-key" aria-hidden="true"></i> -->
+                                    <i class="icofont-key"></i>
+                                </span>
+                            </div>
+                            <input
+                                [type]="(changePassword.newPassword != null && changePassword.newPassword !='' && isNewPasswordView) ? 'text':'password'"
+                                class="form-control form-control-sm" name="newPassword" #newPasswordRef="ngModel"
+                                id="newPassword" autocomplete="off" [(ngModel)]="changePassword.newPassword"
+                                [pattern]="'^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{4,}$'" required
+                                minlength="6">
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="changePassword.newPassword != null && changePassword.newPassword !=''"
+                                (click)="click_NewPasswordView()">
+                                <span class="input-group-addon text-dark">
+                                    <i [class]="
+                                    (changePassword.newPassword != null && changePassword.newPassword !='' && isNewPasswordView) 
+                                    ? 'fa fa-eye':'fa fa-eye-slash'"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="newPasswordRef.touched" class="text-danger">
+                            <span *ngIf="newPasswordRef.errors?.required">Password is required</span>
+                            <span *ngIf="newPasswordRef.errors?.minlength">Minlength is 6</span>
+                            <span *ngIf="newPasswordRef.errors?.pattern && newPasswordRef.value != ''">
+                                Password must contain
+                                <ul class="p-0 m-0">One uppercase letter</ul>
+                                <ul class="p-0 m-0">One small letter</ul>
+                                <ul class="p-0 m-0">One special character</ul>
+                                <ul class="p-0 m-0">One numeric character</ul>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="confirmPassword" class="control-label font-bold">Confirm Password</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <!-- <i class="fa fa-key" aria-hidden="true"></i> -->
+                                    <i class="icofont-key"></i>
+                                </span>
+                            </div>
+                            <input
+                                [type]="(changePassword.confirmPassword != null && changePassword.confirmPassword !='' && isConfirmPasswordView) ? 'text':'password'"
+                                class="form-control form-control-sm" name="confirmPassword" id="confirmPassword"
+                                autocomplete="off" #confirmPasswordRef="ngModel"
+                                [(ngModel)]="changePassword.confirmPassword" required minlength="6">
+                            <div class="input-group-prepend cursor-pointer"
+                                *ngIf="changePassword.confirmPassword != null && changePassword.confirmPassword !=''"
+                                (click)="click_ConfirmPasswordView()">
+                                <span class="input-group-addon text-dark">
+                                    <i [class]="
+                                    (changePassword.confirmPassword != null && changePassword.confirmPassword !='' && isConfirmPasswordView) 
+                                    ? 'fa fa-eye':'fa fa-eye-slash'"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="confirmPasswordRef.touched" class="text-danger">
+                            <p class="mb-0" *ngIf="confirmPasswordRef.errors?.required">
+                                Confirm Password is required
+                            </p>
+                            <p class="mb-0"
+                                *ngIf="newPasswordRef.value != '' && confirmPasswordRef.value != '' && newPasswordRef.value!=confirmPasswordRef.value">
+                                Confirm password does not match
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="changePasswordForm.invalid || btnChangePassword || (newPasswordRef.value != '' && confirmPasswordRef.value != '' && newPasswordRef.value!=confirmPasswordRef.value)">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Update Password
+                    <span [hidden]="!btnChangePassword" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

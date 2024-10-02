@@ -1,0 +1,356 @@
+<ng-template #salaryProcessModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle icofont-pay"></i>| Salary Process
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12 text-x-small">
+                    <div class="ibox-content shadow-sm">
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-sm-12 mb-1">
+                                <label for="salaryProcessType" class="control-label font-bold">Process Type</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-cog"></i>
+                                        </span>
+                                    </div>
+                                    <select name="salaryProcessType" id="salaryProcessType"
+                                        class="form-control form-control-sm" #salaryProcessTypeRef="ngModel"
+                                        [(ngModel)]="salaryProcessType" (change)="processtype_changed()">
+                                        <option value="">--Select Process--</option>
+                                        <option [value]="'Systematically'">Systematically</option>
+                                        <option [value]="'Uploaded Salary-Sheet'">Uploaded Salary-Sheet</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12 mb-1">
+                                <label for="month" class="control-label font-bold">Salary Month & Year</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <select name="month" id="month" class="form-control form-control-sm"
+                                        [(ngModel)]="processMonth" #processMonthRef="ngModel"
+                                        (change)="monthYear_changed()">
+                                        <option [value]="'0'" selected>--Month--</option>
+                                        <option [value]="month.monthNo" *ngFor="let month of months">{{month.month}}
+                                        </option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <select name="year" id="year" class="form-control form-control-sm"
+                                            #processYearRef="ngModel" [(ngModel)]="processYear"
+                                            (change)="monthYear_changed()">
+                                            <option [value]="'0'" selected>--Year--</option>
+                                            <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12 mb-1">
+                                <label for="salaryDate" class="control-label font-bold">Process Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar-check-o"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="salaryDate" id="salaryDate" #salaryDateRef="ngModel"
+                                        [(ngModel)]="salaryDate" class="form-control form-control-sm bg-white"
+                                        (ngModelChange)="monthYear_salaryDate_changed()" readonly
+                                        placeholder="Select Process Date.." title="Salary Date" bsDatepicker
+                                        [bsConfig]="datePickerConfig">
+                                    <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date"
+                                        [hidden]="salaryDate== null"
+                                        (click)="[salaryDate = null,monthYear_salaryDate_changed()]">
+                                        <span class="input-group-addon text-danger">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 text-x-small" *ngIf="salaryProcessType == 'Uploaded Component'">
+                    <div class="ibox">
+                        <div class="ibox-footer">
+                            <div class="clearfix">
+                                <button type="submit" [disabled]="uploadedComponentSalaryProcessForm.invalid"
+                                    class="btn btn-success btn-rounded btn-sm ml-1 pull-right"
+                                    (click)="runSalaryProcess()">
+                                    <i class="fa fa-cogs"></i> | Run Process
+                                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 text-x-small" *ngIf="salaryProcessType == 'Systematically'">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <!-- *ngIf="user_company_id == 19 && user_organization_id ==11" -->
+                            <div class="form-row mb-2">
+                                <div class="form-group col-md-6 col-sm-12 mb-0">
+                                    <div class="custom-control custom-switch pull-left" style="vertical-align: middle;">
+                                        <input type="checkbox" class="custom-control-input" name="chkIsMargeProcess"
+                                            id="chkIsMargeProcess" #isMargeProcessRef="ngModel"
+                                            [(ngModel)]="is_marge_process">
+                                        <label class="custom-control-label custom-switch-lable pull-right mb-0 mt-2"
+                                            for="chkIsMargeProcess"> Marge with pending process (if exist)</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-12 mb-0">
+                                    <div class="custom-control custom-switch pl-0" style="vertical-align: middle;">
+                                        <input type="checkbox" class="custom-control-input" name="chkWithTaxProcess"
+                                            id="chkWithTaxProcess" #isAutoCalculateRef="ngModel"
+                                            [(ngModel)]="with_tax_process">
+                                        <label class="custom-control-label custom-switch-lable pull-right mb-0 mt-2"
+                                            for="chkWithTaxProcess"> With Tax Process</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row border-top">
+                                <div class="form-group col-md-6 col-sm-12 mb-1 mt-2">
+                                    <label for="executionOn" class="control-label font-bold">Execution On</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-cog"></i>
+                                            </span>
+                                        </div>
+                                        <select name="executionOn" id="executionOn" class="form-control form-control-sm"
+                                            #executionOnRef="ngModel" [(ngModel)]="executionOn"
+                                            (change)="executionOn_changed()">
+                                            <option value="">--Select Execution--</option>
+                                            <option [value]="'All'">All</option>
+                                            <option [value]="'Branch'">Branch</option>
+                                            <option [value]="'Department'">Department</option>
+                                            <option [value]="'Selected Employees'">Selected Employees</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-12 mb-1 mt-2" *ngIf="executionOn == 'Branch'">
+                                    <label for="processBranchId" class="control-label font-bold">Branch</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-building-o"></i>
+                                            </span>
+                                        </div>
+                                        <select name="processBranchId" id="processBranchId"
+                                            class="form-control form-control-sm" #processBranchIdRef="ngModel"
+                                            [(ngModel)]="processBranchId" (change)="processBranch_changed()">
+                                            <option [value]="0" selected>--Select Branch--</option>
+                                            <option [value]="item.value" *ngFor="let item of branches">{{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-12 mb-1 mt-2" *ngIf="executionOn == 'Department'">
+                                    <label for="processDepartmentId" class="control-label font-bold">Department</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-building-o"></i>
+                                            </span>
+                                        </div>
+                                        <select name="processDepartmentId" id="processDepartmentId"
+                                            class="form-control form-control-sm" #processDepartmentIdRef="ngModel"
+                                            [(ngModel)]="processDepartmentId" (change)="processDepartment_changed()">
+                                            <option [value]="0" selected>--Select Department--</option>
+                                            <option [value]="item.id" *ngFor="let item of departments | async">
+                                                {{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-12 mb-1 mt-2"
+                                    *ngIf="executionOn == 'Selected Employees'">
+                                    <label for="employee" class="control-label font-bold">Select Employe
+                                        Singely</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-user-circle-o"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="employee" id="employee" [(ngModel)]="selected"
+                                            class="form-control form-control-sm" [typeahead]="employees"
+                                            typeaheadOptionField="text" [isAnimated]="false"
+                                            placeholder="Type Employee Name Here..."
+                                            (typeaheadOnSelect)="employeeOnSelect($event)" autocomplete="off"
+                                            [typeaheadMinLength]="0" [typeaheadScrollable]="true">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="openExcelFileDataUplaoder()">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-upload"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-row hide" *ngIf="executionOn == 'Selected Employees'">
+                                <div class="form-group col-md-6 col-sm-12 mb-1 hide">
+                                    <label for="commaemployee" class="control-label font-bold">Select Employe Comma
+                                        Separatedly</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-user-circle-o"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="commaemployee" id="commaemployee"
+                                            class="form-control form-control-sm" [(ngModel)]="commaSeparatedEmployee"
+                                            placeholder="Type Comma Separated Employee Code Here..." autocomplete="off">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="loadEmployeeByCommaSeparatedData()">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row" *ngIf="executionOn == 'Selected Employees'">
+                                <div class="form-group col-md-12 col-sm-12 mt-2 mb-1">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover table-responsive-xl">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">#SL</th>
+                                                    <th>Employee</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of employeesList; let i=index">
+                                                    <td class="text-center font-bold">{{i+1}}</td>
+                                                    <td>{{item.text}}</td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-xs btn-danger"
+                                                            (click)="deleteEmployee(item.id)">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox-footer" *ngIf="executionOn == 'All'">
+                            <div class="clearfix">
+                                <button type="submit" [disabled]="allEmployeeSalaryProcessForm.invalid"
+                                    class="btn btn-info btn-rounded btn-sm ml-1 pull-right"
+                                    (click)="executeSalaryProcess()">
+                                    <i class="fa fa-cog"></i> | Execute Process
+                                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </button>
+
+                                <button type="submit" [disabled]="allEmployeeSalaryProcessForm.invalid"
+                                    class="btn btn-success btn-rounded btn-sm ml-1 pull-right hide"
+                                    (click)="runSalaryProcess()">
+                                    <i class="fa fa-cogs"></i> | Run Process
+                                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="ibox-footer" *ngIf="executionOn == 'Branch'">
+                            <div class="clearfix">
+                                <button type="submit" [disabled]="branchWiseSalaryProcessForm.invalid"
+                                    class="btn btn-info btn-rounded btn-sm ml-1 pull-right"
+                                    (click)="executeSalaryProcess()">
+                                    <i class="fa fa-cog"></i> | Execute Process
+                                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </button>
+                                <button type="submit" [disabled]="branchWiseSalaryProcessForm.invalid"
+                                    class="btn btn-success btn-rounded btn-sm ml-1 pull-right hide"
+                                    (click)="runSalaryProcess()">
+                                    <i class="fa fa-cogs"></i> | Run Process
+                                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- *ngIf="user_company_id==19 && user_organization_id==11" -->
+                        <!--  *ngIf="user_company_id !=19 && user_organization_id !=11" -->
+                        <div class="ibox-footer" *ngIf="executionOn == 'Department'">
+                            <div class="clearfix">
+                                <button type="submit" [disabled]="departmentWiseSalaryProcessForm.invalid"
+                                    class="btn btn-info btn-rounded btn-sm ml-1 pull-right"
+                                    (click)="executeSalaryProcess()">
+                                    <i class="fa fa-cog"></i> | Execute Process
+                                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </button>
+                                <button type="submit" [disabled]="departmentWiseSalaryProcessForm.invalid"
+                                    class="btn btn-success btn-rounded btn-sm ml-1 pull-right hide"
+                                    (click)="runSalaryProcess()">
+                                    <i class="fa fa-cogs"></i> | Run Process
+                                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="ibox-footer" *ngIf="executionOn == 'Selected Employees'">
+                            <div class="clearfix">
+                                <button type="submit" [disabled]="selectedEmployeestWiseSalaryProcessForm.invalid"
+                                    class="btn btn-info btn-rounded btn-sm ml-1 pull-right"
+                                    (click)="executeSalaryProcess()">
+                                    <i class="fa fa-cog"></i> | Execute Process
+                                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </button>
+                                <button type="submit" [disabled]="selectedEmployeestWiseSalaryProcessForm.invalid"
+                                    class="btn btn-success btn-rounded btn-sm ml-1 pull-right hide"
+                                    (click)="runSalaryProcess()">
+                                    <i class="fa fa-cogs"></i> | Run Process
+                                    <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-container *ngIf="showExcelFileDataUplaoder == true">
+    <app-payroll-singel-item-file-values [key]="key_of_uploader"
+        (closeModalEvent)="closeExcelFileDataUplaoder($event)"></app-payroll-singel-item-file-values>
+</ng-container>
+
+<div class="spinner-div" *ngIf="btnProcess == true">
+    <div class="sk-spinner sk-spinner-cube-grid spinner text-success">
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+    </div>
+    <div class="col-md-12 col-sm-12 spinner-text">
+        <h4 class="text-center">Please wait...</h4>
+        <h5 class="">Salary is being proceed...</h5>
+    </div>
+</div>

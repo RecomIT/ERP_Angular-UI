@@ -1,0 +1,414 @@
+<ng-template #requestDetailsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-circle fa fa-diamond"></i>| {{modalTitle}}
+        </h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="closeRequestModal('Cross click')"><span
+                aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-lg-12">
+                    <div id="Employee">
+                        <div class="employee-info-card">
+                            <div class="header">
+                                <span class="title"><i class="fa fa-id-card"></i> Employee's Info</span>
+                            </div>
+                            <div class="content">
+                                <div class="details"></div>
+                                <div class="profile-pic">
+                                    <img [src]="image_path" alt="Profile Picture" />
+                                </div>
+                                <div class="details"></div>
+                                <div class="details">
+                                    <div>
+                                        <i class="fa fa-id-badge"></i> <strong>Employee Code :</strong>&nbsp;{{
+                                        employeeData.employeeCode || 'N/A' }}
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-user"></i> <strong>Name :</strong>&nbsp;{{
+                                        employeeData.employeeName
+                                        ||
+                                        'N/A' }}
+                                    </div>
+                                </div>
+                                <div class="details">
+                                    <div>
+                                        <i class="fa fa-building"></i> <strong>Department :</strong>&nbsp;{{
+                                        employeeData.departmentName || 'N/A' }}
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-black-tie"></i> <strong>Designation :</strong>&nbsp;{{
+                                        employeeData.designationName || 'N/A' }}
+                                    </div>
+                                </div>
+                                <div class="contact">
+                                    <div>
+                                        <i class="fa fa-phone"></i> <strong>Office Phone :</strong>&nbsp;{{
+                                        employeeData.officePhone || 'N/A' }}
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-envelope"></i> <strong>Office Email :</strong>&nbsp;{{
+                                        employeeData.officeEmail || 'N/A' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="Request">
+                        <div class="request-info-card">
+                            <div class="header">
+                                <span class="title"><i class="fa fa-exchange"></i> {{transactionType}} Request's Info</span>
+                            </div>
+                            <div class="table-responsive" *ngIf="transactionType === 'Conveyance'">
+                                <table
+                                    class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Transaction Date</th>
+                                            <th class="text-center">Reference Number</th>
+                                            <th class="text-center">Request Date</th>
+                                            <th>Company Name</th>
+                                            <th>Purpose</th>
+                                            <th>Spend Mode</th>
+                                            <th class="text-right" *ngIf="spendMode === 'Advance'">Advance Amount</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of requestList; let i=index">
+                                            <td class="text-center">{{item.transactionDate | date:"dd-MMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.referenceNumber}}</td>
+                                            <td class="text-center">{{item.requestDate | date:"dd-MMM-yyyy"}}</td>
+                                            <td>{{item.companyName}}</td>
+                                            <td>{{item.purpose}}</td>
+                                            <td>{{item.spendMode}}</td>
+                                            <th class="text-right" *ngIf="spendMode === 'Advance'">
+                                                {{item.advanceAmount}}
+                                            </th>
+                                            <td>{{item.description}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" *ngIf="transactionType === 'Travel'">
+                                <table
+                                    class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Transaction Date</th>
+                                            <th class="text-center">Reference Number</th>
+                                            <th class="text-center">From Date</th>
+                                            <th class="text-center">To Date</th>
+                                            <th>Spend Mode</th>
+                                            <th>Destination City</th>
+                                            <th>Purpose</th>
+                                            <th>Transportation</th>
+                                            <th class="text-center">Transportation Costs</th>
+                                            <th class="text-center">Accommodation Costs</th>
+                                            <th class="text-center">Subsistence Costs</th>
+                                            <th class="text-center">Other Costs</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of requestList; let i=index">
+                                            <td class="text-center">{{item.transactionDate | date:
+                                                "dd-MMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.referenceNumber}}</td>
+                                            <td class="text-center">{{item.fromDate | date: "dd-MMM-yyyy"}}
+                                            </td>
+                                            <td class="text-center">{{item.toDate | date: "dd-MMM-yyyy"}}
+                                            </td>
+                                            <td>{{item.spendMode}}</td>
+                                            <td>{{item.location}}</td>
+                                            <td>{{item.purpose}}</td>
+                                            <td>{{item.transportation}}</td>
+                                            <td class="text-center">{{item.transportationCosts}}</td>
+                                            <td class="text-center">{{item.accommodationCosts}}</td>
+                                            <td class="text-center">{{item.subsistenceCosts}}</td>
+                                            <td class="text-center">{{item.otherCosts}}</td>
+                                            <td>{{item.description}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" *ngIf="transactionType === 'Entertainment' || transactionType === 'Purchase'">
+                                <table
+                                    class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg">
+                                    <thead>
+                                        <tr *ngFor="let item of requestList ; let i=index">
+                                            <th class="text-center">Transaction Date</th>
+                                            <th class="text-center">Reference Number</th>
+                                            <th class="text-center">Request Date</th>
+                                            <th>Purpose</th>
+                                            <th>Description</th>
+                                            <th>Spend Mode</th>
+                                            <th *ngIf="item.filePath">File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of requestList ; let i=index">
+                                            <td class="text-center">{{item.transactionDate | date:
+                                                "dd-MMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.referenceNumber}}</td>
+                                            <td class="text-center">{{item.requestDate | date:
+                                                "dd-MMM-yyyy"}}</td>
+                                            <td>{{item.purpose}}</td>
+                                            <td>{{item.entertainment}}</td>
+                                            <td>{{item.spendMode}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-xs btn-warning" *ngIf="item.filePath"
+                                                    (click)="downloadFile(item.filePath)">
+                                                    <i class="fa fa-file"></i> Download File
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" *ngIf="transactionType === 'Expat'">
+                                <table
+                                    class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Transaction Date</th>
+                                            <th class="text-center">Reference Number</th>
+                                            <th class="text-center">Request Date</th>
+                                            <th>Description</th>
+                                            <th>Spend Mode</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of requestList ; let i=index">                                          
+                                            <td class="text-center">{{item.transactionDate | date:
+                                                "dd-MMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.referenceNumber}}</td>
+                                            <td class="text-center">{{item.requestDate | date:
+                                                "dd-MMM-yyyy"}}</td>
+                                            <td>{{item.description}}</td>
+                                            <td>{{item.spendMode}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" *ngIf="transactionType === 'Training'">
+                                <table
+                                    class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Transaction Date</th>
+                                            <th class="text-center">Reference Number</th>
+                                            <th>Institution Name</th>
+                                            <th>Course</th>
+                                            <th>Description</th>
+                                            <th class="text-center">Admission Date</th>
+                                            <th>Duration</th>
+                                            <th>Purpose</th>
+                                            <th>Costs</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of requestList; let i=index">
+                                            <td class="text-center">{{item.transactionDate | date:
+                                                "dd-MMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.referenceNumber}}</td>
+                                            <td>{{item.institutionName}}</td>
+                                            <td>{{item.course}}</td>
+                                            <td>{{item.description}}</td>
+                                            <td class="text-center">{{item.admissionDate | date:
+                                                "dd-MMM-yyyy"}}</td>
+                                            <td>{{item.duration}}</td>
+                                            <td>{{item.purpose}}</td>
+                                            <td>{{item.trainingCosts}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="RequestList" *ngIf="transactionType === 'Conveyance' || transactionType === 'Entertainment' || transactionType === 'Purchase'">
+                        <div *ngIf="spendMode !== 'Advance'">
+                            <div class="request-info-card">
+                                <div class="header">
+                                    <span class="title"><i class="fa fa-info-circle"></i> {{requestDetailsTitle}}
+                                    </span>
+                                </div>
+                                <div class="table-responsive" *ngIf="transactionType === 'Conveyance'">
+                                    <table
+                                        class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Destination</th>
+                                                <th>Mode</th>
+                                                <th>Cost</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of requestDetailsList ; let i=index">
+                                                <td class="text-center font-bold">{{i+1}}</td>
+                                                <td>{{item.destination}}</td>
+                                                <td>{{item.mode}}</td>
+                                                <td>{{item.cost}}</td>
+                                            </tr>
+                                            <td colspan="3" class="text-right font-weight-bold"></td>
+                                            <td>
+                                                <label class="mr-2 font-weight-bold">Total :</label>
+                                                <span class="font-weight-bold">{{ totalAmountC() }}</span>                                                
+                                            </td> 
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-responsive" *ngIf="transactionType === 'Entertainment' || transactionType === 'Purchase'">
+                                    <table
+                                        class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>
+                                                <th>Item</th>
+                                                <th>Quantity</th>
+                                                <th>Price </th>
+                                                <th>Amount </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of requestDetailsList ; let i=index">
+                                                <td class="text-center font-bold">{{i+1}}</td>
+                                                <td>{{item.item}}</td>
+                                                <td>{{item.quantity}}</td>
+                                                <td>{{item.price}}</td>
+                                                <td>{{item.amount}}</td>
+                                            </tr>                                           
+                                            <!-- <td colspan="4" class="text-right font-weight-bold">Total Amount :</td>
+                                            <td>                                     
+                                                <label class="col-sm-3 col-form-label font-weight-bold"> {{ totalAmount() }}</label>
+                                            </td>      -->
+
+                                            <td colspan="4" class="text-right font-weight-bold"></td>
+                                            <td>
+                                                <label class="mr-2 font-weight-bold">Total :</label>
+                                                <span class="font-weight-bold">{{ totalAmount() }}</span>                                                
+                                            </td>  
+                                                                             
+                                        </tbody>
+                                    </table>
+                                </div>                              
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="transactionType === 'Expat'">
+                        <div class="request-info-card">
+                            <div class="header">
+                                <span class="title"><i class="fa fa-info-circle"></i> {{requestDetailsTitle}} </span>
+                            </div>
+                            <div class="table-responsive" *ngIf="transactionType === 'Expat'">
+                                <table
+                                    class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Company Name</th>
+                                            <th>Particulars</th>
+                                            <th>Type of Bill</th>
+                                            <th>Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of requestDetailsList ; let i=index">
+                                            <td class="text-center font-bold">{{i+1}}</td>
+                                            <td>{{item.companyName}}</td>
+                                            <td>{{item.particular}}</td>
+                                            <td>{{item.billType}}</td>
+                                            <td>{{item.cost}}</td>
+                                        </tr>
+                                        <td colspan="4" class="text-right font-weight-bold"></td>
+                                        <td>
+                                            <label class="mr-2 font-weight-bold">Total :</label>
+                                            <span class="font-weight-bold">{{ totalAmountC() }}</span>                                                
+                                        </td> 
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="Action">
+                        <div class="employee-info-card">
+                            <div class="header">
+                                <span class="title"><i class="fa fa-terminal"></i> Action</span>
+                            </div>
+                            <form [formGroup]="approvedForm">
+                                <div class="ibox-content border-radius-5 pb-2 text-x-small font-bold">
+                                    <div class="form-row">
+                                        <div class="form-group col-12 col-md-5">
+                                            <label for="commentUser" class="control-label font-bold">Comment's for
+                                                user</label>
+                                            <div class="input-group">
+                                                <div class="input-group">
+                                                    <textarea formControlName="commentsUser"
+                                                        class="form-control form-control-sm"
+                                                        name="commentsUser"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12 col-md-5" *ngIf="spendMode === 'Advance'">
+                                            <label for="CommentAcc" class="control-label">Comment's for account</label>
+                                            <div class="input-group">
+                                                <div class="input-group">
+                                                    <textarea formControlName="commentsAccount"
+                                                        class="form-control form-control-sm"
+                                                        name="commentsAccount"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="button" *ngIf="stateStatus === 'Pending'" class="form-group col-12 col-md-2 ml-auto center-buttons">
+                                            <label for="status" class="control-label">&#160;</label>
+                                            <div class="input-group">
+                                                <div class="input-group">
+                                                    <button type="button"
+                                                        class="btn btn-md btn-primary btn-rounded btn-outline mr-2"
+                                                        aria-label="Approved" (click)="submitApproved('Approved')">
+                                                        <span aria-hidden="true">Approved</span>
+                                                    </button>
+                                                    <button type="button" [disabled]="!approvedForm.get('commentsUser').value"
+                                                        class="btn btn-md btn-danger btn-outline btn-rounded" title="Please write user comment's first"
+                                                        aria-label="Rejected" (click)="submitApproved('Rejected')">
+                                                        <span aria-hidden="true">Rejected</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>                                    
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-footer text-x-small pb-2">
+            <!-- [attr.disabled]="accountStatus === 'Payment' ? true : null" -->
+            <button type="button" *ngIf="userRoll === 'Account' && accountStatus !== 'Payment'" class="btn btn-md btn-primary btn-rounded btn-outline mr-2" 
+            aria-label="Settlement"
+                (click)="submitApproved('Payment')">
+                <!-- <span aria-hidden="true">{{ accountStatus === 'Payment' ? 'Payment' : 'Settlement' }}</span> -->
+                <span aria-hidden="true">
+                    {{ accountStatus === 'Payment' || accountStatus === 'Pending' ? 'Payment' : 'Settlement' }}
+                  </span>
+            </button>
+            <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button"
+                (click)="closeRequestModal('Cancel click')">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>

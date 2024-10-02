@@ -1,0 +1,257 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-12 col-md-12 col-sm-12">
+        <h2 @slideInUp class="mt-2">Employee Tax Card</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Tax</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Employee Tax Card</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12">
+            <!-- Search Box -->
+            <form [formGroup]="taxCardForm">
+                <div class="ibox">
+                    <div class="ibox-content border-radius-5 pb-2 text-x-small font-bold">
+                        <div class="form-row">
+                            <div class="form-group mb-1 col-md-5 col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 80%;">
+                                            <ng-select2 [data]="ddlEmployees" name="employees" id="employees"
+                                                [placeholder]="'Select Employee...'" [options]="select2Options"
+                                                [allowClear]="true" formControlName="employeeId" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-3 col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <div class="input-group-prepend">
+                                        <select name="taxMonth" formControlName="taxMonth"
+                                            class="form-control form-control-sm">
+                                            <option [value]="0" selected>---Select Month---</option>
+                                            <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                {{item.month}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group-prepend">
+                                        <select name="taxYear" formControlName="taxYear"
+                                            class="form-control form-control-sm">
+                                            <option [value]="0" selected>---Select Year---</option>
+                                            <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                <div class="clearfix">
+                                    <button type="button" class="btn btn-sm btn-primary btn-rounded pull-right ml-1"
+                                        (click)="downloadTaxCard()">
+                                        <i class="fa fa-file-pdf-o"></i> | Generate PDF
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-info btn-rounded pull-right"
+                                        (click)="viewTaxCard()">
+                                        <i class="fa fa-eye"></i> | View Tax-Card
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning btn-rounded pull-right mr-1" [disabled]="btnDownloadFinalTaxCard"
+                                        (click)="finalTaxCard()" tooltip="Download final tax card. If File is not downloaded. Then select Month - June & a year & then click on Generate PDF">
+                                        <i class="fa fa-file-pdf-o"></i> | Final Tax Card <span *ngIf="btnDownloadFinalTaxCard==true">...</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 text-x-small">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <tbody>
+                                <tr>
+                                    <td>Employee ID</td>
+                                    <td>{{taxCardInfo?.employeeCode}}</td>
+                                    <td>Employee Name</td>
+                                    <td>{{taxCardInfo?.employeeName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td>{{taxCardInfo?.gender}}</td>
+                                    <td>TIN No</td>
+                                    <td>{{taxCardInfo?.tinNo}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Income Year</td>
+                                    <td>{{taxCardInfo?.fiscalYearRange}}</td>
+                                    <td>Assessment Year</td>
+                                    <td>{{taxCardInfo?.assessmentYear}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <thead class="bg-secondary text-white">
+                                <tr class="text-center">
+                                    <th class="text-left">Salary Component</th>
+                                    <th class="text-right">Till Date</th>
+                                    <th class="text-right">Current Month</th>
+                                    <th class="text-right">Projected</th>
+                                    <th class="text-right">Gross Annual Income</th>
+                                    <th class="hide">Less Exempted</th>
+                                    <th class="text-right">Total Taxable Income</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                <tr *ngFor="let item of taxCardDetails; let i =index">
+                                    <td class="text-left">{{item.allowanceName}}</td>
+                                    <td class="text-right">{{item.tillDateIncome | number}}</td>
+                                    <td class="text-right">{{item.currentMonthIncome | number}}</td>
+                                    <td class="text-right">{{item.projectedIncome | number}}</td>
+                                    <td class="text-right">{{item.grossAnnualIncome | number}}</td>
+                                    <td class="hide">{{item.lessExempted | number}}</td>
+                                    <td class="text-right">{{item.totalTaxableIncome | number}}</td>
+                                </tr>
+                                <tr class="font-bold">
+                                    <td class="text-left">Total</td>
+                                    <td class="text-right">{{totaltillDateIncome | number}}</td>
+                                    <td class="text-right">{{totalCurrentMonthIncome | number}}</td>
+                                    <td class="text-right">{{totalProjectedIncome | number}}</td>
+                                    <td class="text-right">{{totalGrossAnnualIncome | number}}</td>
+                                    <td class="hide">{{totalLessExemptedAmount | number}}</td>
+                                    <td class="text-right">{{totalTaxableIncome | number}}</td>
+                                </tr>
+                                <tr class="font-bold">
+                                    <td class="text-left" colspan="5">Total Gross Annual Income</td>
+                                    <td class="text-right">{{taxCardInfo?.totalGrossAnnualIncome |number}}</td>
+                                </tr>
+                                <tr class="font-bold">
+                                    <td class="text-left" colspan="5">Exemption Amount</td>
+                                    <td class="text-right">{{taxCardInfo?.exemptionAmountOnAnnualIncome |number}}</td>
+                                </tr>
+                                <tr class="font-bold">
+                                    <td class="text-left" colspan="5">Total Taxable Income</td>
+                                    <td class="text-right">{{taxCardInfo?.taxableIncome |number}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg text-center">
+                            <thead class="bg-secondary text-white">
+                                <tr>
+                                    <th>Current Rate</th>
+                                    <th>Parameter</th>
+                                    <th class="text-right">Taxable Income</th>
+                                    <th class="text-right">Individual Tax Liability</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of taxCardSlabs; let i =index">
+                                    <td>{{item.slabPercentage}}%</td>
+                                    <td>{{item.parameterName}}</td>
+                                    <td class="text-right">{{item.taxableIncome | number}}</td>
+                                    <td class="text-right">{{item.taxLiability | number}}</td>
+                                </tr>
+                                <tr class="font-bold">
+                                    <td colspan="2" class="text-right">Total</td>
+                                    <td class="text-right">{{totalTaxableIncomeInSlab | number}}</td>
+                                    <td class="text-right">{{totalIndividualTaxLiablility | number}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <thead class="bg-secondary text-white">
+                                <tr>
+                                    <th>Constant Head</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>PF Contribution-Both Parts(a) </td>
+                                    <td class="text-right">{{taxCardInfo?.pfContributionBothPart | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Others Investment Recog. except PF(b) </td>
+                                    <td class="text-right">{{taxCardInfo?.otherInvestment | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Actual Investment Made </td>
+                                    <td class="text-right">{{taxCardInfo?.actualInvestmentMade | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tax Rebate Due to Investment </td>
+                                    <td class="text-right">{{taxCardInfo?.investmentRebateAmount | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Advance Income Tax (AIT), if any </td>
+                                    <td class="text-right">{{taxCardInfo?.aitAmount | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tax Refund/Adjustment, if any </td>
+                                    <td class="text-right">{{taxCardInfo?.excessTaxPaidRefundAmount | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Net Tax Payable </td>
+                                    <td class="text-right">{{taxCardInfo?.yearlyTax | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Till Date Tax Deducted </td>
+                                    <td class="text-right">{{tillDateTaxDeducted | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>This Month Projection Tax </td>
+                                    <td class="text-right">{{taxCardInfo?.projectionTax | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>This Month Once Off Tax </td>
+                                    <td class="text-right">{{taxCardInfo?.onceOffTax | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>This Month Tax </td>
+                                    <td class="text-right">{{taxCardInfo?.monthlyTax | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Tax Deducted </td>
+                                    <td class="text-right">{{taxCardInfo?.paidTotalTax | number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tax to be Adjusted</td>
+                                    <td class="text-right">{{taxTobeAdjusted | number}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

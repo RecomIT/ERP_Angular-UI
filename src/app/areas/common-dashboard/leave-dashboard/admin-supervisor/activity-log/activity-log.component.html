@@ -1,0 +1,332 @@
+
+<ng-template #activityLoggerModal let-modal>
+    <div class="modal-header" style="border-bottom: dotted;">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-settings border-right"></i> Activity Log
+        </h3>
+        <p class="ml-2 mt-2">
+            <span class="label label-warning text-x-small" *ngIf="activityLogDetails.stateStatus=='Pending'">{{activityLogDetails.stateStatus +
+                '...'}}</span>
+            <span class="label label-primary text-x-small" *ngIf="activityLogDetails.stateStatus=='Approved'"> <i
+                    class="fa fa-check"></i>
+                {{activityLogDetails.stateStatus}}</span>
+            <span class="label label-inverse text-x-small" *ngIf="activityLogDetails.stateStatus=='Cancelled'"><i
+                    class="fa fa-eraser"></i>
+                {{activityLogDetails.stateStatus}}</span>
+            <span class="label label-danger text-x-small" *ngIf="activityLogDetails.stateStatus=='Rejected'"><i
+                    class="fa fa-times"></i>
+                {{activityLogDetails.stateStatus}}</span>
+
+            <span class="label label-info text-x-small" *ngIf="activityLogDetails.stateStatus=='Recheck'"><i
+                    class="fa fa-backward"></i>
+                {{activityLogDetails.stateStatus}}</span>
+
+
+            <span class="label label-info text-x-small" *ngIf="activityLogDetails.stateStatus=='Recommended'"><i
+                    class="fa fa-check-square"></i>
+                {{activityLogDetails.stateStatus}}</span>
+        </p>
+        <button type="button" class="close" aria-label="Close" (click)="closeActivityModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="col-12 col-md-12 col-sm-12 font-bold">
+                <div class="activity-stream">
+
+
+                    
+                    <!-- For User -->
+
+                    <div class="stream pb-0" *ngIf="activityLogDetails?.createdBy != null && activityLogDetails?.createdBy !=''">
+                        <div class="stream-badge">
+                            <i class="fa fa-pencil"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <label class="label label-warning text-white">Requested By</label>
+                                <p class="text-dark font-bold">
+                                    {{activityLogDetails?.createdBy}}
+                                </p>
+                            </div>
+                            <i class="fa fa-calendar"></i> | {{activityLogDetails?.createdDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                        </div>
+                    </div>
+
+                    <div class="stream pb-0" *ngIf="activityLogDetails?.updatedBy != null && activityLogDetails?.updatedBy !=''">
+                        <div class="stream-badge">
+                            <i class="fa fa-edit"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <label class="label label-warning-light text-white">Modified By</label>
+                                <p class="text-dark font-bold">
+                                    {{activityLogDetails?.updatedBy}}
+                                </p>
+                            </div>
+                            <i class="fa fa-calendar"></i> | {{activityLogDetails?.updatedDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                        </div>
+                    </div>
+
+                    
+
+                    <!-- <ng-container *ngIf="activityLogDetails.approvedBy != null && activityLogDetails.approvedBy != '' && activityLogDetails.stateStatus == 'Approved'">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-checked"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-primary">Approved By</label>
+                                    <p class="text-dark font-bold">
+                                        {{activityLogDetails?.approvedBy}}
+                                    </p>
+                                    <ng-container *ngIf="activityLogDetails?.approvalRemarks != null && activityLogDetails?.approvalRemarks !=''">
+                                        <i class="icofont-comment"></i> | {{activityLogDetails?.approvalRemarks}}
+                                    </ng-container>
+                                </div>
+                                <i class="fa fa-calendar"></i> | {{activityLogDetails?.approvedDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                            </div>
+                        </div>
+    
+                    </ng-container> -->
+
+
+
+                    <!-- For Final Approver -->
+
+                    <ng-container *ngIf="activityLogDetails.supervisorName === activityLogDetails.hodName && activityLogDetails.stateStatus == 'Pending'">
+                        <div class="stream pb-0" *ngIf="activityLogDetails?.hodName != null && activityLogDetails?.hodName != ''">
+                            <div class="stream-badge">
+                                <i class="icofont-stop"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-waiting">Pending final approval from</label>
+                                </div>
+                                <i class="icofont-user-suited"></i> | {{ activityLogDetails.hodName }}
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="activityLogDetails.supervisorName === activityLogDetails.hodName && activityLogDetails.approvedBy != null && activityLogDetails.approvedBy != ''">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-checked"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-primary">Approved By</label>
+                                    <p class="text-dark font-bold">
+                                        {{activityLogDetails?.approvedBy}}
+                                    </p>
+                                    <ng-container *ngIf="activityLogDetails?.approvalRemarks != null && activityLogDetails?.approvalRemarks !=''">
+                                        <i class="icofont-comment"></i> | {{activityLogDetails?.approvalRemarks}}
+                                    </ng-container>
+                                </div>
+                                <i class="fa fa-calendar"></i> | {{activityLogDetails?.approvedDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                            </div>
+                        </div>
+    
+                    </ng-container>
+
+                    <ng-container *ngIf="activityLogDetails.supervisorName === activityLogDetails.hodName && activityLogDetails.stateStatus == 'Rejected'">
+                        
+                        <div class="stream pb-0" *ngIf="activityLogDetails?.rejectedBy != null && activityLogDetails?.rejectedBy !=''">
+                            <div class="stream-badge">
+                                <i class="fa fa-close"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-danger text-white">Rejected By</label>
+                                    <p class="text-dark font-bold">
+                                        {{activityLogDetails?.rejectedBy}}
+                                    </p>
+                                    <ng-container *ngIf="activityLogDetails?.rejectedRemarks != null && activityLogDetails?.rejectedRemarks !=''">
+                                        <i class="icofont-comment"></i> | {{activityLogDetails?.rejectedRemarks}}
+                                    </ng-container>
+                                </div>
+                                <i class="fa fa-calendar"></i> | {{activityLogDetails?.rejectedDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                            </div>
+                        </div>
+
+                    </ng-container>
+
+
+
+                    <!-- For Supervisor Or Final Approver -->
+                    <ng-container *ngIf="activityLogDetails.supervisorName != activityLogDetails.hodName && activityLogDetails.stateStatus == 'Pending'">
+                        <div class="stream pb-0">
+                            <div class="stream-badge">
+                                <i class="icofont-stop"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-waiting">Awaiting recommendations from</label>
+                                </div>
+                                <i class="icofont-user-suited"></i> | {{activityLogDetails.supervisorName}}
+                            </div>
+                        </div>
+
+                        <div class="stream pb-0" *ngIf="activityLogDetails?.hodName != null && activityLogDetails?.hodName != ''">
+                            <div class="stream-badge">
+                                <i class="icofont-stop"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-waiting">Pending final approval from</label>
+                                </div>
+                                <i class="icofont-user-suited"></i> | {{ activityLogDetails.hodName }}
+                            </div>
+                        </div>
+
+                    </ng-container>
+
+
+                    <ng-container *ngIf="activityLogDetails.supervisorName != activityLogDetails.hodName && activityLogDetails.stateStatus == 'Recommended'">
+
+                        <div class="stream pb-0" *ngIf="activityLogDetails?.checkedBy != null && activityLogDetails?.checkedBy != ''">
+                            <div class="stream-badge">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-info">Recommended By</label>
+                                    <p class="text-dark font-bold">
+                                        {{activityLogDetails?.checkedBy}}
+                                    </p>
+                                    <ng-container *ngIf="activityLogDetails?.checkRemarks != null && activityLogDetails?.checkRemarks !=''">
+                                        <i class="icofont-comment"></i> | {{activityLogDetails?.checkRemarks}}
+                                    </ng-container>
+                                </div>
+                                <i class="fa fa-calendar"></i> | {{activityLogDetails?.checkedDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                            </div>
+                        </div>
+
+                        <div class="stream pb-0" *ngIf="activityLogDetails?.hodName != null && activityLogDetails?.hodName != ''">
+                            <div class="stream-badge">
+                                <i class="icofont-stop"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-waiting">Pending final approval from</label>
+                                </div>
+                                <i class="icofont-user-suited"></i> | {{ activityLogDetails.hodName }}
+                            </div>
+                        </div>
+
+                    </ng-container>
+
+
+                    <ng-container *ngIf="activityLogDetails.supervisorName != activityLogDetails.hodName && activityLogDetails.stateStatus == 'Approved'">
+
+                        <div class="stream pb-0" *ngIf="activityLogDetails?.checkedBy != null && activityLogDetails?.checkedBy != ''">
+                            <div class="stream-badge">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-info">Recommended By</label>
+                                    <p class="text-dark font-bold">
+                                        {{activityLogDetails?.checkedBy}}
+                                    </p>
+                                    <ng-container *ngIf="activityLogDetails?.checkRemarks != null && activityLogDetails?.checkRemarks !=''">
+                                        <i class="icofont-comment"></i> | {{activityLogDetails?.checkRemarks}}
+                                    </ng-container>
+                                </div>
+                                <i class="fa fa-calendar"></i> | {{activityLogDetails?.checkedDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                            </div>
+                        </div>
+
+                        <div class="stream pb-0" *ngIf="activityLogDetails?.approvedBy != null && activityLogDetails?.approvedBy != ''">
+                            <div class="stream-badge">
+                                <i class="icofont-checked"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-primary">Approved By</label>
+                                    <p class="text-dark font-bold">
+                                        {{activityLogDetails?.approvedBy}}
+                                    </p>
+                                    <ng-container *ngIf="activityLogDetails?.approvalRemarks != null && activityLogDetails?.approvalRemarks !=''">
+                                        <i class="icofont-comment"></i> | {{activityLogDetails?.approvalRemarks}}
+                                    </ng-container>
+                                </div>
+                                <i class="fa fa-calendar"></i> | {{activityLogDetails?.approvedDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                            </div>
+                        </div>
+    
+                    </ng-container>
+
+
+
+                    <ng-container *ngIf="activityLogDetails.supervisorName != activityLogDetails.hodName && activityLogDetails.stateStatus == 'Rejected'">
+
+                        <div class="stream pb-0" *ngIf="activityLogDetails?.checkedBy != null && activityLogDetails?.checkedBy != ''">
+                            <div class="stream-badge">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-info">Recommended By</label>
+                                    <p class="text-dark font-bold">
+                                        {{activityLogDetails?.checkedBy}}
+                                    </p>
+                                    <ng-container *ngIf="activityLogDetails?.checkRemarks != null && activityLogDetails?.checkRemarks !=''">
+                                        <i class="icofont-comment"></i> | {{activityLogDetails?.checkRemarks}}
+                                    </ng-container>
+                                </div>
+                                <i class="fa fa-calendar"></i> | {{activityLogDetails?.checkedDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                            </div>
+                        </div>
+
+                        <div class="stream pb-0" *ngIf="activityLogDetails?.rejectedBy != null && activityLogDetails?.rejectedBy !=''">
+                            <div class="stream-badge">
+                                <i class="fa fa-close"></i>
+                            </div>
+                            <div class="stream-panel">
+                                <div class="stream-info font-normal">
+                                    <label class="label label-danger text-white">Rejected By</label>
+                                    <p class="text-dark font-bold">
+                                        {{activityLogDetails?.rejectedBy}}
+                                    </p>
+                                    <ng-container *ngIf="activityLogDetails?.rejectedRemarks != null && activityLogDetails?.rejectedRemarks !=''">
+                                        <i class="icofont-comment"></i> | {{activityLogDetails?.rejectedRemarks}}
+                                    </ng-container>
+                                </div>
+                                <i class="fa fa-calendar"></i> | {{activityLogDetails?.rejectedDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                            </div>
+                        </div>
+    
+                    </ng-container>
+
+
+                 
+                    <div class="stream pb-0" *ngIf="activityLogDetails?.cancelledBy != null && activityLogDetails?.cancelledBy !=''">
+                        <div class="stream-badge">
+                            <i class="fa fa-times"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <label class="label label-inverse text-white">Cancelled By</label>
+                                <p class="text-dark font-bold">
+                                    {{activityLogDetails?.cancelledBy}}
+                                </p>
+                                <ng-container *ngIf="activityLogDetails?.cancelRemarks != null && activityLogDetails?.cancelRemarks !=''">
+                                    <i class="icofont-comment"></i> | {{activityLogDetails?.cancelRemarks}}
+                                </ng-container>
+                                
+                            </div>
+                            <i class="fa fa-calendar"></i> | {{activityLogDetails?.cancelledDate | date:"dd MMM yyyy hh:mm:ss a"}}
+                        </div>
+                    </div>
+
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer"></div>
+</ng-template>

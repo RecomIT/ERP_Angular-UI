@@ -1,0 +1,71 @@
+
+
+
+ <div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12">
+        <h2 class="mt-2">Resignation Request</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Resignation</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Resignation Request</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3 animated fadeInRight mb-4 pt-sm-1">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 pl-0 pr-0">
+
+            <div class="ibox">
+                <div class="ibox-content border-radius-5">
+
+                    <div class="row">
+                        <div class="col-12 header p-1">
+                            <h4 class="title pl-2">{{ showTitle }}</h4>
+
+                            <!-- Back Icon -->
+                            <i class="toggle-icon mr-2" (click)="showBackSection = true; showPlusSection = false; showListSection = false;">
+                                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                            </i>
+
+                            <!-- Plus Icon -->
+                            <i class="toggle-icon mr-2 fadeInRight" (click)="showPlusSection = true; showBackSection = false; showListSection = false;">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </i>
+
+                            <!-- List Icon -->
+                            <i class="toggle-icon mr-2" (click)="showListSection = true; showBackSection = false; showPlusSection = false;">
+                                <i class="fa fa-list-ul" aria-hidden="true"></i>
+                            </i>
+                        </div>
+                    </div>
+
+                    <!-- Back Section -->
+                    <div class="row" *ngIf="showBackSection">
+                        <div class="col-12 p-0">
+                            <app-resignation-request-guide-lines></app-resignation-request-guide-lines>
+                        </div>
+                    </div>
+
+                    <!-- Plus Section -->
+                    <div class="row" *ngIf="showPlusSection">
+                        <div class="col-12">
+                            <app-add-resignation-request></app-add-resignation-request>
+                        </div>
+                    </div>
+
+                    <!-- List Section -->
+                    <div class="row" *ngIf="showListSection">
+                        <div class="col-12">
+                            <app-resignation-request-list></app-resignation-request-list>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

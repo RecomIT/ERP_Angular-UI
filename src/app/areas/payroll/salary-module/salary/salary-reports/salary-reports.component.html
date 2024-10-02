@@ -1,0 +1,412 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Salary Related Report</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Salary</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Salary Related Reports</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs text-x-small">
+                    <li><a href="#paySlip" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Payslip
+                        </a>
+                    </li>
+                    <li><a href="#paymentReports" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Payment Reports
+                        </a>
+                    </li>
+
+                </ul>
+                <div class="tab-content">
+                    <div id="paySlip" class="tab-pane active">
+                        <div class="panel-body pt-3 pb-2 pb-1 text-x-small">
+                            <div class="form-row">
+                                <div class="form-group col-md-3 col-sm-12 mb-2">
+                                    <label for="paySlipEmployeeId" class="control-label font-bold">Search
+                                        By Employee</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width: 80%;">
+                                            <ng-select2 [data]="ddlPaySlipEmployee" name="paySlipEmployeeId"
+                                                #paySlipEmployeeIdRef="ngModel" id="paySlipEmployeeId"
+                                                [placeholder]="'Select Employee...'" [options]="select2Options"
+                                                [allowClear]="true" [(ngModel)]="paySlipEmployeeId" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12 mb-2">
+                                    <label for="paySlipMonth" class="control-label font-bold">View/Download By Salary
+                                        Month & Year</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <select name="paySlipMonth" id="paySlipMonth"
+                                            class="form-control form-control-sm" title="Month"
+                                            [(ngModel)]="paySlipMonth" #paySlipMonthRef="ngModel" required>
+                                            <option [value]="1">January</option>
+                                            <option [value]="2">February</option>
+                                            <option [value]="3">March</option>
+                                            <option [value]="4">April</option>
+                                            <option [value]="5">May</option>
+                                            <option [value]="6">June</option>
+                                            <option [value]="7">July</option>
+                                            <option [value]="8">August</option>
+                                            <option [value]="9">September</option>
+                                            <option [value]="10">October</option>
+                                            <option [value]="11">November</option>
+                                            <option [value]="12">December</option>
+                                        </select>
+                                        <div class="input-group-prepend">
+                                            <select name="paySlipYear" id="paySlipYear" #paySlipYearRef="ngModel"
+                                                required class="form-control form-control-sm" title="Year"
+                                                [(ngModel)]="paySlipYear">
+                                                <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group-prepend cursor-pointer" (click)="viewReport()"
+                                            title="View Report">
+                                            <span class="input-group-addon text-warning">
+                                                <i class="fa fa-eye"></i>
+                                            </span>
+                                        </div>
+                                        <div class="input-group-prepend cursor-pointer" (click)="downloadPayslip()"
+                                            title="Download Payslip (PDF)">
+                                            <span class="input-group-addon text-info">
+                                                <i class="fa fa-download"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12 mb-2">
+                                    <label for="payslipByDateRange" class="control-label font-bold">Download
+                                        Payslip By DateRange</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="payslipByDateRange" id="payslipByDateRange"
+                                            #payslipByDateRangeRef="ngModel" [(ngModel)]="payslipByDateRange"
+                                            class="form-control form-control-sm bg-white" placeholder="ENTER DATERANGE"
+                                            bsDaterangepicker [bsConfig]="datePickerConfig" readonly>
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="downloadPayslipByDateRange()" title="Download (PDF)">
+                                            <span class="input-group-addon text-info">
+                                                <i class="fa fa-download"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12 mb-2">
+                                    <label for="salarySheetByDateRange" class="control-label font-bold">Download
+                                        Salary Sheet By DateRange</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="salarySheetByDateRange" id="salarySheetByDateRange"
+                                            #salarySheetByDateRangeRef="ngModel" [(ngModel)]="salarySheetByDateRange"
+                                            class="form-control form-control-sm bg-white" placeholder="ENTER DATERANGE"
+                                            bsDaterangepicker [bsConfig]="datePickerConfig" readonly>
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="downloadSalarySheetByDateRange()" title="Download (Excel)">
+                                            <span class="input-group-addon text-info">
+                                                <i class="fa fa-download"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body text-xx-small pt-1" *ngIf="payslipData != null" @fadeIn>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <div class="table-responsive font-bold">
+                                    <table
+                                        class="table table-sm table-striped table-bordered table-hover table-responsive-xl mb-0">
+                                        <tbody>
+                                            <tr class="bg-dark-blue">
+                                                <td colspan="2" class="text-white font-bold">Employee Details</td>
+                                                <td colspan="2" class="text-white font-bold text-right">Payslip -
+                                                    {{payslipData?.monthName}}'{{payslipData?.salaryYear}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">Employee No.</td>
+                                                <td class="text-left">{{payslipData?.employeeCode}}</td>
+                                                <td class="text-left">Employee Name</td>
+                                                <td class="text-left">{{payslipData?.employeeName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">Date Of Joining</td>
+                                                <td class="text-left">{{payslipData?.dateofJoining | date:"dd MMM
+                                                    yyyy"}}</td>
+                                                <td class="text-left">Designation</td>
+                                                <td class="text-left">{{payslipData?.designationName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">Working Days</td>
+                                                <td class="text-left">{{payslipData?.workingDays}}</td>
+                                                <td class="text-left">Department</td>
+                                                <td class="text-left">{{payslipData?.departmentName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">Location</td>
+                                                <td class="text-left">{{payslipData?.location}}</td>
+                                                <td class="text-left">TIN</td>
+                                                <td class="text-left">{{payslipData?.tin}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <h5>Salary Details (Component-wise Breakdown)</h5>
+                                <div class="table-responsive">
+                                    <table
+                                        class="table table-sm table-striped table-hover table-responsive-xl text-x-small mb-0 font-bold">
+                                        <thead class="bg-light-blue text-white">
+                                            <tr>
+                                                <th class="text-center font-bold">#SL</th>
+                                                <th class="text-left">Earnings</th>
+                                                <th class="text-right">Amount</th>
+                                                <th class="text-right border-right">Arrear</th>
+                                                <th class="text-left">Deductions</th>
+                                                <th class="text-right">Amount</th>
+                                                <th class="text-right border-right">Adjustment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of payslipData?.payslipDetails; let i = index">
+                                                <td class="text-center">{{i+1}}</td>
+                                                <td class="text-left">{{item.allowanceName}}</td>
+                                                <td class="text-right">{{item.allowanceAmount | number}}</td>
+                                                <td class="text-right border-right">{{(item.allowanceArrearAmount > 0 ?
+                                                    item.allowanceArrearAmount : null) | number}}</td>
+                                                <td class="text-left">{{item.deductionName}}</td>
+                                                <td class="text-right">{{(item.deductionAmount > 0 ?
+                                                    item.deductionAmount
+                                                    : null)| number}}</td>
+                                                <td class="text-right border-right">{{(item.deductionArrearAmount > 0 ?
+                                                    item.deductionArrearAmount : null) | number}}</td>
+
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="bg-dark-blue text-white  font-bold">
+                                                <td colspan="2" class="text-left">Total</td>
+                                                <td class="text-right">{{(payslipData?.totalAllowance > 0 ?
+                                                    payslipData?.totalAllowance : 0.00) | number }}</td>
+                                                <td class="text-right border-right">{{(payslipData?.totalArrearAllowance
+                                                    > 0 ? payslipData?.totalArrearAllowance : 0.00) | number}}</td>
+                                                <td class="text-left">Total Deduction</td>
+                                                <td class="text-right">{{(payslipData?.totalDeduction > 0 ?
+                                                    payslipData?.totalDeduction : 0.00) | number}}</td>
+                                                <td class="text-right">{{(payslipData?.totalArrearDeduction > 0 ?
+                                                    payslipData?.totalArrearDeduction : 0.00) | number}}</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered table-responsive-xl mb-0 font-bold">
+                                        <tr>
+                                            <td colspan="2" class="text-right">Net Payable</td>
+                                            <td colspan="2" class="text-right">{{payslipData?.netPay | number}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-borderless table-responsive-xl mb-0 font-bold">
+                                        <tr>
+                                            <td colspan="4" class="text-left">In Words: {{payslipData?.amountInWord}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-left">[N.B : Confidential Report. Please Do Not
+                                                Share with Anyone]</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 shadow-sm">
+                                <h5>Payment Methods:</h5>
+                                <div class="table-responsive">
+                                    <table
+                                        class="table table-sm table-striped table-hover table-responsive-xl text-x-small font-bold text-center">
+                                        <thead class="bg-light-blue text-white">
+                                            <tr>
+                                                <th>Payment Type</th>
+                                                <th>Bank/Wallet Name</th>
+                                                <th>Account/Wallet Number</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Bank Transfer</td>
+                                                <td>{{payslipData?.bankName}}</td>
+                                                <td>{{payslipData?.bankAccNo}}</td>
+                                                <td>{{payslipData?.netPay}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="paymentReports" class="tab-pane">
+                        <div class="panel-body pt-3 pb-2 pb-1 text-x-small">
+                            <div class="form-row">
+                                <div class="form-group col-md-3 col-sm-12 mb-2">
+                                    <label for="rptBranchId" class="control-label font-bold">Branch</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-building"></i>
+                                            </span>
+                                        </div>
+                                        <select name="rptBranchId" id="rptBranchId" class="form-control form-control-sm"
+                                            [(ngModel)]="rptBranchId" #rptBranchIdRef="ngModel">
+                                            <option [value]="0" selected>---Select Branch---</option>
+                                            <option [value]="item.value" *ngFor="let item of branches">
+                                                {{item.text}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12 mb-2">
+                                    <label for="rptMonth" class="control-label font-bold">Salary
+                                        Month & Year</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <select name="rptMonth" id="rptMonth" class="form-control form-control-sm"
+                                            title="Month" [(ngModel)]="rptMonth" #rptMonthRef="ngModel" required>
+                                            <option [value]="1">January</option>
+                                            <option [value]="2">February</option>
+                                            <option [value]="3">March</option>
+                                            <option [value]="4">April</option>
+                                            <option [value]="5">May</option>
+                                            <option [value]="6">June</option>
+                                            <option [value]="7">July</option>
+                                            <option [value]="8">August</option>
+                                            <option [value]="9">September</option>
+                                            <option [value]="10">October</option>
+                                            <option [value]="11">November</option>
+                                            <option [value]="12">December</option>
+                                        </select>
+                                        <div class="input-group-prepend">
+                                            <select name="rptYear" id="rptYear" #rptYearRef="ngModel" required
+                                                class="form-control form-control-sm" title="Year" [(ngModel)]="rptYear">
+                                                <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12 mb-2">
+                                    <label for="jobtype" class="control-label font-bold">
+                                        Job Type
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-list"></i>
+                                        </span>
+                                        <select name="jobtype" id="jobtype" class="form-control form-control-sm"
+                                            [(ngModel)]="rptJobtype" #JobtypeRef="ngModel">
+                                            <option [value]="''">All</option>
+                                            <option [value]="'Permanent'">Permanent</option>
+                                            <option [value]="'Contractual'">Contractual</option>
+                                            <option [value]="'Probation'">Probation</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12 mb-2">
+                                    <label for="rptReportType" class="control-label font-bold">
+                                        Report Type
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-file-archive-o"></i>
+                                        </span>
+                                        <select name="rptReportType" id="rptReportType"
+                                            class="form-control form-control-sm" [(ngModel)]="rptReportType"
+                                            #rptReportTypeRef="ngModel">
+                                            <option [value]="'Reconciliation Statement'">Reconciliation Statement
+                                            </option>
+                                            <option [value]="'Reconciliation Breakdown'">Reconciliation Breakdown
+                                            </option>
+                                            <option [value]="'Payment Authorization'">Payment Authorization</option>
+                                            <option [value]="'Payment Authorization Cash'">Payment Authorization Cash
+                                            </option>
+                                        </select>
+                                        <div class="input-group-addon text-dark cursor-pointer"
+                                            (click)="downloadOtherReport()">
+                                            <i class="fa fa-download"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-12 mt-lg-4 mt-sm-4 hide">
+                                    <div class="clearfix">
+                                        <button type="button" class="btn btn-sm btn-primary font-bold btn-rounded mr-1"
+                                            (click)="downloadReconciliationStatement()"><i
+                                                class="fa fa-file-pdf-o fa-3x"></i> | Reconciliation Statement
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-primary font-bold btn-rounded mr-1"
+                                            (click)="downloadReconciliationBreakdown()"><i
+                                                class="fa fa-file-pdf-o fa-3x"></i> | Reconciliation Breakdown
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-primary font-bold btn-rounded mr-1"
+                                            (click)="downloadSalarySheetByDateRange()"><i
+                                                class="fa fa-file-pdf-o fa-3x"></i> | Payment Authorization
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-primary font-bold btn-rounded mr-1"
+                                            (click)="downloadSalarySheetByDateRange()"><i
+                                                class="fa fa-file-pdf-o fa-3x"></i> | Payment Authorization Cash
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <ng-container *ngIf="showDownloadPayslipModal">
+    <app-payroll-download-payslip-from-date-range [paySlipEmployeeId]="paySlipEmployeeId" (closeModalEvent)="closeDownloadPayslipModal($event)" 
+    [isRequestFromSelfService]="false">
+    </app-payroll-download-payslip-from-date-range>
+</ng-container>  -->

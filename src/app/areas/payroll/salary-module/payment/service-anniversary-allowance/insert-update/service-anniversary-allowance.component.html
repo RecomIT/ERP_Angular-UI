@@ -1,0 +1,418 @@
+
+
+
+<ng-template #addServiceAnniversaryConfigModal let-modal>
+  <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+          <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-plus" aria-hidden="true"></i>|
+          Add Service Anniversary Allowance Config
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+          ><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="font-bold text-dark">
+      <div class="modal-body">
+         
+        <div class="container mt-4 text-x-small">
+          <form [formGroup]="payrollForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+            
+              <div class="form-row">
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                    <div class="form-group">
+                      <label for="allowanceName" class="control-label font-bold">
+                        Allowance Name <span class="text-danger">*</span>
+                      </label>
+                      <ng-select2 formControlName="allowanceName"
+                                  [data]="allowanceList"
+                                  name="searchByAllowanceId"
+                                  id="searchByAllowanceId"
+                                  [placeholder]="'Select Allowance ...'"
+                                  [options]="allowanceSelect2Options"
+                                  [allowClear]="true"
+                                  (ngModelChange)="onAllowanceSelectionChange($event)">
+                      </ng-select2>
+                    </div>
+                  </div>
+                
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      <div class="form-group">
+                        <label for="cutOffDay" class="control-label font-bold">
+                          Cut Off Day <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                          <select class="form-control rounded" id="cutOffDay" formControlName="cutOffDay" (change)="onCutOffDayChange($event)">
+                            <option value="" disabled selected>Select Cut Off Day</option>
+                            <option *ngFor="let day of cutoffDays" [value]="day">{{ day }}</option>
+                          </select>
+                         
+                        </div>
+                      </div>
+                  </div>
+                    
+                    
+                    
+                    
+                    
+              </div>
+                
+  
+              <div class="form-row">
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+
+                      <div class="form-group">
+                          <label for="jobType" class="control-label font-bold">
+                              Job Type<span class="text-danger">*</span>
+                          </label>
+                          <select class="form-control rounded" id="jobType" formControlName="jobType">
+                            <option value="" disabled selected>Select Job Type</option>
+                            <option value="Permanent">Permanent</option>
+                            <option value="Contractual">Contractual</option>
+                            <option value="Probation">Probation</option>
+                            <option value="Intern">Intern</option>
+                            <option value="Not Applicable">Not Applicable</option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="payrollForm.get('jobType').hasError('required')">
+                            Please select a job type.
+                          </div>
+                      </div>
+                        
+                  </div>
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                      <div class="form-group">
+                          <label for="religion" class="control-label font-bold">
+                              Religion<span class="text-danger">*</span>
+                          </label>
+                        
+                          <select class="form-control rounded" id="religion" formControlName="religion">
+                            <option value="" disabled selected>Select Religion</option>
+                            <option value="Islam">Islam</option>
+                            <option value="Hindu">Hindu</option>
+                            <option value="Christian">Christian</option>
+                            <option value="Buddhist">Buddhist</option>
+                            <option value="Not Applicable">Not Applicable</option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="payrollForm.get('religion').hasError('required')">
+                            Please select a religion.
+                          </div>
+                        </div>
+                        
+                        
+                  </div>
+
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                      <div class="form-group">
+                          <label for="maritalStatus" class="control-label font-bold">
+                              Marital Status<span class="text-danger">*</span>
+                          </label>
+
+                          <select class="form-control rounded" id="maritalStatus" formControlName="maritalStatus">
+                            <option value="" disabled selected>Select Marital Status</option>
+                            <option value="Married">Married</option>
+                            <option value="Single">Single</option>
+                            <option value="Not Applicable">Not Applicable</option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="payrollForm.get('maritalStatus').hasError('required')">
+                            Please select a marital status.
+                          </div>
+                        </div>
+                          
+                  </div>
+
+              </div>
+
+
+              <div class="form-row">
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+
+                      <div class="form-group">
+                          <label for="citizen" class="control-label font-bold">
+                              Citizen<span class="text-danger">*</span>
+                          </label>
+                          <select class="form-control rounded" id="citizen" formControlName="citizen">
+                            <option value="" disabled selected>Select Citizen Status</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                            <option value="Not Applicable">Not Applicable</option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="payrollForm.get('citizen').hasError('required')">
+                            Please select a citizen status.
+                          </div>
+                        </div>
+                        
+                        
+                  </div>
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                      <div class="form-group">
+                          <label for="gender" class="control-label font-bold">
+                              Gender<span class="text-danger">*</span>
+                          </label>
+                          <select class="form-control rounded" id="gender" formControlName="gender">
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Not Applicable">Not Applicable</option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="payrollForm.get('gender').hasError('required')">
+                            Please select a gender.
+                          </div>
+                        </div>
+                                     
+                  </div>
+
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                      <div class="form-group">
+                          <label for="physicalCondition" class="control-label font-bold">
+                              Physical Condition<span class="text-danger">*</span>
+                          </label>
+
+                          <select class="form-control rounded" id="physicalCondition" formControlName="physicalCondition">
+                            <option value="" disabled selected>Select Physical Condition</option>
+                            <option value="Disabled">Disabled</option>
+                            <option value="Undisabled">Undisabled</option>
+                            <option value="Not Applicable">Not Applicable</option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="payrollForm.get('physicalCondition').hasError('required')">
+                            Please select a physical condition.
+                          </div>
+                        </div>
+                        
+                  </div>
+
+              </div>
+            
+            
+              <div class="form-row">
+
+                  <!-- <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+
+                      <div class="form-group">
+                          <label for="depositType" class="control-label font-bold">
+                              Deposit Type<span class="text-danger">*</span>
+                          </label>
+                          <select class="form-control rounded" id="depositType" formControlName="depositType">
+                            <option value="" disabled selected>Select Deposit Type</option>
+                            <option value="Monthly">Monthly</option>
+                            <option value="Yearly">Yearly</option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="payrollForm.get('depositType').hasError('required')">
+                            Please select a deposit type.
+                          </div>
+                        </div>
+                        
+                  </div> -->
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                      <div class="form-group">
+                          <label for="baseOfPayment" class="control-label font-bold">
+                              Based On<span class="text-danger">*</span>
+                          </label>
+                          <select class="form-control rounded" id="baseOfPayment" formControlName="baseOfPayment">
+                            <option value="" disabled selected>Select Based On</option>
+                            <option value="Flat">Flat</option>
+                            <option value="Basic">Basic</option>
+                            <option value="Gross">Gross</option>
+                            <option value="GrossWithoutConveyance">Gross without Conveyance</option>
+                            <option value="GrossWithConveyance">Gross with Conveyance</option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="payrollForm.get('baseOfPayment').hasError('required')">
+                            Please select the base of payment.
+                          </div>
+                        </div>    
+                  </div>
+
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                      <div class="form-group" *ngIf="payrollForm.get('baseOfPayment').value !== 'Flat'">
+                          <label for="percentage" class="control-label font-bold">
+                              Percentage<span class="text-danger">*</span>
+                          </label>
+
+                          <div class="input-group">
+                            <input type="number" class="form-control rounded" id="percentage" formControlName="percentage" placeholder="Enter Percentage">
+                            <div class="invalid-feedback" *ngIf="payrollForm.get('percentage').hasError('required')">
+                              Please enter the percentage.
+                            </div>
+                          </div>
+                        </div>   
+                        
+                        <div class="form-group" *ngIf="payrollForm.get('baseOfPayment').value === 'Flat'">
+                          <label for="amount" class="control-label font-bold">
+                            Amount <span class="text-danger">*</span>
+                          </label>
+                      
+                          <div class="input-group">
+                            <input type="number" class="form-control rounded" id="amount" formControlName="amount" placeholder="Enter Amount">
+                            <div class="invalid-feedback" *ngIf="payrollForm.get('amount').hasError('required')">
+                              Please enter the amount.
+                            </div>
+                          </div>
+                        </div>
+                        
+                  </div>
+
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                    
+                    </div>
+                    
+
+              </div>
+           
+        
+              <div class="form-row">
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+
+                      <div class="form-group form-inline">
+
+                          <label class="mr-2" for="isVisibleInPayslipYes"><strong>Is Visible in Payslip</strong>
+                          </label>
+                          <div class="form-check mr-2">
+                            <input class="form-check-input" type="radio" id="isVisibleInPayslipYes" value="Yes" formControlName="isVisibleInPayslip">
+                            <label class="form-check-label" for="isVisibleInPayslipYes">Yes</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" id="isVisibleInPayslipNo" value="No" formControlName="isVisibleInPayslip">
+                            <label class="form-check-label" for="isVisibleInPayslipNo">No</label>
+                          </div>
+                          <div class="invalid-feedback ml-2" *ngIf="payrollForm.get('isVisibleInPayslip').hasError('required')">
+                            Please select if it is visible in payslip.
+                          </div>
+                        </div>
+                        
+                  </div>
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                      <div class="form-group form-inline">
+                          <label class="mr-2" for="isVisibleInSalarySheetYes"><strong>Is Visible in Salary Sheet</strong>
+                          </label>
+
+                          <div class="form-check mr-2">
+                            <input class="form-check-input" type="radio" id="isVisibleInSalarySheetYes" value="Yes" formControlName="isVisibleInSalarySheet">
+                            <label class="form-check-label" for="isVisibleInSalarySheetYes">Yes</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" id="isVisibleInSalarySheetNo" value="No" formControlName="isVisibleInSalarySheet">
+                            <label class="form-check-label" for="isVisibleInSalarySheetNo">No</label>
+                          </div>
+                          <div class="invalid-feedback ml-2" *ngIf="payrollForm.get('isVisibleInSalarySheet').hasError('required')">
+                            Please select if it is visible in salary sheet.
+                          </div>
+                        </div>
+                  </div>
+
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                                       
+                        
+                  </div>
+
+              </div>
+
+
+
+              <div class="form-row">
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+
+                      <div class="form-group">
+                          <label for="activationFrom" class="control-label font-bold">
+                            Activation From <span class="text-danger">*</span>
+                          </label>
+                          <div class="input-group rounded">
+                            <div class="input-group-prepend">
+                              <span class="input-group-addon">
+                                <i class="fa fa-calendar-check-o"></i>
+                              </span>
+                            </div>
+                            <input type="text" formControlName="activationFrom" id="activationFrom" 
+                              class="form-control form-control-sm bg-white rounded"
+                              readonly
+                              placeholder="Select Activation From .." title="Activation From" bsDatepicker
+                              [bsConfig]="datePickerConfig">
+                            <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date" 
+                              [hidden]="!payrollForm.get('activationFrom').value"
+                              (click)="clearActivationFrom()">
+                              <span class="input-group-addon text-danger">
+                                <i class="fa fa-times"></i>
+                              </span>
+                            </div>
+                          </div>
+                      </div>
+                        
+                        
+                  </div>
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                      <div class="form-group">
+                          <label for="activationTo" class="control-label font-bold">
+                            Activation To <span class="text-danger">*</span>
+                          </label>
+                          <div class="input-group rounded">
+                            <div class="input-group-prepend">
+                              <span class="input-group-addon">
+                                <i class="fa fa-calendar-check-o"></i>
+                              </span>
+                            </div>
+                            <input type="text" formControlName="activationTo" id="activationTo" 
+                              class="form-control form-control-sm bg-white rounded"
+                              readonly
+                              placeholder="Select Activation To .." title="Activation To" bsDatepicker
+                              [bsConfig]="datePickerConfig">
+                            <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date" 
+                              [hidden]="!payrollForm.get('activationTo').value"
+                              (click)="clearActivationTo()">
+                              <span class="input-group-addon text-danger">
+                                <i class="fa fa-times"></i>
+                              </span>
+                            </div>
+                          </div>
+                      </div>
+
+                  </div>
+
+
+                  <div class="col-12 col-lg-4 col-md-4 col-sm-12 mb-1">
+                      
+                                       
+                        
+                  </div>
+
+              </div>
+         
+         
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary" [disabled]="payrollForm.invalid">Submit</button>
+            </div>
+
+          </form>
+      </div>
+
+      </div>
+      <div class="modal-footer text-x-small pb-2">
+          <button type="button" class="btn btn-sm btn-danger btn-rounded pull-right"
+              (click)="closeModal('Close click')">
+              <i class="fa fa-times"></i> | Close
+
+          </button>
+      </div>
+  </div>
+</ng-template>
+
+
+  

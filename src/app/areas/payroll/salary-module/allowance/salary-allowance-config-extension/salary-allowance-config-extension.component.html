@@ -1,0 +1,121 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-8">
+        <h2 @slideInUp class="mt-2">Salary Breakdown Setup</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Allowance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Salary Breakdown Setup</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-4">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-sm btn-outline-primary float-right btn-rounded"
+                (click)="openInsertUpdateModal(0)"><i class="fa fa-plus"></i> | Add Setup</button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-sm-12 col-md-12 col-lg-12 hide">
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 text-x-small font-bold">
+                    <h3>Filter Section</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-4" *ngFor="let item  of listOfSalaryAllowanceConfig, let idx = index">
+            <div class="ibox">
+                <div class="ibox-title" [class.bg-warning]="item?.isOnProcess">
+                    <h5
+                        *ngIf="item?.configCategory == 'All' || item?.configCategory == 'Employee Wise' || item?.configCategory == 'Designation' || item?.configCategory == 'Grade'">
+                        <span *ngIf="item?.configCategory == 'Employee Wise'">
+                            Special Breakdown
+                        </span>
+                        <span *ngIf="item?.configCategory != 'Employee Wise'">
+                            {{item?.configCategory}}
+                        </span>
+                    </h5>
+                    <h5 *ngIf="item?.configCategory == 'Job Type'">{{item?.jobType}}</h5>
+
+                    <div class="ibox-tools">
+                        <i class="fa fa-circle text-danger" *ngIf="item?.isActive == false"> Inactive</i>
+                        <i class="fa fa-circle text-navy" *ngIf="item?.isActive == true"> Active</i>
+                    </div>
+                </div>
+                <div class="ibox-content text-x-small font-bold">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <span class="label label-waiting pull-right">{{item?.baseType}} - Base</span>
+                        <div class="table-responsive mb-sm-1">
+                            <table
+                                class="table table-sm table-striped table-hover table-responsive-sm table-responsive-xl">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>#SL</th>
+                                        <th>Allowance</th>
+                                        <th>Base</th>
+                                        <th>Amt/Per</th>
+                                        <th>Addition Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let detail of item.salaryAllowanceConfigurationDetails; let i=index">
+                                    <tr class="text-center">
+                                        <td>{{i+1}}</td>
+                                        <td>{{detail?.allowanceName}}</td>
+                                        <td>{{detail?.allowanceBase}}</td>
+                                        <td>
+                                            {{detail?.allowanceBase == 'Flat' ? detail?.amount : detail?.percentage}}
+                                            <i *ngIf="detail?.allowanceBase == 'Flat'">&#2547;</i>
+                                            <i *ngIf="detail?.allowanceBase != 'Flat'">%</i>
+                                        </td>
+                                        <td>{{detail?.additionalAmount}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 col-sm-12 col-md-4 col-lg-4">
+                            <span *ngIf="item?.stateStatus == 'Pending'"><i class="fa fa-circle text-warning"> </i>
+                                Pending</span>
+                            <span *ngIf="item?.stateStatus == 'Approved'"><i class="fa fa-circle text-navy"> </i>
+                                Approved</span>
+                        </div>
+                        <div class="col-4 col-sm-12 col-md-4 col-lg-4 text-x-small">
+                            <span
+                                *ngIf="item?.configCategory == 'Employee Wise' || item?.configCategory == 'Grade' || item?.configCategory == 'Designation'">
+                                Head count - <button class="btn btn-xs btn-rounded btn-info"
+                                    (click)="seeHeadInfo(item)">{{item?.headCount}}</button>
+                            </span>
+                        </div>
+                        <div class="col-4 col-sm-12 col-md-4 col-lg-4 text-x-small pull-right"
+                            *ngIf="item?.stateStatus == 'Approved'" [tooltip]="'Activation Date'">
+                            <i class="fa fa-calendar"></i>&nbsp;<span>{{item?.approvedDate | date:'dd MMM yyyy'}}</span>
+                        </div>
+                        <div class="col-4 col-sm-12 col-md-4 col-lg-4" *ngIf="item?.stateStatus == 'Pending'">
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-sm btn-rounded btn-info" [disabled]="btnSubmit"
+                                    (click)="approved(item, idx)" [tooltip]="'Click to Approved'"><i
+                                        class="fa fa-check"></i></button>
+                                <button type="button" class="btn btn-sm btn-rounded btn-danger" [disabled]="btnSubmit"
+                                    (click)="delete(item, idx)" [tooltip]="'Click to Delete'"><i
+                                        class="fa fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showInsertUpdateModal == true">
+    <app-payroll-add-salary-allowance-config-extension [id]="config_id"
+        (closeModalEvent)="closeInsertUpdateModal($event)"></app-payroll-add-salary-allowance-config-extension>
+</ng-container>

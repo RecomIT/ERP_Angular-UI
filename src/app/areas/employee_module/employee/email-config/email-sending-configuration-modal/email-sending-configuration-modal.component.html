@@ -1,0 +1,188 @@
+<ng-template #emailSendingConfigurationModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-users-alt-4 pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <form [formGroup]="emailSendingConfigurationForm" (ngSubmit)="submitEmailSendingConfiguration()" >
+        <div class="modal-body text-x-small">
+            
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Module Name<span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-list-ul"></i>
+                            </span>
+                        </div>
+                        <select name="moduleName" id="moduleName" class="form-control" formControlName="moduleName"> 
+                            <option [value]="0" selected>---Select Module Name---</option>
+                            <option [value]="item.text" *ngFor="let item of ddlModuleName">{{item.text}}</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="emailStage" class="control-label font-bold">Email Stage<span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <!-- <i class="fa fa-book"></i> -->
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div> 
+                        <input type="text" class="form-control form-control-sm" name="emailStage" id="emailStage" formControlName="emailStage">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Email CC 1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-cc"></i>
+                            </span>
+                        </div>
+                        <select name="emailCC1" id="emailCC1" class="form-control form-control-sm" formControlName="emailCC1">
+                            <option [value]="0" selected>---Select Email CC 1---</option>                     
+                            <option [value]="c" *ngFor="let c of ddlEmailCCBC()">{{c}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Email CC 2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-cc"></i>
+                            </span>
+                        </div>
+                        <select name="emailCC2" id="emailCC2" class="form-control form-control-sm" formControlName="emailCC2">
+                            <option [value]="0" selected>---Select Email CC 2---</option>
+                            <option [value]="c" *ngFor="let c of ddlEmailCCBC()">{{c}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Email CC 3</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-cc"></i>
+                            </span>
+                        </div>
+                        <select name="emailCC3" id="emailCC3" class="form-control form-control-sm" formControlName="emailCC3">
+                            <option [value]="0" selected>---Select Email CC 3---</option>
+                            <option [value]="c" *ngFor="let c of ddlEmailCCBC()">{{c}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Email BCC 1</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-briefcase"></i>
+                            </span>
+                        </div>
+                        <select name="emailBCC1" id="emailBCC1" class="form-control form-control-sm" formControlName="emailBCC1">
+                            <option [value]="0" selected>---Select Email BCC 1---</option>
+                            <option [value]="c" *ngFor="let c of ddlEmailCCBC()">{{c}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="" class="control-label font-bold">Email BCC 2</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-briefcase"></i>
+                            </span>
+                        </div>
+                        <select name="emailBCC2" id="emailBCC2" class="form-control form-control-sm" formControlName="emailBCC2">
+                            <option [value]="0" selected>---Select Email BCC 2---</option>
+                            <option [value]="c" *ngFor="let c of ddlEmailCCBC()">{{c}}</option>
+                        </select>
+                    </div>
+                </div>    
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="emailTo" class="control-label font-bold">Email To<span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-paper-plane"></i>
+                            </span>
+                        </div>
+                        <select name="emailTo" id="emailTo" class="form-control form-control-sm" formControlName="emailTo">
+                            <option [value]="0" selected>---Select Email To---</option>
+                            <option [value]="c" *ngFor="let c of ddlEmailCCBC()">{{c}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">               
+                <div class="form-group col-sm-6 col-sm-6">
+                      <div class="input-group">
+                        <div class="input-group-prepend">                            
+                            <span class="input-group-addon">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon my-input-group-addon-padding">
+                                <input type="checkbox" name="isActive" id="isActive" formControlName="isActive">
+                            </span>
+                        </div>
+                        <div class="form-control form-control-sm text-small font-bold">
+                            Is Active?
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blink">{{objErrorMsg?.exist}}</div>
+
+        </div>
+
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary"
+                [disabled]="this.emailSendingConfigurationForm.invalid">
+                <i class="fa fa-paper-plane"></i> | {{this.id > 0 ? 'Update': 'Submit'}} <span 
+                role="status" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger" (click)="closeModal('Cancel click')"><i
+                    class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>
+
+<style>
+
+    .blink {
+                animation: blinker 2.5s linear infinite;
+                color: red;
+                font-family: sans-serif;     
+                /* font-size: 30px; */
+                font-weight: bold;
+            }
+            @keyframes blinker {
+                50% {
+                    opacity: 0;
+                }
+            }
+    
+    
+</style>

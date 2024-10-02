@@ -1,0 +1,120 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 @slideInUp class="mt-2">Tax Refund</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Self Service</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Submission</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Tax Refund</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-8 col-sm-6 text-x-small">
+        <div class="title-action">
+            <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded" (click)="openRefundModal(0)">
+                <i class="fa fa-plus"></i> | Refund
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#empAdvanceIncomeTax" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> Refund
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="empAdvanceIncomeTax" class="tab-pane active">
+                        <div class="panel-body bg-white pb-1">
+                            <form [formGroup]="searchForm">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="fiscalYearId" id="fiscalYearId"
+                                                class="form-control form-control-sm" formControlName="fiscalYearId">
+                                                <option [value]="0" selected>---Select Fiscal year---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlFiscalYears">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Fiscal Year</th>
+                                            <th class="text-center">Amount</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Documents</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of listOfData , let i =index">
+                                            <td class="text-center font-bold">{{i+1 +(pageSize*(pageNumber-1))}}</td>
+                                            <td class="text-center">{{item.fiscalYearRange}}</td>
+                                            <td class="text-center">{{item.amount}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus +
+                                                    '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs text-danger btn-outline"
+                                                    (click)="showDocumentFile(item.filePath)">
+                                                    <i class="icofont-file-alt"></i>
+                                                </button>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs" title="Edit"
+                                                    (click)="openRefundModal(item?.submissionId)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showRefundModal">
+    <app-payroll-self-tax-refund-modal [id]="id" (closeModalEvent)="closeRefundModal($event)">
+    </app-payroll-self-tax-refund-modal>
+</ng-container>

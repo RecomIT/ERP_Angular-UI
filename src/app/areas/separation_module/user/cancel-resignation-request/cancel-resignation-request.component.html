@@ -1,0 +1,51 @@
+<ng-template #cancelResignationRequestModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        <i class="fa fa-trash-o btn btn-sm btn-success btn-circle" aria-hidden="true"></i> Cancel Resignation Request
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeCancelResignationRequestModal('close click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+  
+    <div class="modal-body">
+ 
+      <form [formGroup]="cancelForm" (ngSubmit)="submitCancel()">
+          <div class="form-row">
+              <div class="col-md-12 col-sm-12 mt-1 text-x-small">
+                  <label  for="cancelRemarks" class="control-label font-bold">
+                  <strong>Cancel Remarks:</strong> <span class="text-danger">*</span>
+                  </label>
+                  <textarea id="cancelRemarks" class="form-control rounded" rows="3" formControlName="CancelRemarks"></textarea>
+                      <div *ngIf="cancelForm.get('CancelRemarks').hasError('maxlength')">Maximum 200 characters allowed.</div>
+              </div>
+          </div>
+
+          <div class="form-row mt-3">
+
+            <div class="col-md-12">
+  
+              <button class="btn btn-xs btn-primary  p-1 shadow mr-2" type="submit" [disabled]="cancelForm.invalid">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i> | Submit
+              </button>
+
+              <button class="btn btn-xs btn-danger p-1 shadow mr-2" type="button" (click)="reset()">
+                <i class="fa fa-repeat" aria-hidden="true"></i> | Clear
+              </button>
+  
+          
+            </div>
+          </div>
+
+          <!-- <button type="submit" class="btn btn-primary mt-1" [disabled]="cancelForm.invalid">Submit</button> -->
+      </form>
+
+    </div>
+  
+    <div class="modal-footer">
+      <button class="btn btn-xs btn-danger btn-rounded shadow-lg" type="button" (click)="closeCancelResignationRequestModal('Close Click')">
+        <i class="fa fa-times"></i> | Cancel
+      </button>
+    </div>
+  </ng-template>
+  

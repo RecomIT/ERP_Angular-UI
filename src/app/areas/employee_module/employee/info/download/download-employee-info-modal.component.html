@@ -1,0 +1,365 @@
+<ng-template #downloadEmployeeInfoModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="fa fa-user pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="showData()">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="row">
+                        <div class="col-md-9 col-sm-12">
+                            <div class="ibox">
+                                <div class="ibox-title m-0">
+                                    <h5> <i class="fa fa-filter"></i> | Filter Section</h5>
+                                </div>
+                                <div class="ibox-content text-x-small">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="searchById" class="control-label font-bold">Id</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-id-badge"></i>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="searchById"
+                                                    placeholder="Enter Here..." formControlName="id" name="searchById">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="searchByName" class="control-label font-bold">Name</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-user"></i>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    id="searchByName" placeholder="Enter here..." formControlName="name"
+                                                    name="searchByName">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="branchId" class="control-label font-bold">Branch</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-building"></i>
+                                                </div>
+                                                <select class="form-control form-control-sm" name="branchId"
+                                                    id="branchId" formControlName="branchId">
+                                                    <option [value]="0" selected>--Select One--</option>
+                                                    <option [value]="item.id" *ngFor="let item of ddlBranch">
+                                                        {{item.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="designation"
+                                                class="control-label font-bold">Designation</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-shield"></i>
+                                                </div>
+                                                <select class="form-control form-control-sm" id="designation"
+                                                    name="designation" formControlName="designation">
+                                                    <option [value]="0" selected>--Select One--</option>
+                                                    <option [value]="item.id" *ngFor="let item of ddlDesignation">
+                                                        {{item.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="department"
+                                                class="control-label font-bold">Department</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-building-o"></i>
+                                                </div>
+                                                <select class="form-control form-control-sm" id="department"
+                                                    name="department" formControlName="department">
+                                                    <option [value]="0" selected>--Select One--</option>
+                                                    <option [value]="item.id"
+                                                        *ngFor="let item of ddlDepartment | async">
+                                                        {{item.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="joiningDate" class="control-label font-bold">
+                                                Joining Date
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    placeholder="Enter here..." formControlName="joiningDate"
+                                                    [bsConfig]="datePickerConfig" bsDaterangepicker
+                                                    name="joiningDate" id="joiningDate">
+                                                <div class="input-group-addon cursor-pointer text-danger" tooltip="Remove Date"
+                                                    *ngIf="this.form.get('joiningDate').value != null"
+                                                    (click)="[this.form.get('joiningDate').setValue(null)]">
+                                                    <i class=" fa fa-close"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="status" class="control-label font-bold">Status</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-list-alt"></i>
+                                                </div>
+                                                <select name="status" formControlName="status" id="status" class="form-control form-control-sm">
+                                                    <option [value]="''" selected>--Select One--</option>
+                                                    <option [value]="item" *ngFor="let item of types_of_status">{{item}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="jobStaus" class="control-label font-bold">Activity-Status</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-list-alt"></i>
+                                                </div>
+                                                <select name="jobStaus" id="jobStaus" formControlName="jobStaus" class="form-control form-control-sm">
+                                                    <option [value]="''" selected>--Select One--</option>
+                                                    <option [value]="item.value"
+                                                        *ngFor="let item of types_of_jobStatus">
+                                                        {{item.text}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="serviceLength" class="control-label font-bold">Service Length</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-clock-o"></i>
+                                                </div>
+                                                <input type="number" class="form-control form-control-sm" id="serviceLength" name="serviceLength"
+                                                 placeholder="Enter Here..." formControlName="serviceLength">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="terminationDate" class="control-label font-bold">Last Working Date</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-calendar-minus-o"></i>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    id="terminationDate" name="terminationDate"
+                                                    placeholder="Enter Here..." [bsConfig]="datePickerConfig"
+                                                    bsDaterangepicker formControlName="terminationDate">
+                                                <div class="input-group-addon cursor-pointer text-danger" tooltip="Remove Date"
+                                                    *ngIf="this.form.get('terminationDate').value != null"
+                                                    (click)="[this.form.get('terminationDate').setValue(null)]">
+                                                    <i class=" fa fa-close"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="dateOfBirth" class="control-label font-bold">Birth Date</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-calendar-check-o"></i>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    [bsConfig]="datePickerConfig" bsDaterangepicker
+                                                    id="dateOfBirth" name="dateOfBirth" placeholder="Enter Here..." formControlName="dateOfBirth">
+                                                <div class="input-group-addon cursor-pointer text-danger" tooltip="Remove Date"
+                                                    *ngIf="this.form.get('dateOfBirth').value != null"
+                                                    (click)="[this.form.get('dateOfBirth').setValue(null)]">
+                                                    <i class=" fa fa-close"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 col-sm-12 mb-1">
+                                            <label for="age" class="control-label font-bold">Age</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="age" name="age" placeholder="Enter Here..."
+                                                    formControlName="age" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3 col-sm-12 mb-1">
+                                            <label for="gender" class="control-label font-bold">Gender</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-male"></i>
+                                                </div>
+                                                <select name="gender" id="gender" formControlName="gender" name="gender" class="form-control form-control-sm">
+                                                    <option [value]="''" selected>--Select One--</option>
+                                                    <option [value]="item" *ngFor="let item of types_of_gender">{{item}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3 col-sm-12 mb-1">
+                                            <label for="maritalStatus" class="control-label font-bold">Marital-Status</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-life-ring"></i>
+                                                </div>
+                                                <select name="maritalStatus" id="maritalStatus" formControlName="maritalStatus" class="form-control form-control-sm">
+                                                    <option [value]="''" selected>--Select One--</option>
+                                                    <option [value]="item" *ngFor="let item of types_of_merital">
+                                                        {{item}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2 col-sm-12 mb-1">
+                                            <label for="religion" class="control-label font-bold">Religion</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-life-ring"></i>
+                                                </div>
+                                                <select name="religion" id="religion" formControlName="religion"
+                                                    class="form-control form-control-sm">
+                                                    <option [value]="''" selected>--Religion--</option>
+                                                    <option [value]="item" *ngFor="let item of type_of_religion">
+                                                        {{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2 col-sm-12 mb-1">
+                                            <label for="bloodGroup" class="control-label font-bold">Blood Group</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class=" fa fa-life-ring"></i>
+                                                </div>
+                                                <select name="bloodGroup" id="bloodGroup" formControlName="bloodGroup" class="form-control form-control-sm">
+                                                    <option [value]="''" selected>--Blood--</option>
+                                                    <option [value]="item" *ngFor="let item of types_of_bloodGroup">
+                                                        {{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2 col-sm-12 mb-1">
+                                            <label for="" class="control-label font-bold hidden">button</label>
+                                            <div class="clearfix">
+                                                <button class="button" [disabled]="btnSearch"
+                                                    class="btn btn-sm btn-rounded btn-outline-secondary pull-right"
+                                                    title="Click to see data">
+                                                    <i class="icofont-search"></i> | Search <span [hidden]="!btnSearch"
+                                                        class="spinner-border spinner-border-sm" role="status"
+                                                        aria-hidden="true"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="ibox">
+                                <div class="ibox-title m-0">
+                                    <h5> <i class="fa fa-list"></i> | Columns</h5>
+                                </div>
+                                <div class="ibox-content text-x-small"
+                                    style="min-height: 305px;max-height: 305px; overflow-y: scroll;">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-responsive-xl no">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <input type="checkbox" formControlName="isCheckedAll"
+                                                            (change)="checkAll($event)">
+                                                    </th>
+                                                    <th>Check All</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr formArrayName="columns" *ngFor="let item of formArray; let i = index">
+                                                    <ng-container [formGroupName]="i">
+                                                        <td>
+                                                            <input type="checkbox" formControlName="isChecked"
+                                                                (change)="item_Checked($event)">
+                                                        </td>
+                                                        <td>
+                                                            <span>{{item.get('displayName').value}}</span>
+                                                        </td>
+                                                    </ng-container>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="ibox">
+                        <div class="ibox-content text-x-small">
+                            <div class="form-row">
+                                <div class="form-group col-md-5 col-sm-9 pl-0 mb-0">
+                                    <div class="input-group text-x-small">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control form-control-sm" id="serachByAnything"
+                                            onkeyup="tableFilter('#tbl tbody tr',this)" name="serachByAnything"
+                                            placeholder="Search By Anything" />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-7 col-sm-3 pl-0 mb-0">
+                                    <span class="label label-info pull-right">Total: {{this.list != null ?
+                                        this.list.length: 0}} (Rows)</span>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="max-height: 260px;overflow: scroll;">
+                                <table class="table table-sm table-hover table-striped table-responsive-xl" id="tbl">
+                                    <thead>
+                                        <tr>
+                                            <th *ngIf="jsonKeys.length > 0">#SL</th>
+                                            <th *ngFor="let key of jsonKeys">
+                                                {{key}}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of list; let i= index">
+                                            <td class="font-bold">{{i+1}}</td>
+                                            <td *ngFor="let key of jsonKeys; let i =index">
+                                                {{item[key]}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-primary" (click)="download()"
+                [disabled]="btnReport">
+                <i class="fa fa-file-excel-o" title="Download"></i> | Download xlsx
+                <span [hidden]="!btnReport" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                (click)="closeModal('Cancel click')">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </form>
+
+</ng-template>
+
+<style>
+    .checked-checkbox {
+        color: blue;
+    }
+</style>

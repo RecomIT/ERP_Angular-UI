@@ -1,0 +1,273 @@
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-2">{{dashboard}} Dashboard</h2>
+    </div>
+    <div class="col-md-4 col-sm-6 text-x-small">
+        <div class="title-action pt-3">
+            <div class="col-12 text-right" (click)="popup.togglePopup()">
+                <i class="fa fa-ellipsis-h text-center mt-1" aria-hidden="true" style="font-size: 14px;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+
+    <app-dashboard-popup #popup (showAttendanceDashboard)="toggleAttendanceDashboard()"
+        (showLeaveDashboard)="toggleLeaveDashboard()" (toggleAllDashboard)="toggleAllDashboard()"
+        (showHrDashboard)="toggleHrDashboard()" (showPayrollDashboard)="togglePayrollDashboard()">
+    </app-dashboard-popup>
+
+
+    <div class="col-12 col-lg-9 col-md-12 col-sm-12">
+        <div class="row" id="hr" *ngIf="showHrDashboard">
+            <div>
+                <app-hr-dashboard-details></app-hr-dashboard-details>
+            </div>
+        </div>
+        <div class="row" id="payroll" *ngIf="showPayrollDashboard && showPayrollDashboard2">
+            <div class="col-md-4">
+                <div class="row" id="additional-values">
+                    <div class="col-md-12 m-auto p-1 border-radius-5">
+                        <div class="dashboard-item">
+                            <div class="icon-container">
+                                <i class="fa fa-user icon"></i>
+                            </div>
+                            <div class="text-container">
+                                <h4 class="title m-0">Active Employee</h4>
+                                <!-- <h2 class="value m-0">{{ activeEmployees }}</h2> -->
+                                <h2 class="value m-0">...</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 p-1 border-radius-5">
+                        <div class="dashboard-item">
+                            <div class="icon-container">
+                                <i class="fa fa-user-plus icon"></i>
+                            </div>
+                            <div class="text-container">
+                                <h6 class="title">New Employee</h6>
+                                <h4 class="value">{{ newEmployees }}</h4>
+                                <h6 class="title text-danger m-0">-5%</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 p-1 border-radius-5">
+                        <div class="dashboard-item">
+                            <div class="icon-container">
+                                <i class="fa fa-user-times icon"></i>
+                            </div>
+                            <div class="text-container">
+                                <h6 class="title">Termination</h6>
+                                <h4 class="value">{{ discontinuedEmployees }}</h4>
+                                <h6 class="title m-0 text-primary">-7%</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row" id="additional-values">
+                    <div class="col-md-12 m-auto p-1 border-radius-5">
+                        <div class="dashboard-item">
+                            <div class="icon-container">
+                                <i class="icofont-calendar icon"></i>
+                            </div>
+                            <div class="text-container">
+                                <h5 class="title m-0">Last Salary Process</h5>
+                                <h3 class="value m-0">{{ lastSalaryProcess }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 m-auto p-1 border-radius-5">
+                        <div class="dashboard-item">
+                            <div class="icon-container">
+                                <i class="icofont-users-social icon"></i>
+                            </div>
+                            <div class="text-container">
+                                <h5 class="title m-0">Processed for No. of Employees</h5>
+                                <h3 class="value m-0">{{ processedForEmployees }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row" id="additional-values">
+
+
+                    <div class="col-md-12 m-auto p-1 border-radius-5">
+                        <div class="dashboard-item">
+                            <div class="icon-container">
+                                <i class="icofont-money-bag icon"></i>
+                            </div>
+                            <div class="text-container">
+                                <h5 class="title m-0">Total Salary Paid</h5>
+                                <h3 class="value m-0">{{ totalSalaryPaid }}</h3>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 p-1 border-radius-5">
+                        <div class="dashboard-item">
+                            <div class="icon-container">
+                                <i class="icofont-bill icon"></i>
+                            </div>
+                            <div class="text-container">
+                                <h6 class="title">Average Salary</h6>
+                                <h4 class="value">{{ averageSalary }}</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 p-1 border-radius-5">
+                        <div class="dashboard-item">
+                            <div class="icon-container">
+                                <i class="icofont-chart-line icon"></i>
+                            </div>
+                            <div class="text-container">
+                                <h6 class="title">MoM Salary Growth Rate</h6>
+                                <h4 class="value">{{ salaryGrowthRate }}</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="row" id="pf-tds-values">
+                            <div class="col-md-12 m-auto p-1 border-radius-5">
+                                <div class="dashboard-item">
+                                    <div class="icon-container">
+                                        <i class="icofont-taka-false icon"></i>
+                                    </div>
+                                    <div class="text-container">
+                                        <h5 class="title m-0">PF Deduction</h5>
+                                        <h3 class="value m-0">{{ pfDeduction }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="row" id="pf-tds-values">
+
+                            <div class="col-md-12 m-auto p-1 border-radius-5">
+                                <div class="dashboard-item">
+                                    <div class="icon-container">
+                                        <i class="icofont-taka-true icon"></i>
+                                    </div>
+                                    <div class="text-container">
+                                        <h5 class="title m-0">PF Employer Contribution</h5>
+                                        <h3 class="value m-0">{{ pfEmployerContribution }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="row" id="pf-tds-values">
+
+
+                            <div class="col-md-12 m-auto p-1 border-radius-5">
+                                <div class="dashboard-item">
+                                    <div class="icon-container">
+                                        <i class="icofont-taka-minus icon"></i>
+                                    </div>
+                                    <div class="text-container">
+                                        <h5 class="title m-0">TDS Deducted</h5>
+                                        <h3 class="value m-0">{{ tdsDeducted }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+        <div class="row" id="attendance" *ngIf="showAttendanceDashboard">
+
+            <div class="col-12 col-lg-5 col-md-5 col-sm-12 p-1">
+                <app-my-attendance-summary></app-my-attendance-summary>
+            </div>
+
+
+            <div class="col-12 col-lg-7 col-md-7 col-sm-12 p-1">
+                <app-geo-location-attendance></app-geo-location-attendance>
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="row" id="leave" *ngIf="showLeaveDashboard">
+
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 p-1" *ngIf="isSupervisorOrFinalApproval">
+                <app-subordinates-leave-dashboard></app-subordinates-leave-dashboard>
+            </div>
+
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 p-1" *ngIf="isAdmin">
+                <app-employee-leave-history></app-employee-leave-history>
+            </div>
+
+
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 p-1">
+                <app-my-leave-applied-records></app-my-leave-applied-records>
+            </div>
+
+
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 p-1">
+                <app-my-leave-history></app-my-leave-history>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <div class="col-12 col-lg-3 col-md-12 col-sm-12">
+
+        <div class="row">
+            <div class="col-12 col-lg-12 col-md-6 col-sm-12  p-1" *ngIf="this.User().ComId == 3 || this.User().ComId == 5">
+                <app-lunch-requests></app-lunch-requests>
+            </div>
+
+            <div class="col-12 col-lg-12 col-md-6 col-sm-12  p-1">
+                <app-upcoming-holidays-and-events></app-upcoming-holidays-and-events>
+            </div>
+            <!-- ------------------------- >>> Employee Contact Start -->
+            <div class="col-12 col-lg-12 col-md-6 col-sm-12  p-1 ">
+                <app-employee-contact></app-employee-contact>
+            </div>
+            <!-- ------------------------- >>> Employee Contact End -->
+        </div>
+    </div>
+
+
+
+</div>

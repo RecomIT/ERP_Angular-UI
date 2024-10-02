@@ -1,0 +1,30 @@
+<div class="tabs-container">
+    <ul class="nav nav-tabs">
+        <li><a class="nav-link active" data-toggle="tab" href="#professional"> <i class="fa fa-briefcase"></i>|Professional</a></li>
+        <li><a class="nav-link" data-toggle="tab" href="#personal"> <i class="fa fa-user"></i>| Personal</a></li>
+        <li><a class="nav-link" data-toggle="tab" href="#experiance"> <i class="icofont-worker"></i>| Experiance</a></li>
+        <li><a class="nav-link" data-toggle="tab" href="#education"> <i class="icofont-education"></i>| Education</a></li>
+        <li><a class="nav-link" data-toggle="tab" href="#skill"> <i class="icofont-brainstorming"></i>| Skill</a></li>
+        <li><a class="nav-link" data-toggle="tab" href="#document"> <i class="icofont-file-document"></i>| Document</a></li>
+    </ul>
+    <div class="tab-content text-x-small">
+        <div id="professional" class="tab-pane active">
+            <app-employee-module-employee-professional-list [inputEmployeeId]="employeeId"></app-employee-module-employee-professional-list>
+        </div>
+        <div id="personal" class="tab-pane">
+            <app-employee-module-employee-personal-list [inputEmployeeId]="employeeId"></app-employee-module-employee-personal-list>
+        </div>
+        <div id="experiance" class="tab-pane">
+            <app-employee-module-employee-experience-list [inputEmployeeId]="employeeId"></app-employee-module-employee-experience-list>
+        </div>
+        <div id="education" class="tab-pane">
+            <app-employee-module-employee-education-list [inputEmployeeId]="employeeId"></app-employee-module-employee-education-list>
+        </div>
+        <div id="skill" class="tab-pane">
+            <app-employee-module-employee-skill-list [inputEmployeeId]="employeeId"></app-employee-module-employee-skill-list>
+        </div>
+        <div id="document" class="tab-pane">
+            <app-employee-module-employee-document-list [inputEmployeeId]="employeeId"></app-employee-module-employee-document-list>
+        </div>
+    </div>
+</div>

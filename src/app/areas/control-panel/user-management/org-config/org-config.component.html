@@ -1,0 +1,973 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12 col-12">
+        <h2 @slideInUp class="mt-2">Orgranization Config</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Administration</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Org Config</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row m-t-sm text-x-small">
+    <div class="col-md-12 mb-5">
+        <div class="tabs-container">
+            <ul class="nav nav-tabs ">
+                <li><a href="#org-auth" data-toggle="tab" class="nav-link">
+                        <i class="fa fa-shield" aria-hidden="true"></i>| Organization Authorization</a></li>
+                <li><a href="#com-auth" data-toggle="tab" class="nav-link">
+                        <i class="fa fa-shield" aria-hidden="true"></i>| Company Authorization
+                    </a></li>
+                <li><a href="#module-config" data-toggle="tab" class="nav-link active">
+                        <i class="fa fa-cogs" aria-hidden="true"></i>| Module Config
+                    </a></li>
+                <li><a href="#com-role" data-toggle="tab" class="nav-link">
+                        <i class="fa fa-user-circle-o" aria-hidden="true"></i>| Company User Roles
+                    </a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="org-auth" class="tab-pane ">
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-desktop"></i> |
+                                            <i class="fa fa-building"></i>
+                                        </span>
+                                    </div>
+                                    <select name="organizaionId" id="organizaionId"
+                                        class="form-control form-control-sm font-bold" (change)="getGetOrgAuths()"
+                                        #orgId="ngModel" [(ngModel)]="organizationId">
+                                        <option class="font-bold" [value]="0" selected>---Select Organization---
+                                        </option>
+                                        <option class="font-bold" [value]="ol.organizationId"
+                                            *ngFor="let ol of orgList">{{ol.organizationName}}</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <button type="submit" class="btn btn-primary" [disabled]="orgAuthApp.appId == 0"
+                                            (click)="saveOrgAuth()" title="Save Data">
+                                            <i class="fa fa-paper-plane"></i> | Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"></div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-md-3" *ngFor="let aa of orgAuthApp.modules">
+                                <div class="card">
+                                    <div class="card-header bg-dark-blue text-white">
+                                        <h3 class="card-title mb-0">{{aa.moduleName}}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="todo-list m-t mt-0">
+                                            <li *ngFor="let mm of aa.mainMenus">
+                                                <input type="checkbox" value="" name="" class="i-checks"
+                                                    [(ngModel)]="mm.hasPermision" />
+                                                <span class="m-l-xs font-bold"
+                                                    [class]="mm.hasPermision? 'todo-completed':''">{{mm.mainMenuName}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="com-auth" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-md-5">
+                                <label for="comOrganizaionId" class="control-label font-bold">Organization</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-desktop"></i> |
+                                            <i class="fa fa-building"></i>
+                                        </span>
+                                    </div>
+                                    <select name="comOrganizaionId" id="comOrganizaionId"
+                                        class="form-control form-control-sm font-bold" #cOrgId="ngModel"
+                                        [(ngModel)]="comOrgId" (change)="getCompanyByOrg('comAuth')">
+                                        <option class="font-bold" [value]="0" selected>
+                                            ---Select Organization---
+                                        </option>
+                                        <option class="font-bold" [value]="ol.organizationId"
+                                            *ngFor="let ol of orgList">{{ol.organizationName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="authCompanyId" class="control-label font-bold">Company</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-briefcase"></i> |
+                                            <i class="fa fa-building"></i>
+                                        </span>
+                                    </div>
+                                    <select name="authCompanyId" id="authCompanyId"
+                                        class="form-control form-control-sm font-bold" #comId="ngModel"
+                                        [(ngModel)]="authCompanyId" (change)="getGetComAuths()">
+                                        <option class="font-bold" [value]="0" selected>---Select Company---
+                                        </option>
+                                        <option [value]="com.companyId" *ngFor="let com of companyList">
+                                            {{com.companyName}}</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <button type="submit" class="btn btn-primary" [disabled]="comAuthApp.appId == 0"
+                                            (click)="saveComAuth()" title="Save Data">
+                                            <i class="fa fa-paper-plane"></i> | Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-md-3" *ngFor="let aa of comAuthApp.modules">
+                                <div class="card">
+                                    <div class="card-header bg-dark-blue text-white">
+                                        <h3 class="card-title mb-0">{{aa.moduleName}}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="todo-list m-t mt-0">
+                                            <li *ngFor="let mm of aa.mainMenus">
+                                                <input type="checkbox" value="" name="" class="i-checks"
+                                                    [(ngModel)]="mm.hasPermision" />
+                                                <span class="m-l-xs font-bold"
+                                                    [class]="mm.hasPermision? 'todo-completed':''">{{mm.mainMenuName}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="module-config" class="tab-pane active">
+                    <div class="panel-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-3 col-sm-6">
+                                <select name="mcOrganizationId" id="mcOrganizationId" #mcOrganizationId="ngModel"
+                                    [(ngModel)]="moduleConfigOrg" class="form-control form-control-sm"
+                                    (change)="loadCompany(mcOrganizationId.value)">
+                                    <option [value]="0">---Select Organization---</option>
+                                    <option [value]="org.organizationId" class="font-bold" *ngFor="let org of orgList">
+                                        {{org.organizationName}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-6">
+                                <select name="mcCompanyId" id="mcCompanyId" #mcCompanyId="ngModel"
+                                    [(ngModel)]="moduleConfigCom" class="form-control form-control-sm"
+                                    (change)="loadMainmenu(mcCompanyId.value)">
+                                    <option [value]="0">---Select Company---</option>
+                                    <option [value]="com.id" class="font-bold" *ngFor="let com of ddlCompany">
+                                        {{com.text}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-6">
+                                <!-- (change)="loadModuleConfig(mcComMainmenuId.value,mcCompanyId.value,mcOrganizationId.value)" -->
+                                <select name="mcComMainmenuId" id="mcComMainmenuId" #mcComMainmenuId="ngModel"
+                                    [(ngModel)]="mcComMainmenu" class="form-control form-control-sm"
+                                    (change)="loadModuleConfigExtension(mcComMainmenuId.value,mcCompanyId.value,mcOrganizationId.value)">
+                                    <option [value]="0">---Select Mainmenu---</option>
+                                    <option [value]="m.id" class="font-bold" *ngFor="let m of ddlMainmenu">
+                                        {{m.text}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <button type="button" class="btn btn-sm btn-rounded btn-primary"
+                                    (click)="submitModuleConfigExtension()">
+                                    <i class="fa fa-paper-plane"></i>| Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body hide">
+                        <div class="d-flex justify-content-center">
+                            <div class="col-md-6">
+                                <!-- <div class="form-group col-md-6 col-sm-12" *ngIf="selectItemText == 'Payroll'"> -->
+                                <table class="table table-sm table-striped table-hover table-responsive-lg"
+                                    *ngIf="selectItemText == 'Payroll'">
+                                    <tbody>
+                                        <tr *ngFor="let cd of configData;let i =index">
+                                            <td class="font-bold">{{cd.configText}}
+                                                <select name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    class="form-control form-control-sm" #configData{{i}}="ngModel"
+                                                    [(ngModel)]="configData[i].configValue"
+                                                    *ngIf="cd.configText == 'What does consideration for month?'">
+                                                    <option [value]="'30 days'">30 days</option>
+                                                    <option [value]="'Actual days'">Actual days</option>
+                                                </select>
+                                                <input type="checkbox" name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    #configData{{i}}="ngModel" [(ngModel)]="configData[i].configValue"
+                                                    *ngIf="cd.configText == 'Is Provident Fund activated?'"
+                                                    (ngModelChange)="configData[i].configValue = configData[i].configValue.toString()"
+                                                    [checked]="configData[i].configValue=='True'">
+                                                <input type="number" name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    class="form-control form-control-sm" #configData{{i}}="ngModel"
+                                                    [(ngModel)]="configData[i].configValue"
+                                                    (ngModelChange)="configData[i].configValue = configData[i].configValue.toString()"
+                                                    *ngIf="cd.configText == 'Percentage of basic for Provident Fund?'">
+                                                <input type="number" name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    class="form-control form-control-sm" #configData{{i}}="ngModel"
+                                                    [(ngModel)]="configData[i].configValue"
+                                                    (ngModelChange)="configData[i].configValue = configData[i].configValue.toString()"
+                                                    *ngIf="cd.configText == 'Percentage of actual calculated tax for monthly deduction?'">
+                                                <input type="checkbox" name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    #configData{{i}}="ngModel" [(ngModel)]="configData[i].configValue"
+                                                    *ngIf="cd.configText == 'Is once off tax available?'"
+                                                    [checked]="configData[i].configValue=='True'"
+                                                    (ngModelChange)="configData[i].configValue = configData[i].configValue.toString()">
+                                                <select name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    class="form-control form-control-sm" #configData{{i}}="ngModel"
+                                                    [(ngModel)]="configData[i].configValue"
+                                                    *ngIf="cd.configText == 'When does once off tax cut down?'">
+                                                    <option [value]="'With salary'">With salary</option>
+                                                    <option [value]="'Separate from Salary'">Separate from Salary
+                                                    </option>
+                                                    <option [value]="'Can be both'">Can be both</option>
+                                                </select>
+                                                <input type="checkbox" name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    #configData{{i}}="ngModel" [(ngModel)]="configData[i].configValue"
+                                                    *ngIf="cd.configText == 'Is Non Resident tax applied?'"
+                                                    [checked]="configData[i].configValue=='True'"
+                                                    (ngModelChange)="configData[i].configValue = configData[i].configValue.toString()">
+                                                <input type="checkbox" name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    #configData{{i}}="ngModel" [(ngModel)]="configData[i].configValue"
+                                                    *ngIf="cd.configText == 'Is Festival Bonus separately paid based on Religion?'"
+                                                    [checked]="configData[i].configValue=='True'"
+                                                    (ngModelChange)="configData[i].configValue = configData[i].configValue.toString()">
+                                                <input type="checkbox" name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    #configData{{i}}="ngModel" [(ngModel)]="configData[i].configValue"
+                                                    [checked]="configData[i].configValue=='True'"
+                                                    *ngIf="cd.configText == 'Is separated employees last month payment processed separately?'"
+                                                    (ngModelChange)="configData[i].configValue = configData[i].configValue.toString()">
+                                                <select name="{{'configData'+i}}" id="{{'configData'+i}}"
+                                                    class="form-control form-control-sm"
+                                                    [(ngModel)]="configData[i].configValue"
+                                                    *ngIf="cd.configText == 'Is separated employee zero tax consideration in last month?'">
+                                                    <option [value]="'Only benefits process separately'">Only benefits
+                                                        process separately</option>
+                                                    <option [value]="'Salary and benefits both process separately'">
+                                                        Salary and benefits both process separately
+                                                    </option>
+                                                    <option [value]="'Salary and benefits both process with salary'">
+                                                        Salary and benefits both process with salary
+                                                    </option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body text-small" *ngIf="selectItemText == 'Payroll'">
+                        <div class="ibox shadow-lg">
+                            <div class="ibox-title bg-dark-blue text-white">
+                                <h5 class="text-small"><i class="fa fa-cogs"></i> Payroll Config</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="monthConsideration" class="control-label font-bold"><i
+                                                class="fa fa-calendar"></i> What does consideration for month?</label>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="monthConsideration"
+                                                    #monthConsiderationRef="ngModel"
+                                                    [(ngModel)]="payrollModuleConfig.whatDoesConsiderationForMonth"
+                                                    [value]="'Actual Days'"> Actual Days
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" name="monthConsideration"
+                                                    #monthConsiderationRef="ngModel"
+                                                    [(ngModel)]="payrollModuleConfig.whatDoesConsiderationForMonth"
+                                                    [value]="'30 Days'"> 30 Days
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="IsProvidentFundActivated" class="control-label font-bold"><i
+                                                class="fa fa-database"></i> Is Provident fund activated?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input"
+                                                    name="IsProvidentFundActivated" [value]="true"
+                                                    #IsProvidentFundActivatedRef="ngModel"
+                                                    [(ngModel)]="payrollModuleConfig.isProvidentFundactivated"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input"
+                                                    name="IsProvidentFundActivated" [value]="false"
+                                                    #IsProvidentFundActivatedRef="ngModel"
+                                                    [(ngModel)]="payrollModuleConfig.isProvidentFundactivated"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="PercentageOfBasicForProvidentFund"
+                                            class="control-label font-bold">Percentage Of Basic For Provident-Fund
+                                            (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control form-control-sm"
+                                                id="PercentageOfBasicForProvidentFund"
+                                                name="PercentageOfBasicForProvidentFund"
+                                                #PercentageOfBasicForProvidentFundRef="ngModel"
+                                                [(ngModel)]="payrollModuleConfig.percentageOfBasicForProvidentFund"
+                                                style="width: 30px !important;">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="PercentageOfActualCalculatedTaxForMonthlyDeduction"
+                                            class="control-label font-bold">Percentage Of Actual Calculated Tax
+                                            (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control form-control-sm"
+                                                id="PercentageOfActualCalculatedTaxForMonthlyDeduction"
+                                                name="PercentageOfActualCalculatedTaxForMonthlyDeduction"
+                                                #PercentageOfActualCalculatedTaxForMonthlyDeductionRef="ngModel"
+                                                [(ngModel)]="payrollModuleConfig.percentageOfActualCalculatedTaxForMonthlyDeduction"
+                                                style="width: 30px !important;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-6">
+                                        <label for="IsOnceOffTaxAvailable" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Is OnceOff Tax Available?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input"
+                                                    name="isOnceOffTaxAvailable" [value]="true"
+                                                    #isOnceOffTaxAvailableRef="ngModel"
+                                                    [(ngModel)]="payrollModuleConfig.isOnceOffTaxAvailable"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input"
+                                                    name="isOnceOffTaxAvailable" [value]="false"
+                                                    #isOnceOffTaxAvailableRef="ngModel"
+                                                    [(ngModel)]="payrollModuleConfig.isOnceOffTaxAvailable"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-6">
+                                        <label for="WhenDoesOnceOffTaxCutDown" class="control-label font-bold"><i
+                                                class="fa fa-cut"></i> When does
+                                            Once-Off tax cut down?</label>
+                                        <br>
+                                        <div class="input-group">
+                                            <select id="whenDoesOnceOffTaxCutDown" name="WhenDoesOnceOffTaxCutDown"
+                                                #WhenDoesOnceOffTaxCutDownRef="ngModel"
+                                                [(ngModel)]="payrollModuleConfig.whenDoesOnceOffTaxCutDown"
+                                                class="form-control form-control-sm">
+                                                <option [value]="''">---Select One---</option>
+                                                <option [value]="'With salary'">With salary</option>
+                                                <option [value]="'External Salary'">External Salary</option>
+                                                <option [value]="'Can be both'">Can be both</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-6">
+                                        <label for="IsFestivalBonusseparatelyPaidbasedonReligion"
+                                            class="control-label font-bold"><i class="fa fa-moon-o"></i> Is Festival
+                                            bonus disbursed based on
+                                            Religion?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input"
+                                                    name="IsFestivalBonusseparatelyPaidbasedonReligion" [value]="true"
+                                                    #isFestivalBonusseparatelyPaidbasedonReligionRef="ngModel"
+                                                    [(ngModel)]="payrollModuleConfig.isFestivalBonusDisbursedbasedonReligion">
+                                                Yes
+                                            </label>
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input"
+                                                    name="IsFestivalBonusseparatelyPaidbasedonReligion" [value]="false"
+                                                    #isFestivalBonusseparatelyPaidbasedonReligionRef="ngModel"
+                                                    [(ngModel)]="payrollModuleConfig.isFestivalBonusDisbursedbasedonReligion">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-6">
+                                        <label for="IsDiscontinuedEmployeesLastMonthPaymentProcessedSeparately"
+                                            class="control-label font-bold"><i class="fa fa-vcard"></i> Is Discontinued
+                                            Employees Last Month Payment
+                                            Processed Separately?</label>
+                                        <br>
+                                        <div class="input-group">
+                                            <select name="discontinuedEmployeesLastMonthPaymentProcess"
+                                                id="discontinuedEmployeesLastMonthPaymentProcess"
+                                                #discontinuedEmployeesLastMonthPaymentProcessRef="ngModel"
+                                                [(ngModel)]="payrollModuleConfig.discontinuedEmployeesLastMonthPaymentProcess"
+                                                class="form-control form-control-sm">
+                                                <option [value]="''">---Select One---</option>
+                                                <option
+                                                    [value]="'Both Benefits and salary disbursed with regular salary'">
+                                                    Both Benefits and salary disbursed with regular salary
+                                                </option>
+                                                <option
+                                                    [value]="'Both benefits and salary disbursed in full and final'">
+                                                    Both benefits and salary disbursed in settlement
+                                                </option>
+                                                <option
+                                                    [value]="'Salary paid with regular salary but benefits will be paid in settlement'">
+                                                    Salary paid with regular salary but benefits will be paid in
+                                                    settlement
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body text-small" *ngIf="selectItemText == 'Human Resource'">
+                        <div class="ibox shadow-lg">
+                            <div class="ibox-title bg-dark-blue text-white">
+                                <h5><i class="fa fa-cogs"></i> HR Config</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-6">
+                                        <label for="enableMaxLateWarning" class="control-label mb-0 text-x-large"
+                                            style="line-height: 2.5;">Enable
+                                            Max Late Warning</label>
+                                        <div class="custom-control custom-switch d-inline">
+                                            <input type="checkbox" class="custom-control-input"
+                                                id="enableMaxLateWarning" name="enableMaxLateWarning"
+                                                #enableMaxLateWarningRef="ngModel"
+                                                [(ngModel)]="hrModuleConfig.enableMaxLateWarning">
+                                            <label class="custom-control-label custom-switch-lable pull-right"
+                                                for="enableMaxLateWarning"> </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-6">
+                                        <input type="number" class="form-control form-control-sm" id="MaxLateInMonth"
+                                            name="MaxLateInMonth" #maxLateInMonthRef="ngModel"
+                                            [(ngModel)]="hrModuleConfig.maxLateInMonth"
+                                            style="width: 150px !important; border-radius: 5px;"
+                                            placeholder="Enter Max Late In a Month">
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-6">
+                                        <label for="EnableSequenceLateWarning" class="control-label mb-0 text-x-large"
+                                            style="line-height: 2.5;">Enable
+                                            Sequence Late Warning</label>
+                                        <div class="custom-control custom-switch d-inline">
+                                            <input type="checkbox" class="custom-control-input"
+                                                id="EnableSequenceLateWarning" name="EnableSequenceLateWarning"
+                                                #enableSequenceLateWarningRef="ngModel"
+                                                [(ngModel)]="hrModuleConfig.enableSequenceLateWarning">
+                                            <label class="custom-control-label custom-switch-lable pull-right"
+                                                for="EnableSequenceLateWarning"> </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-6">
+                                        <input type="number" class="form-control form-control-sm"
+                                            id="SequenceLateInMonth" name="SequenceLateInMonth"
+                                            #sequenceLateInMonthRef="ngModel"
+                                            [(ngModel)]="hrModuleConfig.sequenceLateInMonth"
+                                            style="width: 180px !important; border-radius: 5px;"
+                                            placeholder="Enter Sequence Late In a Month">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body text-small" *ngIf="selectItemText == 'Provident Fund'">
+                        <div class="ibox shadow-lg">
+                            <div class="ibox-title bg-dark-blue text-white">
+                                <h5><i class="fa fa-cogs"></i> PF Config</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="CalculateByJoiningDate" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Calculate By Joining Date?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input"
+                                                    name="CalculateByJoiningDate" [value]="true"
+                                                    #CalculateByJoiningDateRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.calculateByJoiningDate"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input"
+                                                    name="CalculateByJoiningDate" [value]="false"
+                                                    #CalculateByJoiningDateRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.calculateByJoiningDate"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="CashFlow" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Cash Flow</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="CashFlow"
+                                                    #CashFlowRef="ngModel" [(ngModel)]="pfModuleConfig.cashFlow"
+                                                    [value]="true"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" name="CashFlow"
+                                                    #CashFlowRef="ngModel" [(ngModel)]="pfModuleConfig.cashFlow"
+                                                    [value]="false"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="Subsidiary" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Subsidiary</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="Subsidiary"
+                                                    [value]="true" #SubsidiaryRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.subsidiary"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" #SubsidiaryRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.subsidiary" [value]="false"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="OnlyEmployeePartLoan" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Only Employee PartLoan</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="OnlyEmployeePartLoan"
+                                                    [value]="true" #OnlyEmployeePartLoanRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.onlyEmployeePartLoan"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" name="OnlyEmployeePartLoan"
+                                                    [value]="false" #OnlyEmployeePartLoanRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.onlyEmployeePartLoan"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="IsIslamic" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Is Islamic?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="IsIslamic"
+                                                    [value]="true" #IsIslamicRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.isIslamic"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" name="IsIslamic"
+                                                    [value]="false" #IsIslamicRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.isIslamic"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="MonthWiseIntrument" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Month Wise Intrument?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="MonthWiseIntrument"
+                                                    [value]="true" #MonthWiseIntrumentRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.monthWiseIntrument"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" name="MonthWiseIntrument"
+                                                    [value]="false" #MonthWiseIntrumentRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.monthWiseIntrument"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="PendingContribution" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Pending Contribution?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="PendingContribution"
+                                                    [value]="true" #PendingContributionRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.pendingContribution"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" name="PendingContribution"
+                                                    [value]="false" #PendingContributionRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.pendingContribution"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="GenerateAmortization" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Generate Amortization?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="GenerateAmortization"
+                                                    [value]="true" #GenerateAmortizationRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.generateAmortization"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" name="GenerateAmortization"
+                                                    [value]="false" #GenerateAmortizationRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.generateAmortization"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="LoanPaidandAmortization" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Loan Paid and Amortization?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input"
+                                                    name="LoanPaidandAmortization" [value]="true"
+                                                    #LoanPaidandAmortizationRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.loanPaidandAmortization"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input"
+                                                    name="LoanPaidandAmortization" [value]="false"
+                                                    #LoanPaidandAmortizationRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.loanPaidandAmortization"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="ReceivePaymentReport" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Receive Payment Report?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="ReceivePaymentReport"
+                                                    [value]="true" #ReceivePaymentReportRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.receivePaymentReport"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" name="ReceivePaymentReport"
+                                                    [value]="false" #ReceivePaymentReportRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.receivePaymentReport"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="ContributionFromPayroll" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Contribution From Payroll?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input"
+                                                    name="ContributionFromPayroll" [value]="true"
+                                                    #ContributionFromPayrollRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.contributionFromPayroll"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input"
+                                                    name="ContributionFromPayroll" [value]="false"
+                                                    #ContributionFromPayrollRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.contributionFromPayroll"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="InstrumentAccruedProcess" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Instrument Accrued Process?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input"
+                                                    name="InstrumentAccruedProcess" [value]="true"
+                                                    #InstrumentAccruedProcessRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.instrumentAccruedProcess"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input"
+                                                    name="InstrumentAccruedProcess" [value]="false"
+                                                    #InstrumentAccruedProcessRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.instrumentAccruedProcess"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="Forfeiture" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Forfeiture?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="Forfeiture"
+                                                    [value]="true" #ForfeitureRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.forfeiture"> Yes
+                                            </label>
+                                            <label class="form-check-label font-bold">
+                                                <input type="radio" class="form-check-input" name="Forfeiture"
+                                                    [value]="false" #ForfeitureRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.forfeiture"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="Monthlyprofit" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Monthly Profit?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="Monthlyprofit"
+                                                    [value]="true" #MonthlyprofitRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.monthlyprofit"> Yes
+                                            </label>
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="Monthlyprofit"
+                                                    [value]="false" #MonthlyprofitRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.monthlyprofit"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4">
+                                        <label for="Chequeue" class="control-label font-bold"><i
+                                                class="fa fa-credit-card" aria-hidden="true"></i>
+                                            Chequeue ?</label>
+                                        <br>
+                                        <div class="form-check-inline font-bold">
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="Chequeue"
+                                                    [value]="true" #ChequeueRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.chequeue"> Yes
+                                            </label>
+                                            <label class="form-check-label mr-1">
+                                                <input type="radio" class="form-check-input" name="Chequeue"
+                                                    [value]="false" #ChequeueRef="ngModel"
+                                                    [(ngModel)]="pfModuleConfig.chequeue"> Yes
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-sm-4"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="com-role" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="form-group row mb-0">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm 
+                                font-bold" placeholder="Search By Name" id="rolefilter" #rolefilter="ngModel"
+                                        [(ngModel)]="searchRoleName" (input)="getApplicationRoles()" />
+                                    <!-- onkeyup="tableFilter('#tblrole tbody tr',this)" -->
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-building"></i>
+                                        </span>
+                                    </div>
+                                    <select name="searchRoleOrgId" id="searchRoleOrgId"
+                                        class="form-control form-control-sm font-bold" #serRoleOrgId="ngModel"
+                                        [(ngModel)]="searchRoleOrgId"
+                                        (change)="[getCompanyByOrg('roleSearch'),getApplicationRoles()]">
+                                        <option [value]="0" class="font-bold" selected>---Select Organization---
+                                        </option>
+                                        <option [value]="org.organizationId" class="font-bold"
+                                            *ngFor="let org of orgList">
+                                            {{org.organizationName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-building"></i>
+                                        </span>
+                                    </div>
+                                    <select name="searchRoleComId" id="searchRoleComId"
+                                        class="form-control form-control-sm font-bold" #serRoleComId="ngModel"
+                                        [(ngModel)]="searchRoleComId" (change)="getApplicationRoles()">
+                                        <option [value]="0" class="font-bold" selected>---Select Company---</option>
+                                        <option [value]="com.companyId" class="font-bold"
+                                            *ngFor="let com of roleComList">
+                                            {{com.companyName}}
+                                        </option>
+                                    </select>
+                                    <div class="input-group-prepend" title="Create New Role">
+                                        <button class="btn btn-sm btn-redius-none btn-success"
+                                            (click)="openRoleModal()">
+                                            <i class="fa fa-plus"></i> | Create
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblRole">
+                            <thead class="bg-dark-blue text-white">
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th>Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Status&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Company&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Organization&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let role of roleList;let i =index">
+                                    <td class="text-center font-bold">{{i+1}}</td>
+                                    <td>{{role.name}}</td>
+                                    <td>
+                                        <span [class]="role.isActive? 'label label-primary':'label label-danger'">
+                                            {{role.isActive? "Active":"Inactive"}}</span>
+                                    </td>
+                                    <td> <span class="label label-info">{{role.companyName}}</span></td>
+                                    <td>{{role.organizationName}}</td>
+                                    <td>
+                                        <button class="btn btn-xs" title="Edit" (click)="editRole(role.id.toString())">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="roleList == null" class="text-center">
+                                    <td colspan="8">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr *ngIf="roleList != null && roleList.length == 0" class="text-center font-bold">
+                                    <td colspan="8">No data found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #roleModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i
+                class="btn btn-sm btn-redius-none btn-circle fa fa-user-circle-o"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small">
+        <form #roleForm="ngForm" (submit)="submitRole()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="roleName" class="control-label font-bold">Role
+                            <!-- <div class="form-check abc-checkbox abc-checkbox-success form-check-inline">
+                               
+                            </div> -->
+                            <input class="form-check-input ml-2" type="checkbox" id="isActive" name="isActive"
+                            [value]="role.isActive" [checked]="role.isActive" #roleIsActive="ngModel"
+                            [(ngModel)]="role.isActive">
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-user-circle-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="roleName" id="roleName"
+                                class="form-control form-control-sm font-bold" #roleName="ngModel"
+                                [(ngModel)]="role.name" maxlength="256" minlength="2" required>
+                        </div>
+                        <div *ngIf="roleName.invalid && roleName.touched" class="text-danger font-bold">
+                            <span *ngIf="roleName.errors?.required">Name is required</span>
+                            <span *ngIf="roleName.errors?.minlength">Min length is 2</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="roleOrgAndCom" class="control-label font-bold">Company
+                            <span class="text-danger font bold">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-briefcase"></i>
+                                </span>
+                            </div>
+                            <select name="roleOrgAndCom" id="roleOrgAndCom"
+                                class="form-control form-control-sm font-bold" #roleOrgAndCom="ngModel"
+                                [(ngModel)]="roleOrgAndComId">
+                                <option class="font-bold" [value]="0" selected>---Select Company---</option>
+                                <option class="font-bold" [value]="c.value" *ngFor="let c of ddlCompanies">
+                                    {{c.text}}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="roleOrgAndCom.value =='0' && roleName.touched" class="text-danger font-bold">
+                            <span>Company is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-outline-success"
+                    [disabled]="roleForm.invalid ||(roleOrgAndCom.value =='0')">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-outline-danger"
+                    (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+
+            </div>
+        </form>
+    </div>
+</ng-template>

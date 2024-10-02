@@ -1,0 +1,47 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 @slideInUp class="mt-2">Yearly Investment</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Self Service</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Yearly Investment</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-8 col-sm-6">
+        <div class="title-action">         
+            <button type="button" class="btn btn-success btn-outline btn-rounded" (click)="showInvestmentModal(0)">
+                <i class="fa fa-plus"></i> | Investment
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-lg-3" *ngFor="let item of list">
+            <div class="widget style1 navy-bg">
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <i class="icofont-coins fa-5x"></i>
+                    </div>
+                    <div class="col-8 text-right">
+                        <p class="m-0">Fiscal Year: {{item.fiscalYearRange}}</p>
+                        <span>Investment</span>
+                        <h2>&#2547; {{item.investmentAmount}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-container *ngIf="showInvestmentInsertModal == true">
+    <app-payroll-modal-yearly-investment
+        (closeModalEvent)="closeModal($event)"></app-payroll-modal-yearly-investment>
+</ng-container>
+

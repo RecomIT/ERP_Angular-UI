@@ -1,0 +1,364 @@
+<div class="ibox">
+    <form [formGroup]="professionalForm" (ngSubmit)="submitForm()">
+        <div class="ibox-content">
+            <div class="form-row text-x-small ">
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="employeeCode" class="control-label  font-bold">
+                        Employee ID <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group shadow-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-id-card"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="employeeCode" id="employeeCode" class="form-control form-control-sm"
+                            formControlName="employeeCode" autocomplete="off" maxlength="50" (input)="logFormErrors()" (blur)="logFormErrors()" />
+                    </div>
+                    <div *ngIf="formErrors?.employeeCode" class="text-danger">
+                        <span>{{formErrors?.employeeCode}}</span>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="FirstName" class="control-label  font-bold">First Name
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group shadow-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-sort-alpha-asc"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="FirstName" id="FirstName" autocomplete="off"
+                            class="form-control form-control-sm" formControlName="firstName" required minlength="4"
+                            maxlength="100" (input)="logFormErrors()" (blur)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.firstName" class="text-danger">
+                        <span>{{formErrors.firstName}}</span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="LastName" class="control-label  font-bold">Last Name
+                        <span class="text-danger hide">*</span>
+                    </label>
+                    <div class="input-group shadow-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-sort-alpha-asc"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="LastName" autocomplete="off" id="LastName"
+                            class="form-control form-control-sm" formControlName="lastName" minlength="4"
+                            (input)="logFormErrors()" (blur)="logFormErrors()">
+                    </div>
+                    <div *ngIf="formErrors.lastName" class="text-danger">
+                        <span>{{formErrors.lastName}}</span>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="empBranch" class="control-label  font-bold">Branch
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group shadow-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-building"></i>
+                            </span>
+                        </div>
+                        <select name="empBranch" id="empBranch" class="form-control form-control-sm"
+                            formControlName="branchId" (change)="logFormErrors()" (blur)="logFormErrors()">
+                            <option [value]="0">---Select Branch---</option>
+                            <option [value]="item.id" *ngFor="let item of ddlBranch">{{item.text}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.branchId" class="text-danger">
+                        <span>{{formErrors.branchId}}</span>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="employeeDesig" class="control-label  font-bold">Designation
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group shadow-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="employeeDesig" id="employeeDesig" class="form-control form-control-sm" (change)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="designationId">
+                            <option [value]="0" selected>---Select Designation---</option>
+                            <option [value]="item.value" *ngFor="let item of ddlDesignation">{{item.text}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.designationId" class="text-danger">
+                        <span>{{formErrors.designationId}}</span>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="empDepartment" class="control-label  font-bold">Department
+                        <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group shadow-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-briefcase"></i>
+                            </span>
+                        </div>
+                        <select name="empDepartment" id="empDepartment" class="form-control form-control-sm" (change)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="departmentId">
+                            <option [value]="0" selected>---Select Department---</option>
+                            <option [value]="item.value" *ngFor="let item of ddlDepartment">{{item.text}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.departmentId" class="text-danger">
+                        <span>{{formErrors.departmentId}}</span>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="dateOfJoining" class="control-label  font-bold">
+                        Date of Joining<span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="dateOfJoining" id="dateOfJoining" readonly (input)="logFormErrors()" (blur)="logFormErrors()"
+                            [bsConfig]="datePickerConfig" class="form-control form-control-sm bg-white"
+                            formControlName="dateOfJoining" bsDatepicker autocomplete="off">
+                    </div>
+                    <div *ngIf="formErrors.dateOfJoining" class="text-danger">
+                        <span>{{formErrors.dateOfJoining}}</span>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="workShift" class="control-label  font-bold">
+                        Work Shift<span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="workShift" id="workShift" class="form-control form-control-sm" (change)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="workshiftId">
+                            <option [value]="0" selected>---Select Work Shift---</option>
+                            <option [value]="l.id" *ngFor="let l of ddlWorkShift">{{l.text}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.workshiftId" class="text-danger">
+                        <span>{{formErrors.workshiftId}}</span>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="officeMobileNo" class="control-label  font-bold">
+                        Office Mobile No.<span class="text-danger"></span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-mobile"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="officeMobileNo" id="officeMobileNo" (input)="logFormErrors()" (blur)="logFormErrors()"
+                            class="form-control form-control-sm" formControlName="officeMobile" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="officeEmail" class="control-label  font-bold">
+                        Office Email<span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="officeEmail" id="officeEmail" class="form-control form-control-sm" (input)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="officeEmail" required maxlength="200" autocomplete="off">
+                    </div>
+                    <div *ngIf="formErrors.officeEmail" class="text-danger">
+                        <span>{{formErrors.officeEmail}}</span>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="referenceNo" class="control-label  font-bold">
+                        RFF ID <span class="text-danger"></span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-id-card"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="referenceNo" id="referenceNo" class="form-control form-control-sm" (input)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="referenceNo" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="fingerId" class="control-label  font-bold">
+                        Finger Id / Punch Machine ID<span class="text-danger"></span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark ">
+                                <i class="fa fa-hand-o-up" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="fingerId" id="fingerId" class="form-control form-control-sm" (input)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="fingerId" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="jobTypeRef" class="control-label  font-bold">
+                        Job Type<span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-tag" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="jobType" id="jobType" class="form-control form-control-sm" (change)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="jobType" required>
+                            <option [value]="''" selected>---Select Status---</option>
+                            <option [value]="item" *ngFor="let item of ddlJobtypes">{{item}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formErrors.jobType" class="text-danger">
+                        <span>{{formErrors.jobType}}</span>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3"
+                    *ngIf="this.professionalForm.get('jobType').value == 'Probation'">
+                    <label for="probationMonth" class="control-label  font-bold">
+                        Probotion Month<span class="text-danger"></span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-tag" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="probationMonth" id="probationMonth" class="form-control form-control-sm" (input)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="probationMonth" required>
+                            <option [value]="item" *ngFor="let item of ddlProbotionMonth">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="employeeTypeId" class="control-label ">
+                        Employee Type<span class="text-danger"></span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-tag" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="employeeTypeId" id="employeeTypeId" class="form-control form-control-sm" (change)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="employeeTypeId" required>
+                            <option [value]="'0'" selected>---Select Employee Type---</option>
+                            <option [value]="item.id" *ngFor="let item of ddlEmployeeType">{{item.text}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="jobCategoryId" class="control-label  font-bold">
+                        Job Category<span class="text-danger"></span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-tag" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="jobCategoryId" id="employeeTypeId" class="form-control form-control-sm"   (change)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="jobCategoryId" required>
+                            <option [value]="'0'" selected>---Select Job Category---</option>
+                            <option [value]="item.id" *ngFor="let item of ddlJobCategory">{{item.text}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="costCenterId" class="control-label  font-bold">
+                        Cost Center<span class="text-danger"></span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-tag" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <select name="costCenterId" id="employeeTypeId" class="form-control form-control-sm"  (change)="logFormErrors()" (blur)="logFormErrors()"
+                            formControlName="costCenterId" required>
+                            <option [value]="'0'" selected>---Select Cost Center---</option>
+                            <option [value]="item.id" *ngFor="let item of ddlCostCenter">{{item.text}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="supervisorId" class="control-label ">
+                        Supervisor <span class="text-danger"></span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-tag" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div style="width: 80%;">
+                            <ng-select2 [data]="ddlEmployees" name="supervisorId" [placeholder]="'Select Supervisor...'" (change)="logFormErrors()" (blur)="logFormErrors()"
+                                [options]="select2Options" [allowClear]="true" formControlName="supervisorId">
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group  col-sm-12 col-md-3">
+                    <label for="hodId" class="control-label ">
+                        Head Of Depeartment/Director<span class="text-danger"></span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-tag" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div style="width: 80%;">
+                            <ng-select2 [data]="ddlEmployees" name="hodId" [placeholder]="'Select Supervisor...'" (change)="logFormErrors()" (blur)="logFormErrors()"
+                                [options]="select2Options" [allowClear]="true" formControlName="hodId">
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-3">
+                    <label for="isPFMember" class="control-label font-bold">Is PF Member?</label>
+                    <div>
+                      <div class="form-check abc-radio abc-radio-info form-check-inline">
+                        <input class="form-check-input" type="radio" id="isPFMember1" [value]="true" name="isPFMember"
+                          formControlName="isPFMember">
+                        <label class="form-check-label" for="isPFMember1"> Yes
+                        </label>
+                      </div>
+                      <div class="form-check abc-radio abc-radio-danger form-check-inline">
+                        <input class="form-check-input" type="radio" id="isPFMember2" [value]="false" name="isPFMember"
+                          formControlName="isPFMember">
+                        <label class="form-check-label" for="isPFMember2"> No
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                <!-- {{professionalForm.value | json}} -->
+            </div>
+        </div>
+        <div class="ibox-footer">
+            <button type="submit" class="btn btn-primary btn-rounded btn-outline" [disabled]="professionalForm.invalid"
+                *ngIf="employeeOfficeInfo?.stateStatus=='Pending'">
+                <i class="fa fa-paper-plane faa-passing"></i>| Update
+            </button>
+        </div>
+    </form>
+</div>

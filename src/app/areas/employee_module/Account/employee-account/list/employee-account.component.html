@@ -1,0 +1,200 @@
+<div class="row wrapper border-bottom white-bg pb-2 page-heading">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-1"> <i class="icofont-card"></i> | Employee Account Info</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Account</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Employee Salary Account</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-4 col-sm-6 text-x-small">
+        <div class="title-action pt-3">
+            <button type="button" class="btn btn-sm btn-outline-info btn-rounded pull-right" tooltip="Add Account Info"
+                (click)="openModal(0)" *ngIf="pagePrivilege?.add == true"> <i class="fa fa-plus"></i> | Add Account Info
+            </button>
+
+            <button type="button" class="btn btn-sm btn-rounded btn-secondary btn-outline pull-right"
+                (click)="openUploadAccountInfoModal()" *ngIf="pagePrivilege?.upload == true">
+                <i class="fa fa-arrow-up"></i> | Upload
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="ibox-content pt-2 pb-2 text-x-small border-radius-5 shadow-sm font-bold text-dark">
+                    <form [formGroup]="searchForm" (submit)="1==1">
+                        <div class="form-row">
+                            <div class="form-group col-md-3 col-sm-12">
+                                <label for="employeeSearch" class="control-label ">Search By Employee</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-users"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width: 80%;">
+                                        <ng-select2 [data]="ddlEmployees" name="employeeSearch"
+                                            formControlName="employeeId" id="employeeSearch"
+                                            [placeholder]="'Search By Employee...'" [options]="select2Options"
+                                            [allowClear]="true">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <label for="paymentMode" class="control-label">Search By Payement Mode</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <select name="paymentMode" id="paymentMode" formControlName="paymentMode"
+                                        class="form-control form-control-sm">
+                                        <option [value]="''" selected>---Select Payment Mode---</option>
+                                        <option [value]="item" *ngFor="let item of paymentModes">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <label for="accountNumber" class="control-label ">Search By Account</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="accountNo" id="accountNo" formControlName="accountNo"
+                                        class="form-control form-control-sm" placeholder="Enter Account Number"
+                                        autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <label for="accountNumber" class="control-label ">Search By Status</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <select name="stateStatus" id="stateStatus" formControlName="stateStatus"
+                                        class="form-control form-control-sm">
+                                        <option [value]="''" selected>---Select Status---</option>
+                                        <option [value]="'Approved'">Approved</option>
+                                        <option [value]="'Pending'">Pending</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content pt-3 pb-2 text-x-small border-radius-5 shadow-sm font-bold text-dark">
+                    <table class="table table-sm table-striped table-hover table-responsive-lg">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#SL</th>
+                                <th>Employee Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th class="text-center">Payment Mode</th>
+                                <th class="text-center">Bank/Agent</th>
+                                <th class="text-center">Account No</th>
+                                <th class="text-center">Is Active</th>
+                                <th class="text-center">StateStatus</th>
+                                <th class="text-center">Activation Date</th>
+                                <th class="text-center">Deactivation Date</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of list | paginate:pageConfig; let i=index ">
+                                <td class="text-center font-bold">{{i+1}}</td>
+                                <td>{{item.employeeName}}</td>
+                                <td>{{item.designationName}}</td>
+                                <td>{{item.departmentName}}</td>
+                                <td>{{item.paymentMode}}</td>
+                                <td class="text-center">
+                                    {{(item.paymentMode =='Bank' ?
+                                    (item.bankName+'~'+item.bankBranchName):
+                                    (item.paymentMode =='Mobile Banking' ? (item.agentName):
+                                    item.paymentMode))}}
+                                </td>
+                                <td class="text-center">
+                                    {{item.accountNo}}
+                                </td>
+                                <td class="text-center">
+                                    <span [class]="item.isActive ? 'label label-success':'label label-danger'">
+                                        {{item.isActive ? 'Yes':'No'}}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span *ngIf="item.stateStatus=='Pending'"
+                                        class="label label-warning">{{item.stateStatus}}</span>
+                                    <span *ngIf="item.stateStatus=='Approved'"
+                                        class="label label-primary">{{item.stateStatus}}</span>
+                                    <span *ngIf="item.stateStatus=='Cancelled'"
+                                        class="label label-danger">{{item.stateStatus}}</span>
+                                </td>
+                                <td class="text-center">{{item.effectiveFrom == null ? 'N/A':(item.effectiveFrom |
+                                    date:"dd-MMM-yyyy")}}</td>
+                                <td class="text-center">{{item.deactivationFrom == null ? 'N/A':(item.deactivationFrom |
+                                    date:"dd-MMM-yyyy")}}</td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-xs"
+                                        *ngIf="(item.stateStatus=='Pending' || item.stateStatus=='Recheck') && pagePrivilege?.edit == true"
+                                        (click)="openModal(item?.accountInfoId)">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-xs"
+                                        *ngIf="(item.stateStatus=='Pending' || item.stateStatus=='Recheck') && pagePrivilege?.approval == true"
+                                        (click)="openApprovalModal(item.accountInfoId,item.employeeId)">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end">
+                        <pagination-controls (pageChange)="page_changed($event)" [responsive]="true" [autoHide]="true"
+                            id="data_list"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showInsertUpdateModal == true">
+    <app-employee-module-account-insert-update-modal [id]="accountAccountInfoId" (closeModalEvent)="closeModal($event)">
+    </app-employee-module-account-insert-update-modal>
+</ng-container>
+
+
+<ng-container *ngIf="showApprovalModal == true">
+    <app-employee-module-account-aproval-modal [id]="accountInfoId" [employeeId]="employeeId"
+        (closeModalEvent)="closeApprovalModal($event)">
+    </app-employee-module-account-aproval-modal>
+</ng-container>
+
+<ng-container *ngIf="isUploadAccountInfoModal == true">
+    <app-employee-module-upload-account-info-modal [accountInfoId]="accountInfoId"
+        (closeModalEvent)="closeUploadAccountInfoModal($event)">
+    </app-employee-module-upload-account-info-modal>
+</ng-container>

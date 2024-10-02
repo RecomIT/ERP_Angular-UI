@@ -1,0 +1,141 @@
+<div class="animated fadeInDown pt-3">
+ 
+    <div class="col-12 p-1">
+        <div class="border-section">
+            <div class="border-label">
+              Search By Employee
+            </div>
+        
+              <div class="form-row">
+        
+                <div class="col-12 col-lg-12 col-md-12 col-sm-12 text-x-small" >
+        
+                  <ng-select2 
+                      [(ngModel)]="pendingSettlementSetupEmployeeId"
+                      [data]="settlementSetupEmployees"
+                      name="pendingSettlementSetupEmployeeId"
+                      id="pendingSettlementSetupEmployeeId"
+                      [placeholder]="'Select A Employee ...'"
+                      [options]="employeeSelect2Options"
+                      [allowClear]="true"
+                      #pendingSettlementSetupEmployeeIdRef="ngModel"
+                      (ngModelChange)="onEmployeeSelectionChange($event)" 
+                      >
+                  </ng-select2>
+                </div>
+                
+              </div>   
+          </div>
+    </div>
+  
+
+
+
+    <div class="form-row card-container p-1">
+      <div *ngFor="let employee of listOfSetup| paginate: listOfSetupPageConfig; let i = index;" class="col-12 col-lg-3 col-sm-12 col-md-3 mt-2">
+  
+          <div class="p-3 bg-white rounded shadow">
+              <div class="mat-card-header">
+                  <div class="header-left">   
+                      <!-- <img src="assets/img/user.png" alt="Employee Photo" class="employee-photo">            -->
+                      <img [src]="photoPath" (error)="setDefaultPhoto()" alt="Photo" class="employee-photo">            
+                  </div>
+                  <div class="header-right">
+                  <mat-card-title>{{ employee.name }}</mat-card-title>
+                  <mat-card-subtitle>{{ employee.designationName }}</mat-card-subtitle>
+                  <mat-card-subtitle>{{ employee.departmentName }}</mat-card-subtitle>
+                  </div>
+              </div>
+  
+  
+              <div class="card-container mt-2">
+                <button class="btn btn-success btn-xs mr-1" (click)="openDetailsModal(employee)"><i class="fa fa-info" aria-hidden="true"></i> Details</button>
+                <button class="btn btn-success btn-xs mr-1" (click)="openEditModal(employee)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
+                <button class="btn btn-danger btn-xs" (click)="openDeleteModal(employee)"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+              </div>
+  
+          </div>
+          
+      </div>
+
+    </div>
+
+
+  
+   
+
+    
+    <div *ngIf="listOfSetup.length === 0">
+        <div class="text-center bg-light" style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">
+            <h5 style="color: #555; font-size: 24px; font-weight: bold;">No Request</h5>
+            <p style="color: #777; font-size: 16px;">There are no resignation requests at the moment.</p>
+        </div>
+      </div>
+
+
+      <div class="col-12 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-end align-items-center text-x-small">
+        <div>
+            <span class="mr-1">Page Size:</span>
+            <select [(ngModel)]="pageSize" (change)="onPageSizeChange()" class="form-control-sm">
+            <option value="8">8</option>
+            <option value="16">16</option>
+            <option value="32">32</option>
+            <option value="64">64</option>
+            </select>
+        </div>
+        <pagination-controls (pageChange)="pageChanged($event)" [responsive]="true" id="ListOfSetup"></pagination-controls>
+    </div>
+    
+
+</div>
+    
+
+  
+<ng-container *ngIf="showSettlementSetupModal">
+<app-add-settlement-setup
+    [resignationRequestId]="resignationRequestId" 
+    [resignationEmployeeId]="resignationEmployeeId" 
+    [ExecutionFlag]="ExecutionFlag"
+    (closeModalEvent)="closeSetttlementSetupModal($event)"
+    >
+</app-add-settlement-setup>
+</ng-container>
+  
+
+
+
+
+<!-- Details -->
+<ng-container *ngIf="showDetailsSettlementSetupModal">
+  <app-add-settlement-setup
+    [detailsData]="selectedSettlementSetupDataForDetails" 
+    [ExecutionFlag]="ExecutionFlag"
+    (closeModalEvent)="closeDetailsSettlementSetupModal($event)">
+  </app-add-settlement-setup>
+</ng-container>
+
+
+
+
+<!-- Edit -->
+<ng-container *ngIf="showEditSettlementSetupModal">
+  <app-add-settlement-setup
+    [editData]="selectedSettlementSetupData" 
+    [ExecutionFlag]="ExecutionFlag"
+    (closeModalEvent)="closeEditSettlementSetupModal($event)">
+  </app-add-settlement-setup>
+</ng-container>
+
+
+
+
+<!-- Edit -->
+<ng-container *ngIf="showDeleteSettlementSetupModal">
+  <app-add-settlement-setup
+    [deleteData]="selectedSettlementSetupDataForDelete" 
+    [ExecutionFlag]="ExecutionFlag"
+    (closeModalEvent)="closeDeleteSettlementSetupModal($event)">
+  </app-add-settlement-setup>
+</ng-container>
+
+

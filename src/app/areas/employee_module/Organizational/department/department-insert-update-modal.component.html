@@ -1,0 +1,59 @@
+<ng-template #departmentModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle icofont-badge" aria-hidden="true"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <form [formGroup]="departmentForm" (submit)="submit()">
+            <div class="modal-body">
+                <div class="form-row text-x-small">
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <label for="txtDepartmentName" class="control-label font-bold">Department</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-badge"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="txtDepartmentName" id="txtDepartmentName" formControlName="departmentName" (blur)="logFormErrors()" (input)="logFormErrors()"
+                                autocomplete="off" class="form-control form-control-sm" placeholder="Enter Department Name Here" autofocus="true">
+                        </div>
+                        <div  class="text-danger">
+                            <span *ngIf="formErrors?.departmentName">{{formErrors?.departmentName}}</span>
+                            <span *ngIf="server_errors != null">{{server_errors?.exist}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <label for="txtDepartmentShortName" class="control-label font-bold">Short Name</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="icofont-text-height"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="txtDepartmentShortName" id="txtDepartmentShortName" formControlName="shortName" (blur)="logFormErrors()" (input)="logFormErrors()"
+                                autocomplete="off" class="form-control form-control-sm" placeholder="Enter Short Name Here" autofocus="true">
+                        </div>
+                        <div  class="text-danger">
+                            <span *ngIf="formErrors?.shortName">{{formErrors?.shortName}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-x-small">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="departmentForm.invalid || btnSubmit">
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

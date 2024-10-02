@@ -1,0 +1,78 @@
+<ng-template #EmployeeAccountApprovalModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title mt-0" id="modal-basic-title">
+            <i class="fa fa-money" aria-hidden="true"></i> | {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+       click')"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <div class="modal-body">
+            <div class="row">
+                <table class="table table-bordered table-striped table-responsive-lg">
+                    <tbody>
+                        <tr>
+                            <td>Employee</td>
+                            <td>
+                                {{employeeAccountInfo?.employeeName}}
+                            </td>
+                            <td>Office Details</td>
+                            <td>{{employeeAccountInfo?.departmentName +'
+                                -'+employeeAccountInfo?.designationName+'-'+employeeAccountInfo?.gradeName}}</td>
+                        </tr>
+                        <tr>
+                            <td>Payment Mode</td>
+                            <td>{{employeeAccountInfo?.paymentMode}}</td>
+                            <td>Account Details</td>
+                            <td> {{(employeeAccountInfo?.paymentMode =='Bank' ?
+                                (employeeAccountInfo?.bankName+'~'+employeeAccountInfo?.bankBranchName+'~'+employeeAccountInfo?.accountNo):
+                                (employeeAccountInfo?.paymentMode =='Mobile Banking' ?
+                                (employeeAccountInfo?.agentName+'~'+employeeAccountInfo?.accountNo):
+                                employeeAccountInfo?.paymentMode))}}</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>
+                                <span class="label label-success">{{employeeAccountInfo?.stateStatus}}</span>
+                            </td>
+                            <td>Activation Reason</td>
+                            <td>
+                                {{employeeAccountInfo?.activationReason}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Remarks</td>
+                            <td>{{employeeAccountInfo?.remarks}}</td>
+                            <td>Entry Date</td>
+                            <td>{{employeeAccountInfo?.createdDate | date:"dd-MMM-yyyy"}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <form [formGroup]="form" (submit)="submit()">
+            <div class="modal-body pt-0">
+                <div class="form-row border-top">
+                    <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                        <div class="input-group">
+                            <input type="text" name="remarks" id="remarks" class="form-control form-control-sm"
+                                formControlName="remarks" placeholder="Write Comments Here.." />
+                            <div class="input-group-prepend">
+                                <select name="status" id="status" class="form-control form-control-sm"
+                                    formControlName="stateStatus">
+                                    <option value="Approved">Approved</option>
+                                    <option value="Recheck">Recheck</option>
+                                </select>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-paper-plane"></i> | Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

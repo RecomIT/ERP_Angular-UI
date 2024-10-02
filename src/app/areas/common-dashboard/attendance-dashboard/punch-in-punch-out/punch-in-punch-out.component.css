@@ -1,0 +1,101 @@
+.modal-header {
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .modal-title {
+    margin: 0;
+  }
+  
+
+  
+  .font-bold {
+    font-weight: bold;
+  }
+  
+  .attendance-details {
+    margin-bottom: 5px;
+  }
+  
+  .attendance-details .detail {
+    margin-bottom: 5px;
+  }
+  
+  .attendance-details .label {
+    font-weight: bold;
+    margin-right: 5px;
+    width: 20px;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .text-danger {
+    color: #dc3545;
+  }
+  
+
+
+
+
+.modal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    border-top: 1px solid #dee2e6;
+    border-bottom-right-radius: calc(0.3rem - 1px);
+    border-bottom-left-radius: calc(0.3rem - 1px);
+}
+
+
+
+/* Adjust radio buttons to display horizontally */
+.form-check-inline {
+  display: inline-block;
+  margin-right: 10px; /* Adjust as needed */
+}
+
+/* Adjust radio buttons and labels to be vertically aligned in the middle */
+.form-check-input,
+.form-check-label {
+  vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+/* ---------------------------- Selected Employee */
+
+
+.selected-employee {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 0.1875rem 0.625rem; 
+  border-radius: 0.625rem; 
+  margin-right: 0.3125rem; 
+  margin-bottom: 0.3125rem; 
+  box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.1); 
+  font-size: 0.67rem; 
+}
+
+.selected-employee span {
+  margin-right: 4px;
+}
+
+.selected-employee i {
+  cursor: pointer;
+  color: #888;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.selected-employee i:hover {
+  color: #d9534f;
+  transform: scale(1.1); 
+}

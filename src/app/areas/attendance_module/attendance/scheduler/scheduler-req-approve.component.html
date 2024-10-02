@@ -1,0 +1,581 @@
+<div class="wrapper wrapper-content" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small pl-0 pr-0">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs bg-light-blue">
+                    <li><a href="#schedulerRequestApproval" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-clock-o" aria-hidden="true"></i> | Scheduler Request Approval
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="schedulerRequestApproval" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-codepen" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="searchByMeetingCode" id="searchByMeetingCode"
+                                            class="form-control form-control-sm" placeholder="Search By Meeting Code"
+                                            #searchByMeetingCodeRef="ngModel" [(ngModel)]="searchByMeetingCode"
+                                            (input)="getSchedulerRequests(1)">
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-users" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="searchByEmployeeId" id="searchByEmployeeId"
+                                            class="form-control form-control-sm" [typeahead]="ddlEmployees"
+                                            typeaheadOptionField="text" [isAnimated]="false"
+                                            [(ngModel)]="searchByEmployeeText" placeholder="Search By Employee..."
+                                            autocomplete="off" (typeaheadOnSelect)="searchByEmployeeChanged($event)"
+                                            [typeaheadMinLength]="0">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="[searchByEmployeeText='',searchByEmployeeId=0,getSchedulerRequests(1)]"
+                                            [hidden]="searchByEmployeeText==''">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="searchByLocation" id="searchByLocation"
+                                            class="form-control form-control-sm" placeholder="Search By Location"
+                                            #searchByLocationRef="ngModel" [(ngModel)]="searchByLocation"
+                                            (input)="getSchedulerRequests(1)">
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon bg-dark-blue text-white">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" name="searchByDate" id="searchByDate"
+                                            class="form-control form-control-sm bg-white" placeholder="Search By Date"
+                                            #searchByDateRef="ngModel" [(ngModel)]="searchByDate"
+                                            (ngModelChange)="getSchedulerRequests(1)" bsDaterangepicker
+                                            autocomplete="off" readonly [bsConfig]="datePickerConfig">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            (click)="[searchByDate=[],getSchedulerRequests(1)]"
+                                            [hidden]="searchByDate.length ==0">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon  bg-dark-blue text-white">
+                                                <i class="fa fa-linode" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByStatus" id="searchByStatus"
+                                            class="form-control form-control-sm" #searchByStatusRef="ngModel"
+                                            [(ngModel)]="searchByStatus" (change)="getSchedulerRequests(1)">
+                                            <option [value]="''">---Search By Status---</option>
+                                            <option [value]="'Pending'">Pending</option>
+                                            <option [value]="'Cancelled'">Cancelled</option>
+                                            <option [value]="'Approved'">Approved</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-4">
+                                    <!-- <button type="button" class="btn btn-sm btn-redius-none btn-primary pull-right"
+                                        (click)="openSchedulerRequestModal()">
+                                        <i class="fa fa-plus"></i> | Create
+                                    </button> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-xl"
+                                    id="tblSchedulerRequest">
+                                    <thead class="bg-dark-blue">
+                                        <tr class="text-white">
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Code</th>
+                                            <th>Hosted By</th>
+                                            <th>Department</th>
+                                            <th>Subject</th>
+                                            <th>Details</th>
+                                            <th>Location</th>
+                                            <th class="text-center">Date</th>
+                                            <th class="text-center">Time</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Guest Count</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listOfSchedulerRequests | paginate: schedulerRequestPageConfig, let i=index">
+                                            <td class="text-center font-bold">{{i+1 + (schedulerRequestPageSize
+                                                *(schedulerRequestPageNo-1))}}</td>
+                                            <td class="text-center">{{item.scheduleCode}}</td>
+                                            <td>{{item.employeeName +'~'+item.employeeCode}}</td>
+                                            <td>{{item.departmentName}}</td>
+                                            <td>{{item.subject}}</td>
+                                            <td>{{item.details}}</td>
+                                            <td>{{item.location}}</td>
+                                            <td class="text-center">{{item.scheduleDate | date:"dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.fromTime +'-'+item.toTime}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus}}</span>
+                                                <span class="label label-primary"
+                                                    *ngIf="item.stateStatus=='Approved'">{{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'">{{item.stateStatus}}</span>
+                                                <span class="label label-info"
+                                                    *ngIf="item.stateStatus=='Recheck'">{{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center font-bold">{{item.guestCount}}</td>
+                                            <td class="text-center">{{item.createdDate | date:"dd-MMMM-yyyy hh:mm:ss
+                                                a"}}
+                                            </td>
+                                            <td class="text-center">
+                                                <!-- *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'" -->
+                                                <button type="button" class="btn btn-xs"
+                                                    (click)="loadSchedulerInfoWithDetailsForEdit(item.schedulerInfoId)"
+                                                    *ngIf="false">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-warning"
+                                                    (click)="openSchedulerDetailModal(item.schedulerInfoId)">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <!-- *ngIf="item.stateStatus == 'Pending' || item.stateStatus == 'Recheck'"  -->
+                                                <button type="button" class="btn btn-xs text-danger" (click)="1==1"
+                                                    *ngIf="false">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-info"
+                                                    (click)="openSchedulerPermissionModal(item.schedulerInfoId)"
+                                                    *ngIf="item.stateStatus == 'Pending'">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfSchedulerRequests.length ==0 && schedulerRequestsDTLabel == null">
+                                            <td colspan="15" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfSchedulerRequests.length ==0 && schedulerRequestsDTLabel != null">
+                                            <td colspan="15" class="text-center font-bold">
+                                                {{schedulerRequestsDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="schedulerRequestPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="schedulerRequest">
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #schedulerRequestModal let-modal>
+    <div class="modal-header bg-dark-blue text-white">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-clock-o" aria-hidden="true"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="schedulerRequestForm" (ngSubmit)="submitScheduler()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <input type="hidden" name="hostEmployeeId" id="hostEmployeeId" formControlName="hostEmployeeId">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="eventSubject" class="control-label">
+                            Event Subject <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon bg-dark-blue text-white">
+                                    <i class="fa fa-subscript"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="eventSubject" id="eventSubject" autocomplete="off" [ngClass]="{'is-invalid':
+                            ((schedulerRequestForm.get('subject').touched ||
+                            schedulerRequestForm.get('subject').dirty) &&
+                            schedulerRequestForm.get('subject').errors)}" [class.is-valid]="
+                            schedulerRequestForm.get('subject').valid " class="form-control form-control-sm"
+                                #eventSubject formControlName="subject" />
+                        </div>
+                        <span class="text-danger"
+                            *ngIf=" ((schedulerRequestForm.get('subject').touched || schedulerRequestForm.get('subject').dirty) && schedulerRequestForm.get('subject').errors)">
+                            Field is required.
+                        </span>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="eventDetails" class="control-label">
+                            Event Details <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon  bg-dark-blue text-white">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <textarea name="eventDetails" autocomplete="off" id="eventDetails"
+                                class="form-control form-control-sm" [ngClass]="{'is-invalid':
+                            ((schedulerRequestForm.get('details').touched ||
+                            schedulerRequestForm.get('details').dirty) &&
+                            schedulerRequestForm.get('details').errors)}"
+                                [class.is-valid]="schedulerRequestForm.get('details').valid " #eventDetails
+                                formControlName="details" cols="30" rows="1"></textarea>
+                        </div>
+                        <span class="text-danger"
+                            *ngIf=" ((schedulerRequestForm.get('details').touched || schedulerRequestForm.get('details').dirty) && schedulerRequestForm.get('details').errors)">
+                            Field is required.
+                        </span>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="eventLocation" class="control-label">
+                            Event Location <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon  bg-dark-blue text-white">
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="eventLocation" autocomplete="off" id="eventLocation" [ngClass]="{'is-invalid':
+                            ((schedulerRequestForm.get('location').touched ||
+                            schedulerRequestForm.get('location').dirty) &&
+                            schedulerRequestForm.get('location').errors)}"
+                                [class.is-valid]="schedulerRequestForm.get('location').valid "
+                                class="form-control form-control-sm" #eventLocation formControlName="location" />
+                        </div>
+                        <span class="text-danger"
+                            *ngIf=" ((schedulerRequestForm.get('location').touched || schedulerRequestForm.get('location').dirty) && schedulerRequestForm.get('location').errors)">
+                            Field is required.
+                        </span>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="scheduleDate" class="control-label">
+                            Schedule Date <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon bg-dark-blue text-white">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="scheduleDate" id="scheduleDate" bsDatepicker [ngClass]="{'is-invalid':
+                            ((schedulerRequestForm.get('scheduleDate').touched ||
+                            schedulerRequestForm.get('scheduleDate').dirty) &&
+                            schedulerRequestForm.get('scheduleDate').errors)}"
+                                [class.is-valid]="schedulerRequestForm.get('scheduleDate').valid " autocomplete="off"
+                                [readonly]="true" [bsConfig]="datePickerConfig" placement="bottom"
+                                class="form-control form-control-sm bg-white" #scheduleDate
+                                formControlName="scheduleDate">
+                            <div class="input-group-prepend cursor-pointer"
+                                (click)="[schedulerRequestForm.get('scheduleDate').setValue(null)]"
+                                *ngIf="schedulerRequestForm.get('scheduleDate').value != null">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span class="text-danger"
+                            *ngIf=" ((schedulerRequestForm.get('scheduleDate').touched || schedulerRequestForm.get('scheduleDate').dirty) && schedulerRequestForm.get('scheduleDate').errors)">
+                            Field is required.
+                        </span>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="scheduleFromTime" class="control-label">
+                            From Time <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <timepicker formControlName="fromTime" name="fromTime" #fromTime [min]="minTime"
+                                [max]="maxTime" [showMeridian]="false" [ngClass]="{'is-invalid':
+                            ((schedulerRequestForm.get('fromTime').touched ||
+                            schedulerRequestForm.get('fromTime').dirty) &&
+                            schedulerRequestForm.get('fromTime').errors)}"></timepicker>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="scheduleToTime" class="control-label">
+                            To Time <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <timepicker [formControlName]="'toTime'" name="toTime" #toTime [showMeridian]="false"
+                                [min]="minTime" [max]="maxTime" [ngClass]="{'is-invalid':
+                            ((schedulerRequestForm.get('toTime').touched ||
+                            schedulerRequestForm.get('toTime').dirty) &&
+                            schedulerRequestForm.get('toTime').errors)}"></timepicker>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon bg-dark-blue text-white">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="employee" id="employee" class="form-control form-control-sm"
+                                [typeahead]="typeHeadEmployees" typeaheadOptionField="text" [isAnimated]="false"
+                                formControlName="typeHeadEmployee" placeholder="Type Employee Name Here..."
+                                autocomplete="off" (typeaheadOnSelect)="employeeOnSelect($event)"
+                                [typeaheadMinLength]="0">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg table-responsive-lg">
+                            <thead>
+                                <tr class="bg-dark-blue text-white">
+                                    <th class="text-center">#SL</th>
+                                    <th>Employee</th>
+                                    <th class="hide">Department</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr formArrayName="schedulerDetails"
+                                    *ngFor="let creds of schedulerRequestForm.controls.schedulerDetails?.value; let i = index">
+                                    <ng-container [formGroupName]="i">
+                                        <td class="text-center">
+                                            <input type="hidden" name="schedulerDetailId" id="schedulerDetailId"
+                                                formControlName="schedulerDetailId">
+                                            {{i+1}}
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="employeeId" id="employeeId"
+                                                formControlName="employeeId">
+                                            <input type="hidden" name="employeeName" id="employeeName"
+                                                formControlName="employeeName">
+                                            <span>{{creds.employeeName}}</span>
+                                        </td>
+                                        <td class="hide">
+                                            <input type="hidden" name="departmentId" id="departmentId"
+                                                formControlName="departmentId">
+                                            <input type="hidden" name="departmentName" id="departmentName"
+                                                formControlName="departmentName">
+                                            <span>{{creds.departmentName}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="hidden" name="participantStatus" id="participantStatus"
+                                                formControlName="participantStatus">
+                                            <button class="btn btn-xs text-danger"
+                                                (click)="deleteGuestEmployee(i,creds.participantStatus)"
+                                                *ngIf="creds.participantStatus == null">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-redius-none btn-primary"
+                    [disabled]="schedulerRequestForm.invalid || btnSchedulerSubmit">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnSchedulerSubmit"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-redius-none btn-danger"
+                    (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #schedulerRequestPermissionModal let-modal>
+    <div class="modal-header bg-dark-blue text-white">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-clock-o" aria-hidden="true"></i>| Scheduler Request
+            Permission
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl">
+                <tbody>
+                    <tr>
+                        <td class="bg-dark-blue text-white">Code</td>
+                        <td>{{schedulerPermissionData.scheduleCode}}</td>
+                        <td class="bg-dark-blue text-white">Hosted By</td>
+                        <td>{{schedulerPermissionData.employeeName + '~' + schedulerPermissionData.employeeCode}}</td>
+                        <td class="bg-dark-blue text-white">Date</td>
+                        <td>{{schedulerPermissionData.scheduleDate | date:"dd-MMMM-yyyy"}}</td>
+                        <td class="bg-dark-blue text-white">Time</td>
+                        <td>{{schedulerPermissionData.fromTime +'-'+ schedulerPermissionData.toTime}}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-dark-blue text-white">Subject</td>
+                        <td colspan="3">{{schedulerPermissionData.subject}}</td>
+                        <td class="bg-dark-blue text-white">Details</td>
+                        <td colspan="3">{{schedulerPermissionData.details}}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-dark-blue text-white">Location</td>
+                        <td colspan="3">{{schedulerPermissionData.location}}</td>
+                        <td class="bg-dark-blue text-white">Guest Count</td>
+                        <td colspan="3">{{schedulerPermissionData.guestCount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-striped table-hover table-responsive-xl"
+                *ngIf="schedulerPermissionData.schedulerDetails.length > 0">
+                <thead class="bg-dark-blue text-white">
+                    <tr>
+                        <th class="text-center">#SL</th>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of schedulerPermissionData.schedulerDetails; let i=index">
+                        <td class="text-center">{{i+1}}</td>
+                        <td>{{item.employeeName}}</td>
+                        <td>{{item.departmentName}}</td>
+                        <td class="text-center">
+                            <span *ngIf="item.participantStatus == null" class="label label-warning">Pending</span>
+                            <span *ngIf="item.participantStatus != null && item.participantStatus == true"
+                                class="label label-primary">Agree</span>
+                            <span *ngIf="item.participantStatus != null && item.participantStatus == false"
+                                class="label label-danger">Disagree</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <form #schedulerRequestPermissionForm="ngForm"
+            (submit)="submitSchedulerStatus(schedulerRequestPermissionForm,remarks.value,checkStatus.value)">
+            <div class="modal-body pt-0">
+                <div class="form-row border-top">
+                    <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                        <div class="input-group">
+                            <input type="text" name="checkRemarks" #remarks id="checkRemarks"
+                                class="form-control form-control-sm" placeholder="Write Comments Here.." required
+                                minlength="2">
+                            <div class="input-group-prepend">
+                                <select name="checkStatus" #checkStatus id="checkStatus"
+                                    class="form-control form-control-sm" required>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Recheck">Recheck</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="input-group-prepend">
+                                <!-- checkStatus.value =='' || remarks.value == '' || -->
+                                <button type="submit" class="btn btn-sm btn-primary"
+                                    [disabled]="btnSchedulerStatusSubmit">
+                                    <i class="fa fa-paper-plane"></i>| Submit <span [hidden]="!btnSchedulerStatusSubmit"
+                                        class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #schedulerRequestViewModal let-modal>
+    <div class="modal-header bg-dark-blue text-white">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-clock-o" aria-hidden="true"></i>| Scheduler Request
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl">
+                <tbody>
+                    <tr>
+                        <td class="bg-dark-blue text-white">Code</td>
+                        <td>{{schedulerPermissionData.scheduleCode}}</td>
+                        <td class="bg-dark-blue text-white">Hosted By</td>
+                        <td>{{schedulerPermissionData.employeeName + '~' + schedulerPermissionData.employeeCode}}</td>
+                        <td class="bg-dark-blue text-white">Date</td>
+                        <td>{{schedulerPermissionData.scheduleDate | date:"dd-MMMM-yyyy"}}</td>
+                        <td class="bg-dark-blue text-white">Time</td>
+                        <td>{{schedulerPermissionData.fromTime +'-'+ schedulerPermissionData.toTime}}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-dark-blue text-white">Subject</td>
+                        <td colspan="3">{{schedulerPermissionData.subject}}</td>
+                        <td class="bg-dark-blue text-white">Details</td>
+                        <td colspan="3">{{schedulerPermissionData.details}}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-dark-blue text-white">Location</td>
+                        <td colspan="3">{{schedulerPermissionData.location}}</td>
+                        <td class="bg-dark-blue text-white">Guest Count</td>
+                        <td colspan="3">{{schedulerPermissionData.guestCount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-striped table-hover table-responsive-xl"
+                *ngIf="schedulerPermissionData.schedulerDetails.length > 0">
+                <thead class="bg-dark-blue text-white">
+                    <tr>
+                        <th class="text-center">#SL</th>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of schedulerPermissionData.schedulerDetails; let i=index">
+                        <td class="text-center">{{i+1}}</td>
+                        <td>{{item.employeeName}}</td>
+                        <td>{{item.departmentName}}</td>
+                        <td class="text-center">
+                            <span *ngIf="item.participantStatus == null" class="label label-warning">Pending</span>
+                            <span *ngIf="item.participantStatus != null && item.participantStatus == true"
+                                class="label label-primary">Agree</span>
+                            <span *ngIf="item.participantStatus != null && item.participantStatus == false"
+                                class="label label-danger">Disagree</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-template>

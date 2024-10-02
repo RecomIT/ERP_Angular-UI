@@ -1,0 +1,224 @@
+--------------------- html markup -------------------
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Page title</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Mainmenu</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Submenu</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Sub Submenu</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-4 col-md-4 col-sm-4">
+        <div class="title-action">
+            <button type="button" class="btn btn-success btn-outline btn-rounded" (click)="1==1"
+                title="Bonus Process"><i class="fa fa-cogs"></i>| Bonus Process</button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12">
+            <!-- Search Box -->
+            <form [formGroup]="searchForm">
+                <div class="ibox">
+                    <div class="ibox-content border-radius-5 pb-2 text-x-small font-bold">
+                        <div class="form-row">
+                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                <label for="" class="control-label">SEARCH BY ...</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="" id="searchByOne" class="form-control form-control-sm"
+                                        formControlName="">
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                <label for="" class="control-label">SEARCH BY ...</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <select name="searchByTwo" id="searchByTwo" class="form-control form-control-sm"
+                                        formControlName="searchByTwo">
+                                        <option [value]="''" selected>---Select Status---</option>
+                                        <option [value]="''"></option>
+                                        <option [value]="''"></option>
+                                        <option [value]="''"></option>
+                                        <option [value]="''"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                <label for="" class="control-label">SEARCH BY ...</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <div class="d-inline" style="width: 90%;">
+                                        <ng-select2 [data]="ddlEmployees" name="employeesSearchRef"
+                                            formControlName="searchByThree" id="employeesSearchRef"
+                                            [placeholder]="'Search Employee...'" [options]="select2Options"
+                                            [allowClear]="true" required>
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                <label for="" class="control-label">SEARCH BY Date...</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="searchByFromDate" id="searchByFromDate"
+                                        #searchByFromDateRef="ngModel" [(ngModel)]="searchByFromDate"
+                                        class="form-control form-control-sm bg-white" placeholder="Enter Date Range"
+                                        bsDaterangepicker [bsConfig]="datePickerConfig" readonly
+                                        (ngModelChange)="1==">
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                <label for="" class="control-label">SEARCH BY Date...</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="searchByFromDate" id="searchByFromDate"
+                                        #searchByFromDateRef="ngModel" [(ngModel)]="searchByFromDate"
+                                        class="form-control form-control-sm bg-white" placeholder="Enter Date Range"
+                                        bsDatepicker [bsConfig]="datePickerConfig" readonly
+                                        (ngModelChange)="1==1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 text-x-small">
+                <!-- List of items / Grid -->
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg" id="tbl">
+                            <thead>
+                                <tr>
+                                    <th class="text-center font-bold">#SL</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- *ngFor="let item of list | paginate: list_pager;let i =index" -->
+                                <tr>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-end">
+                            <pagination-controls (pageChange)="list_pageChanged($event)" [responsive]="true"
+                                [autoHide]="true" id="list_pager"></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+--------------------- html markup -------------------
+
+--------------------- componet code -------------------
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { ControlPanelWebService } from "src/app/shared/services/control-panel.service";
+import { CustomModalService } from "src/app/shared/services/custom-modal.service";
+import { HrWebService } from "src/app/shared/services/hr-web.service";
+import { PayrollWebService } from "src/app/shared/services/payroll-web.service";
+import { UserService } from "src/app/shared/services/user.service";
+import { UtilityService } from "src/app/shared/services/utility.service";
+import { AreasHttpService } from "../../areas.http.service";
+import { transition, trigger, useAnimation } from "@angular/animations";
+import { bounceIn, fadeIn, fadeInRight, slideInUp } from "ng-animate";
+import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
+
+@Component({
+    selector: 'app-payroll-bonus-process',
+    templateUrl: './bonus-process.component.html',
+    animations: [
+        trigger('slideInUp', [transition('* => *', useAnimation(slideInUp, { params: { timing: 0.5 } }))]),
+        trigger('fadeIn', [transition('void => *', useAnimation(fadeIn, { params: { timing: 0.3 } }))]),
+        trigger('fadeInRight', [transition('void => *', useAnimation(fadeInRight, { params: { timing: 0.5 } }))]),
+        trigger('bounceIn', [transition('void => *', useAnimation(bounceIn, { params: { timing: 1 } }))]),
+    ]
+})
+
+export class BonusProcessComponent implements OnInit {
+
+    datePickerConfig: Partial<BsDatepickerConfig> = {};
+
+    constructor(private utilityService: UtilityService, private payrollWebService: PayrollWebService, private controlPanelWebService: ControlPanelWebService, private hrWebService: HrWebService, private fb: FormBuilder,
+        private userService: UserService, public modalService: CustomModalService, private areasHttpService: AreasHttpService) { }
+    ngOnInit(): void {
+        this.datePickerConfig = Object.assign({}, {
+            containerClass: "theme-dark-blue",
+            showWeekNumbers: false,
+            dateInputFormat: "DD-MMMM-YYYY",
+            isAnimated: true,
+            showClearButton: false,
+            showTodayButton: false,
+            todayPosition: "left",
+            rangeInputFormat: "DD-MMM-YYYY",
+            rangeSeparator: " ~ ",
+            size: "sm",
+            customTodayClass: 'custom-today-class'
+          })
+    }
+
+    /// Page Basic Setting //
+    logger(msg: any, options: any) {
+        this.utilityService.consoleLog(msg, options);
+    }
+
+    User() {
+        return this.userService.User();
+    }
+
+    select2Options = {
+        width: "100%",
+        containerCssClass: "form-control form-control-sm text-x-small font-bold",
+        theme: "bootstrap4"
+    }
+    //===================//
+
+    searchForm: FormGroup;
+
+    searchFormInit(){
+
+    }
+}

@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-12">
+        <div class="attendance-table">
+            <table class="table table-hover table-responsive-sm">
+                <thead class="text-dark text-white">
+                    <tr class="text-center font-bold">
+                        <th>Date</th>
+                        <th>In Time</th>
+                        <th>In Time Remarks</th>
+                        <th>Out Time</th>
+                        <th>Out Time Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-center font-bold wrapper-content" *ngFor="let item of listOfGeoLocationAttendance | paginate: geoLocationAttendancePageConfig; let i = index">
+                       
+                        <td>{{ item.date | date:"dd MMM, yyyy" }}</td>
+
+                        <td>{{ item.punchIn }}
+                            <span *ngIf="item.attendanceInLocation !== null" [attr.data-tooltip]="item.attendanceInLocation" class="tooltip-icon">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            </span>
+                        </td>
+                        <td>
+                            {{ item.attendanceInRemarks }}
+                        </td>
+                        <td>{{ item.punchOut }}
+                            <span *ngIf="item.attendanceOutLocation !== null" [attr.data-tooltip]="item.attendanceOutLocation" class="tooltip-icon">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            </span>
+                        </td>
+                        <td>{{ item.attendanceOutRemarks }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-row w-100" *ngIf="listOfGeoLocationAttendance !== null && listOfGeoLocationAttendance.length > 0">
+            <div class="col-12 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-end align-items-center text-x-small ">
+                <div>
+                  <span class="mr-1">Page Size:</span>
+                  <select [(ngModel)]="pageSize" (change)="onPageSizeChange()" class="form-control-sm">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                  </select>
+                </div>
+                <pagination-controls (pageChange)="geoLocationAttendancePageChanged($event)" [responsive]="true" id="geoLocationAttendance"></pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>

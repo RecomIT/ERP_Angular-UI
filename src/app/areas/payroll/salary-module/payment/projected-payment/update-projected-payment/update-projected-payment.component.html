@@ -1,0 +1,149 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="icofont-money-bag"></i>| {{"Update Projected Payment"}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="ibox">
+                    <div class="ibox-content pb-1 shadow-sm border-radius-5">
+                        <div class="form-row">
+                            <div class="form-group col-12 col-md-6 col-sm-12">
+                                <label for="employeeId" class="control-label">Employee <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="icofont-user"></i>
+                                        </span>
+                                    </div>
+                                    <div class="form-control form-control-sm bg-muted font-bold">
+                                        {{itemInDb?.employeeName}}
+                                    </div>
+                                    <div *ngIf="formErrors?.employeeId" class="text-danger">
+                                        {{formErrors?.employeeId}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-md-6 col-sm-12">
+                                <label for="allowanceNameId" class="control-label">Allowance <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="icofont-pay"></i>
+                                        </span>
+                                    </div>
+                                    <div class="form-control form-control-sm bg-muted font-bold">
+                                        {{itemInDb?.allowanceName}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-md-6 col-sm-12">
+                                <label for="allowanceReason" class="control-label">Reason <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-list"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="allowanceReason" id="allowanceReason"
+                                        class="form-control form-control-sm" formControlName="allowanceReason"
+                                        [typeahead]="reasons" [typeaheadMinLength]="0" [typeaheadScrollable]="true" />
+                                </div>
+                                <div *ngIf="formErrors?.allowanceReason" class="text-danger">
+                                    {{formErrors?.allowanceReason}}
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-md-6 col-sm-12">
+                                <label for="payableYear" class="control-label">Payable Year<span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-info"></i>
+                                        </span>
+                                    </div>
+                                    <select name="payableYear" id="payableYear" class="form-control form-control-sm"
+                                        formControlName="payableYear">
+                                        <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors.payableYear" class="text-danger">
+                                    {{formErrors.payableYear}}
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-md-4 col-sm-12">
+                                <label for="baseOfPayment" class="control-label">Base Of Payment <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-info"></i>
+                                        </span>
+                                    </div>
+                                    <select name="baseOfPayment" id="baseOfPayment" class="form-control form-control-sm"
+                                        formControlName="baseOfPayment">
+                                        <option [value]="item" *ngFor="let item of baseOfPayments">{{item}}</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors?.baseOfPayment" class="text-danger">
+                                    {{formErrors?.baseOfPayment}}
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-md-4 col-sm-12"
+                                *ngIf="this.form!= null && this.form.get('baseOfPayment').value =='Flat'">
+                                <label for="amount" class="control-label">Amount<span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i>&#2547;</i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" id="amount" name="amount"
+                                        formControlName="amount" />
+                                </div>
+                                <div *ngIf="formErrors?.baseOfPayment" class="text-danger">
+                                    {{formErrors?.baseOfPayment}}
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-md-4 col-sm-12"
+                                *ngIf="this.form!= null && (this.form.get('baseOfPayment').value =='Gross' || this.form.get('baseOfPayment').value =='Basic')">
+                                <label for="" class="control-label">Percentage<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i>%</i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" id="percentage"
+                                        name="percentage" formControlName="percentage" />
+                                </div>
+                                <div *ngIf="formErrors?.amount" class="text-danger">
+                                    {{formErrors?.amount}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="form.invalid || btnSubmit">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnSubmit"
+                    (click)="closeModal('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

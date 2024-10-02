@@ -1,0 +1,882 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 @slideInUp class="mt-2">User Config</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Administration</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>User Config</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-8 col-sm-6">
+        <div class="title-action">
+            <button type="button" class="btn btn-success btn-outline btn-rounded" *ngIf="listPages == false"
+                (click)="[listPages=true,userEntryPage=false,roleAuthEntryPage=false,customAuthPage=false,userEditEnabled=false,getApplicationUsers()]"><i
+                    class="fa fa-arrow-left"></i>
+                | Back To List </button>
+        </div>
+    </div>
+</div>
+<div class="wrapper pt-3 wrapper-content animated fadeInRight" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4" *ngIf="listPages">
+            <div class="tabs-container font-bold">
+                <ul class="nav nav-tabs text-x-small">
+                    <li><a class="nav-link active" data-toggle="tab" href="#userList"> <i class="fa fa-users"></i>|
+                            User Information</a></li>
+                    <li><a class="nav-link" data-toggle="tab" href="#roleAuth"><i class="fa fa-user-plus"></i>|
+                            Role Authorization</a></li>
+                </ul>
+                <div class="tab-content text-x-small">
+                    <div id="userList" class="tab-pane active">
+                        <div class="panel-body text-dark">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm 
+                                    font-bold" placeholder="Search By Anything" id="countryfilter"
+                                            onkeyup="tableFilter('#tblUsers tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-sm btn-rounded btn-success float-right"
+                                        (click)="createUser()">
+                                        <i class="fa fa-plus"></i>|Create User</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover table-responsive-xl"
+                                    id="tblUsers">
+                                    <thead>
+                                        <tr>
+                                            <th>#SL</th>
+                                            <th>FullName &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                            <th>Employee-Code &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                            <th>Role &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                            <th>Email &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                            <th>Username</th>
+                                            <th>Phone No</th>
+                                            <th>Address</th>
+                                            <th>User-Status</th>
+                                            <th>Role-Status</th>
+                                            <th>Branch</th>
+                                            <th>Division</th>
+                                            <th>Company</th>
+                                            <th>Organization</th>
+                                            <th>Created Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let user of appUserList,let i =index">
+                                            <td class="font-bold text-center">{{i+1}}</td>
+                                            <td>{{user.fullName}}</td>
+                                            <td>{{user.employeeCode}}</td>
+                                            <td>{{user.roleName}}</td>
+                                            <td>{{user.email}}</td>
+                                            <td>{{user.userName}}</td>
+                                            <td>{{user.phoneNumber}}</td>
+                                            <td>{{user.address}}</td>
+                                            <td>
+                                                <span
+                                                    [class]="user.isActive?'label label-primary':'label label-danger'">{{user.isActive
+                                                    ? 'Active':'Inactive'}}</span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    [class]="user.isRoleActive?'label label-primary':'label label-danger'">
+                                                    {{user.isRoleActive ? 'Active':'Inactive'}}
+                                                </span>
+                                            </td>
+                                            <td>{{user.branchName}}</td>
+                                            <td>{{user.divisionName}}</td>
+                                            <td>{{user.companyName}}</td>
+                                            <td>{{user.organizationName}}</td>
+                                            <td>{{user.createdDate | date:"dd-MMM-yyyy hh:mm:ss"}}</td>
+                                            <td>
+                                                <button class="btn btn-xs" (click)="editUser(user.id)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="roleAuth" class="tab-pane">
+                        <div class="panel-body text-dark">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="roleAuthFilter"
+                                            onkeyup="tableFilter('#tblRoleAuth tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-sm btn-rounded btn-success float-right" (click)="roleAuth()">
+                                        <i class="fa fa-plus"></i>|Role Auth</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg"
+                                id="tblRoleAuth">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#SL</th>
+                                        <th>Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Status&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Company&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Organization&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                        </th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let role of roleList;let i =index">
+                                        <td class="font-bold text-center">{{i+1}}</td>
+                                        <td>{{role.name}}</td>
+                                        <td>
+                                            <span [class]="role.isActive? 'label label-primary':'label label-danger'">
+                                                {{role.isActive? "Active":"Inactive"}}</span>
+                                        </td>
+                                        <td> <span class="label label-info">{{role.companyName}}</span></td>
+                                        <td>{{role.organizationName}}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-xs" title="Edit"
+                                                (click)="loadRoleAuth(role.id)">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="roleList == null" class="text-center">
+                                        <td colspan="8">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="roleList != null && roleList.length == 0" class="text-center font-bold">
+                                        <td colspan="8">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mb-4" *ngIf="userEntryPage">
+            <div class="ibox shadow-lg">
+                <div class="ibox-title">
+                    <h5>
+                        <i class="fa fa-user-plus"></i> | {{entryPageTitle}}
+                    </h5>
+                </div>
+                <div class="ibox-content pt-2 pb-2">
+                    <form #UserForm="ngForm" (submit)="submitUser(UserForm)">
+                        <div class="row">
+                            <div class="col-md-5 shadow-sm">
+                                <div class="ibox-title border-0 border-bottom">
+                                    <h5><i class="fa fa-info"></i> | User Information</h5>
+                                </div>
+                                <div class="ibox-content text-x-small font-bold text-dark pt-2 pb-2 pl-1 pr-1 border-0">
+                                    <input type="hidden" name="id" #appUserId="ngModel" [(ngModel)]="appUser.id">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="appUserBranch" class="control-label font-bold"
+                                                (click)="touchedSelect2(appUserBranch)">
+                                                Branch/Company<span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-building"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="d-inline" style="width: 90%;">
+                                                    <ng-select2 [(ngModel)]="branchWithCompanyAndOrganization"
+                                                        [data]="ddlBranchWithCompanyAndOrganization"
+                                                        (ngModelChange)="loadEmployeeAndRole()" name="appUserBranch"
+                                                        #appUserBranch="ngModel" id="appUserBranch"
+                                                        [placeholder]="'Select Branch...'" [options]="select2Options"
+                                                        (click)="touchedSelect2(appUserBranch)" [allowClear]="true">
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="appUserBranch.value == null && appUserBranch.touched">
+                                                <span>Branch is required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="appUserEmployee" class="control-label font-bold"
+                                                (click)="touchedSelect2(appUserEmployee)">
+                                                Employee<span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="d-inline" style="width: 80%;">
+                                                    <!--  (ngModelChange)="loadUserInfoFromEmployee()" -->
+                                                    <ng-select2 [(ngModel)]="appUser.employeeId" [data]="ddlEmployees"
+                                                        name="appUserEmployee" #appUserEmployee="ngModel"
+                                                        (ngModelChange)="[loadUserInfoFromEmployee($event),duplicateEmployee='']"
+                                                        id="appUserEmployee" [placeholder]="'Select Employee...'"
+                                                        [options]="select2Options" [allowClear]="true"
+                                                        (click)="touchedSelect2(appUserEmployee)">
+                                                    </ng-select2>
+                                                </div>
+                                            </div>
+                                            <div class="text-danger hide">
+                                                <div
+                                                    *ngIf="(appUserEmployee.value == 0 || appUserEmployee.value == null) && appUserEmployee.touched">
+                                                    <span>Employee is required</span>
+                                                </div>
+                                                <span>{{duplicateEmployee}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="appUserRole" class="control-label">Role <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-users"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="appUserRole" id="appUserRole" #appUserRole="ngModel"
+                                                    [(ngModel)]="appUser.roleId" class="form-control form-control-sm"
+                                                    required>
+                                                    <option [value]="''" selected>---Select Role---</option>
+                                                    <option [value]="r.id" *ngFor="let r of ddlRole; let i = index">
+                                                        {{r.text}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="appUserRole.value ==0 && appUserRole.touched">
+                                                <span>Role is required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="appUserfullName" class="control-label">Full Name</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-vcard"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="appUserfullName" id="appUserfullName"
+                                                    #appUserfullName="ngModel" [(ngModel)]="appUser.fullName"
+                                                    class="form-control form-control-sm" required maxlength="150"
+                                                    minlength="4">
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="appUserfullName.invalid && appUserfullName.touched">
+                                                <span *ngIf="appUserfullName.errors?.required">Fullname is
+                                                    required</span>
+                                                <span *ngIf="appUserfullName.errors?.maxlength">Maxlength is 150</span>
+                                                <span *ngIf="appUserfullName.errors?.minlength">Minlength is 4</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="appUserEmail" class="control-label">Email</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="email" name="appUserEmail" id="appUserEmail"
+                                                    #appUserEmail="ngModel" [(ngModel)]="appUser.email" maxlength="256"
+                                                    minlength="8" required class="form-control form-control-sm">
+                                            </div>
+                                            <div class="text-danger">
+                                                <div *ngIf="appUserEmail.invalid && appUserEmail.touched">
+                                                    <span *ngIf="appUserEmail.errors?.required">Email is required</span>
+                                                    <span *ngIf="appUserEmail.errors?.maxlength">Maxlength is 256</span>
+                                                    <span *ngIf="appUserEmail.errors?.minlength">Minlength is 8</span>
+                                                </div>
+                                                <span>{{duplicateUserEmail}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="appUserName" class="control-label">User name
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user-secret"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="appUserName" id="appUserName"
+                                                    class="form-control form-control-sm" #appUserName="ngModel"
+                                                    [(ngModel)]="appUser.userName" maxlength="256" minlength="8"
+                                                    required>
+                                            </div>
+                                            <div class="text-danger">
+                                                <div *ngIf="appUserName.invalid && appUserName.touched">
+                                                    <span *ngIf="appUserName.errors?.required">Username is
+                                                        required</span>
+                                                    <span *ngIf="appUserName.errors?.maxlength">Maxlength is 256</span>
+                                                    <span *ngIf="appUserName.errors?.minlength">Minlength is 8</span>
+                                                </div>
+                                                <span>{{duplicateUsername}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="appUserPhone" class="control-label">Phone No
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-phone"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="appUserPhone" id="appUserPhone"
+                                                    #appUserPhone="ngModel" [(ngModel)]="appUser.phoneNumber"
+                                                    class="form-control form-control-sm" maxlength="50" minlength="11">
+                                            </div>
+                                            <div class="text-danger">
+                                                <div *ngIf="appUserPhone.invalid && appUserPhone.touched">
+                                                    <span *ngIf="appUserPhone.errors?.maxlength">Maxlength is 50</span>
+                                                    <span *ngIf="appUserPhone.errors?.minlength">Minlength is 11</span>
+                                                </div>
+                                                <span>{{duplicateUserPhone}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="appUserAddress" class="control-label">Address
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-address-card"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="appUserAddress" id="appUserAddress"
+                                                    #appUserAddress="ngModel" [(ngModel)]="appUser.address"
+                                                    class="form-control form-control-sm" maxlength="150" minlength="4">
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="appUserAddress.invalid && appUserAddress.touched">
+                                                <span *ngIf="appUserAddress.errors?.maxlength">Maxlength is 150</span>
+                                                <span *ngIf="appUserAddress.errors?.minlength">Minlength is 4</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="appUserPassword" class="control-label">Password
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-key"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="password" name="appUserPassword" id="appUserPassword"
+                                                    #appUserPassword="ngModel" [(ngModel)]="appUser.password"
+                                                    class="form-control form-control-sm" required minlength="6"
+                                                    maxlength="20" required>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="appUserPassword.invalid && appUserPassword.touched">
+                                                <span *ngIf="appUserPassword.errors?.required">Password is
+                                                    required</span>
+                                                <span *ngIf="appUserPassword.errors?.maxlength">Maxlength is 150</span>
+                                                <span *ngIf="appUserPassword.errors?.minlength">Minlength is 6</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="appUserConfirmPassword" class="control-label">Confirm Password
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-key"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="password" name="appUserConfirmPassword"
+                                                    id="appUserConfirmPassword" #appUserConfirmPassword="ngModel"
+                                                    [(ngModel)]="appUser.confirmPassword"
+                                                    class="form-control form-control-sm" required minlength="6"
+                                                    maxlength="20" required>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="appUserConfirmPassword.invalid && appUserConfirmPassword.touched">
+                                                <span
+                                                    *ngIf="appUserConfirmPassword.errors?.required || appUserConfirmPassword.value.trim()==''">Confirm
+                                                    Password
+                                                    is required</span>
+                                                <span *ngIf="appUserConfirmPassword.errors?.maxlength">Maxlength is
+                                                    150</span>
+                                                <span *ngIf="appUserConfirmPassword.errors?.minlength">Minlength is
+                                                    6</span>
+                                            </div>
+                                            <div class="text-danger"
+                                                *ngIf="appUserPassword.value!='' && appUserConfirmPassword.value!='' && appUserConfirmPassword.touched">
+                                                <span
+                                                    *ngIf="appUserPassword.value != appUserConfirmPassword.value">Confirm
+                                                    Password does not match</span>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-play"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="form-control form-control-sm font-bold">
+                                                    Is Active?
+                                                </div>
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-addon">
+                                                        <input type="checkbox" name="appUserActive" id="appUserActive"
+                                                            #appUserActive="ngModel" [(ngModel)]="appUser.isActive">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-play"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="form-control form-control-sm font-bold">
+                                                    Is Role Active?
+                                                </div>
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-addon">
+                                                        <input type="checkbox" name="appUserRoleActive"
+                                                            id="appUserRoleActive" #appUserRoleActive="ngModel"
+                                                            [(ngModel)]="appUser.isRoleActive">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row hide">
+                                        <div class="form-group col-md-12">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7 shadow-sm">
+                                <div class="ibox-title border-0 border-bottom">
+                                    <h5><i class="fa fa-user-secret"></i>| User Authorization</h5>
+                                </div>
+                                <div class="ibox-content text-x-small font-bold pt-2 pb-2 pl-1 pr-1 border-0"
+                                    style="max-height: 450px;overflow-y: scroll;">
+                                    <table class="table table-sm table-borderless table-hover table-responsive-lg">
+                                        <ng-container *ngFor="let m of menusData,let i= index">
+                                            <tr class="text-center bg-dark-blue text-white bg">
+                                                <th colspan="15" title="Mainmenu">{{m.mainmenuName}}</th>
+                                            </tr>
+                                            <tr *ngFor="let sub of m.appSubmenuForPermissions,let j=index">
+                                                <td>
+                                                    <span title="Submenu"
+                                                        [class]="sub.submenuName!= '' ?'label label-info':''">{{sub.submenuName}}</span>
+                                                </td>
+                                                <td>
+                                                    <span title="Subsubmenu"
+                                                        [class]="sub.subSubmenuName!= '' ?'label label-primary':''">{{sub.subSubmenuName}}</span>
+                                                </td>
+                                                <td [class]="">
+                                                    <span title="Tab"
+                                                        [class]="sub.tabName!= '' ?'label label-warning':''">{{sub.tabName}}</span>
+                                                </td>
+                                                <!-- [class]="checkedRowColor(i,j)?' text-white':''" -->
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'All'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'All'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isAll"
+                                                        (change)="allPermissionChanged(i,j)">
+                                                    All
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Add'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Add'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isAdd"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Add
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Edit'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Edit'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isEdit"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Edit
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Delete'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Delete'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isDelete"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Delete
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Detail'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Detail'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isDetail"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Detail
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Approval'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Approval'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isApproval"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Approval
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Report'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Report'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isReport"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Report
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Upload'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Upload'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isUpload"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Upload
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </table>
+
+                                    <!-- <table class="table table-sm table-responsive-lg" *ngFor="let m of menusData"> -->
+                                    <!-- <thead> -->
+                                    <!-- <tr class="bg-dark-blue text-white text-center"> -->
+                                    <!-- <th colspan="9">{{m.mainmenuName}}</th> -->
+                                    <!-- </tr> -->
+                                    <!-- </thead> -->
+                                    <!-- <tbody> -->
+                                    <!-- <tr *ngFor="let sub of m.appUserSubmenus"> -->
+                                    <!-- <td title="Submenu"><span -->
+                                    <!-- class="label label-primary">{{sub.submenuName}}</span></td> -->
+                                    <!-- <ng-container *ngIf="!sub.isActAsParent && sub.hasTab"> -->
+                                    <!-- <tr *ngFor="let tab of sub.appUserPageTabs" class=""> -->
+                                    <!-- <td title="Page-tab"><span -->
+                                    <!-- class="label label-info">{{tab.tabName}}</span></td> -->
+                                    <!-- <td> <input type="checkbox" name="{{tab.tabName+'-'+'Add'}}" -->
+                                    <!-- id="{{tab.tabName+'-'+'Add'}}"> Add -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{tab.tabName+'-'+'Edit'}}" -->
+                                    <!-- id="{{tab.tabName+'-'+'Edit'}}"> Edit -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{tab.tabName+'-'+'Detail'}}" -->
+                                    <!-- id="{{tab.tabName+'-'+'Detail'}}"> Detail -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{tab.tabName+'-'+'Delete'}}" -->
+                                    <!-- id="{{tab.tabName+'-'+'Delete'}}"> Delete -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{tab.tabName+'-'+'Approval'}}" -->
+                                    <!-- id="{{tab.tabName+'-'+'Approval'}}"> Approval -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{tab.tabName+'-'+'Report'}}" -->
+                                    <!-- id="{{tab.tabName+'-'+'Report'}}"> Report -->
+                                    <!-- </tr> -->
+                                    <!-- </ng-container> -->
+                                    <!-- <ng-container *ngIf="!sub.isActAsParent && !sub.hasTab"> -->
+                                    <!-- <td> <input type="checkbox" name="{{sub.submenuName+'-'+'Add'}}" -->
+                                    <!-- id="{{sub.submenuName+'-'+'Add'}}"> Add -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{sub.submenuName+'-'+'Edit'}}" -->
+                                    <!-- id="{{sub.submenuName+'-'+'Edit'}}"> Edit -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{sub.submenuName+'-'+'Detail'}}" -->
+                                    <!-- id="{{sub.submenuName+'-'+'Detail'}}"> Detail -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{sub.submenuName+'-'+'Delete'}}" -->
+                                    <!-- id="{{sub.submenuName+'-'+'Delete'}}"> Delete -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{sub.submenuName+'-'+'Approval'}}" -->
+                                    <!-- id="{{sub.submenuName+'-'+'Approval'}}"> Approval -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{sub.submenuName+'-'+'Report'}}" -->
+                                    <!-- id="{{sub.submenuName+'-'+'Report'}}"> Report -->
+                                    <!-- </td> -->
+                                    <!-- </ng-container> -->
+                                    <!-- <ng-container *ngIf="sub.isActAsParent"> -->
+                                    <!-- <tr *ngFor="let ss of sub.appUserSubSubmenus"> -->
+                                    <!-- <!-- <td title="Subsubmenu"> <span class="label label-success">{{ss.subSubmenuName}}</span></td> -->
+                                    <!-- <ng-container *ngIf="ss.hasTab"> -->
+                                    <!-- <tr *ngFor="let ptss of ss.appUserPageTabs"> -->
+                                    <!-- <td title="Page-tab"><span -->
+                                    <!-- class="label label-info">{{ptss.tabName}}</span></td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ptss.tabName+'-'+'Add'}}" -->
+                                    <!-- id="{{ptss.tabName+'-'+'Add'}}"> Add -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ptss.tabName+'-'+'Edit'}}" -->
+                                    <!-- id="{{ptss.tabName+'-'+'Edit'}}"> Edit -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ptss.tabName+'-'+'Detail'}}" -->
+                                    <!-- id="{{ptss.tabName+'-'+'Detail'}}"> Detail -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ptss.tabName+'-'+'Delete'}}" -->
+                                    <!-- id="{{ptss.tabName+'-'+'Delete'}}"> Delete -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ptss.tabName+'-'+'Approval'}}" -->
+                                    <!-- id="{{ptss.tabName+'-'+'Approval'}}"> Approval -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ptss.tabName+'-'+'Report'}}" -->
+                                    <!-- id="{{ptss.tabName+'-'+'Report'}}"> Report -->
+                                    <!-- </tr> -->
+                                    <!-- </ng-container> -->
+                                    <!-- <ng-container *ngIf="!ss.hasTab"> -->
+                                    <!-- <td> <input type="checkbox" name="{{ss.subSubmenuName+'-'+'Add'}}" -->
+                                    <!-- id="{{ss.subSubmenuName+'-'+'Add'}}"> Add -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ss.subSubmenuName+'-'+'Edit'}}" -->
+                                    <!-- id="{{ss.subSubmenuName+'-'+'Edit'}}"> Edit -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ss.subSubmenuName+'-'+'Detail'}}" -->
+                                    <!-- id="{{ss.subSubmenuName+'-'+'Add'}}"> Detail -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ss.subSubmenuName+'-'+'Delete'}}" -->
+                                    <!-- id="{{ss.subSubmenuName+'-'+'Add'}}"> Delete -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ss.subSubmenuName+'-'+'Approval'}}" -->
+                                    <!-- id="{{ss.subSubmenuName+'-'+'Add'}}"> Approval -->
+                                    <!-- </td> -->
+                                    <!-- <td> <input type="checkbox" name="{{ss.subSubmenuName+'-'+'Report'}}" -->
+                                    <!-- id="{{ss.subSubmenuName+'-'+'Add'}}"> Report -->
+                                    <!-- </td> -->
+                                    <!-- </ng-container> -->
+                                    <!-- </tr> -->
+                                    <!-- </ng-container> -->
+                                    <!-- </tr> -->
+                                    <!-- </tbody> -->
+                                    <!-- </table> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-x-small mt-2">
+                                <!--  UserForm.invalid -->
+                                <!-- appUserEmployee.invalid || -->
+                                <!-- || (appUser.id ==null && appUserPassword.invalid) || (appUser.id ==null && appUserConfirmPassword.invalid) -->
+                                <button type="submit"
+                                    [disabled]="appUserBranch.invalid || btnAppUserMenu ||  appUserRole.invalid || appUserfullName.invalid || appUserEmail.invalid || appUserName.invalid || appUserPhone.invalid"
+                                    class="btn btn-sm btn-rounded btn-success float-right"><i
+                                        class="fa fa-paper-plane"></i> |Submit
+                                    <span [hidden]="!btnAppUserMenu" class="spinner-border spinner-border-sm"
+                                        role="status" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mb-4" *ngIf="roleAuthEntryPage">
+            <form #roleAuthForm="ngForm" (submit)="submitRoleAuth(roleAuthForm)">
+                <div class="ibox shadow-lg">
+                    <div class="ibox-title">
+                        <h5>
+                            <i class="fa fa-user-plus"></i> | {{entryPageTitle}}
+                        </h5>
+                    </div>
+                    <div class="ibox-content pt-2 pb-2">
+                        <div class="row">
+                            <div class="col-md-5 shadow-sm">
+                                <div class="ibox-title border-0 border-bottom">
+                                    <h5><i class="fa fa-info"></i> | Role Info</h5>
+                                </div>
+                                <div class="ibox-content text-x-small font-bold text-dark pt-2 pb-2 pl-1 pr-1 border-0">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="roleId" class="control-label">User Role</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-addon bg-dark-blue text-white">
+                                                        <i class="fa fa-user-circle-o"></i>
+                                                    </span>
+                                                </div>
+                                                <select name="roleId" id="roleId" class="form-control form-control-sm"
+                                                    #roleIdRef="ngModel" [(ngModel)]="roleAuthRoleId"
+                                                    (change)="getMenusForRolesAuth()" required>
+                                                    <option [value]="''">---Select Role---</option>
+                                                    <option [value]="item.id" *ngFor="let item of ddlUserRoles">
+                                                        {{item.text}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7 shadow-sm">
+                                <div class="ibox-title border-0 border-bottom">
+                                    <h5><i class="fa fa-info"></i> | Role Authorization</h5>
+                                </div>
+                                <div class="ibox-content text-x-small font-bold pt-2 pb-2 pl-1 pr-1 border-0"
+                                    style="max-height: 450px;overflow-y: scroll;">
+                                    <table class="table table-sm table-borderless table-hover table-responsive-lg">
+                                        <ng-container *ngFor="let m of menusData;let i= index">
+                                            <tr class="text-center bg-dark-blue text-white bg">
+                                                <th colspan="15" title="Mainmenu">{{m.mainmenuName}}</th>
+                                            </tr>
+                                            <tr *ngFor="let sub of m.appSubmenuForPermissions,let j=index">
+                                                <td>
+                                                    <span title="Submenu"
+                                                        [class]="sub.submenuName!= '' ?'label label-info':''">{{sub.submenuName}}</span>
+                                                </td>
+                                                <td>
+                                                    <span title="Subsubmenu"
+                                                        [class]="sub.subSubmenuName!= '' ?'label label-primary':''">{{sub.subSubmenuName}}</span>
+                                                </td>
+                                                <td [class]="">
+                                                    <span title="Tab"
+                                                        [class]="sub.tabName!= '' ?'label label-warning':''">{{sub.tabName}}</span>
+                                                </td>
+                                                <!-- [class]="checkedRowColor(i,j)?' text-white':''" -->
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'All'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'All'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isAll"
+                                                        (change)="allPermissionChanged(i,j)">
+                                                    All
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Add'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Add'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isAdd"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Add
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Edit'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Edit'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isEdit"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Edit
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Delete'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Delete'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isDelete"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Delete
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Detail'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Detail'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isDetail"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Detail
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Approval'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Approval'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isApproval"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Approval
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Report'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Report'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isReport"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Report
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                        name="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Upload'}}"
+                                                        id="{{sub.submenuName+sub.subSubmenuName+sub.tabName+'Upload'}}"
+                                                        [(ngModel)]="menusData[i].appSubmenuForPermissions[j].isUpload"
+                                                        (change)="permissionChanged(i,j)">
+                                                    Upload
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-x-small mt-2">
+                                <button type="submit" [disabled]="roleIdRef.value==0"
+                                    class="btn btn-sm btn-rounded btn-primary float-right"><i
+                                        class="fa fa-paper-plane"></i> |Submit
+                                    <span [hidden]="!btnRoleAuthMenu" class="spinner-border spinner-border-sm"
+                                        role="status" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<ng-template #userConfigModal let-modal>
+    <div class="modal-header bg-dark-blue text-white">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-success btn-circle 
+    fa fa-globe"></i>
+            | </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #userConfigForm="ngForm" (submit)="1==1">
+        </form>
+    </div>
+</ng-template>

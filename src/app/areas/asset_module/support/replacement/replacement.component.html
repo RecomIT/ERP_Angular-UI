@@ -1,0 +1,180 @@
+
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-1"><i class="fa fa-diamond"></i> | Replacement</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Asset</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Replacement</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-4 col-sm-6 text-x-small">
+        <div class="title-action pt-3">
+            <button type="button" class="btn btn-sm btn-outline-info btn-rounded pull-right"
+                tooltip="Asset Create" (click)="showModal(0)"> <i class="fa fa-plus"></i> | Create
+            </button>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">        
+            <form [formGroup]="searchForm">
+                <div class="ibox">
+                    <div class="ibox-content border-radius-5 pb-2 text-x-small font-bold">
+                        <div class="form-row">
+                            <div class="form-group mb-1 col-md-3 col-sm-12">
+                                <label for="searchByAnything" class="control-label font-bold">Search By Anything</label>
+                                <div class="input-group">
+                                    <input type="text" name="searchByAnything" id="searchByAnything"
+                                        onkeyup="tableFilter('#tbl tbody tr',this)" class="form-control form-control-sm" autofocus
+                                        placeholder="Type here..." />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon  text-dark">
+                                            <i class="icofont-search-2"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-3 col-sm-12">
+                                <label for="searchByEmployee" class="control-label ">Search By
+                                    Employee</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-users"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width: 87%;">
+                                        <ng-select2 [data]="ddlEmployees" name="searchByEmployee"
+                                            [placeholder]="'Select Employee...'" [options]="select2Options"
+                                            [allowClear]="true" formControlName="employeeId">
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-3 col-sm-12">
+                                <label for="" class="control-label">Search By Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="transactionDate" id="transactionDate"
+                                        formControlName="transactionDate" class="form-control form-control-sm bg-white"
+                                        placeholder="Enter Date Range" bsDaterangepicker [bsConfig]="datePickerConfig"
+                                        readonly>
+                                    <div class="input-group-prepend cursor-pointer"
+                                        *ngIf="this.searchForm.get('transactionDate').value != null"
+                                        (click)="this.searchForm.get('transactionDate').setValue(null)">
+                                        <span class="input-group-addon text-dark text-danger">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-3 col-sm-12">
+                                <label for="status" class="control-label">Status</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <select name="status" id="status" class="form-control form-control-sm" formControlName="status">
+                                        <option [value]="''" selected>---Select Status---</option>
+                                        <option [value]="item" *ngFor="let item of ddlStatus">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-sm table-responsive-lg"
+                            id="tbl">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#SL</th>
+                                    <th class="text-center">Employee ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Designation</th>
+                                    <th>Grade</th>
+                                    <th>Department</th>
+                                    <th>Branch</th>
+                                    <th>Job Type</th>
+                                    <th class="text-center">Transaction Date</th>
+                                    <th>Asset Name</th>
+                                    <th>Replace Product Id</th>
+                                    <th>Received Product Id</th>
+                                    <th class="text-center">Status</th>
+                                    <th>Remarks</th>
+                                    <!-- <th class="text-center">Action</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list | paginate: list_pager; let i=index">
+                                    <td class="text-center font-bold">{{i+1+(pageSize*(pageNumber-1))}}</td>
+                                    <td>{{item.employeeCode}}</td>
+                                    <td>{{item.employeeName}}</td>
+                                    <td>{{item.designationName}}</td>
+                                    <td>{{item.gradeName}}</td>
+                                    <td>{{item.departmentName}}</td>
+                                    <td>{{item.branchName}}</td>
+                                    <td>{{item.jobType}}</td>
+                                    <td class="text-center">{{item.transactionDate | date: "dd-MMM-yyyy"}}</td>  
+                                    <td>{{item.assetName}}</td> 
+                                    <td>{{item.replaceProductId}}</td> 
+                                    <td>{{item.receivedProductId}}</td>                                      
+                                    <td class="text-center">{{item.status}}</td> 
+                                    <td>{{item.remarks}}</td>
+                                    <!-- <td class="text-center">
+                                        <button type="button" class="btn btn-sm" (click)="showModal(item.replacementId)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </td> -->
+                                </tr>
+                                <tr *ngIf=" list.length == 0 && list_loading_label == null">
+                                    <td colspan="15" class="text-center">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="list.length == 0 && list_loading_label == ''">
+                                    <td colspan="15" class="text-center font-bold">
+                                        {{list_loading_label}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-end">
+                            <pagination-controls (pageChange)="list_pageChanged($event)" [responsive]="true"
+                                [autoHide]="true" id="list_pager"></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-container *ngIf="showingModal == true">
+    <asset-module-replacement-modal [id]="replacementId" (closeModalEvent)="closeModal($event)">
+    </asset-module-replacement-modal>
+</ng-container>
+
+<!-- <ng-container *ngIf="showingModal == true">
+    <asset-module-replacement-modal [employeeId]="employeeId" [type]="type" (closeModalEvent)="closeModal($event)">
+    </asset-module-replacement-modal>
+</ng-container> -->

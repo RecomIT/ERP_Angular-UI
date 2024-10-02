@@ -1,0 +1,24 @@
+pagePrivilege: any = null;
+
+private router: Router
+
+, private controlPanelWebService: ControlPanelWebService
+
+this.checkUserPrivilege("DailyAttendanceComponent");
+
+checkUserPrivilege(component: string) {
+    this.controlPanelWebService.getCheckUserprivilege<any>(component).then((data: any) => {
+      if (data != null) {
+        this.pagePrivilege = data;
+        console.log("pagePrivilege>>", this.pagePrivilege)
+      }
+      else {
+        this.router.navigate(['/areas/unauthorized']);
+      }
+    }).catch((error) => {
+      if (error instanceof HttpErrorResponse) {
+        console.log("error>>", error.error)
+      }
+      this.router.navigate(['/areas/unauthorized']);
+    })
+  }

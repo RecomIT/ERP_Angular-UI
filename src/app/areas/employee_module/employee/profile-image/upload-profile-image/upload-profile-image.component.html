@@ -1,0 +1,45 @@
+<ng-template #uploadProfileImageModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-ui-image pr-1 fa-1x border-right"></i> Set Your Profile Image
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="uploadForm" (ngSubmit)="submitForm()">
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group col-md-12 col-sm-12">
+                    <div class="contact-box border-0 center-version text-center">
+                        <img [src]="imagePath" class="img-lg rounded-circle circle-border" />
+                    </div>
+                </div>
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="file">
+                        <span style="font-size: 10px;">(Image Format: JPG,JPEG, PNG , Max size: 200KB)</span>
+                    </label>
+                    <div class="text-danger">
+                        File size must be less then or equal 200 KB.
+                    </div>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input id="file" type="file" class="custom-file-input" name="file"
+                                (change)="fileUpload($event)" accept="image/png, image/jpeg" formContronlName="file">
+                            <label class="custom-file-label" for="file">
+                                {{uploadFileName}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary"
+                [disabled]="this.uploadForm.invalid">
+                <i class="fa fa-paper-plane"></i> | Submit
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                (click)="closeModal('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+</ng-template>

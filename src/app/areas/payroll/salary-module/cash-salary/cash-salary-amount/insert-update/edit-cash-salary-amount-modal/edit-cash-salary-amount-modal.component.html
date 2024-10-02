@@ -1,0 +1,99 @@
+<ng-template #editCashSalaryModal let-modal>    
+    <div class="modal-header">
+        <h4 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-users-alt-4 pr-1 fa-1x border-right"></i> Edit Upload Cash Salary
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="uplaodCashSalaryEditForm" (ngSubmit)="updateUploadCashSalary()">             
+            <div class="modal-body">      
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </div>
+                            <div style="width:80%">
+                                <ng-select2 [data]="ddlEmployees" name="employees"
+                                id="searchByEmployee" formControlName="employeeId"
+                                [placeholder]="'Employee...'" [options]="select2Config"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <div style="width:80%">
+                                <ng-select2 [data]="ddlCashSalaryHead" name="cashSalaryHeadId"
+                                    formControlName="cashSalaryHeadId" [placeholder]="'Select Cash Head...'"
+                                    [options]="select2Options" [allowClear]="true" required>
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-prepend">
+                                <select name="salaryMonth" class="form-control form-control-sm"
+                                    formControlName="salaryMonth">
+                                    <option [value]="''">---Select Month---</option>
+                                    <option [value]="item.monthNo" *ngFor="let item of ddlMonths">{{item.month}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="input-group-prepend">
+                                <select name="salaryYear" class="form-control form-control-sm"
+                                    formControlName="salaryYear">
+                                    <option [value]="''">---Select Year---</option>
+                                    <option [value]="item" *ngFor="let item of ddlYears">{{item}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i>&#2547;</i>
+                                </span>
+                            </div>
+                            <input type="number" formControlName="amount" class="form-control form-control-sm"
+                            name="amount">      
+                        </div>
+                    </div>
+                </div>
+            </div>  
+     
+            <div class="modal-footer p-2">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="uplaodCashSalaryEditForm.invalid || btnEditCashSalary">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnEditCashSalary" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnEditCashSalary"
+                    (click)="closeModal('Cross click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+</ng-template>

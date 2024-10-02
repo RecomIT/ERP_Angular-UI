@@ -1,0 +1,400 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-4 col-sm-6">
+        <h2 @slideInUp class="mt-2">Attendance Process</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Attendance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Attendance Process</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-8 col-sm-6">
+        <div class="title-action">
+            <button type="button" class="btn btn-success btn-outline btn-rounded"
+                (click)="openAttendanceProcessModal()"><i class="fa fa-cogs"></i>
+                | Attendance Process </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3 animated fadeInRight">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 pt-3 pb-2 text-x-small font-bold text-dark">
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar-times-o"></i>
+                                    </span></div>
+                                <select name="searchByMonth" id="searchByMonth" class="form-control form-control-sm"
+                                    #searchByMonthRef="ngModel" [(ngModel)]="searchByMonth"
+                                    (change)="getAttendanceProcessInfo()">
+                                    <option [value]="0" selected>---Search By Month---</option>
+                                    <option [value]="1">January</option>
+                                    <option [value]="2">February</option>
+                                    <option [value]="3">March</option>
+                                    <option [value]="4">April</option>
+                                    <option [value]="5">May</option>
+                                    <option [value]="6">June</option>
+                                    <option [value]="7">July</option>
+                                    <option [value]="8">August</option>
+                                    <option [value]="9">September</option>
+                                    <option [value]="10">October</option>
+                                    <option [value]="11">November</option>
+                                    <option [value]="12">December</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar-times-o"></i>
+                                    </span>
+                                </div>
+                                <select name="year" id="year" class="form-control form-control-sm"
+                                    #searchByYearRef="ngModel" [(ngModel)]="searchByYear"
+                                    (change)="getAttendanceProcessInfo()">
+                                    <option [value]="0" selected>---Search By Year---</option>
+                                    <option [value]="item" *ngFor="let item of year">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 hidden">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button type="button" class="btn btn-primary btn-outline btn-rounded pull-right"
+                                (click)="openAttendanceRowDataUpload()"><i class="fa fa-file-excel-o"></i> | Upload Excel File</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 pt-3 pb-2 text-x-small font-bold text-dark">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>#SL</th>
+                                    <th>Month</th>
+                                    <th>Status</th>
+                                    <th>Locked/Unlocked Date</th>
+                                    <th>Process Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of listOfAttendanceInfo; let i =index">
+                                    <td class="text-center font-bold">{{i+1}}</td>
+                                    <td class="text-center">{{item.monthYear}}</td>
+                                    <td class="text-center">
+                                        <span [class]="(item.isLocked ? 'label label-success':'label label-primary')">
+                                            <i [class]="item.isLocked ? 'fa fa-lock':'fa fa-unlock-alt'"></i>
+                                            {{item.isLocked? "Locked":"Unlocked"}}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">{{item.lockedDate == null ? "N/A": (item.isLocked ?
+                                        (item.lockedDate | date:"dd MMMM yyyy"): (item.updatedDate | date:"dd MMMM
+                                        yyyy")) }}</td>
+                                    <td class="text-center">
+                                        {{item.updatedDate == null ? (item.createdDate | date:"dd MMMM yyyy") :
+                                        (item.updatedDate | date:"dd MMMM yyyy") }}
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" [disabled]="disabledAllLocked"
+                                            class="btn btn-xs text-success"
+                                            [class]="item.isLocked ? 'text-success':'text-primary'"
+                                            (click)="LockUnlockAttendanceProcess(item.attendanceProcessId,item.month, item.year,(item.isLocked? false: true))">
+                                            <i class="fa fa-lock" aria-hidden="true" *ngIf="item.isLocked"
+                                                title="Unlock Process"></i>
+                                            <i class="fa fa-unlock-alt" aria-hidden="true" *ngIf="!item.isLocked"
+                                                title="Lock Process"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="listOfAttendanceInfo.length ==0 && attendanceInfoDTLabel == null">
+                                    <td colspan="20" class="text-center">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </td>
+                                </tr>
+                                <tr *ngIf=" listOfAttendanceInfo.length ==0 && attendanceInfoDTLabel != null">
+                                    <td colspan="20" class="text-center font-bold">
+                                        {{attendanceInfoDTLabel}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #attendanceProcessModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-cogs" aria-hidden="true"></i>| Attendance Process
+        </h4>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="attendanceProcessForm" (ngSubmit)="runAttendanceProcess()">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7 col-sm-12">
+                        <div class="form-row">
+                            <div class="form-group col-md-12 col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-calendar-times-o"></i>
+                                        </span>
+                                    </div>
+                                    <select name="month" id="month" formControlName="month" (blur)="formErrorLogged()"
+                                        class="form-control form-control-sm">
+                                        <option [value]="0" selected>---Select Month---</option>
+                                        <option [value]="1">January</option>
+                                        <option [value]="2">February</option>
+                                        <option [value]="3">March</option>
+                                        <option [value]="4">April</option>
+                                        <option [value]="5">May</option>
+                                        <option [value]="6">June</option>
+                                        <option [value]="7">July</option>
+                                        <option [value]="8">August</option>
+                                        <option [value]="9">September</option>
+                                        <option [value]="10">October</option>
+                                        <option [value]="11">November</option>
+                                        <option [value]="12">December</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors.month" class="text-danger">
+                                    <span><small>{{formErrors.month}}</small></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12 col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-calendar-times-o"></i>
+                                        </span>
+                                    </div>
+                                    <select name="year" id="year" formControlName="year"
+                                        class="form-control form-control-sm" (blur)="formErrorLogged()">
+                                        <option [value]="0" selected>---Select Year---</option>
+                                        <option [value]="item" *ngFor="let item of year">{{item}}</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="formErrors.year" class="text-danger">
+                                    <span><small>{{formErrors.year}}</small></span>
+                                </div>
+                            </div>
+                            <ng-container formGroupName="dateGroup">
+                                <div class="form-group col-md-12 col-sm-12"
+                                    [hidden]="attendanceProcessForm.get('month').value == 0 ||  attendanceProcessForm.get('year').value == 0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm bg-white" id="fromDate"
+                                            name="fromDate" formControlName="fromDate" readonly bsDatepicker
+                                            [bsConfig]="datePickerConfig" placeholder="Enter From Date"
+                                            (blur)="formErrorLogged()" autocomplete="off">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            *ngIf="attendanceProcessForm.get('dateGroup').get('fromDate').value != null"
+                                            (click)="[attendanceProcessForm.get('dateGroup').get('fromDate').setValue(null)]">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="formErrors.fromDate" class="text-danger">
+                                        <span><small>{{formErrors.fromDate}}</small></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12" [hidden]="attendanceProcessForm.get('month').value == 0 || 
+                                attendanceProcessForm.get('year').value == 0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm bg-white" id="toDate"
+                                            name="toDate" formControlName="toDate" readonly bsDatepicker
+                                            (blur)="formErrorLogged()" [bsConfig]="datePickerConfig"
+                                            placeholder="Enter To Date" autocomplete="off">
+                                        <div class="input-group-prepend cursor-pointer"
+                                            *ngIf="attendanceProcessForm.get('dateGroup').get('toDate').value != null"
+                                            (click)="[attendanceProcessForm.get('dateGroup').get('toDate').setValue(null)]">
+                                            <span class="input-group-addon text-danger">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="formErrors.toDate" class="text-danger">
+                                        <span><small>{{formErrors.toDate}}</small></span>
+                                    </div>
+                                    <div *ngIf="formErrors.dateGroup" class="text-danger">
+                                        <span><small>{{formErrors.dateGroup}}</small></span>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-12">
+                        <div class="form-group col-md-12 col-sm-12 p-0">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm 
+                    font-bold search-box" placeholder="Search By Anything" id="empfilter"
+                                    onkeyup="tableFilter('#tblEmp tbody tr',this)" />
+                                <div class="input-group-prepend cursor-pointer clearSearch">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 p-0  h-max-300">
+                            <table class="table table-sm table-striped table-hover table-responsive-sm" id="tblEmp">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" formControlName="checkAll"
+                                                (change)="allEmployeeChecked()">
+                                        </th>
+                                        <th>Employee Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr formArrayName="employees" *ngFor="let item of formArray; let i = index">
+                                        <ng-container [formGroupName]="i">
+                                            <td>
+                                                <input type="checkbox" formControlName="isChecked"
+                                                    (change)="checkSingleEmployee()">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" formControlName="employeeName">
+                                                <input type="hidden" formControlName="employeeId">
+                                                <span>{{item.get('employeeName').value}}</span> &nbsp;&nbsp;
+                                                <span
+                                                    [class]="item.get('isActive').value ? 'label label-primary':'label label-warning'">{{item.get('isActive').value
+                                                    ? 'Active':'Inactive'}}</span>
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button class="btn btn-sm btn-success btn-rounded" type="submit"
+                    [disabled]="attendanceProcessForm.invalid || btnAttendanceProcess">
+                    <i class="fa fa-cogs"></i> | Start Process
+                    <span [hidden]="!btnAttendanceProcess" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnAttendanceProcess"
+                    (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #uploadAttendanceRowModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>| Upload Attendance Row Data
+        </h4>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="uploadAttendanceForm" (ngSubmit)="submitExcelFile()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="processDate" class="control-label font-bold">Process Date</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm bg-white" id="processDate" name="processDate"
+                            formControlName="processDate" readonly bsDatepicker [bsConfig]="datePickerConfig"
+                            placeholder="Enter From Date" autocomplete="off" [class]="this.uploadAttendanceForm.get('processDate').value != null ? 'border-right-0':''">
+                            <div class="input-group-prepend cursor-pointer border-left-0" *ngIf="this.uploadAttendanceForm.get('processDate').value != null" (click)="[this.uploadAttendanceForm.get('processDate').setValue(null)]">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="excelFile" class="control-label font-bold" style="visibility: hidden;">Excel</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input id="excelFile" type="file" class="custom-file-input" name="excelFile"
+                                    (change)="excelFileUpload($event)" accept=".xls,.xlsx" formContronlName="excelFile">
+                                <label class="custom-file-label" for="excelFileUpload">
+                                    {{excelFileName}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="excelJsonData != null">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered table-responsive-lg">
+                                <thead >
+                                    <th class="text-center" *ngFor="let item of this.excelColumn">{{item}}</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let i of this.excelJsonData">
+                                        <td *ngFor="let j of i" class="text-center">
+                                            {{j}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <app-excel-view [excelColumn]="excelColumn" [excelJsonData]="excelJsonData"></app-excel-view>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-outline btn-rounded" type="submit" [disabled]="this.uploadAttendanceForm.invalid">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Upload File
+                    <span [hidden]="!btnUploadExcel" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button" (click)="modal.close('Cancel click')" [disabled]="btnUploadExcel">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

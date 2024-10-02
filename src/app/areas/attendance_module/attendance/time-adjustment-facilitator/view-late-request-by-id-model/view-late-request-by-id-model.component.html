@@ -1,0 +1,96 @@
+<ng-template #lateConsiderationDetailById let-modal>
+    
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-users-alt-4 pr-1 fa-1x border-right"></i> {{modalTitle}}
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+
+    <form [formGroup]="ViewAndCheckLateCosideratioForm" >
+        
+        <div class="modal-body">
+            <div class="full-name font-weight-bold">
+                <strong class="d-block">Employee Code: {{ employeeCode }}</strong>
+               
+              </div>
+             <div class="employee-code font-weight-bold">
+                <strong class="d-block">Employee Name: {{ fullName }}</strong>
+                   
+              </div>
+         
+             
+              
+            <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="info">
+                <thead>
+                    
+              <tr>
+                <th>#SL</th>
+                <th>Requested For Date</th>
+                <th>InMinute</th>
+                <th>Reason</th>
+                <th>Other Reason</th>              
+                <th>Status</th>
+               
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let detailFormGroup of formArray; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ detailFormGroup.get('requestedForDate').value | date: 'dd-MMMM-yyyy' }}</td>
+                <td>{{ detailFormGroup.get('inMinute').value }}</td>
+                <td>{{ detailFormGroup.get('reason').value }}</td>
+                <td>{{ detailFormGroup.get('otherReason').value }}</td>
+              
+                <td>
+                    <span class="label label-warning" *ngIf="detailFormGroup.get('status').value === 'Pending'">
+                      {{ detailFormGroup.get('status').value + '...' }}
+                    </span>
+                    <span class="label label-primary" *ngIf="detailFormGroup.get('status').value === 'Approved'">
+                      <i class="fa fa-check"></i> {{ detailFormGroup.get('status').value }}
+                    </span>
+                    <span class="label label-danger" *ngIf="detailFormGroup.get('status').value === 'Rejected'">
+                      <i class="fa fa-times"></i> {{ detailFormGroup.get('status').value }}
+                    </span>
+                    <span class="label label-info" *ngIf="detailFormGroup.get('status').value === 'Recheck'">
+                      <i class="fa fa-backward"></i> {{ detailFormGroup.get('status').value }}
+                    </span>
+                  </td>
+                 <!-- <td>
+                    <div>
+                        <label>
+                          <input [formControl]="detailFormGroup.get('approve')" type="checkbox" (change)="handleCheckboxChange(detailFormGroup, 'approve')"> Approve
+                        </label>
+                        <label>
+                          <input [formControl]="detailFormGroup.get('reject')" type="checkbox" (change)="handleCheckboxChange(detailFormGroup, 'reject')"> Reject
+                        </label>
+                        <label>
+                          <input [formControl]="detailFormGroup.get('recheck')" type="checkbox" (change)="handleCheckboxChange(detailFormGroup, 'recheck')"> Recheck
+                        </label>
+                      </div>
+                  
+                 </td> 
+                  
+                    <td>
+                    
+                    <textarea [formControl]="detailFormGroup.get('comment')" placeholder="Comment" *ngIf="detailFormGroup.get('reject').value || detailFormGroup.get('recheck').value"></textarea>
+                  </td> -->
+                
+              </tr>
+            </tbody>
+          </table>       
+        
+
+      
+        <!-- <button type="submit">Submit</button> -->
+        <!-- <button type="submit" class="btn btn-sm btn-primary" >
+            <i class="fa fa-paper-plane"></i> | Submit 
+            <span [hidden]="!btnApproval" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button> -->
+        </div>       
+    </form>
+</ng-template>
+
+

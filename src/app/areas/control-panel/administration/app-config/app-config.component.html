@@ -1,0 +1,1085 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12 col-12">
+        <h2 @slideInUp class="mt-2">App Config</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Administration</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>App Config</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight pt-2">
+    <div class="row m-t-sm text-x-small">
+        <div class="col-md-12 mb-4 mb-sm-4">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a class="nav-link active" data-toggle="tab" href="#tab-1">
+                            <i class="fa fa-desktop"></i>| Applictions</a>
+                    </li>
+                    <li><a class="nav-link" data-toggle="tab" href="#tab-2">
+                            <i class="fa fa-ellipsis-h"></i>| Modules </a>
+                    </li>
+                    <li><a class="nav-link" data-toggle="tab" href="#tab-3">
+                            <i class="fa fa-th-list"></i>| Mainmenu </a>
+                    </li>
+                    <li><a class="nav-link" data-toggle="tab" href="#tab-4">
+                            <i class="fa fa-list-alt"></i>| Submenu </a>
+                    </li>
+                    <li><a class="nav-link" data-toggle="tab" href="#tab-5">
+                            <i class="fa fa-pagelines"></i>| Page Tab</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="panel-body pt-1 pb-1">
+                            <div class="form-group row mb-0">
+                                <div class="col-sm-6 mt-1">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="appFilter"
+                                            onkeyup="tableFilter('#tblApp tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 mt-1">
+                                    <button class="btn btn-sm btn-rounded btn-success float-right"
+                                        (click)="openAppModal()"><i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped table-responsive-lg" id="tblApp">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Name &nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                            <th>Type &nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                            <th>Status</th>
+                                            <th class="hide">Created By</th>
+                                            <th class="hide">Created Date</th>
+                                            <th class="hide">Updated By</th>
+                                            <th class="hide">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of appList;let i=index">
+                                            <td class="font-weight-bold text-center">{{i+1}}</td>
+                                            <td>{{item.applicationName}}</td>
+                                            <td>{{item.applicationType}}</td>
+                                            <td>
+                                                <span
+                                                    [class]="item.isActive? 'label label-primary':'label label-danger'">{{item.isActive
+                                                    ? "Active":"Inactive"}}</span>
+                                            </td>
+                                            <td class="hide">{{item.createdBy}}</td>
+                                            <td class="hide">{{item.createdDate}}</td>
+                                            <td class="hide">{{item.updatedBy}}</td>
+                                            <td class="hide">{{item.updatedBy}}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-xs" (click)="editApplication(item.applicationId)"
+                                                    title="Edit">
+                                                    <i class="fa fa-pencil-square-o-square-o"></i>
+                                                </button> &nbsp;
+                                                <button class="btn btn-xs"
+                                                    (click)="deleteApplication(item.applicationId, item.applicationName)"
+                                                    title="Delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="appList == null" class="text-center">
+                                            <td colspan="8">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                                Loading...
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="appList != null && appList.length == 0"
+                                            class="text-center font-bold">
+                                            <td colspan="9">No data found.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane">
+                        <div class="panel-body pt-1 pb-1">
+                            <div class="form-group row mb-0">
+                                <div class="col-sm-6 mt-1">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm  font-bold"
+                                            placeholder="Search By Anything" id="modulefilter"
+                                            onkeyup="tableFilter('#tblMod tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 mt-1">
+                                    <button class="btn btn-sm btn-rounded btn-success float-right"
+                                        (click)="openModuleModal()"><i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg" id="tblMod">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#SL</th>
+                                        <th>Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                        <th>Application&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                        </th>
+                                        <th>Status</th>
+                                        <th class="hide">Created By</th>
+                                        <th class="hide">Created Date</th>
+                                        <th class="hide">Updated By</th>
+                                        <th class="hide">Updated Date</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of moduleList;let i=index">
+                                        <td class="font-weight-bold text-center">{{i+1}}</td>
+                                        <td>{{item.moduleName}}</td>
+                                        <td>{{item.applicationName}}</td>
+                                        <td><span
+                                                [class]="item.isActive? 'label label-primary':'label label-danger'">{{item.isActive
+                                                ? "Active":"Inactive"}}</span></td>
+                                        <td class="hide">{{item.createdBy}}</td>
+                                        <td class="hide">{{item.createdDate}}</td>
+                                        <td class="hide">{{item.updatedBy}}</td>
+                                        <td class="hide">{{item.updatedDate}}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-xs" (click)="editModule(item.moduleId)" title="Edit">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button> &nbsp;
+                                            <button class="btn btn-xs"
+                                                (click)="deleteModule(item.moduleId, item.moduleName)" title="Delete">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="moduleList == null" class="text-center">
+                                        <td colspan="10">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="moduleList != null && moduleList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="10">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="tab-3" class="tab-pane">
+                        <div class="panel-body pt-1 pb-1">
+                            <div class="form-group row mb-0">
+                                <div class="col-sm-6 mt-1">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm font-bold"
+                                            placeholder="Search By Anything" id="mainmenufilter"
+                                            onkeyup="tableFilter('#tblMm tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 mt-1">
+                                    <button class="btn btn-sm btn-rounded btn-success float-right"
+                                        (click)="openMainmenuModal()"><i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-striped table-responsive-lg" id="tblMm">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                            <th>Short Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Module&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th class="text-center">Sequeance No</th>
+                                            <th>Application&nbsp;<i class="fa fa-sort-amount-asc"
+                                                    aria-hidden="true"></i>
+                                            </th>
+                                            <th>Icon Class&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Icon Color&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Status</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of mainmenuList;let i=index">
+                                            <td class="text-center font-weight-bold">{{i+1}}</td>
+                                            <td>{{item.menuName}}</td>
+                                            <td>{{item.shortName}}</td>
+                                            <td>{{item.moduleName}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-info">
+                                                    {{item.sequenceNo}}
+                                                </span>
+                                            </td>
+                                            <td>{{item.applicationName}}</td>
+                                            <td>{{item.iconClass}}</td>
+                                            <td>{{item.iconColor}}</td>
+                                            <td><span
+                                                    [class]="item.isActive? 'label label-primary':'label label-danger'">{{item.isActive
+                                                    ? "Active":"Inactive"}}</span></td>
+                                            <td class="text-center">
+                                                <button class="btn btn-xs" (click)="editMainmenu(item.mmId)"
+                                                    title="Edit">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button> &nbsp;
+                                                <button class="btn btn-xs"
+                                                    (click)="deleteMainmenu(item.mmId, item.menuName)" title="Delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="mainmenuList == null" class="text-center">
+                                            <td colspan="15">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                                Loading...
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="mainmenuList != null && mainmenuList.length == 0"
+                                            class="text-center font-bold">
+                                            <td colspan="15">No data found.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-4" class="tab-pane">
+                        <div class="panel-body pt-2 pb-2">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-3 col-sm-12 mt-1">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-list-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" placeholder="Search By Submenu Name..."
+                                            name="searchBySubmenuName" id="searchBySubmenuName"
+                                            class="form-control form-control-sm"
+                                            (input)="[submenuPageNo=1,searchInSubmenu()]"
+                                            [(ngModel)]="searchBySubmenu" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-12 mt-1">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-list-alt"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByMainmenu" id="searchByMainmenu"
+                                            class="form-control form-control-sm"
+                                            (change)="[submenuPageNo=1,searchByMainmenu_changed(),searchInSubmenu()]"
+                                            [(ngModel)]="searchByMainmenu">
+                                            <option [value]="0" selected>---Search By Mainmenu---</option>
+                                            <option value="{{mm.mmId}}" *ngFor="let mm of mainmenuList">
+                                                {{mm.menuName+' ['+mm.moduleName+']'}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-12 mt-1">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-list-alt"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByParentSubmenu" id="searchByParentSubmenu"
+                                            class="form-control form-control-sm"
+                                            (change)="[submenuPageNo=1,searchInSubmenu()]"
+                                            [(ngModel)]="searchByParentSubmenu">
+                                            <option [value]="0" selected>---Search By Parent-Submenu---</option>
+                                            <option value="{{item.value}}"
+                                                *ngFor="let item of parentSubmenuList_Searchlist">
+                                                {{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-12 mt-1">
+                                    <button class="btn btn-sm btn-rounded btn-success float-right"
+                                        (click)="openSubmenuModal()"><i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pt-2 pb-2">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblSub">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                            <th>Controller&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Action&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Path&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></th>
+                                            <th>Component&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Mainmenu&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th class="text-center">SequenceNo&nbsp;<i class="fa fa-sort-amount-asc"
+                                                    aria-hidden="true"></i>
+                                            </th>
+                                            <th>Icon Class&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Icon Color&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Status</th>
+                                            <th>Parent Submenu</th>
+                                            <th>Viewable</th>
+                                            <th>Act as Parent</th>
+                                            <th>Has tab</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let sub of submenuList | paginate: submenuConfig; let i = index">
+                                            <td class="text-center font-weight-bold">{{i+1}}</td>
+                                            <td>{{sub.submenuName}}</td>
+                                            <td>{{sub.controllerName}}</td>
+                                            <td>{{sub.actionName}}</td>
+                                            <td>{{sub.path}}</td>
+                                            <td>{{sub.component}}</td>
+                                            <td>{{sub.menuName}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-info">
+                                                    {{sub.menuSequence}}
+                                                </span>
+                                            </td>
+                                            <td>{{sub.iconClass}}</td>
+                                            <td>{{sub.iconColor}}</td>
+                                            <td>
+                                                <span [class]="sub.isActive? 'label label-primary':'label 
+                                    label-danger'">{{sub.isActive
+                                                    ? "Active":"Inactive"}}</span>
+                                            </td>
+                                            <td>{{sub.parentSubmenuId}}</td>
+                                            <td>
+                                                <span
+                                                    [class]="sub.isViewable ? 'label label-primary':'label label-danger'">{{sub.isViewable
+                                                    ? "Yes": "No"}}</span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    [class]="sub.isActAsParent ? 'label label-primary':'label label-danger'">{{sub.isActAsParent
+                                                    ? "Yes": "No"}}</span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    [class]="sub.hasTab? 'label label-primary':'label label-danger'">{{sub.hasTab
+                                                    ? "Yes": "No"}}</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="btn btn-xs" (click)="editSubmenu(sub.submenuId)"
+                                                    title="Edit">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button> &nbsp;
+                                                <button class="btn btn-xs"
+                                                    (click)="deleteSubmenu(sub.submenuId, sub.submenuName)"
+                                                    title="Delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="submenuList == null" class="text-center">
+                                            <td colspan="15">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                                Loading...
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="submenuList != null && submenuList.length == 0"
+                                            class="text-center font-bold">
+                                            <td colspan="15">No data found.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="d-flex justify-content-end">
+                                    <pagination-controls (pageChange)="submenuPageChanged($event)" [responsive]="true"
+                                        [autoHide]="true" id="submenuData"></pagination-controls>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-5" class="tab-pane">
+                        <div class="panel-body  pt-2 pb-2">
+                            <div class="form-group row mb-0">
+                                <div class="col-sm-4 mt-1">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-file-text-o"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" name="searchByPageTabName" id="searchByPageTabName"
+                                            class="form-control form-control-sm" placeholder="Search By Tab Name..."
+                                            [(ngModel)]="searchByTabname" (input)="[tabPageNo=1,searchInPageTab()]">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 mt-1">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-list-alt"></i>
+                                            </div>
+                                        </div>
+                                        <select name="searchBySubmenuInPageTab" id="searchBySubmenuInPageTab"
+                                            class="form-control form-control-sm" [(ngModel)]="searchByPagetabSubmenu"
+                                            (change)="[tabPageNo=1,searchInPageTab()]">
+                                            <option [value]="0">---Search By Submenu---</option>
+                                            <option [value]="pts.value" *ngFor="let pts of pageTabSubmenusForSearch">
+                                                {{pts.text}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 mt-1">
+                                    <button class="btn btn-sm btn-rounded btn-success float-right"
+                                        (click)="openPagetabModal()">
+                                        <i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pt-2 pb-2">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblPt">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Tab Name&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Submenu Name&nbsp;<i class="fa fa-sort-amount-asc"
+                                                    aria-hidden="true"></i>
+                                            </th>
+                                            <th>Icon Class&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Icon Color&nbsp;<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                            </th>
+                                            <th>Status</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let t of pageTabList | paginate:pageTabConfig ; let i =index">
+                                            <td class="font-weight-bold text-center">{{i+1}}</td>
+                                            <td>{{t.tabName}}</td>
+                                            <td>{{t.submenuName}}</td>
+                                            <td>{{t.iconClass}}</td>
+                                            <td>{{t.iconColor}}</td>
+                                            <td>
+                                                <span [class]="t.isActive? 'label label-primary':'label label-danger'">
+                                                    {{t.isActive? "Active":"Inactive"}}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="btn btn-xs" (click)="editPageTab(t.tabId)" title="Edit">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button> &nbsp;
+                                                <button class="btn btn-xs" (click)="deletePageTab(t.tabId, t.tabName)"
+                                                    title="Delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="pageTabList == null" class="text-center">
+                                            <td colspan="15">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                                Loading...
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="pageTabList != null && pageTabList.length == 0"
+                                            class="text-center font-bold">
+                                            <td colspan="15">No data found.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="pagetabPageChanged($event)" [responsive]="true"
+                                    [autoHide]="true" id="pageTabData"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #appModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small">
+        <form #appForm="ngForm" (submit)="submitApplication()">
+            <input type="hidden" name="applicationId" id="applicationId" [value]="app.applicationId"
+                #applicationId="ngModel" [(ngModel)]="app.applicationId" />
+            <div class="modal-body">
+                <div class="form-row ">
+                    <div class="form-group col-md-6">
+                        <label for="applicationName" class="control-label font-bold">Application Name
+                            <div class="form-check abc-checkbox abc-checkbox-success form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="isActive" name="isActive"
+                                    [value]="app.isActive" [checked]="app.isActive" #appIsActive="ngModel"
+                                    [(ngModel)]="app.isActive">
+                            </div>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            </div>
+                            <input type="text" name="applicationName" id="applicationName"
+                                class="form-control form-control-sm " required #applicationName="ngModel"
+                                [(ngModel)]="app.applicationName" />
+                        </div>
+                        <span [hidden]="applicationName.valid || applicationName.pristine"
+                            class="text-danger font-bold">Name is required</span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="applicationType" class="control-label font-bold">Application Type
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon"><i class="fa fa-list-ul"></i></span>
+                            </div>
+                            <select name="applicationType" id="applicationType" class="form-control form-control-sm "
+                                required #applicationType="ngModel" [(ngModel)]="app.applicationType">
+                                <option value="">---Select Type---</option>
+                                <option [value]="at" *ngFor="let at of appTypes">{{at}}</option>
+                            </select>
+                        </div>
+                        <span [hidden]="applicationType.valid || applicationType.pristine"
+                            class="text-danger er font-bold">Type is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary" [disabled]="appForm.invalid"><i
+                        class="fa fa-check"></i> Submit</button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i>Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #moduleModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="text-x-small">
+        <form #moduleForm="ngForm" (submit)="submitModule()">
+            <input type="hidden" name="moduleId" id="moduleId" [value]="module.moduleId" #moduleId="ngModel"
+                [(ngModel)]="module.moduleId" />
+            <div class="modal-body">
+                <div class="form-row ">
+                    <div class="form-group col-md-6">
+                        <label for="moduleName" class="control-label font-bold">Module Name
+                            <div class="form-check abc-checkbox abc-checkbox-success form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="isModuleActive"
+                                    name="isModuleActive" [value]="module.isActive" [checked]="module.isActive"
+                                    #moduleIsActive="ngModel" [(ngModel)]="module.isActive">
+                            </div>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
+                            </div>
+                            <input type="text" name="moduleName" id="moduleName" class="form-control form-control-sm "
+                                required #moduleName="ngModel" [(ngModel)]="module.moduleName" />
+                        </div>
+                        <span [hidden]="moduleName.valid || moduleName.pristine" class="text-danger er font-bold">Name
+                            is
+                            required</span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="applicationId" class="control-label font-bold">Application
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            </div>
+                            <select name="moduleAppId" id="moduleAppId" class="form-control form-control-sm " required
+                                #moduleAppId="ngModel" [(ngModel)]="module.applicationId">
+                                <option [value]="0" selected>---Select Application---</option>
+                                <option [value]="al.applicationId" *ngFor="let al of appList">{{al.applicationName}}
+                                </option>
+                            </select>
+                        </div>
+                        <span [hidden]="(moduleAppId.value == 0) || moduleAppId.valid || moduleAppId.pristine"
+                            class="text-danger er font-bold">Application is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="moduleForm.invalid || (moduleAppId.value == 0)"><i class="fa fa-check"></i>
+                    Submit</button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i>Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #mainmenuModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="text-x-small">
+        <form #mainmenuForm="ngForm" (submit)="submitMainmenu()">
+            <input type="hidden" name="mmId" id="mmId" [value]="mainmenu.mmId" #mmId="ngModel"
+                [(ngModel)]="mainmenu.mmId" />
+            <div class="modal-body">
+                <div class="form-row ">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="mainmenuName" class="control-label font-bold">Mainmenu Name
+                            <input class="form-check-input ml-2" type="checkbox" id="isMainmenuActive"
+                                name="isMainmenuActive" [value]="mainmenu.isActive" [checked]="mainmenu.isActive"
+                                #isSubmenuActive="ngModel" [(ngModel)]="mainmenu.isActive">
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon"><i class="fa fa-th-list"></i></span>
+                            </div>
+                            <input type="text" name="mainmenuName" id="mainmenuName"
+                                class="form-control form-control-sm " required #mainmenuName="ngModel"
+                                [(ngModel)]="mainmenu.menuName" />
+                        </div>
+                        <span [hidden]="mainmenuName.valid || mainmenuName.pristine"
+                            class="text-danger er font-bold">Name
+                            is required</span>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="mainmenuName" class="control-label font-bold">Sequeance No
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon"><i class="fa fa-th-list"></i></span>
+                            </div>
+                            <input type="number" name="sequenceNo" id="sequenceNo" class="form-control form-control-sm "
+                                #sequenceNo="ngModel" [(ngModel)]="mainmenu.sequenceNo" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="mainmenuModule" class="control-label font-bold">
+                            Module<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </span>
+                            </div>
+                            <select name="mainmenuModule" id="mainmenuModule" class="form-control form-control-sm "
+                                #mainmenuModule="ngModel" [(ngModel)]="mainmenu.mId" required>
+                                <option [value]="0" selected>---Select Module---</option>
+                                <option value="{{m.moduleId}}" *ngFor="let m of moduleList">{{m.moduleName}}</option>
+                            </select>
+                        </div>
+                        <span [hidden]="(mainmenuModule.value == 0) || mainmenuModule.valid || mainmenuModule.pristine"
+                            class="text-danger er font-bold">Module is required</span>
+                    </div>
+                </div>
+                <div class="form-row ">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="shortName" class="control-label font-bold">Short Name</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="shortName" name="shortName"
+                                #shortName="ngModel" [(ngModel)]="mainmenu.shortName" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="iconClass" class="control-label font-bold">Icon Class</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-css3" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="iconClass" id="iconClass" #iconClass="ngModel"
+                                [(ngModel)]="mainmenu.iconClass" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="iconColor" class="control-label font-bold">Icon Color</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-paint-brush" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="color" name="iconColor" id="iconColor" #iconClass="ngModel"
+                                [(ngModel)]="mainmenu.iconColor" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="(mainmenuModule.value == 0) || mainmenuForm.invalid || (mainmenuForm.value == 0)"><i
+                        class="fa fa-check"></i> Submit</button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i>Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #submenuModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="text-x-small">
+        <form #submenuForm="ngForm" (submit)="submitSubmenu()">
+            <input type="hidden" name="subMenuId" id="subMenuId" [value]="submenu.submenuId" #mmId="ngModel"
+                [(ngModel)]="submenu.submenuId" />
+            <div class="modal-body">
+                <div class="form-row ">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="subMenuName" class="control-label font-weight-bold">Submenu Name
+                            <input class="form-check-input ml-2" type="checkbox" id="isSubmenuActive"
+                                name="isSubmenuActive" [value]="submenu.isActive" [checked]="submenu.isActive"
+                                #isSubmenuActive="ngModel" [(ngModel)]="submenu.isActive">
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-list-alt"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="subMenuName" id="subMenuName" class="form-control form-control-sm "
+                                #subMenuName="ngModel" [(ngModel)]="submenu.submenuName" autocomplete="off" required />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="controllerName" class="control-label font-weight-bold">Controller</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="controllerName" id="controllerName"
+                                class="form-control form-control-sm" #controllerName="ngModel"
+                                [(ngModel)]="submenu.controllerName" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="actionName" class="control-label font-weight-bold">Action</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="actionName" id="actionName" class="form-control form-control-sm"
+                                #actionName="ngModel" [(ngModel)]="submenu.actionName" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row ">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="path" class="control-label font-weight-bold">Path <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-road" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="path" id="path" class="form-control form-control-sm" required
+                                #path="ngModel" [(ngModel)]="submenu.path" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="component" class="control-label font-weight-bold">Component</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-bandcamp" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="component" id="component" class="form-control form-control-sm"
+                                #component="ngModel" [(ngModel)]="submenu.component" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="subMainmenuId" class="control-label font-bold">Mainmenu <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-th-list"></i>
+                                </span>
+                            </div>
+                            <select name="subMainmenuId" id="subMainmenuId" class="form-control form-control-sm"
+                                #subMainmenuId="ngModel" [(ngModel)]="submenu.mmId" (change)="mainmenu_changed()">
+                                <option [value]="0" selected>---Select Mainmenu---</option>
+                                <option value="{{mm.mmId}}" *ngFor="let mm of mainmenuList">
+                                    {{mm.menuName+' ['+mm.moduleName+']'}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row ">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="submenuIconClass" class="control-label font-bold">Icon Class</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-css3" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="submenuIconClass" id="submenuIconClass" #submenuIconClass="ngModel"
+                                [(ngModel)]="submenu.iconClass" class="form-control form-control-sm"
+                                autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="submenuIconColor" class="control-label font-bold">Icon Color</ label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-paint-brush" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="color" name="submenuIconColor" id="submenuIconColor"
+                                    #submenuIconColor="ngModel" [(ngModel)]="submenu.iconColor"
+                                    class="form-control form-control-sm" autocomplete="off" />
+                            </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="parentSubmenuId" class="control-label font-bold">Parent Submenu</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-list-alt"></i>
+                                </span>
+                            </div>
+                            <select name="parentSubmenuId" id="parentSubmenuId" class="form-control form-control-sm"
+                                [(ngModel)]="submenu.parentSubmenuId" #parentSubmenuId="ngModel"
+                                (change)="SubmenuActAsParent('select',(submenu.parentSubmenuId > 0))">
+                                <option [value]="0" selected>---Select Parent---</option>
+                                <option value="{{ps.value}}" *ngFor="let ps of parentSubmenus">{{ps.text}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm center">
+                                <input type="checkbox" name="isViewable" id="isViewable" [value]="submenu.isViewable"
+                                    [checked]="submenu.isViewable" #isViewable="ngModel"
+                                    [(ngModel)]="submenu.isViewable" />&nbsp;<strong>Is Viewable?</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm center">
+                                <input type="checkbox" name="isActAsParent" id="isActAsParent"
+                                    [value]="submenu.isActAsParent" [checked]="submenu.isActAsParent"
+                                    #isActAsParent="ngModel" [(ngModel)]="submenu.isActAsParent"
+                                    (change)="SubmenuActAsParent('checkbox',submenu.isActAsParent)" />
+                                &nbsp;<strong>Is act as parent?</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm center">
+                                <input type="checkbox" name="hasTab" id="hasTab" [value]="submenu.hasTab"
+                                    [checked]="submenu.hasTab" #hasTab="ngModel" [(ngModel)]="submenu.hasTab" />
+                                &nbsp;<strong>Has Tab?</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="menuSequence" class="control-label font-bold">Sequence No</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-paint-brush" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="number" name="menuSequence" id="sequenceNo" #menuSequence="ngModel"
+                                [(ngModel)]="submenu.menuSequence" class="form-control form-control-sm"
+                                autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary" [disabled]="(subMainmenuId.value == 0) || submenuForm.invalid || 
+(submenuForm.value == 0)"><i class="fa fa-check"></i> Submit</button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel 
+click')"><i class="fa fa-times"></i>Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #pageTabModal let-modal>
+    <div class="modal-header bg-dark-blue">
+        <h4 class="modal-title">{{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="text-x-small">
+        <form #pageTabForm="ngForm" (submit)="SubmitPageTab()">
+            <input type="hidden" name="pageTabId" id="pageTabId" [value]="pageTab.tabId" #mmId="ngModel"
+                [(ngModel)]="pageTab.tabId" />
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="pageTabName" class="control-label font-bold">Tab Name
+                            <div class="form-check abc-checkbox abc-checkbox-success form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="isActive" name="isActive"
+                                    [value]="pageTab.isActive" [checked]="pageTab.isActive" #pageTabIsActive="ngModel"
+                                    [(ngModel)]="pageTab.isActive">
+                            </div>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="pageTabName" id="pageTabName" #pageTabName="ngModel"
+                                [(ngModel)]="pageTab.tabName" class="form-control form-control-sm" required
+                                autocomplete="off" />
+                        </div>
+                        <span class="text-danger" [hidden]="pageTabName.valid || pageTabName.pristine">Name is
+                            required</span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="pageTabSubmenuId" class="control-label font-bold">Submenu <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-list-alt"></i>
+                                </span>
+                            </div>
+                            <select id="pageTabSubmenuId" name="pageTabSubmenuId" class="form-control form-control-sm"
+                                #pageTabSubmenuId="ngModel" [(ngModel)]="pageTab.submenuId" required>
+                                <option [value]="0" selected>---Select Submenu---</option>
+                                <option [value]="pts.value" *ngFor="let pts of pageTabSubmenus">
+                                    {{pts.text}}</option>
+                            </select>
+                        </div>
+                        <span
+                            [hidden]="(pageTabSubmenuId.value == 0) || pageTabSubmenuId.valid || pageTabSubmenuId.pristine"
+                            class="text-danger er font-bold">Submenu is required</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="" class="control-label font-bold">Icon Class</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-css3"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="pageTabIconClass" id="pageTabIconClass"
+                                class="form-control form-control-sm" #pageTabIconClass="ngModel"
+                                [(ngModel)]="pageTab.iconClass" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="" class="control-label font-bold">Icon Color</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-paint-brush"></i>
+                                </span>
+                            </div>
+                            <input type="color" name="pageTabIconColor" id="pageTabIconColor"
+                                class="form-control form-control-sm" #pageTabIconColor="ngModel"
+                                [(ngModel)]="pageTab.iconColor" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="(pageTabSubmenuId.value == 0) || pageTabForm.invalid || (pageTabForm.value == 0)">
+                    <i class="fa fa-check"></i> Submit</button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

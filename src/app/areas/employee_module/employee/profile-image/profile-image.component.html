@@ -1,0 +1,26 @@
+<div class="profile-image ">
+    <div class="align-middle rounded-circle circle-border position-relative image-overlay-hover">
+        <ng-container *ngIf="data != null && data.imagePath !=''">
+            <img src="{{data.imagePath}}" class="rounded-circle circle-border" onerror="this.onerror=null; this.src='assets/img/user.png'" alt="" alt="profile">
+        </ng-container>
+        <ng-container *ngIf="data != null && data.imagePath ==''">
+           
+            <ng-container *ngIf="data != null && data.gender =='Male'">
+                <img src="assets/img/male.png" onerror="this.onerror=null; this.src='assets/img/user.png'" class="rounded-circle circle-border" alt="profile">
+            </ng-container>
+            <ng-container *ngIf="data != null && data.gender =='Female'">
+                <img src="assets/img/female.png" onerror="this.onerror=null; this.src='assets/img/female.png'" class="rounded-circle circle-border" alt="profile">
+            </ng-container>
+            <ng-container *ngIf="data != null && data.gender ==''">
+                <img src="assets/img/user.png" onerror="this.onerror=null; this.src='assets/img/user.png'" class="rounded-circle circle-border" alt="profile">
+            </ng-container>
+        </ng-container>
+        <div class="position-absolute rounded-circle circle-border cursor-pointer text-center align-middle text-white bg-dark image-overlay" *ngIf="showImageUploder" (click)="openModal()" >
+            <div class="image-overlay-text"><i class="fa fa-camera fa-2x"></i></div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showModal == true && data != null">
+    <app-employee-module-upload-profile-image [data]="data" (closeModalEvent)="closeModal($event)"></app-employee-module-upload-profile-image>
+</ng-container>

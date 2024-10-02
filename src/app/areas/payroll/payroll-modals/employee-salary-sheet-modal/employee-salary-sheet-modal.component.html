@@ -1,0 +1,29 @@
+<ng-template #downloadEmployeeSalarySheet let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-arrow-down" aria-hidden="true"></i>| Download Salary Sheet
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group col-md-12 col-sm-12">
+                    <input type="text" name="searchByDate" id="searchByDate"
+                    class="form-control form-control-sm bg-white" placeholder="Select Range of Date ..."
+                    bsDaterangepicker #dateRangeRef="ngModel" [(ngModel)]="dateRange"
+                    autocomplete="off" readonly [bsConfig]="datePickerConfig">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-primary btn-rounded" type="button" (click)="getSalaryDataBetweenDataRange()">
+                <i class="icofont-download"></i> | Download File
+            </button>
+            <button class="btn btn-sm btn-danger btn-rounded" type="button">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>

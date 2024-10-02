@@ -1,0 +1,141 @@
+
+
+.employee-detail-item {
+    margin-bottom: 5px;
+  }
+  
+  .property {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #333;
+  }
+  
+  .value {
+    color: #555;
+  }
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header-shadow{
+    margin-bottom: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+  
+
+
+
+
+
+.mat-accordion {
+    width: 100%;
+    max-width: 800px; 
+    margin: 0 auto;
+  }
+  
+  .mat-expansion-panel {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 5px;
+    overflow: hidden;
+  }
+
+
+  .mat-expansion-panel-header {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+  color: #333;
+}
+
+.mat-expansion-panel-header-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: bold; 
+}
+
+.mat-expansion-panel-header-description {
+  font-size: 14px;
+  margin-top: 4px; 
+}
+  
+  .mat-icon {
+    font-size: 20px;
+    color: #555;
+    transition: transform 0.3s ease;
+  }
+  
+  .mat-expansion-panel-header.mat-expanded .mat-icon {
+    transform: rotate(180deg);
+  }
+  
+  .mat-expansion-panel-content {
+    padding: 10px;
+    background-color: #fff;
+  }
+  
+
+  .mat-expansion-panel-header:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+  }
+  
+
+  .mat-expansion-panel-content p {
+    color: #666;
+    line-height: 1.5;
+  }
+  
+
+  .mat-expansion-panel:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+  }
+  
+
+
+  
+
+  .mat-expansion-panel:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .mat-expansion-panel-header-description {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .mat-expansion-panel-header-description span {
+    margin-right: 10px; 
+  }
+
+
+  
+
+  /* .mat-expansion-panel-header {
+    background-color: #fafafa; 
+    padding: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  }
+   */
+  .mat-expansion-panel-header:hover {
+    background-color: #fcf4f4; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  }
+  
+  
+  .mat-expansion-panel-header.mat-expanded {
+    background-color: #d1e0f7; 
+  }

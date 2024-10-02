@@ -1,0 +1,377 @@
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <form #salaryAllowanceConfig="ngForm" (submit)="submitSalaryAllowanceConfiguration()">
+                <div class="row m-t-sm mt-0">
+                    <div class="col-md-12 mb-1">
+                        <div class="ibox-title">
+                            <h5>
+                                <i class="fa fa-cogs" aria-hidden="true"></i> | Make Salary Configuration
+                            </h5>
+                        </div>
+                        <div class="ibox-content pt-1 pb-1 text-x-small">
+                            <div class="panel-body pt-1 pb-1 pl-0 pr-0">
+                                <div class="form-row">
+                                    <div class="form-group mb-1 col-sm-6 col-md-6">
+                                        <label for="configCategory" class="control-label font-bold text-uppercase">Config Category</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <select name="configCategory" id="configCategory"
+                                                #configCategoryRef="ngModel" [(ngModel)]="configCategory"
+                                                class="form-control form-control-sm" (change)="configCategoryChanged()">
+                                                <option [value]="''">--Select Config Category--</option>
+                                                <option [value]="'Employee Wise'">Employee Wise</option>
+                                                <option [value]="'Grade'">Grade</option>
+                                                <option [value]="'Designation'">Designation</option>
+                                                <option [value]="'All'">All</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="configCategory !='' && configCategory!= null && configCategory!='All'">
+                        <div class="ibox">
+                            <div class="ibox-content pt-1 pb-1 text-x-small shadow-sm">
+                                <div class="form-row" *ngIf="configCategory=='Employee Wise'">
+                                    <div class="form-group col-md-12 mt-2 mb-2">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <textarea name="bulkEmployeeSearch" id="bulkEmployeeSearch" cols="30"
+                                                rows="1" placeholder="Search By Comma Separated Employee Code"
+                                                #bulkEmployeeSearchRef="ngModel" [(ngModel)]="bulkEmployeeSearchBox"
+                                                class="form-control form-control-sm font-bold"
+                                                style="text-indent: unset !important;">
+                                            </textarea>
+                                            <div class="input-group-prepend cursor-pointer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    (click)="searchBulkEmployee(bulkEmployeeSearchRef.value)">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12 hide">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <div class="d-inline" style="width: 80%;">
+                                                <ng-select2 [data]="ddlEmployees" name="employees" #employeesRef
+                                                    id="employeesRef" (valueChanged)="getEmployeeInfo($event)"
+                                                    [placeholder]="'Select Employee...'" [options]="select2Options"
+                                                    [allowClear]="true" required>
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="configCategory=='Grade'">
+                                    <div class="form-group col-md-12 mt-2">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-id-badge"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" name="grade" id="grade" #gradeRef
+                                                [(ngModel)]="selectedGrade" class="form-control form-control-sm"
+                                                [typeahead]="ddlGradesForConfig" typeaheadOptionField="text"
+                                                [isAnimated]="false" placeholder="Type Grade Here..." autocomplete="off"
+                                                (typeaheadOnSelect)="gradeOnSelect($event,gradeRef)"
+                                                [typeaheadMinLength]="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="configCategory =='Designation'">
+                                    <div class="form-group col-md-12 mt-2">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-id-badge"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" name="designation" id="designation" #designationRef
+                                                [(ngModel)]="selectedDesignation" class="form-control form-control-sm"
+                                                [typeahead]="ddlDesignationForConfig" typeaheadOptionField="text"
+                                                [isAnimated]="false" placeholder="Type Designation Here..."
+                                                autocomplete="off"
+                                                (typeaheadOnSelect)="designationOnSelect($event,designationRef)"
+                                                [typeaheadMinLength]="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ibox">
+                            <div class="ibox-content border-radius-5" *ngIf="employeeInfo.employeeId > 0 || bulkEmployees.length > 0">
+                                <table class="table table-striped table-hover table-responsive-sm">
+                                    <tbody>
+                                        <tr *ngFor="let emp of bulkEmployees, let i = index">
+                                            <td class="bg-dark-blue text-white">{{emp.employeeCode}}</td>
+                                            <td> <b>{{emp.employeeName}}</b> {{' ~ '+emp.designationName}}</td>
+                                            <td><button class="btn btn-xs text-danger" (click)="deleteEmployee(emp.employeeId)"><i class="fa fa-trash"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="ibox-content border-radius-5" *ngIf="selectedGrades.length > 0">
+                                <table class="table table-sm table-striped table-hover table-responsive-sm">
+                                    <thead>
+                                        <tr class="text-center text-dark">
+                                            <th>#SL</th>
+                                            <th>Grade</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of selectedGrades; let i=index" class="text-center">
+                                            <td class="font-bold">{{i+1}}</td>
+                                            <td>{{item.value}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-xs" (click)="deleteGrade(item.id)">
+                                                    <i class="fa fa-trash-o text-danger"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="ibox-content border-radius-5" *ngIf="selectedDesignations.length > 0">
+                                <table class="table table-sm table-striped table-hover table-responsive-sm">
+                                    <thead>
+                                        <tr class="text-center text-dark">
+                                            <th>#SL</th>
+                                            <th>Designation</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of selectedDesignations; let i=index" class="text-center">
+                                            <td class="font-bold">{{i+1}}</td>
+                                            <td>{{item.value}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-xs"
+                                                    (click)="deleteDesignation(item.id)">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        [class]="configCategory=='All' || configCategory =='' || configCategory == null ?'col-md-12':'col-md-8 pl-1'">
+                        <div class="ibox">
+                            <div class="ibox-content border-radius-5 pt-1 pb-1 text-x-small shadow-sm">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 col-sm-12 col-12 mt-2 mb-3">
+                                        <label for="allowanceBase" class="control-label font-bold text-uppercase">Base Of Allowance</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend cursor-pointer text-small"
+                                                (click)="lockedOrUnlocked()" [title]="isLocked?'Locked':'Unlocked'">
+                                                <span class="input-group-addon font-bold"
+                                                    [class]="isLocked ? 'bg-dark-blue text-white': ''">
+                                                    <i class="fa" [class]="isLocked ? 'fa-lock': 'fa-unlock-alt'"
+                                                        aria-hidden="true" style="font-size: small !important;"></i>
+                                                </span>
+                                            </div>
+                                            <select name="allowanceBase" id="allowanceBase" [disabled]="isLocked"
+                                                class="form-control form-control-sm font-bold" #allowanceBaseRef
+                                                (change)="mainAllowanceBaseChanged(allowanceBaseRef.value)">
+                                                <option [value]="'Gross'">Gross</option>
+                                                <option [value]="'Basic'">Basic</option>
+                                                <option [value]="'Flat'">Flat</option>
+                                                <option [value]="'CTC'">CTC</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox">
+                            <div class="ibox-title text-center ">
+                                <span class="label label-primary">Total Gross Percentage:
+                                    {{totalGrossPercentage.toString()
+                                    +'
+                                    %'}}</span>
+                                <span class="label label-info">Total Basic Percentage: {{'0 %'}}</span>
+                                <span class="label label-warning">Amount: {{totalAmount}}</span>
+                            </div>
+                            <div class="ibox-content pt-1 pb-1 text-x-small shadow-sm">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12" *ngIf="1==1">
+                                        <table
+                                            class="table table-sm table-striped table-hover table-responsive-xl mb-0">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>#SL</th>
+                                                    <th>Allowance</th>
+                                                    <th>Allowance Base</th>
+                                                    <th>Percentage</th>
+                                                    <th class="hide">Is Periodically?</th>
+                                                    <th class="hide">Effective From ~ To</th>
+                                                    <th>Max Amount</th>
+                                                    <th>Add. Amount</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of salaryAllowanceConfigurations; let i = index">
+                                                    <td class="text-center font-bold">{{i+1}}</td>
+                                                    <td>
+                                                        <select name="{{'allowanceNameId-'+(i+1).toString()}}"
+                                                            id="{{'allowanceNameId-'+(i+1).toString()}}"
+                                                            class="form-control form-control-sm"
+                                                            #allowanceNameId{{(i+1).toString()}}="ngModel"
+                                                            [(ngModel)]="salaryAllowanceConfigurations[i].allowanceNameId"
+                                                            [disabled]="(allowanceBaseRef.value =='Gross' && totalGrossPercentage >= 100 && salaryAllowanceConfigurations[i].allowanceNameId==0) 
+                                                || (allowanceBaseRef.value =='Gross' && totalGrossPercentage >= 100 && salaryAllowanceConfigurations[i].allowanceNameId !=0 && salaryAllowanceConfigurations[i].percentage==0)"
+                                                            (change)="allowanceNameChanged(salaryAllowanceConfigurations[i].allowanceNameId,i)">
+                                                            <option [value]="0">---Select Allowance Name---</option>
+                                                            <option [value]="an.id"
+                                                                *ngFor="let an of ddlAllowanceNames">
+                                                                {{an.isFixed
+                                                                ?(an.text +'- Fixed'):an.text }}</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select name="allowanceBase{{(i+1).toString()}}"
+                                                            id="allowanceBase{{(i+1).toString()}}"
+                                                            class="form-control form-control-sm font-bold"
+                                                            #allowanceBase{{(i+1).toString()}}="ngModel"
+                                                            [(ngModel)]="salaryAllowanceConfigurations[i].allowanceBase"
+                                                            [disabled]="isLocked">
+                                                            <option [value]="'Gross'">Gross</option>
+                                                            <option [value]="'Basic'">Basic</option>
+                                                            <option [value]="'Flat'">Flat</option>
+                                                        </select>
+                                                    </td>
+                                                    <td style="width: 10%;">
+                                                        <div class="input-group">
+                                                            <input type="number"
+                                                                name="{{'percentage-'+(i+1).toString()}}"
+                                                                id="{{'percentage-'+(i+1).toString()}}"
+                                                                #percentage{{(i+1).toString()}}="ngModel"
+                                                                [(ngModel)]="salaryAllowanceConfigurations[i].percentage"
+                                                                [hidden]="salaryAllowanceConfigurations[i].allowanceBase == 'Flat'"
+                                                                [disabled]="salaryAllowanceConfigurations[i].allowanceNameId ==0"
+                                                                class="form-control form-control-sm font-bold"
+                                                                (input)="percentageAndAmountCalculation(salaryAllowanceConfigurations[i].allowanceBase,0,i)">
+                                                            <input type="number" name="{{'amount-'+(i+1).toString()}}"
+                                                                id="{{'amount-'+(i+1).toString()}}"
+                                                                #percentage{{(i+1).toString()}}="ngModel"
+                                                                [(ngModel)]="salaryAllowanceConfigurations[i].amount"
+                                                                [hidden]="salaryAllowanceConfigurations[i].allowanceBase == 'Gross' || salaryAllowanceConfigurations[i].allowanceBase == 'Basic'"
+                                                                (input)="percentageAndAmountCalculation(salaryAllowanceConfigurations[i].allowanceBase,0,i)"
+                                                                [disabled]="salaryAllowanceConfigurations[i].allowanceNameId ==0"
+                                                                class="form-control form-control-sm font-bold">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-addon text-dark">
+                                                                    <span
+                                                                        *ngIf="salaryAllowanceConfigurations[i].allowanceBase !='Flat'">%</span>
+                                                                    <span
+                                                                        *ngIf="salaryAllowanceConfigurations[i].allowanceBase =='Flat'">&#2547;</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center hide">
+                                                        <input type="checkbox"
+                                                            #isPeriodically{{(i+1).toString()}}="ngModel"
+                                                            [(ngModel)]="salaryAllowanceConfigurations[i].isPeriodically"
+                                                            [disabled]="
+                                                salaryAllowanceConfigurations[i].allowanceNameId == 0 || this.salaryAllowanceConfigurations[i].isFixedSalaryHead
+                                                || (salaryAllowanceConfigurations[i].allowanceBase =='Gross' && totalGrossPercentage >= 100 && salaryAllowanceConfigurations[i].allowanceNameId==0) 
+                                                || (salaryAllowanceConfigurations[i].allowanceBase =='Gross' && totalGrossPercentage >= 100 && salaryAllowanceConfigurations[i].allowanceNameId !=0 && salaryAllowanceConfigurations[i].percentage==0)"
+                                                            name="{{'isPeriodically-'+(i+1).toString()}}"
+                                                            (change)="effectiveFromTo[i]=''"
+                                                            id="{{'isPeriodically-'+(i+1).toString()}}">
+                                                    </td>
+                                                    <td class="hide">
+                                                        <div class="input-group"
+                                                            [class]="this.salaryAllowanceConfigurations[i].isFixedSalaryHead || this.salaryAllowanceConfigurations[i].allowanceNameId == 0 ? 'hide':''">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-addon text-dark">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </div>
+                                                            </div>
+                                                            <input type="text"
+                                                                name="{{'effectiveFromTo'+(i+1).toString()}}"
+                                                                id="{{'effectiveFromTo'+(i+1).toString()}}"
+                                                                #effectiveFromTo{{(i+1).toString()}}="ngModel"
+                                                                [(ngModel)]="effectiveFromTo[i]"
+                                                                class="form-control form-control-sm" bsDaterangepicker
+                                                                autocomplete="off" readonly
+                                                                [class]="salaryAllowanceConfigurations[i].isPeriodically == false ? 'bg-gray': 'bg-white'"
+                                                                [disabled]="salaryAllowanceConfigurations[i].isPeriodically == false"
+                                                                [bsConfig]="datePickerConfig" placement="left">
+                                                            <div class="input-group-prepend cursor-pointer"
+                                                                (click)="effectiveFromTo[i]=''">
+                                                                <div class="input-group-addon text-dark">
+                                                                    <i class="fa fa-times"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 10%;">
+                                                        <input type="number" name="{{'maxAmount-'+(i+1).toString()}}"
+                                                            id="{{'maxAmount-'+(i+1).toString()}}"
+                                                            #maxAmount{{(i+1).toString()}}="ngModel"
+                                                            [(ngModel)]="salaryAllowanceConfigurations[i].maxAmount"
+                                                            [disabled]="salaryAllowanceConfigurations[i].allowanceNameId ==0"
+                                                            class="form-control form-control-sm font-bold">
+                                                    </td>
+                                                    <td style="width: 10%;">
+                                                        <input type="number" name="{{'additionalAmount-'+(i+1).toString()}}"
+                                                            id="{{'additionalAmount-'+(i+1).toString()}}"
+                                                            #additionalAmount{{(i+1).toString()}}="ngModel"
+                                                            [(ngModel)]="salaryAllowanceConfigurations[i].additionalAmount"
+                                                            [disabled]="salaryAllowanceConfigurations[i].allowanceNameId ==0"
+                                                            class="form-control form-control-sm font-bold">
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button"
+                                                            class="btn mr-1 btn-xs btn-rounded btn-primary"
+                                                            (click)="addAllowance(allowanceBaseRef.value) ">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-xs btn-rounded btn-danger"
+                                                            (click)="[deleteAllowance(i)]">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ibox-footer">
+                                <div class="clearfix text-x-small">
+                                    <button type="submit" class="btn btn-sm btn-primary btn-rounded pull-right font-bold">
+                                        <i class="fa fa-paper-plane"></i> | Submit</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <form [formGroup]="bonusProcessExecutionForm" (ngSubmit)="submit()">
+                <div class="ibox text-x-small">
+                    <div class="ibox-content border-radius-5">
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-sm-12 mb-1">
+                                <label for="bonusAndConfig" class="control-label font-bold text-uppercase">Bonus
+                                    Name</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-money"></i>
+                                        </span>
+                                    </div>
+                                    <select name="bonusAndConfig" id="bonusAndConfig"
+                                        class="form-control form-control-sm" formControlName="bonusAndConfig">
+                                        <option [value]="''" selected>---Select Bonus---</option>
+                                        <option [value]="item.value" *ngFor="let item of ddlBonus">{{item.text}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12 mb-1">
+                                <label for="processDate" class="control-label font-bold text-uppercase">Cut-off
+                                    Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" name="processDate"
+                                        id="processDate" bsDatepicker [bsConfig]="datePickerConfig" formControlName="processDate"
+                                        placeholder="Enter Cut-off Date">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12 mb-1">
+                                <label for="executionOn" class="control-label font-bold text-uppercase">Execution On</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <select name="executionOn" id="executionOn" class="form-control form-control-sm"
+                                        formControlName="executionOn">
+                                        <option [value]="''" selected>---Select Execution---</option>
+                                        <option [value]="'All'">All</option>
+                                        <option [value]="'Branch'">Branch</option>
+                                        <option [value]="'Department'">Department</option>
+                                        <option [value]="'Selected Employees'">Selected Employees</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+
+                        </div>
+                    </div>
+                    <div class="ibox-footer">
+                        <div class="clearfix">
+                            <button type="submit" class="btn btn-success btn-rounded btn-sm ml-1 pull-right"
+                                (click)="1==1" [disabled]="bonusProcessExecutionForm.invalid">
+                                <i class="fa fa-cogs"></i> | Run Process
+                                <!-- <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span> -->
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

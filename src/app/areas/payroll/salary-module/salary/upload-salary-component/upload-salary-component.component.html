@@ -1,0 +1,490 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 @slideInUp class="mt-2">Upload Salary Component</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Salary</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Upload Salary Component</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#uploadAllowanceDeductionArrear" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-download" aria-hidden="true"></i> | Upload Allowance/Deduction/Arrear
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="uploadAllowanceDeductionArrear" class="tab-pane active">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <!-- <div class="form-group col-md-2">
+                                    <label for="srcSelectSalaryComponent" class="control-label font-bold">Select Salary
+                                        Component</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon ">
+                                                <i class="fa fa-list"></i>
+                                            </span>
+                                        </div>
+                                        <select name="srcSelectSalaryComponent" id="srcSelectSalaryComponent"
+                                            class="form-control form-control-sm" #srcSelectSalaryComponent>
+                                            <option [value]="''">--Select One--</option>
+                                            <option [value]="'Allowance'">Allowance</option>
+                                            <option [value]="'Deduction'">Deduction</option>
+                                            <option [value]="'Arrear'">Arrear</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3" [hidden]="srcSelectSalaryComponent.value !='Allowance'">
+                                    <label for="srcSalaryAllowance" class="control-uploadSalaryHead font-bold">Allowance</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon ">
+                                                <i class="fa fa-btc"></i>
+                                            </span>
+                                        </div>
+                                        <select name="srcSalaryAllowance" id="srcSalaryAllowance" #srcAllowanceId
+                                            class="form-control form-control-sm">
+                                            <option [value]="0">--Select Allowance--</option>
+                                            <option [value]="item.id" *ngFor="let item of ddlAllowances">
+                                                {{item.text}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3" [hidden]="srcAllowanceId.value !='Deduction'" >
+                                    <label for="srcSalaryDeduction" class="control-label font-bold">Deduction</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon ">
+                                                <i class="fa fa-btc"></i>
+                                            </span>
+                                        </div>
+                                        <select name="srcSalaryDeduction" id="srcSalaryDeduction" #srcDeductionId
+                                            class="form-control form-control-sm">
+                                            <option [value]="0">--Select Deduction--</option>
+                                            <option [value]="item.id" *ngFor="let item of ddlDeductions">
+                                                {{item.text}}</option>
+                                        </select>
+                                    </div>
+                                </div> -->
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <label for="srcSalaryComponent" class="control-label font-bold">Search By Salary
+                                        Component</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <select name="srcSalaryComponent" id="srcSalaryComponent" #srcSalaryComponentRef
+                                            class="form-control form-control-sm" [(ngModel)]="srcSalaryComponent"
+                                            (change)="salary_Component_changed()">
+                                            <option [value]="'Allowance'">Allowance</option>
+                                            <option [value]="'Deduction'">Deduction</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-sm-12 col-md-9">
+                                    <label for="srcSalaryMonthAndYear" class="control-label font-bold hidden">Action
+                                        Button</label>
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-success btn-rounded btn-sm"
+                                            (click)="openUploadExcelFileModal()">
+                                            <i class="fa fa-arrow-up"></i> |Click To Upload Excel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body  pb-1" *ngIf="srcSalaryComponent =='Allowance'">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                id="tblAllowances">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#SL</th>
+                                        <th>Employee Name</th>
+                                        <th>Allowance Name</th>
+                                        <th class="text-center">Month & Year</th>
+                                        <th class="text-right">Amount</th>
+                                        <th class="text-center">Remarks</th>
+                                        <th class="text-center">Entry Date</th>
+                                        <th class="text-center">Updated Date</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let item of listOfUploadAllowances | paginate: uploadAllowancePageConfig, let i =index">
+                                        <td class="text-center font-bold">{{i+1 + (uploadAllowancePageSize
+                                            *(uploadAllowancePageNo-1))}}</td>
+                                        <td>{{item.employeeName}}</td>
+                                        <td>{{item.allowanceName}}</td>
+                                        <td class="text-center">{{item.monthYear}}</td>
+                                        <td class="text-right">{{item.amount}}</td>
+                                        <td class="text-center">{{item.remarks}}</td>
+                                        <td class="text-center">{{item.createdDate | date:"dd-MMM-yyyy hh:mm:ss a"}}
+                                        </td>
+                                        <td class="text-center">{{item.updatedDate | date:"dd-MMM-yyyy hh:mm:ss a"}}
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-xs"
+                                                (click)="openUpdateAllowanceModal(item.id,item.employeeId,item.allowanceNameId)"
+                                                title="EDIT">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf=" listOfUploadAllowances.length ==0 && uploadAllowancesDTLabel == null">
+                                        <td colspan="20" class="text-center">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf=" listOfUploadAllowances.length ==0 && uploadAllowancesDTLabel != null">
+                                        <td colspan="20" class="text-center font-bold">
+                                            {{uploadAllowancesDTLabel}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="uploadedAllowancesPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="uploadAllowanceData">
+                                </pagination-controls>
+                            </div>
+                        </div>
+                        <div class="panel-body  pb-1" *ngIf="srcSalaryComponent =='Deduction'">
+                            <table class="table table-sm table-hover table-striped table-responsive-lg"
+                                id="tblDeductions">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#SL</th>
+                                        <th>Employee Name</th>
+                                        <th>Deduction Name</th>
+                                        <th class="text-center">Month & Year</th>
+                                        <th class="text-right">Amount</th>
+                                        <th class="text-center">Remarks</th>
+                                        <th class="text-center">Entry Date</th>
+                                        <th class="text-center">Updated Date</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let item of listOfUploadDeductions | paginate: uploadDeductionPageConfig, let i =index">
+                                        <td class="text-center font-bold">{{i+1 + (uploadDeductionPageSize
+                                            *(uploadDeductionPageNo-1))}}</td>
+                                        <td>{{item.employeeName}}</td>
+                                        <td>{{item.deductionName}}</td>
+                                        <td class="text-center">{{item.monthYear}}</td>
+                                        <td class="text-right">{{item.amount}}</td>
+                                        <td class="text-center">{{item.remarks}}</td>
+                                        <td class="text-center">{{item.createdDate | date:"dd-MMM-yyyy hh:mm:ss a"}}
+                                        </td>
+                                        <td class="text-center">{{item.updatedDate | date:"dd-MMM-yyyy hh:mm:ss a"}}
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-xs"
+                                                (click)="openUpdateDeductionModal(item.id,item.employeeId,item.deductionNameId)"
+                                                title="EDIT">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf=" listOfUploadDeductions.length ==0 && uploadDeductionsDTLabel == null">
+                                        <td colspan="20" class="text-center">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf=" listOfUploadDeductions.length ==0 && uploadDeductionsDTLabel != null">
+                                        <td colspan="20" class="text-center font-bold">
+                                            {{uploadDeductionsDTLabel}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="uploadedDeductionsPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="uploadDeductionData">
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #uploadExcelFileModal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-arrow-up" aria-hidden="true"></i>| Upload Excel File
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
+            [disabled]="btnUploadExcel">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #uploadForm="ngForm" (ngSubmit)="submitUploadExcel(uploadForm)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="selectSalaryComponent" class="control-label font-bold">Select Salary
+                            Component</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-list"></i>
+                                </span>
+                            </div>
+                            <select name="selectSalaryComponent" id="selectSalaryComponent"
+                                class="form-control form-control-sm" #selectSalaryComponent="ngModel"
+                                (change)="[uploadSalaryHead.allowanceId =0,uploadSalaryHead.deductionId =0]"
+                                [(ngModel)]="uploadSalaryHead.salaryComponent" required>
+                                <option [value]="''">--Select One--</option>
+                                <option [value]="'Allowance'">Allowance</option>
+                                <option [value]="'Deduction'">Deduction</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12" *ngIf="uploadSalaryHead.salaryComponent =='Allowance'">
+                        <label for="salaryAllowance" class="control-uploadSalaryHead font-bold">Allowance</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-btc"></i>
+                                </span>
+                            </div>
+                            <select name="salaryAllowance" id="salaryAllowance" #allowanceId="ngModel"
+                                [(ngModel)]="uploadSalaryHead.allowanceId" class="form-control form-control-sm"
+                                [required]="uploadSalaryHead.salaryComponent =='Allowance'">
+                                <option [value]="0">--Select Allowance--</option>
+                                <option [value]="item.id" *ngFor="let item of ddlAllowances">
+                                    {{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12" *ngIf="uploadSalaryHead.salaryComponent =='Deduction'">
+                        <label for="salaryDeduction" class="control-label font-bold">Deduction</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-btc"></i>
+                                </span>
+                            </div>
+                            <select name="salaryDeduction" id="salaryDeduction" #deductionId="ngModel"
+                                [(ngModel)]="uploadSalaryHead.deductionId"
+                                [required]="uploadSalaryHead.salaryComponent =='Deduction'"
+                                class="form-control form-control-sm">
+                                <option [value]="0">--Select Deduction--</option>
+                                <option [value]="item.id" *ngFor="let item of ddlDeductions">{{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="salaryMonthAndYear" class="control-label font-bold">Salary Month & Year</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="salaryMonthAndYear" id="salaryMonthAndYear" #salaryMonthAndYear="ngModel"
+                                [(ngModel)]="uploadSalaryHead.salaryMonthAndYear" class="form-control form-control-sm"
+                                required>
+                                <option [value]="''">---Select Month & Year---</option>
+                                <option [value]="'06-2022'">June-2022</option>
+                                <option [value]="'07-2022'">July-2022</option>
+                                <option [value]="'08-2022'">August-2022</option>
+                                <option [value]="'09-2022'">September-2022</option>
+                                <option [value]="'10-2022'">October-2022</option>
+                                <option [value]="'11-2022'">November-2022</option>
+                                <option [value]="'12-2022'">December-2022</option>
+                                <option [value]="'01-2023'">January-2023</option>
+                                <option [value]="'02-2023'">February-2023</option>
+                                <option [value]="'03-2023'">March-2023</option>
+                                <option [value]="'04-2023'">April-2023</option>
+                                <option [value]="'05-2023'">May-2023</option>
+                                <option [value]="'06-2023'">Jun-2023</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="excelFileUpload" class="control-label font-bold"
+                            style="visibility: hidden;">Excel</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input id="excelFileUpload" type="file" class="custom-file-input"
+                                    (change)="excelFileUpload($event)" accept=".xls,.xlsx">
+                                <label class="custom-file-label" for="excelFileUpload">
+                                    {{excelFileName}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-redius-none" type="submit"
+                    [disabled]="uploadForm.invalid || btnUploadExcel">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Upload File
+                    <span [hidden]="!btnUploadExcel" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-redius-none" type="button"
+                    (click)="modal.close('Cancel click')" [disabled]="btnUploadExcel">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #updateAllowanceModal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-arrow-up" aria-hidden="true"></i>| Update Salary Component
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
+            [disabled]="btnUploadExcel">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #updateSalaryAllowance="ngForm" (ngSubmit)="submitUpdateAllowance(updateSalaryAllowance)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label class="control-label font-bold">Allowance</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-btc"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm">
+                                {{this.updateAllowanceObj?.allowanceName}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label class="control-label font-bold">Month & Year</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm">
+                                {{this.updateAllowanceObj?.monthYear}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="amount" class="control-label font-bold">Amount</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="number" name="updateAmount" id="updateAmount" required
+                                class="form-control form-control-sm" [(ngModel)]="this.updateAllowanceObj.amount">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-redius-none" type="submit"
+                    [disabled]="updateSalaryAllowance.invalid || btnUploadExcel">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Update Allowance
+                    <span [hidden]="!btnUploadExcel" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-redius-none" type="button"
+                    (click)="modal.close('Cancel click')" [disabled]="btnUploadExcel">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #updateDeductionModal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-arrow-up" aria-hidden="true"></i>| Update Salary Deduction
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
+            [disabled]="btnUploadExcel">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form #updateSalaryDeduction="ngForm" (ngSubmit)="submitUpdateDeduction(updateSalaryDeduction)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label class="control-label font-bold">Deduction</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-btc"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm">
+                                {{this.updateDeductionObj?.deductionName}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label class="control-label font-bold">Month & Year</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <div class="form-control form-control-sm">
+                                {{this.updateDeductionObj?.monthYear}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="amount" class="control-label font-bold">Amount</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon ">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <input type="number" name="updateDeductionAmount" id="updateDeductionAmount" required
+                                class="form-control form-control-sm" [(ngModel)]="this.updateDeductionObj.amount">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-redius-none" type="submit"
+                    [disabled]="updateSalaryDeduction.invalid || btnUploadExcel">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Update Deduction
+                    <span [hidden]="!btnUploadExcel" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-redius-none" type="button"
+                    (click)="modal.close('Cancel click')" [disabled]="btnUploadExcel">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

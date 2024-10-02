@@ -1,0 +1,187 @@
+
+
+<ng-template #taxZoneModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>| Add Employee(s) Tax Zone            
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="taxZoneForm" (ngSubmit)="submitTaxZone()">             
+            <div class="modal-body">
+                <div formArrayName="taxzones" *ngFor="let taxzone of formArray; let i = index">
+                    <div [formGroupName]="i" class="form-row">
+                        <div class="form-group col-12 col-md-4 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark font-bold">
+                                        {{i+1}}
+                                    </span>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-users"></i>
+                                    </span>
+                                </div>
+                                <div style="width:80%">
+                                    <ng-select2 [data]="ddlEmployees" name="employeeId" formControlName="employeeId"
+                                        id="employeeId" [placeholder]="'Select Employee...'" [options]="select2Options"
+                                        [allowClear]="true" required>
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-md-5 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-location-arrow"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" id="taxZone" name="taxZone"
+                                    formControlName="taxZone" [placeholder]="'Enter tax zone name'" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-money"></i>
+                                    </span>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i>&#2547;</i>
+                                    </span>
+                                </div>
+                                    <input type="number" class="form-control form-control-sm" id="minimumTaxAmount"
+                                        name="minimumTaxAmount" formControlName="minimumTaxAmount" >
+                               
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>                               
+                                <input type="text" class="form-control form-control-sm bg-white" id="effectiveDate"
+                                name="effectiveDate" formControlName="effectiveDate" bsDatepicker readonly
+                                [bsConfig]="datePickerConfig">
+
+                                <div class="input-group-prepend cursor-pointer" (click)="addTaxzoneButtonClick()">
+                                    <span class="input-group-addon text-primary">
+                                        <i class="fa fa-plus"></i></span>
+                                </div>
+                                <div class="input-group-prepend cursor-pointer"
+                                    (click)="removeTaxzoneButtonClick(i)">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-trash"></i></span>
+                                </div>
+                            </div>
+                        </div>                       
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="taxZoneForm.invalid || btnTaxZone">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnTaxZone" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnTaxZone"
+                    (click)="closeModal('Cross click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+
+<ng-template #taxZoneEditModal let-modal>    
+    <div class="modal-header">
+        <h4 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-users-alt-4 pr-1 fa-1x border-right"></i> Update Employee(s) Tax Zone  
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <form [formGroup]="employeeTaxZoneEditForm" (ngSubmit)="updateTaxZone()">
+        <div class="modal-body text-x-small">
+            <div class="form-row">
+                <div class="form-group col-md-12 col-sm-12"> 
+                    <label for="employeeId" class="control-label font-bold">
+                        Employee Name
+                    </label>                   
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-building"></i>
+                            </span>
+                        </div>
+                        <div style="width:80%">
+                            <ng-select2 [data]="ddlEmployees" name="employeeId" formControlName="employeeId"
+                                id="employeeId" [placeholder]="'Select Employee...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="costCenterNameInBengali" class="control-label font-bold">
+                        Tax Zone
+                    </label>                    
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-location-arrow"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="taxZone" name="taxZone"
+                            formControlName="taxZone" [placeholder]="'Enter tax zone name'" >  
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="minimumTaxAmount" class="control-label font-bold">Amount</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i>&#2547;</i>
+                            </span>
+                        </div>
+                            <input type="number" class="form-control form-control-sm" id="minimumTaxAmount"
+                                name="minimumTaxAmount" formControlName="minimumTaxAmount" >      
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="effectiveDate" class="control-label font-bold">Effective Date</label>
+                        <div class="input-group">                      
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>                               
+                        <input type="text" class="form-control form-control-sm bg-white" id="effectiveDate"
+                        name="effectiveDate" formControlName="effectiveDate" bsDatepicker readonly
+                        [bsConfig]="datePickerConfig">  
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" [disabled]="employeeTaxZoneEditForm.invalid || btnTaxZone">
+                <i class="fa fa-paper-plane"></i> | Update
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger" (click)="closeModal('Cancel click')" [disabled]="btnTaxZone"><i
+                    class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+
+
+
+</ng-template>

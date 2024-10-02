@@ -1,0 +1,52 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element text-center">
+                    <img alt="image" class="img-small" width="120" height="90" [src]="siteThumbnailPath"
+                        style="border-radius: 5px" />
+                </div>
+                <div class="logo-element">
+                    {{siteShortName}}
+                </div>
+            </li>
+            <li routerLinkActive="active">
+                <a class="faa-parent animated-hover hide" [routerLink]="['dashboard']"><i
+                        class="fa fa-th-large faa-pulse"></i> <span class="nav-label">Dashboard</span></a>
+                <a class="faa-parent animated-hover" [routerLink]="['common-dashboard']"><i
+                        class="fa fa-th-large faa-pulse"></i> <span class="nav-label">Dashboard</span></a>
+            </li>
+            <!-- Dynamic Manu Creation -->
+            <li routerLinkActive="active" *ngFor="let menu of userMenus">
+                <a class="faa-parent animated-hover" title="{{menu.mainmenuName}}"><i
+                        class="{{menu.iconClass+' faa-pulse'}}"></i> <span
+                        class="nav-label">{{menu.mainmenuName}}</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" routerLinkActive="in">
+                    <li *ngFor="let submenu of menu.appUserSubmenus; let i =index" routerLinkActive="active">
+                        <ng-container *ngIf="!submenu.isActAsParent">
+                            <a [routerLink]="[submenu.path]">
+                                <span class="faa-pulse"
+                                    [class]="submenu.iconClass !='' ? submenu.iconClass: 'fa fa-dot-circle-o'"></span>
+                                {{submenu.submenuName}}
+                            </a>
+                        </ng-container>
+                        <ng-container *ngIf="submenu.isActAsParent">
+                            <a class="faa-parent animated-hover"><i class="faa-pulse"
+                                    [class]="submenu.iconClass !='' ? submenu.iconClass: 'fa fa-dot-circle-o'"
+                                    aria-hidden="true"></i>{{submenu.submenuName}}<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level" routerLinkActive="in">
+                                <li routerLinkActive="active" *ngFor="let subsubmenu of submenu.appUserSubSubmenus" class="app_sub_submenu">
+                                    <a class="faa-parent animated-hover" [routerLink]="[subsubmenu.path]">
+                                        <i class="faa-pulse"
+                                            [class]="subsubmenu.iconClass !='' ? subsubmenu.iconClass: 'fa fa-dot-circle-o'"></i>
+                                        {{subsubmenu.subSubmenuName}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </ng-container>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

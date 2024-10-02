@@ -1,0 +1,1037 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Variable Allowance</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Payroll</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Allowance</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Variable Allowance</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-4 col-md-4 col-sm-4">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-info btn-rounded btn-sm" (click)="openUploadAllowanceModal()"
+                *ngIf="(pagePrivilege?.upload??false) == true"><i class="fa fa-arrow-up"></i> | Upload
+                Excel</button>
+            <button type="button" class="btn btn-success btn-rounded btn-sm ml-1"
+                (click)="openMonthlyVariableAllowanceModal()" *ngIf="(pagePrivilege?.add??false) == true">
+                <i class="fa fa-plus"></i> | Create
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#monthlyVariable" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Monthly Variable Allowance
+                        </a></li>
+                    <li><a href="#periodicallyVariable" data-toggle="tab" class="nav-link hide">
+                            <i class="fa fa-money" aria-hidden="true"></i> | Periodically Variable Allowance
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="monthlyVariable" class="tab-pane active">
+                        <div class="panel-body bg-white pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width:80%">
+                                            <ng-select2 [data]="ddlEmployees" name="ddlSearchByEmployee"
+                                                #ddlSearchByEmployeeRef="ngModel" [(ngModel)]="searchByEmployee"
+                                                id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                (ngModelChange)="onEmployeeChanged()" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-money"></i>
+                                            </span>
+                                        </div>
+                                        <select name="ddlSearchByAllowance" id="ddlSearchByAllowance"
+                                            class="form-control form-control-sm"
+                                            (change)="getMonthlyVariableAllowances(1)"
+                                            #ddlSearchByAllowanceRef="ngModel" [(ngModel)]="searchByAllowance">
+                                            <option [value]="0">---Select Allowance---</option>
+                                            <option [value]="item.id" *ngFor="let item of ddlAllowances">
+                                                {{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-dot-circle-o"></i>
+                                            </span>
+                                        </div>
+                                        <select name="searchByStatus" id="searchByStatus"
+                                            class="form-control form-control-sm" #searchByStatusRef="ngModel"
+                                            [(ngModel)]="searchByStatus" (change)="getMonthlyVariableAllowances(1)">
+                                            <option [value]="''" selected>---Select Status---</option>
+                                            <option [value]="'Pending'">Pending</option>
+                                            <option [value]="'Approved'">Approved</option>
+                                            <option [value]="'Disbursed'">Disbursed</option>
+                                            <option [value]="'Cancelled'">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-sm-12 col-md-3">
+                                    <div class="input-group text-x-small">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                            <select name="salaryMonth" id="salaryMonth"
+                                                class="form-control form-control-sm" #salaryMonthRef="ngModel"
+                                                [(ngModel)]="salaryMonth" (change)="getMonthlyVariableAllowances(1)">
+                                                <option [value]="0" selected>---Select Month---</option>
+                                                <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                                    {{item.month}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                            <select name="salaryYear" id="salaryYear"
+                                                class="form-control form-control-sm" #salaryYearRef="ngModel"
+                                                [(ngModel)]="salaryYear" (change)="getMonthlyVariableAllowances(1)">
+                                                <option [value]="0" selected>---Select Year---</option>
+                                                <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body bg-white pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl"
+                                    id="tblMonthlySalaryVariableAllowance">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Employee Name</th>
+                                            <th class="text-center">Allowance Name</th>
+                                            <th class="text-center">Salary Month & Year</th>
+                                            <th class="text-center">Amount</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listOfMonthlyVariableAllowances | paginate: monthlyVariableAllowancePageConfig, let i =index">
+                                            <td class="text-center font-bold">{{i+1 + (monthlyVariableAllowancePageSize
+                                                *(monthlyVariableAllowancePageNo-1))}}</td>
+                                            <td>{{item.employeeName}}</td>
+                                            <td class="text-center">{{item.allowanceName}}</td>
+                                            <td class="text-center">{{item.salaryMonthYear | date:"MMMM yyyy"}}</td>
+                                            <td class="text-center">
+                                                {{item.amount}}
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                    + '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-success" *ngIf="item.stateStatus=='Disbursed'">
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs" title="Edit"
+                                                    (click)="monthlyVariableAllowanceForEdit(item.monthlyVariableAllowanceId)"
+                                                    *ngIf="(item.stateStatus == 'Pending' || item.stateStatus == 'Recheck') && (pagePrivilege?.edit??false) == true">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-info"
+                                                    (click)="openMonthlyVariableAllowanceCheckModal(item.monthlyVariableAllowanceId,'Approval')"
+                                                    title="Check"
+                                                    *ngIf="item.stateStatus == 'Pending' && (pagePrivilege?.approval??false) == true"><i
+                                                        class="fa fa-check"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-success"
+                                                    (click)="openMonthlyVariableAllowanceCheckModal(item.monthlyVariableAllowanceId,'View')"
+                                                    *ngIf="(pagePrivilege?.detail??false) == true">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-danger"
+                                                    *ngIf="item.stateStatus == 'Pending' && (pagePrivilege?.delete??false) == true"
+                                                    (click)="openAllowanceDeleteModal(item)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-info"
+                                                    title="Update approved data"
+                                                    (click)="openUpdateApprovedAllowanceModal(item.monthlyVariableAllowanceId)"
+                                                    *ngIf="item.stateStatus == 'Approved'">
+                                                    <i class="icofont icofont-edit"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfMonthlyVariableAllowances.length ==0 && monthlyVariableAllowancesDTLabel == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfMonthlyVariableAllowances.length ==0 && monthlyVariableAllowancesDTLabel != null">
+                                            <td colspan="20" class="text-center font-bold">
+                                                {{monthlyVariableAllowancesDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="monthlyVariableAllowancesPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="monthlyVariableAllowanceData">
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="periodicallyVariable" class="tab-pane">
+                        <div class="panel-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group mb-1 col-md-4 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-money"></i>
+                                            </span>
+                                        </div>
+                                        <select name="ddlSearchByAllowance2" id="ddlSearchByAllowance2"
+                                            class="form-control form-control-sm"
+                                            (change)="getPeriodicalVariableAllowances(1)"
+                                            #ddlSearchByAllowance2Ref="ngModel"
+                                            [(ngModel)]="searchByPeriodicalAllowance">
+                                            <option [value]="0">---Select Allowance---</option>
+                                            <option [value]="item.id" *ngFor="let item of ddlSearchByAllowance">
+                                                {{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1 col-md-4 col-sm-12"></div>
+                                <div class="form-group mb-1 col-md-4 col-sm-12">
+                                    <div class="clearfix pull-right">
+                                        <button type="button" class="btn btn-info btn-rounded btn-sm"><i
+                                                class="fa fa-arrow-up"></i> | Upload Excel</button>
+                                        <button type="button" class="btn btn-success btn-rounded btn-sm ml-1"
+                                            (click)="openPeriodicallyVariableAllowanceModal()">
+                                            <i class="fa fa-plus"></i> | Create
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pb-1">
+                            <div class="table-responsive">
+                                <table class="table tables-sm table-hover table-striped table-responsive-xl"
+                                    id="tblPeriodicalSalaryVariableAllowance">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th class="text-center">Allowance Name</th>
+                                            <th>Variable For</th>
+                                            <th class="text-center">Head Count</th>
+                                            <th>Base Of Allowance</th>
+                                            <th class="text-center">Amount/Percentage</th>
+                                            <th class="text-center">Effectivity</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Entry Date</th>
+                                            <th class="text-center">Updated Date</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of listOfPeriodicalVariableAllowances | paginate: periodicalVariableAllowancePageConfig, let i =index">
+                                            <td class="text-center">{{i+1 + (periodicalVariableAllowancePageSize
+                                                *(periodicalVariableAllowancePageNo-1))}}</td>
+                                            <td class="text-center">{{item.allowanceName}}</td>
+                                            <td>{{item.salaryVariableFor}}</td>
+                                            <td class="text-center font-bold">{{item.headCount}}</td>
+                                            <td>{{item.amountBaseOn}}</td>
+                                            <td class="text-center">
+                                                <span *ngIf="item?.amount > 0 && item?.principalAmount == 0"
+                                                    class="label label-primary">
+                                                    {{item.amount}} &#2547;
+                                                </span>
+                                                <span *ngIf="item?.percentage > 0" class="label label-primary">
+                                                    {{item.percentage}} %
+                                                </span>
+                                                <span *ngIf="item?.principalAmount > 0 && item?.amount > 0"
+                                                    class="label label-primary">
+                                                    {{'Principal Amount: '+item?.principalAmount + " - Amount: "+
+                                                    item?.amount}}
+                                                </span>
+                                            </td>
+                                            <td>{{item.effectiveFrom | date:"dd MMM yyyy"}}-{{item.effectiveTo |
+                                                date:"dd
+                                                MMM yyyy"}}</td>
+                                            <td class="text-center">
+                                                <span class="label label-warning"
+                                                    *ngIf="item.stateStatus=='Pending'">{{item.stateStatus
+                                                    + '...'}}</span>
+                                                <span class="label label-primary" *ngIf="item.stateStatus=='Approved'">
+                                                    <i class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                                <span class="label label-danger"
+                                                    *ngIf="item.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                                    {{item.stateStatus}}</span>
+                                                <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                        class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                            </td>
+                                            <td class="text-center">{{item.createdDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">{{item.updatedDate | date: "dd-MMMM-yyyy"}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs text-success"
+                                                    (click)="openPeriodicalVariableAllowanceViewModal('View',item.periodicallyVariableAllowanceInfoId)">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs text-info"
+                                                    *ngIf="item.stateStatus =='Pending'"
+                                                    (click)="openPeriodicalVariableAllowanceViewModal('Approval',item.periodicallyVariableAllowanceInfoId)">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs"
+                                                    *ngIf="item.stateStatus == 'Pending' || item.stateStatus =='Recheck'"
+                                                    (click)="openPeriodicalVariableAllowanceEditModal(item.periodicallyVariableAllowanceInfoId)">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfPeriodicalVariableAllowances.length ==0 && periodicalVariableAllowancesDTLabel == null">
+                                            <td colspan="20" class="text-center">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf=" listOfPeriodicalVariableAllowances.length ==0 && periodicalVariableAllowancesDTLabel != null">
+                                            <td colspan="20" class="text-center font-bold">
+                                                {{periodicalVariableAllowancesDTLabel}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <pagination-controls (pageChange)="periodicalVariableAllowancesPageChanged($event)"
+                                    [responsive]="true" [autoHide]="true" id="periodicalVariableAllowanceData">
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showUploadAllowanceModal">
+    <app-payroll-upload-variable-allowance-modal
+        (closeModalEvent)="closeUploadAllowanceModal($event)"></app-payroll-upload-variable-allowance-modal>
+</ng-container>
+
+<ng-container *ngIf="showAllowanceDeleteModal">
+    <payroll-mmodule-variable-allowance-delete-modal [item]="allowanceDeleteItem"
+        (closeModalEvent)="closeAllowanceDeleteModal($event)">
+    </payroll-mmodule-variable-allowance-delete-modal>
+</ng-container>
+
+<ng-container *ngIf="showAllowanceDeleteModal">
+    <payroll-mmodule-variable-allowance-delete-modal [item]="allowanceDeleteItem"
+        (closeModalEvent)="closeAllowanceDeleteModal($event)">
+    </payroll-mmodule-variable-allowance-delete-modal>
+</ng-container>
+
+
+<ng-container *ngIf="showUpdateApprovedAllowanceModal">
+    <app-payroll-update-approved-variable-allowance [id]="updateApprovedAllowanceId"
+        (closeModalEvent)="closeUpdateApprovedAllowanceModal($event)">
+    </app-payroll-update-approved-variable-allowance>
+</ng-container>
+
+
+
+<ng-template #monthlyVariableAllowanceModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>| Add Monthly Variable
+            Allowance
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="monthlyVariableAllowanceForm" (ngSubmit)="submitMonthlyVariableAllowance()">
+            <div class="modal-body">
+                <div formArrayName="allowances" *ngFor="let allowance of formArray; let i = index">
+                    <div [formGroupName]="i" class="form-row">
+                        <div class="form-group col-12 col-md-4 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark font-bold">
+                                        {{i+1}}
+                                    </span>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-users"></i>
+                                    </span>
+                                </div>
+                                <div style="width:80%">
+                                    <ng-select2 [data]="ddlEmployees" name="employees" formControlName="employeeId"
+                                        id="employeesRef" [placeholder]="'Select Employee...'"
+                                        [options]="select2Options" [allowClear]="true" required>
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-money"></i>
+                                    </span>
+                                </div>
+                                <div style="width:80%">
+                                    <ng-select2 [data]="ddlAllowances" name="allowanceNames"
+                                        formControlName="allowanceNameId" [placeholder]="'Select Allowance Name...'"
+                                        [options]="select2Options" [allowClear]="true" required>
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                                <select name="salaryMonth" class="form-control form-control-sm"
+                                    formControlName="salaryMonth">
+                                    <option [value]="''">---Select Month---</option>
+                                    <option [value]="item.monthNo" *ngFor="let item of ddlMonths">{{item.month}}
+                                    </option>
+                                </select>
+                                <div class="input-group-prepend">
+                                    <select name="salaryYear" class="form-control form-control-sm"
+                                        formControlName="salaryYear">
+                                        <option [value]="''">---Select Year---</option>
+                                        <option [value]="item" *ngFor="let item of ddlYears">{{item}}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-md-2 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon text-dark">
+                                        <i>&#2547;</i>
+                                    </span>
+                                </div>
+                                <input type="number" formControlName="amount" class="form-control form-control-sm"
+                                    name="amount">
+                                <div class="input-group-prepend cursor-pointer" (click)="addAllowancesButtonClick()">
+                                    <span class="input-group-addon text-primary">
+                                        <i class="fa fa-plus"></i></span>
+                                </div>
+                                <div class="input-group-prepend cursor-pointer"
+                                    (click)="removeAllowancesButtonClick(i)">
+                                    <span class="input-group-addon text-danger">
+                                        <i class="fa fa-trash"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="monthlyVariableAllowanceForm.invalid || btnVariableAllowance">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                    <span [hidden]="!btnVariableAllowance" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnVariableAllowance"
+                    (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #monthlyVariableAllowanceEditModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>|
+            Update Monthly Variable Allowance
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="monthlyVariableAllowanceEditForm" (ngSubmit)="updateMonthlyVariableAllowance()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </div>
+                            <div style="width:80%">
+                                <ng-select2 [data]="ddlEmployees" name="employees" formControlName="employeeId"
+                                    id="employeesRef" [placeholder]="'Select Employee...'" [options]="select2Options"
+                                    [allowClear]="true" required>
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <div style="width:80%">
+                                <ng-select2 [data]="ddlAllowances" name="allowanceNames"
+                                    formControlName="allowanceNameId" [placeholder]="'Select Allowance Name...'"
+                                    [options]="select2Options" [allowClear]="true" required>
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <div class="input-group-prepend">
+                                <select name="salaryMonth" formControlName="salaryMonth"
+                                    class="form-control form-control-sm">
+                                    <option [value]="0" selected>---Select Month---</option>
+                                    <option [value]="item.monthNo" *ngFor="let item of ddlMonths">
+                                        {{item.month}}</option>
+                                </select>
+                            </div>
+                            <div class="input-group-prepend">
+                                <select name="salaryYear" formControlName="salaryYear"
+                                    class="form-control form-control-sm">
+                                    <option [value]="0" selected>---Select Year---</option>
+                                    <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon text-dark">
+                                    <i>&#2547;</i>
+                                </span>
+                            </div>
+                            <input type="number" formControlName="amount" class="form-control form-control-sm"
+                                name="amount">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="monthlyVariableAllowanceEditForm.invalid || btnVariableAllowance">
+                    <i class="fa fa-paper-plane"></i> | Update
+                    <span [hidden]="!btnVariableAllowance" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" [disabled]="btnVariableAllowance"
+                    (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #monthlyVariableAllowanceViewAndCheckModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-money" aria-hidden="true"></i>| {{modalTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <table class="table table-sm table-striped table-hover table-responsive-xl" tableName="info">
+                <tbody>
+                    <tr>
+                        <td>Employee Name</td>
+                        <td>{{monthlyVariableAllowance.employeeName}}</td>
+                        <td>Allowance</td>
+                        <td>{{monthlyVariableAllowance.allowanceName}}</td>
+                        <td>Salary Month & Year</td>
+                        <td>{{monthlyVariableAllowance.salaryMonthYear | date:"MMMM yyyy"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
+                        <td>{{monthlyVariableAllowance.amount}}</td>
+                        <td>Status</td>
+                        <td>
+                            <span class="label label-warning" *ngIf="monthlyVariableAllowance.stateStatus=='Pending'">
+                                {{monthlyVariableAllowance.stateStatus
+                                + '...'}}</span>
+                            <span class="label label-primary" *ngIf="monthlyVariableAllowance.stateStatus=='Approved'">
+                                <i class="fa fa-check"></i> {{monthlyVariableAllowance.stateStatus}}</span>
+                            <span class="label label-danger"
+                                *ngIf="monthlyVariableAllowance.stateStatus=='Cancelled'"><i class="fa fa-times"></i>
+                                {{monthlyVariableAllowance.stateStatus}}</span>
+                            <span class="label label-info" *ngIf="monthlyVariableAllowance.stateStatus=='Recheck'"><i
+                                    class="fa fa-backward"></i> {{monthlyVariableAllowance.stateStatus}}</span>
+                            <span class="label label-success" *ngIf="monthlyVariableAllowance.stateStatus=='Disbursed'"><i
+                                    class="fa fa-backward"></i> {{monthlyVariableAllowance.stateStatus}}</span>
+                        </td>
+                        <td>Entry Date</td>
+                        <td>{{monthlyVariableAllowance.createdDate | date:"dd-MMMM-yyyy"}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-body pt-0 text-x-small font-bold text-dark" *ngIf="checkModalFlag =='Approval'">
+        <form #monthlyVariableAllowanceApprovalForm="ngForm"
+            (ngSubmit)="submitMonthlyVariableAllowanceStatus(monthlyVariableAllowanceApprovalForm,remarks.value,checkStatus.value)">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                    <div class="input-group">
+                        <input type="text" name="checkRemarks" #remarks id="checkRemarks" required
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="checkStatus" #checkStatus id="checkStatus"
+                                class="form-control form-control-sm" required>
+                                <option value="Approved">Approved</option>
+                                <option value="Recheck">Recheck</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                                [disabled]="monthlyVariableAllowanceApprovalForm.invalid || btnVariableAllowance">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnVariableAllowance" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #periodicallyVariableAllowanceModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-cogs" aria-hidden="true"></i>| Add Periodical Variable
+            Allowance
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold">
+        <form [formGroup]="periodicallyVariableAllowanceForm" (ngSubmit)="submitPeriodical()">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 border-bottom text-x-small text-dark">
+                        <div class="form-row">
+                            <div class="form-group col-md-5 col-sm-12">
+                                <label for="salaryVariableFor" class="control-label">Variable For
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-users"></i>
+                                        </span>
+                                    </div>
+                                    <select name="salaryVariableFor" id="salaryVariableFor"
+                                        class="form-control form-control-sm" formControlName="salaryVariableFor"
+                                        (blur)="logFormErrors()"
+                                        [ngClass]="{'is-invalid':formErrors.salaryVariableFor}">
+                                        <option [value]="'All'">All</option>
+                                        <option [value]="'Employee'">Employee</option>
+                                        <!-- <option [value]="'Grade'">Grade</option>
+                                        <option [value]="'Designation'">Designation</option> -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-sm-12 col-md-4"
+                        *ngIf="periodicallyVariableAllowanceForm.get('salaryVariableFor').value != 'All'">
+                        <div class="ibox">
+                            <div class="ibox-content text-x-small text-dark pt-2 pb-2 pl-1 pr-1">
+                                <div class="form-group col-md-12 col-sm-12 p-0 mb-0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <textarea name="employeeIds" id="employeeIds" cols="30" rows="1"
+                                            class="form-control form-control-sm"
+                                            formControlName="employeeIds"></textarea>
+                                        <div class="input-group-prepend cursor-pointer" (click)="findEmployees()">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ibox-content text-x-small text-dark"
+                                style="max-height: 300px;overflow-y: scroll;">
+                                <table
+                                    class="table table-sm table-striped table-hover table-responsive-lg table-responsive-lg">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>Name</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr formArrayName="periodicalDetails"
+                                            *ngFor="let creds of periodicallyVariableAllowanceForm.controls.periodicalDetails?.value; let i = index">
+                                            <ng-container [formGroupName]="i">
+                                                <td class="text-center">
+                                                    <input type="hidden" name="detailId" id="detailId"
+                                                        formControlName="detailId">
+                                                    {{i+1}}
+                                                </td>
+                                                <td>
+                                                    <input type="hidden" name="id" id="id" formControlName="id">
+                                                    <input type="hidden" name="name" id="name" formControlName="name">
+                                                    <span>{{creds.name}}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-xs text-danger" (click)="1==1">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </button>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12"
+                        [class]="periodicallyVariableAllowanceForm.get('salaryVariableFor').value == 'All'? 'col-md-12':'col-md-8'">
+                        <div class="ibox">
+                            <div class="ibox-title bg-light-blue text-white">
+                                <h5>Payable Allowance</h5>
+                            </div>
+                            <div class="ibox-content text-x-small text-dark">
+                                <div class="form-row">
+                                    <div class="form-group mb-1 col-md-4 col-sm-12">
+                                        <label for="allowanceNameId" class="control-label">Allowance
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>
+                                            <select name="allowanceNameId" id="allowanceNameId"
+                                                class="form-control form-control-sm" formControlName="allowanceNameId"
+                                                [ngClass]="{'is-invalid':formErrors.allowanceNameId}"
+                                                (blur)="logFormErrors()">
+                                                <option [value]="0">---Select Allowance---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlAllowances">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-1 col-md-4 col-sm-12">
+                                        <label for="durationType" class="control-label">Duration Type
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                            </div>
+                                            <select name="durationType" id="durationType"
+                                                class="form-control form-control-sm" formControlName="durationType"
+                                                [ngClass]="{'is-invalid':formErrors.durationType}"
+                                                (blur)="logFormErrors()">
+                                                <option [value]="'Income Year'" selected>Income Year</option>
+                                                <option [value]="'Date Range'">Date Range</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-1 col-md-4 col-sm-12"
+                                        *ngIf="periodicallyVariableAllowanceForm.get('durationType').value =='Income Year'">
+                                        <label for="fiscalYearId" class="control-label">Fiscal Years
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </span>
+                                            </div>
+                                            <select name="fiscalYearId" id="fiscalYearId"
+                                                class="form-control form-control-sm" formControlName="fiscalYearId"
+                                                [ngClass]="{'is-invalid':formErrors.fiscalYearId}"
+                                                (blur)="logFormErrors()">
+                                                <option [value]="0" selected>---Select Fiscal year---</option>
+                                                <option [value]="item.id" *ngFor="let item of ddlFiscalyears">
+                                                    {{item.text}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-1 col-md-6 col-sm-12"
+                                        *ngIf="periodicallyVariableAllowanceForm.get('durationType').value =='Date Range'">
+                                        <label for="effectionFromTo" class="control-label">Effective From ~ To
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-calendar-check-o"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm bg-white"
+                                                id="effectiveFrom" readonly name="effectiveFrom"
+                                                [ngClass]="{'is-invalid':formErrors.effectiveFrom}" placeholder="From"
+                                                bsDatepicker [bsConfig]="datePickerConfig" (click)="logFormErrors()">
+                                            <input type="text" class="form-control form-control-sm bg-white"
+                                                id="effectiveTo" readonly name="effectiveTo"
+                                                [ngClass]="{'is-invalid':formErrors.effectiveTo}" placeholder="To"
+                                                bsDatepicker [bsConfig]="datePickerConfig" (click)="logFormErrors()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-1 col-md-6 col-sm-12">
+                                        <label for="amountBaseOn" class="control-label">Amount Base
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>
+                                            <select name="amountBaseOn" id="amountBaseOn"
+                                                class="form-control form-control-sm" formControlName="amountBaseOn"
+                                                (blur)="logFormErrors()"
+                                                [ngClass]="{'is-invalid':formErrors.amountBaseOn}">
+                                                <option [value]="'Gross'">Gross</option>
+                                                <option [value]="'Basic'">Basic</option>
+                                                <option [value]="'Flat'">Flat</option>
+                                                <option [value]="'Principle'">Principle</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <!-- When Flat then amount -->
+                                                <!-- When Gross/Basic then percentage -->
+                                                <!-- When Principle then principalAmount -->
+                                                <input type="number" class="form-control form-control-sm"
+                                                    id="percentage" name="percentage" formControlName="percentage"
+                                                    (blur)="logFormErrors()"
+                                                    *ngIf="periodicallyVariableAllowanceForm.get('amountBaseOn').value=='Gross' || periodicallyVariableAllowanceForm.get('amountBaseOn').value=='Basic'"
+                                                    [ngClass]="{'is-invalid':formErrors.percentage}">
+                                                <input type="number" class="form-control form-control-sm" id="amount"
+                                                    name="amount" formControlName="amount"
+                                                    *ngIf="periodicallyVariableAllowanceForm.get('amountBaseOn').value=='Flat'"
+                                                    [ngClass]="{'is-invalid':formErrors.amount}"
+                                                    (blur)="logFormErrors()">
+                                                <input type="number" class="form-control form-control-sm"
+                                                    id="principalAmount" name="principalAmount"
+                                                    formControlName="principalAmount"
+                                                    *ngIf="periodicallyVariableAllowanceForm.get('amountBaseOn').value=='Principle'"
+                                                    [ngClass]="{'is-invalid':formErrors.principalAmount}"
+                                                    (blur)="logFormErrors()">
+                                            </div>
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <span
+                                                        *ngIf="periodicallyVariableAllowanceForm.get('amountBaseOn').value=='Flat' || periodicallyVariableAllowanceForm.get('amountBaseOn').value=='Principle'">&#2547;</span>
+                                                    <span
+                                                        *ngIf="periodicallyVariableAllowanceForm.get('amountBaseOn').value=='Gross' || periodicallyVariableAllowanceForm.get('amountBaseOn').value=='Basic'">%</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2 text-x-small">
+                <button type="submit" class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="periodicallyVariableAllowanceForm.invalid || btnPeriodically">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnPeriodically"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #periodicallyVariableAllowanceViewModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-success btn-circle fa fa-eye" aria-hidden="true"></i>|Periodical Variable
+            Allowance
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <span class="label label-primary">{{periodicalVariableAllowanceInfo.salaryVariableFor}} Wise
+                        Periodical
+                        Salary
+                        Variable Allowance</span>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-sm-12 col-md-4" *ngIf="periodicalVariableAllowanceInfo.salaryVariableFor!='All'">
+                    <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                        <tbody>
+                            <tr *ngFor="let item of periodicalVariableAllowanceInfo.periodicalDetails; let i=index">
+                                <td class="bg-dark-blue text-white text-center">{{i+1}}</td>
+                                <td>{{item.text}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-12"
+                    [class]="periodicalVariableAllowanceInfo.salaryVariableFor=='All' ?'col-md-12':'col-md-8'">
+                    <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                        <tbody>
+                            <tr>
+                                <td>Allowance Name</td>
+                                <td>{{periodicalVariableAllowanceInfo.allowanceName}}</td>
+                                <td>Duration Type</td>
+                                <td>{{periodicalVariableAllowanceInfo.durationType}}</td>
+                                <td>Effectivity</td>
+                                <td>{{periodicalVariableAllowanceInfo.effectiveFrom | date:"dd MMM yyyy"}}-
+                                    {{periodicalVariableAllowanceInfo.effectiveTo | date:"dd MMM yyyy"}}</td>
+                            </tr>
+                            <tr>
+                                <td>Amount Base</td>
+                                <td>{{periodicalVariableAllowanceInfo.amountBaseOn}}</td>
+                                <td>Amount/Percentage</td>
+                                <td>{{periodicalVariableAllowanceInfo.amountBaseOn == 'Gross' ||
+                                    periodicalVariableAllowanceInfo.amountBaseOn == 'Basic' ?
+                                    periodicalVariableAllowanceInfo?.percentage.toString()+"%":(periodicalVariableAllowanceInfo.amount
+                                    > 0 && periodicalVariableAllowanceInfo.principalAmount > 0?
+                                    periodicalVariableAllowanceInfo.principalAmount
+                                    :periodicalVariableAllowanceInfo.amount)}}</td>
+                                <td>StateStatus</td>
+                                <td>
+                                    <span class="label label-warning"
+                                        *ngIf="periodicalVariableAllowanceInfo.stateStatus=='Pending'">{{periodicalVariableAllowanceInfo.stateStatus
+                                        + '...'}}</span>
+                                    <span class="label label-primary"
+                                        *ngIf="periodicalVariableAllowanceInfo.stateStatus=='Approved'"> <i
+                                            class="fa fa-check"></i>
+                                        {{periodicalVariableAllowanceInfo.stateStatus}}</span>
+                                    <span class="label label-danger"
+                                        *ngIf="periodicalVariableAllowanceInfo.stateStatus=='Cancelled'"><i
+                                            class="fa fa-times"></i>
+                                        {{periodicalVariableAllowanceInfo.stateStatus}}</span>
+                                    <span class="label label-info"
+                                        *ngIf="periodicalVariableAllowanceInfo.stateStatus=='Recheck'"><i
+                                            class="fa fa-backward"></i>
+                                        {{periodicalVariableAllowanceInfo.stateStatus}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body pt-0 text-x-small font-bold text-dark" *ngIf="isPeriodicalApprovalModal">
+        <form #periodicallyVariableAllowanceApprovalForm="ngForm"
+            (ngSubmit)="submitPeriodicalVariableAllowanceStatus(periodicallyVariableAllowanceApprovalForm,remarks.value,checkStatus.value)">
+            <div class="form-row border-top">
+                <div class="form-group offset-md-6 col-md-6 col-sm-12 mt-1">
+                    <div class="input-group">
+                        <input type="text" name="checkRemarks" #remarks id="checkRemarks" required
+                            class="form-control form-control-sm" placeholder="Write Comments Here..">
+                        <div class="input-group-prepend">
+                            <select name="checkStatus" #checkStatus id="checkStatus"
+                                class="form-control form-control-sm" required>
+                                <option value="Approved">Approved</option>
+                                <option value="Recheck">Recheck</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                                [disabled]="periodicallyVariableAllowanceApprovalForm.invalid || btnPeriodically">
+                                <i class="fa fa-paper-plane"></i> | Submit
+                                <span [hidden]="!btnPeriodically" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

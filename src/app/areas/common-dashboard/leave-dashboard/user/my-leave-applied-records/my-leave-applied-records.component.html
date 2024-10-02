@@ -1,0 +1,439 @@
+<div class="col-12 col-lg-12 col-md-12 col-sm-12 p-0">
+    <div class="ibox">
+
+        <div class="ibox-content bg-white border-radius-5">
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <h4 class="mb-2"><i class="fa fa-user mr-2" aria-hidden="true"></i>My Leave Applied Records</h4>
+                </div>
+            </div>
+            <hr class="m-1">
+
+            <ng-container *ngIf="leaveRecorsList.length > 0;">
+
+                <div class="row text-x-small px-3" style="max-height: 236px; overflow-y: auto;">
+                    <table class="table table-sm table-hover table-responsive-sm table-bordered">
+                        <thead>
+                            <tr>
+
+                                <th class="text-center align-middle">Leave Type</th>
+                                <th class="text-center align-middle">Dates</th>
+                                <th class="text-center align-middle">Total Days</th>
+                                <th class="text-center align-middle">Status</th>
+                                <th class="text-center align-middle">Remarks</th>
+                                <th class="text-center align-middle">Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let employee of leaveRecorsList | paginate: myLeaveAppliedConfig">
+
+
+                                <td class="text-center align-middle">{{ employee.title }}</td>
+
+
+                                <td class="text-center align-middle">
+                                    <ng-container>
+                                        <span *ngIf="employee.appliedFromDate !== employee.appliedToDate">
+                                            {{ employee.appliedFromDate | date:'dd MMM, yyyy' }} To {{
+                                            employee.appliedToDate | date:'dd MMM, yyyy' }}
+                                        </span>
+                                        <span *ngIf="employee.appliedFromDate === employee.appliedToDate">
+                                            {{ employee.appliedFromDate | date:'dd MMM, yyyy' }}
+                                        </span>
+                                    </ng-container>
+                                </td>
+
+                                <td class="text-center align-middle">{{ employee.appliedTotalDays }}</td>
+
+
+
+                                <td class="text-center align-middle">
+                                    <span *ngIf="employee.stateStatus === 'Cancelled'" class="label label-secondary">{{
+                                        employee.stateStatus }}</span>
+                                    <span *ngIf="employee.stateStatus === 'Rejected'" class="label label-danger">{{
+                                        employee.stateStatus }}</span>
+                                    <span *ngIf="employee.stateStatus === 'Approved'" class="label label-info">{{
+                                        employee.stateStatus }}</span>
+                                    <span *ngIf="employee.stateStatus === 'Pending'" class="label label-warning">{{
+                                        employee.stateStatus }}</span>
+                                    <span *ngIf="employee.stateStatus === 'Recommended'" class="label label-success">{{
+                                        employee.stateStatus }}</span>
+                                </td>
+
+
+                                <td class="text-center align-middle">
+                                    <span
+                                        *ngIf="employee.stateStatus === 'Cancelled' && employee.cancelRemarks !== null">{{
+                                        employee.cancelRemarks }}</span>
+                                    <span
+                                        *ngIf="employee.stateStatus === 'Approved' && employee.approvalRemarks !== null">{{
+                                        employee.approvalRemarks }}</span>
+                                    <span
+                                        *ngIf="employee.stateStatus === 'Rejected' && employee.rejectedRemarks !== null">{{
+                                        employee.rejectedRemarks }}</span>
+                                    <span
+                                        *ngIf="employee.stateStatus === 'Recommended' && employee.checkRemarks !== null">{{
+                                        employee.checkRemarks }}</span>
+                                    <span *ngIf="employee.stateStatus === 'Pending'"></span>
+                                </td>
+
+
+                                <td class="text-center align-middle">
+
+                                    <button *ngIf="employee.fileName != null && employee.filePath != null" type="button" class="btn btn-xs text-danger" title="Details" (click)="downloadFile(employee.fileName, employee.filePath)">
+                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                      </button>
+
+                                    <button *ngIf="employee.stateStatus !== 'Pending'" type="button" class="btn btn-xs"
+                                        tooltip="Edit Leave Request" [disabled]="employee.stateStatus !== 'Pending'">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </button>
+
+                                    <button *ngIf="employee.stateStatus === 'Pending'" type="button" class="btn btn-xs"
+                                        tooltip="Edit Leave Request" (click)="showLeaveRequestModal(employee)">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </button>
+
+                                    <button *ngIf="employee.stateStatus !== 'Pending'" type="button"
+                                        class="btn btn-xs text-danger" tooltip="Cancel Leave Request"
+                                        [disabled]="employee.stateStatus !== 'Pending'">
+                                        <i class="icofont-close-squared-alt" aria-hidden="true"></i>
+                                    </button>
+
+                                    <button *ngIf="employee.stateStatus === 'Pending'" type="button"
+                                        class="btn btn-xs text-danger" tooltip="Cancel Leave Request"
+                                        (click)="openDeleteModal(employee)">
+                                        <i class="icofont-close-squared-alt" aria-hidden="true"></i>
+                                    </button>
+
+
+                                    <button type="button" class="btn btn-xs text-dark-blue" title="Activity Log"
+                                        (click)="openActivityLogModal(employee)">
+                                        <i class="icofont-settings"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-xs" title="Cancel Approved Leave Request"
+                                        (click)="openCancelApprovedLeaveModal(employee)"
+                                        *ngIf="employee.stateStatus=='Approved' || employee.stateStatus=='Availed'"><i
+                                            class="fa fa-window-close"></i>
+                                    </button>
+
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </ng-container>
+
+
+            <div *ngIf="leaveRecorsList.length === 0;">
+                <div class="text-center bg-light" style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">
+                    <h5 style="color: #555; font-size: 24px; font-weight: bold;">No Leave Record</h5>
+                </div>
+            </div>
+
+
+
+            <div class="form-row text-x-small p-0" *ngIf="leaveRecorsList != null && leaveRecorsList.length > 0">
+                <div class="col-12 d-flex justify-content-end align-items-center">
+                    <div>
+                        <span class="mr-1">Page Size:</span>
+                        <select [(ngModel)]="pageSize" (change)="onPageSizeChange()" class="form-control-sm">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <pagination-controls (pageChange)="approvalPageChanged($event)" [responsive]="true"
+                        id="myLeaveAppliedConfigData"></pagination-controls>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<ng-container *ngIf="showDeleteModal">
+    <leave-module-cancel-leave-request-model [item]="employeeDeleteItem"
+        (closeModalEvent)="closeDeleteModal($event)"></leave-module-cancel-leave-request-model>
+</ng-container>
+
+<ng-container *ngIf="showLeaveRequest">
+    <leave-module-insert-update-leave-modal [leaveItem]="editleave" [id]="0"
+        (closeModalEvent)="hideLeaveRequestModal($event)"></leave-module-insert-update-leave-modal>
+</ng-container>
+
+<ng-container *ngIf="showCancelApprovedLeaveModal">
+    <leave-module-cancel-apporved-leave [item]="cancelApprovedLeaveItem"
+        (closeModalEvent)="closeCancelApprovedLeaveModal($event)"></leave-module-cancel-apporved-leave>
+</ng-container>
+
+
+<ng-template #employeeLeaveRequestModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+
+            <i class="icofont-beach fa-2x"></i>|
+            {{employeeLeaveTypeForm.get('employeeLeaveRequestId').value > 0 ? 'Update Applied Leave Request':'Apply New
+            Leave
+            Request'}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="employeeLeaveTypeForm" (ngSubmit)="submitEmployeeLeaveRequest2()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="leaveTypeId" class="control-label">
+                            Leave Type
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon  text-dark">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                            </div>
+                            <select name="leaveTypeId" id="leaveTypeId" class="form-control form-control-sm"
+                                formControlName="leaveTypeId" [ngClass]="{'is-invalid':formErrors.leaveTypeId}"
+                                (blur)="logFormErrors()">
+                                <option [value]="0">---Select Leave Type---</option>
+                                <option [value]="item.id" *ngFor="let item of ddlEmployeeLeaveBalance">{{item.text
+                                    +'- Avaliable: '+item.count+ ' - Max at once: '+item.max}}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="formErrors.leaveTypeId" class="text-danger">
+                            <span>{{formErrors.leaveTypeId}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="dayLeaveType" class="control-label">
+                            Day Leave Type <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon  text-dark">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                            </div>
+                            <select name="dayLeaveType" id="dayLeaveType" class="form-control form-control-sm"
+                                #dayLeaveTypeRef formControlName="dayLeaveType"
+                                [ngClass]="{'is-invalid':formErrors.dayLeaveType}" (blur)="logFormErrors()">
+                                <option [value]="'Full-Day'" selected>Full-Day</option>
+                                <option [value]="'Half-Day'">Half-Day</option>
+                            </select>
+                        </div>
+                        <div *ngIf="formErrors.dayLeaveType" class="text-danger">
+                            <span>{{formErrors.dayLeaveType}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12"
+                        [hidden]="employeeLeaveTypeForm.get('dayLeaveType').value =='Full-Day'">
+                        <label for="halfDayType" class="control-label">Portion Of Day</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon  text-dark">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                            </div>
+                            <select name="halfDayType" id="halfDayType" class="form-control form-control-sm"
+                                formControlName="halfDayType" [ngClass]="{'is-invalid':formErrors.halfDayType}"
+                                (blur)="logFormErrors()">
+                                <option [value]="''">--Select--</option>
+                                <option [value]="'First Portion'">First Half</option>
+                                <option [value]="'Second Portion'">Second Half</option>
+                            </select>
+                        </div>
+                        <div *ngIf="formErrors.halfDayType" class="text-danger">
+                            <span>{{formErrors.halfDayType}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="appliedFromDate" class="control-label">
+                            {{employeeLeaveTypeForm.get('dayLeaveType').value =='Full-Day'?'Applied Date Range':'Applied
+                            Date'}}<span class="text-danger">* &nbsp;</span>
+                            <span class="label label-warning" [hidden]="totalLeave ==0"> Total Leave Days:
+                                {{totalLeave}}</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon  text-dark">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <ng-container *ngIf="employeeLeaveTypeForm.get('dayLeaveType').value =='Full-Day'">
+                                <input type="text" name="appliedFromDate" id="appliedFromDate"
+                                    formControlName="appliedFromDate" class="form-control form-control-sm bg-white"
+                                    placeholder="Enter Date Range" bsDaterangepicker [bsConfig]="datePickerConfig"
+                                    readonly>
+                            </ng-container>
+                            <ng-container *ngIf="employeeLeaveTypeForm.get('dayLeaveType').value =='Half-Day'">
+                                <input type="text" name="appliedFromDate" id="appliedFromDate"
+                                    formControlName="appliedFromDate" class="form-control form-control-sm bg-white"
+                                    placeholder="Enter Date" bsDatepicker [bsConfig]="datePickerConfig" readonly>
+                            </ng-container>
+                            <div class="input-group-prepend cursor-pointer"
+                                [hidden]="this.employeeLeaveTypeForm.get('appliedFromDate').value == null"
+                                (click)="clearDate('appliedFromDate')">
+                                <span class="input-group-addon text-danger">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="formErrors.appliedFromDate" class="text-danger">
+                            <span>{{formErrors.appliedFromDate}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="leavePurpose" class="control-label">
+                            Leave Purpose<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon  text-dark">
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="leavePurpose" id="leavePurpose"
+                                class="form-control form-control-sm" formControlName="leavePurpose"
+                                [ngClass]="{'is-invalid':formErrors.leavePurpose}" (blur)="logFormErrors()">
+                        </div>
+                        <div *ngIf="formErrors.leavePurpose" class="text-danger">
+                            <span>{{formErrors.leavePurpose}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="emergencyPhoneNo" class="control-label">
+                            Emergency Phone No
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon  text-dark">
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="emergencyPhoneNo" id="emergencyPhoneNo"
+                                class="form-control form-control-sm" formControlName="emergencyPhoneNo"
+                                [ngClass]="{'is-invalid':formErrors.emergencyPhoneNo}" (blur)="logFormErrors()">
+                        </div>
+                        <div *ngIf="formErrors.emergencyPhoneNo" class="text-danger">
+                            <span>{{formErrors.emergencyPhoneNo}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="addressDuringLeave" class="control-label">
+                            Address During Leave
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon  text-dark">
+                                    <i class="fa fa-address-card" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="addressDuringLeave" id="addressDuringLeave"
+                                class="form-control form-control-sm" formControlName="addressDuringLeave"
+                                [ngClass]="{'is-invalid':formErrors.addressDuringLeave}" (blur)="logFormErrors()">
+                        </div>
+                        <div *ngIf="formErrors.addressDuringLeave" class="text-danger">
+                            <span>{{formErrors.addressDuringLeave}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="listOfeligibleLeaveDay.length > 0">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm table-responsive-sm">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th>#SL</th>
+                                        <th>Date</th>
+                                        <th>Day</th>
+                                        <th>Shift Name</th>
+                                        <th>Leave</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr *ngFor="let item of listOfeligibleLeaveDay ; let i =index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.Date | date:"dd MMM yyyy"}}</td>
+                                        <td>{{item.DayName}}</td>
+                                        <td>{{item.WorkShiftName}}</td>
+                                        <td>
+                                            <span class="text-success" *ngIf="item.Status == 'Leave'">
+                                                <i class="icofont icofont-check-circled"></i>
+                                            </span>
+                                            <span class="text-danger" *ngIf="item.Status != 'Leave'">
+                                                <i class="icofont icofont-close-circled"></i>
+                                            </span>
+                                        </td>
+                                        <td>{{item.Remarks}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit" class="btn btn-sm btn-primary btn-rounded"
+                    [disabled]="employeeLeaveTypeForm.invalid || btnEmployeeLeaveRequest">
+                    <i class="fa fa-paper-plane"></i> | {{this.employeeLeaveTypeForm.get("employeeLeaveRequestId").value
+                    == 0?
+                    'Submit':'Update'}}
+                    <span [hidden]="!btnEmployeeLeaveRequest" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-rounded" (click)="modal.close('Cancel click')"><i
+                        class="fa fa-times"></i> | Cancel
+                </button>
+
+
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #employeeLeaveRequestDeleteModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="icofont-beach fa-2x"></i>| Cancel Leave Request
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <h5>Are you sure you want to cancel <span class="text-info">{{employeeDeleteItem?.leaveTypeName}}</span>
+            of <span class="text-warning">{{employeeDeleteItem?.appliedFromDate | date:"dd MMM yyyy"}}-
+                {{employeeDeleteItem?.appliedToDate | date:"dd MMM yyyy"}}</span>
+        </h5>
+    </div>
+    <div class="modal-footer p-2">
+        <button type="button" class="btn btn-xs btn-outline-danger" (click)="modal.close('Cancel click')">
+            <i class="fa fa-times"></i> | Cancel</button>
+        <button type="submit" class="btn btn-xs btn-outline-warning" (click)="confirmDelete()">
+            <i class="fa fa-check"></i> | Ok <span class="spinner-border spinner-border-sm hide" role="status"
+                aria-hidden="true"></span>
+        </button>
+    </div>
+</ng-template>
+
+
+
+
+<ng-container *ngIf="showActivityModal">
+    <app-activity-log [activityLogDetails]="activityLogDetails" (closeModalEvent)="closeActivityLogModal($event)">
+    </app-activity-log>
+</ng-container>

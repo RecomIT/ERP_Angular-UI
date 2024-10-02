@@ -1,0 +1,66 @@
+<ng-template #uploadMonthlyVariableAllowanceModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-worker pr-1 fa-1x border-right"></i> Upload Variable Allowance
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="uploadForm" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <label for="allowanceName" class="control-label font-bold text-uppercase">Allowance</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-money"></i>
+                                </span>
+                            </div>
+                            <select name="allowanceName" id="allowanceName" formControlName="allowanceNameId" class="form-control form-control-sm">
+                                <option [value]="0" selected>---Select Allowance---</option>
+                                <option [value]="item.id" *ngFor="let item of ddlAllowances">{{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <label for="salaryMonth" class="control-label font-bold text-uppercase">Salary Month & Year</label>
+                        <div class="input-group">
+                            <select name="salaryMonth" id="salaryMonth" class="form-control form-control-sm" formControlName="salaryMonth">
+                                <option [value]="item.monthNo" *ngFor="let item of ddlMonths">{{item.month}}</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <select name="salaryYear" id="salaryYear" class="form-control form-control-sm" formControlName="salaryYear">
+                                    <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-md-12 col-sm-12">
+                        <label for="excelFileUpload" class="control-label font-bold text-uppercase">Upload Excel File Only</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input id="excelFileUpload" type="file" class="custom-file-input" (change)="excelFileUpload($event)" 
+                                accept=".xls,.xlsx">
+                                <label class="custom-file-label" for="excelFileUpload">
+                                    {{excelFileName}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-outline btn-rounded" type="submit" [disabled]="this.uploadForm.invalid">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Upload File
+                    <span [hidden]="!btnUploadExcel" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button" (click)="closeModal('Cancel click')" [disabled]="btnUploadExcel">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

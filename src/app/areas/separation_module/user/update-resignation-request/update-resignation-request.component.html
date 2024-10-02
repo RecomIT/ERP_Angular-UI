@@ -1,0 +1,282 @@
+
+  
+  
+  
+  
+  
+    <ng-template #editResignationRequestModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          <i class="fa fa-pencil-square-o btn btn-sm btn-success btn-circle" aria-hidden="true"></i> Edit Resignation Request
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeEditResignationRequestModal('close click')">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+    
+      <div class="modal-body">
+  
+            <div class="container">
+            <form [formGroup]="resignationForm" (ngSubmit)="submitUpdate()">
+              <div class="row">
+                <div class="col-md-12">
+    
+                 
+  
+                  <div class="form-row text-x-small">
+                    <div class="col-md-12">
+                      
+                      <div class="form-row">
+  
+                        <div class="col-md-4 col-sm-12 mb-1" style="width: 100%;">
+  
+                          <label  for="ResignationCategoryId" class="control-label font-bold">
+                            Resignation Category: <span class="text-danger">*</span>
+                          </label>
+  
+  
+                            <ng-select2 
+                               
+                                formControlName="ResignationCategoryId"
+                                [data]="resignationCategories"
+                                name="searchByResignationCategory"
+                                id="searchByResignationCategory"
+                                [placeholder]="'Select Category ...'"
+                                [options]="resignationCategorySelect2Options"
+                                [allowClear]="true"
+                                
+                                (ngModelChange)="onResignationCategorySelectionChange($event)"
+                              
+                                >
+                            </ng-select2>
+                        </div>
+  
+                        <div class="col-md-4 col-sm-12 mb-1" style="width: 100%;">
+  
+                          <label  for="ResignationSubCategoryId" class="control-label font-bold">
+                            Resignation SubCategory: <span class="text-danger">*</span>
+                          </label>
+  
+                          <ng-select2 
+                              
+                              formControlName="ResignationSubCategoryId"
+                              [data]="resignationSubCategories"
+                              name="searchByResignationSubCategory"
+                              id="searchByResignationSubCategory"
+                              [placeholder]="'Select SubCategory ...'"
+                              [options]="resignationSubCategorySelect2Options"
+                              [allowClear]="true"
+                              
+                              (ngModelChange)="onResignationSubCategorySelectionChange($event)">
+                          </ng-select2>
+  
+                          <div *ngIf="resignationForm.get('ResignationSubCategoryId').value">
+                 
+                            <label for="noticePeriodLabel">Notice Period:</label>
+                            <span id="noticePeriodLabel">
+                              {{ resignationNoticePeriod.noticePeriod }}
+                              {{ resignationNoticePeriod.noticePeriod === 0 || resignationNoticePeriod.noticePeriod === 1 ? 'Day' : 'Days' }}
+                            </span>
+          
+                          </div>
+  
+                        </div>
+  
+                      </div>
+                    
+    
+                      <div class="form-row">
+                        <div class="col-12 col-lg-6 col-md-6 col-sm-12 mb-1">
+                          <label  for="ResignationReason" class="control-label font-bold">
+                            Resignation Reason: <span class="text-danger">*</span>
+                          </label>
+  
+                          <textarea class="form-control" formControlName="ResignationReason" rows="2"></textarea>
+                        </div>
+                      
+                        <div class="col-12 col-lg-6 col-md-6 col-sm-12 mb-1">
+                          <label for="SecondaryReason" class="font-bold">Secondary Reason:</label>
+                          <textarea class="form-control" formControlName="SecondaryReason" rows="2"></textarea>
+                        </div>
+                      </div>
+                      
+                      <div class="form-row">
+  
+                        <div class="col-md-4 col-sm-12 mb-1">
+                          <label for="NoticeDate" class="control-label font-bold">
+                            Notice Date <span class="text-danger">*</span>
+                          </label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-addon">
+                                <i class="fa fa-calendar-check-o"></i>
+                              </span>
+                            </div>
+                            <input type="text" formControlName="NoticeDate" id="NoticeDate" 
+                                  class="form-control form-control-sm bg-white"
+                                  readonly
+                                  placeholder="Select Notice Date.." title="Notice Date" bsDatepicker
+                                  [bsConfig]="datePickerConfig">
+                            <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date" 
+                              [hidden]="!resignationForm.get('NoticeDate').value"
+                              (click)="clearNoticeDate()">
+  
+                              <span class="input-group-addon text-danger">
+                                <i class="fa fa-times"></i>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+  
+                        <div class="col-md-4 col-sm-12 mb-1">
+                          <label for="RequestLastWorkingDate" class="control-label font-bold">
+                            Last Working Date <span class="text-danger">*</span>
+                          </label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-addon">
+                                <i class="fa fa-calendar-check-o"></i>
+                              </span>
+                            </div>
+                            <input type="text" formControlName="RequestLastWorkingDate" id="RequestLastWorkingDate" 
+                                  class="form-control form-control-sm bg-white"
+                                  readonly
+                                  placeholder="Select Last Working Date .." title="Last Working Date" bsDatepicker
+                                  [bsConfig]="datePickerConfig">
+                            <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date" 
+                              [hidden]="!resignationForm.get('RequestLastWorkingDate').value"
+                              (click)="clearRequestLastWorkingDate()">
+  
+                              <span class="input-group-addon text-danger">
+                                <i class="fa fa-times"></i>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+  
+                        <div class="col-md-4 col-sm-12 mb-1">
+                          <label for="EmployeeExitInterviewDate" class="control-label font-bold">
+                            Exit Interview Date <span class="text-danger">*</span>
+                          </label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-addon">
+                                <i class="fa fa-calendar-check-o"></i>
+                              </span>
+                            </div>
+                            <input type="text" formControlName="EmployeeExitInterviewDate" id="EmployeeExitInterviewDate" 
+                                  class="form-control form-control-sm bg-white"
+                                  readonly
+                                  placeholder="Select Exit Interview Date .." title="Last Working Date" bsDatepicker
+                                  [bsConfig]="datePickerConfig">
+                            <div class="input-group-prepend cursor-pointer border-left-0" title="Remove Date" 
+                              [hidden]="!resignationForm.get('EmployeeExitInterviewDate').value"
+                              (click)="clearEmployeeExitInterviewDate()">
+  
+                              <span class="input-group-addon text-danger">
+                                <i class="fa fa-times"></i>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="col-md-12 col-sm-12">
+                          <div *ngIf="resignationForm.get('NoticeDate').value && resignationForm.get('RequestLastWorkingDate').value">
+                            <p style="display: inline-block; margin-right: 10px;">
+                              Date differences: {{ calculateDateDifference().differenceInDays }} days
+                            </p>
+                            <p *ngIf="calculateDateDifference().shortfall > 0" class="text-danger" style="display: inline-block;">
+                              Shortfall: {{ calculateDateDifference().shortfall }} days
+                            </p>
+                          </div>
+                        </div>
+                        
+  
+                      </div>
+                      
+  
+                      <div class="form-row">
+  
+                        <div class="col-md-12 col-sm-12 mb-1">
+                          <label  for="EmployeeComment" class="control-label font-bold">
+                            Employee Comment:
+                          </label>
+  
+                          <textarea class="form-control" formControlName="EmployeeComment" rows="2"></textarea>
+                        </div>
+                      
+                      </div>
+  
+               
+                      <!-- <input type="File" (change)="fileUpload($event)" formControlName="File" /> -->
+  
+                      
+                      <div class="col-md-12 col-sm-12 text-x-small d-flex align-items-center">
+                        <!-- Display the selected file name if showFileInput is false -->
+                        <div *ngIf="!showFileInput" class="mr-2">
+                          <div style="display: inline-block; margin-right: 10px;">
+                            <strong>File: </strong>{{ selectedFileName || 'No file selected' }}
+                          </div>
+                        </div>
+                      
+                        <!-- Checkbox and its label -->
+                        <div class="form-check form-check-inline mr-2">
+                          <input type="checkbox" class="form-check-input" (change)="toggleFileInput()" id="showFileInput" />
+                          <label for="showFileInput" class="form-check-label">Choose another File</label>
+                        </div>
+                      
+                        <!-- File input when showFileInput is true -->
+                        <div *ngIf="showFileInput">
+                          <input type="file" (change)="fileUpload($event)" formControlName="File" accept=".pdf,.doc,.docs" />
+                        </div>
+                      </div>
+                      
+                      
+  
+  
+                    </div>
+    
+    
+                  </div>
+    
+          
+                  <div class="form-row mt-3">
+  
+                    <div class="col-md-12">
+          
+                      <button class="btn btn-xs btn-primary  p-1 shadow mr-2" type="submit" [disabled]="resignationForm.invalid">
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i> | Update
+                      </button>
+        
+                     
+          
+                  
+                    </div>
+                  </div>
+    
+     
+                  <!-- <div class="form-row mt-3">
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-primary" >Submit</button>
+                    </div>
+                  </div> -->
+  
+  
+  
+  
+                </div>
+              </div>
+            </form>
+          </div>
+  
+      </div>
+    
+      <div class="modal-footer">
+        <button class="btn btn-xs btn-danger btn-rounded shadow-lg" type="button" (click)="closeEditResignationRequestModal('Close Click')">
+          <i class="fa fa-times"></i> | Cancel
+        </button>
+      </div>
+    </ng-template>
+    
+  
+  

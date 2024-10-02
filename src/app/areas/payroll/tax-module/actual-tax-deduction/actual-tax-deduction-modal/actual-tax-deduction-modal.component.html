@@ -1,0 +1,81 @@
+<ng-template #actualTaxDeductionInsertUpdateModel let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-default btn-circle icofont-stop" aria-hidden="true"></i>| Actual Tax Deduction
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark text-x-small">
+        <form [formGroup]="actualTaxDeductionForm" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                        <label for="employeeId" class="control-label font-bold text-dark">Employee <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-user-suited"></i>
+                                </span>
+                            </div>
+                            <div style="width:85%">
+                                <ng-select2 [data]="ddlEmployees" name="employeeId" id="employeeId"
+                                    formControlName="employeeId" [placeholder]="'Select Employee...'"
+                                    [options]="select2Options" [allowClear]="true">
+                                </ng-select2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-12 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="salaryMonth" class="control-label font-bold text-dark">Salary Month & Year <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="salaryMonth" id="salaryMonth" class="form-control form-control-sm"
+                                formControlName="salaryMonth">
+                                <option [value]="0" selected>---Select Month ---</option>
+                                <option [value]="item.monthNo" *ngFor="let item of months">{{item.month}}</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <select name="salaryYear" id="salaryYear" class="form-control form-control-sm"
+                                    formControlName="salaryYear">
+                                    <option [value]="0" selected>---Select Year ---</option>
+                                    <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-sm-12 font-bold mt-2">
+                        <label for="actualTaxAmount" class="control-label font-bold text-dark">Amount <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="icofont-dollar"></i>
+                                </span>
+                            </div>
+                            <input type="number" name="actualTaxAmount" id="actualTaxAmount"
+                                formControlName="actualTaxAmount" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Close Click')">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit"
+                    [disabled]="this.actualTaxDeductionForm.invalid">
+                    <i class="fa fa-paper-plane"></i> | Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

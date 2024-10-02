@@ -1,0 +1,152 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-6 col-sm-6">
+        <h2 @slideInUp class="mt-2">Employee Hierarchy Setup</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Employee Hierarchy</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-6 col-sm-6">
+        <div class="title-action">         
+            <div class="clearfix pull-right text-x-small">             
+                <button type="button" class="btn btn-success btn-rounded btn-sm ml-1"
+                    (click)="openEmployeeHierarchyModal(0)">
+                    <i class="fa fa-plus"></i> | Hierarchy
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-1" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4 text-x-small">
+            <div class="tabs-container">
+                <div class="tab-content">
+                    <div id="employeeHierarchy" class="tab-pane active">
+                        <div class="panel-body border-radius-5 shadow-sm bg-white pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-4 col-sm-12">
+                                    <label for="ddlSearchByEmployee" class="control-label font-bold">Search By Employee</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                        </div>
+                                        <div style="width:90%">                                        
+                                            <ng-select2 [data]="ddlSearchByEmployee" name="ddlSearchByEmployee"
+                                                #ddlSearchByEmployeeRef="ngModel" [(ngModel)]="searchByEmployee"
+                                                id="ddlSearchByEmployee" [placeholder]="'Select Employee...'"
+                                                (ngModelChange)="onEmployeeChanged()" [options]="select2Options"
+                                                [allowClear]="true" required>
+                                            </ng-select2>
+                                        </div>
+                                    </div>
+                                </div>                               
+
+                                <div class="form-group col-md-4 col-sm-12 hide">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon text-dark">
+                                                <i class="fa fa-star"></i>
+                                            </span>
+                                        </div>                                 
+                                      
+                                        <select name="ddlSearchByHierarchy" id="ddlSearchByHierarchy"
+                                            class="form-control form-control-sm"
+                                            (change)="getEmployeeHierarchy()"
+                                            #ddlSearchByHierarchyRef="ngModel" [(ngModel)]="searchByHierarchy">
+                                            <option [value]="''">---Search By Hierarchy---</option>
+                                            <option [value]="'Pending'">Supervisor</option>    
+                                            <option [value]="'Approved'">Line Manager</option>                                                                                 
+                                            <option [value]="'Recheck'">Manager</option>
+                                            <option [value]="'Cancelled'">Head Of Department</option> 
+                                            <option [value]="'Cancelled'">HR Authority</option>                                            
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ibox-content border-radius-5 mt-1 shadow-sm text-x-small font-bold">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table tables-sm table-hover table-striped table-responsive-xl">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#SL</th>                                       
+                                                <th class="text-center">Employee Id</th>                                          
+                                                <th class="text-center">Employee Name</th>
+                                                <th class="text-center">Supervisor Id</th>                                
+                                                <th class="text-center">Supervisor Name</th>
+                                                <th class="text-center">Line Manager Id</th>
+                                                <th class="text-center">Line Manager Name</th>
+                                                <th class="text-center">Manager Id</th>
+                                                <th class="text-center">Manager Name</th>
+                                                <th class="text-center">Head Of Dept/Dir Id</th>
+                                                <th class="text-center">Head Of Dept/Dir Name</th>
+                                                <th class="text-center hide">HR Authority Id</th>
+                                                <th class="text-center hide">HR Authority Name</th>                         
+                                                <th class="text-center">Activation Date</th>                     
+                                                <th class="text-center">Status</th>                            
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr                                            
+                                                *ngFor="let item of employeeHierarchyList;let i = index">
+                                                    <td class="font-bold text-center">{{i+1}}</td>                                             
+                                                    <td class="text-center">{{item.employeeCode}}</td>                             
+                                                    <td class="text-center">{{item.fullName}}</td> 
+                                                    <td class="text-center">{{item.supervisorCode}}</td>
+                                                    <td class="text-center">{{item.supervisorName}}</td>
+                                                    <td class="text-center">{{item.lineManagerCode}}</td>
+                                                    <td class="text-center">{{item.lineManagerName}}</td>
+                                                    <td class="text-center">{{item.managerCode}}</td>
+                                                    <td class="text-center">{{item.managerName}}</td>
+                                                    <td class="text-center">{{item.headOfDepartmentCode}}</td>
+                                                    <td class="text-center">{{item.headOfDepartmentName}}</td>
+                                                    <td class="text-center hide">{{item.hRAuthorityCode}}</td>
+                                                    <td class="text-center hide">{{item.hRAuthorityName}}</td>                                             
+                                                    <td class="text-center">{{item.createdDate | date:"dd-MMMM-yyyy"}}</td>                                                
+                                                    <td class="text-center">                                                 
+                                                        <span [class]="item.isActive ? 'label label-primary':'label label-danger'">
+                                                            {{item.isActive ? 'Yes':'No'}}
+                                                        </span>                                                   
+                                                    </td> 
+                                                
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-xs hide"
+                                                        (click)="openEmployeeHierarchyModal(item?.employeeCode)" title="Edit">
+                                                        <i class="fa fa-pencil-square-o"></i> 
+                                                        </button>                                                 
+                                                    </td>                                               
+                                            </tr>                                           
+                                        </tbody>
+                                    </table>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+         </div>
+     </div>
+  </div>
+</div>
+
+
+
+<ng-container *ngIf="showEmployeeHierarchyModal">
+    <app-hr-add-employee-hierarchy 
+    (closeModalEvent)="closeEmployeeHierarchyModal($event)"></app-hr-add-employee-hierarchy>
+</ng-container>
+

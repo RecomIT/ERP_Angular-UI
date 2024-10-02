@@ -1,0 +1,129 @@
+<ng-template #pfActivationModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-bank pr-1 fa-1x border-right"></i>{{modalTitle}}            
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="pfActivationForm" (ngSubmit)="submitPFActivation()">
+        <div class="modal-body text-x-small">
+            <div class="form-row">
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="employeesSearchRef" class="control-label font-bold">
+                        Employee <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-ui-user-group"></i>
+                            </span>
+                        </div>
+                        <div class="d-inline" style="width: 90%;">
+                            <ng-select2 [data]="ddlEmployees" name="employeesSearchRef" formControlName="employeeId"
+                                id="employeesSearchRef" [placeholder]="'Search Employee...'" [options]="select2Options"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="pfBasedAmount" class="control-label font-bold">
+                        Based Amount <span class="text-danger">*</span>
+                        <!-- <span *ngIf="this.existingText != '' && this.existingText != null"
+                            class="label label-info">{{this.existingText}}</span> -->
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-recycle"></i>
+                            </span>
+                        </div>
+                        <select name="pfBasedAmount" id="pfBasedAmount" class="form-control form-control-sm" formControlName="pfBasedAmount">
+                            <option [value]="''" selected>---Select Based Amount---</option>
+                            <option [value]="item" *ngFor="let item of basedAmount">{{item}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="pfPercentage" class="control-label font-bold">
+                        Percentage (%)<span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-close-circled"></i>
+                            </span>
+                        </div>
+                        <input type="number" name="pfPercentage" id="pfPercentage" class="form-control form-control-sm"
+                            formControlName="pfPercentage" > &nbsp; &nbsp;
+                        <label for="pfPercentage" class="control-label font-bold">
+                           <span class="text-danger">%</span>
+                        </label>
+                    </div>
+                </div> 
+
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="pfEffectiveDate" class="control-label font-bold">
+                        Effective Date <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-ui-calendar"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="pfEffectiveDate" id="pfEffectiveDate" readonly
+                            [bsConfig]="datePickerConfig" class="form-control form-control-sm bg-white"
+                            formControlName="pfEffectiveDate" bsDatepicker autocomplete="off">
+                    </div>
+                </div>    
+
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="pfActivationDate" class="control-label font-bold">
+                        Activation Date <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-ui-calendar"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="pfActivationDate" id="pfActivationDate" readonly
+                            [bsConfig]="datePickerConfig" class="form-control form-control-sm bg-white"
+                            formControlName="pfActivationDate" bsDatepicker autocomplete="off">
+                    </div>
+                </div>             
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="remarks" class="control-label font-bold">
+                        Remarks
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="icofont-comment"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="remarks" id="remarks" class="form-control form-control-sm"
+                            formControlName="remarks" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary"
+                [disabled]="!this.pfActivationForm.valid">
+                <i class="fa fa-paper-plane"></i> | Submit </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                (click)="closeModal('Cancel click')">
+                <i class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+
+</ng-template>

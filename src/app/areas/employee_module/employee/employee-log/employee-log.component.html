@@ -1,0 +1,79 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <h2 class="mt-2"> <i class="icofont-pay"></i> | Info Change Log Report</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Info</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Employee Log</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3 animated fadeInDown" id="page-container">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 text-x-small font-bold">
+                    <form [formGroup]="form" (submit)="submit()">
+                        <div class="form-row">
+                            <div class="form-group mb-sm-1 col-md-4 col-sm-12">
+                                <label for="reportType" class="control-label">From Date ~ To Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-list"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" 
+                                    [bsConfig]="datePickerConfig" bsDaterangepicker name="dateRange" id="dateRange" formControlName="dateRange" autocomplete="off" />
+                                </div>
+                            </div>
+                            <div class="form-group mb-sm-1 col-md-4 col-sm-12">
+                                <label for="employeeId" class="control-label">User(s)</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-list"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width: 85%;">
+                                        <ng-select2 [data]="ddlEmployees" name="employees" id="employeeId"
+                                            formControlName="employeeId" [placeholder]="'Select One...'"
+                                            [options]="select2Config" [allowClear]="true" required>
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-sm-1 col-md-4 col-sm-12">
+                                <label for="branchId" class="control-label">Company/Branch/Location</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-building" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <select type="text" class="form-control form-control-sm font-bold"
+                                        placeholder="Select Branch" id="branchId" name="branchId"
+                                        formControlName="branchId">
+                                        <option [value]="0" selected>---Search one---</option>
+                                        <option [value]="item.id" *ngFor="let item of ddlBranch">{{item.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <div class="form-row">
+                            <button type="submit" class="btn btn-sm btn-rounded btn-outline-secondary"> <i class="icofont-file-pdf text-danger"></i> | Download Report</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

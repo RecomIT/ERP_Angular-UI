@@ -1,0 +1,48 @@
+
+.popup {
+    display: inline-block;
+    position: absolute;
+    top: 70px; 
+    right: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+  }
+  
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px; 
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .popup-header h3 {
+    margin: 0;
+  }
+  
+  .close-icon {
+    cursor: pointer;
+    font-size: 18px;
+    color: #888;
+    padding: 5px;
+  }
+  
+  .popup ul {
+    list-style-type: none;
+    margin: 0; 
+    padding: 0;
+  }
+  
+  .popup li {
+    cursor: pointer;
+    padding: 8px; 
+    border-bottom: 1px solid #f0ebeb;
+  }
+  
+  .popup li:last-child {
+    border-bottom: none;
+  }
+  

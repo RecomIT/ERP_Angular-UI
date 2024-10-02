@@ -1,0 +1,326 @@
+<div class="ibox" @fadeIn>
+    <div class="ibox-content bg-white">
+        <div class="row" *ngIf="showEditBtn">
+            <div class="col-12 col-sm-12 col-md-12">
+                <button class="btn btn-xs btn-outline-primary btn-circle pull-right"
+                    title="EDIT YOUR INFORMATION" (click)="openModal()">
+                    <i class="fa fa-edit"></i>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6 col-sm-12 font-weight-light">
+                <div class="activity-stream">
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-id-card"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                <p class="mb-0">
+                                    Employee ID
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.employeeCode}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-male"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Father Name
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.fatherName ??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-female"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Mother Name
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.motherName ??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-dot-circle-o"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Gender
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.gender ??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-id-card"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Date Of Birth
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.dateOfBirth | date: 'dd MMM yyyy'}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-life-ring"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Marital Status
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.maritalStatus ??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-user-md"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Emergency Contact Person-1
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.emergencyContactPerson ??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-telephone"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Emergency Contact No-1
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.emergencyContactNo?? 'N/A'}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-address-card"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Emergency Contact Address-1
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.emergencyContactAddress?? "N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-dot-circle-o"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Relation With Contact Person-1
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.relationWithEmergencyContactPerson?? 'N/A'}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-dot-circle-o"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Emergency Contact Person Email-1
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.emergencyContactEmailAddress?? 'N/A'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-sm-12 font-weight-light">
+                <div class="activity-stream">
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-moon-o"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Religion
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.religion ??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0 hide">
+                        <div class="stream-badge">
+                            <i class="fa fa-balance-scale"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    HEIGHT IN FEET
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.feet +'-'+employeePersonalInfo?.inch}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-water-drop"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Blood Group
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.bloodGroup ??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-mobile-phone"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Mobile
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.personalMobileNo ??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Email
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.personalEmailAddress ??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-baby"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Number Of Child
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.numberOfChild ?? 'N/A'}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-heart"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Spouse Name
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.spouseName?? 'N/A'}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-user-md"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Emergency Contact Person-2
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.emergencyContactPerson2}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-telephone"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Emergency Contact No-2
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.emergencyContactNo2?? 'N/A'}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-address-card"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Emergency Contact Address-2
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.emergencyContactAddress2??"N/A"}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-dot-circle-o"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Relation With Contact Person-2
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.relationWithEmergencyContactPerson2?? 'N/A'}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="fa fa-dot-circle-o"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-bold">
+                                 <p class="mb-0">
+                                    Emergency Contact Person Email-2
+                                </p>
+                            </div>
+                            {{employeePersonalInfo?.emergencyContactEmailAddress2?? 'N/A'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showModal == true && modalObj != null">
+    <app-employee-module-personal-insert-update-modal [employeeDetail]="modalObj"
+        (closeModalEvent)="closeModal($event)"></app-employee-module-personal-insert-update-modal>
+</ng-container>

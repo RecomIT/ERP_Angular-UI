@@ -1,0 +1,38 @@
+<ng-template #modal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle" aria-hidden="true">&#2547;</i> | Principle Amount Infos
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="col-12 col-md-12 col-sm-12 font-bold">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-responsive-sm text-center">
+                        <thead>
+                            <tr>
+                                <th>#SL</th>
+                                <th>Month</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let item of list; let i=index">
+                            <tr>
+                                <td>{{i+1}}</td>
+                                <td>{{this.utilityService.getMonthNameFull(item?.month)}} - {{item?.year}}</td>
+                                <td>{{item.amount | number}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer text-x-small p-1">
+        <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')">
+            <i class="fa fa-times"></i> | Cancel
+        </button>
+    </div>
+</ng-template>

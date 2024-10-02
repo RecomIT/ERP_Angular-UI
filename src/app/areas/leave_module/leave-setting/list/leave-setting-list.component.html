@@ -1,0 +1,141 @@
+<div class="row wrapper border-bottom white-bg page-heading pb-2">
+    <div class="col-md-8 col-sm-6">
+        <h2 @slideInUp class="mt-1"><i class="icofont-settings"></i> | Leave Policy Setting</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>Leave</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Leave Policy Setting</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-4 col-sm-6 text-x-small">
+        <div class="title-action pt-3">
+            <button type="button" class="btn btn-sm btn-outline-info btn-rounded pull-right"
+                tooltip="Make A Leave Policy Setting" (click)="showModal(0)"> <i class="fa fa-plus"></i> | Leave Policy Setting
+            </button>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated pt-2 fadeInRight">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small font-bold text-dark">
+                    <div class="form-row pt-3">
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="searchByAnything" class="control-label font-bold">Search By Anything</label>
+                            <div class="input-group">
+                                <input type="text" name="searchByAnything" id="searchByAnything"
+                                    onkeyup="tableFilter('#tblLeaveSetting tbody tr',this)" class="form-control form-control-sm"
+                                    autofocus placeholder="Type here..." />
+                                <div class="input-group-prepend">
+                                    <span class="input-group-addon  text-dark">
+                                        <i class="icofont-search-2"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-content shadow-sm bg-white border-radius-5 pt-1 pb-1 text-x-small">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg"
+                        id="tblLeaveSetting">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#SL</th>
+                                <th>Leave Type</th>
+                                <th class="text-center">Short Name</th>
+                                <th class="text-center">No. Of Days</th>
+                                <th class="text-center">Max Days Leave At a time</th>
+                                <th class="text-center">Is Hoilday Included</th>
+                                <th class="text-center">Is Day Off Included</th>
+                                <th class="text-center">Is Carry Forward</th>
+                                <th class="text-center">Max Days Carry Forward</th>
+                                <th class="text-center">Leave Applicable For</th>
+                                <th class="text-center">Request Days Before Taking Leave</th>
+                                <th class="text-center hide">Effectivity</th>
+                                <th class="text-center">Is Active</th>
+                                <!-- <th class="text-center">Status</th> -->
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ls of list; let i = index">
+                                <td class="text-center font-bold">{{i+1}}</td>
+                                <td>{{ls.leaveTypeName}}</td>
+                                <td class="text-center">{{ls.shortName}}</td>
+                                <td class="text-center">{{ls.noOfDays}}</td>
+                                <td class="text-center">{{ls.maxDaysLeaveAtATime}}</td>
+                                <td class="text-center">
+                                    <span
+                                        [class]="ls.isHolidayIncluded ? 'label label-primary':'label label-danger'">
+                                        {{ls.isHolidayIncluded ? 'Yes':'No'}}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span
+                                        [class]="ls.isDayOffIncluded ? 'label label-primary':'label label-danger'">
+                                        {{ls.isDayOffIncluded ? 'Yes':'No'}}
+                                    </span>
+                                </td>
+
+                                <td class="text-center">
+                                    <span
+                                        [class]="ls.isCarryForward ? 'label label-primary':'label label-danger'">
+                                        {{ls.isCarryForward ? 'Yes':'No'}}
+                                    </span>
+                                </td>
+
+                                <td class="text-center">{{ls.maxDaysCarryForward}}</td>
+                                <td class="text-center">{{ls.leaveApplicableFor}}</td>
+                                <td class="text-center">{{ls.requestDaysBeforeTakingLeave}}</td>
+                                <td class="text-center hide">
+                                    {{ls.effectiveFrom | date:"dd MMM yyyy"}} - {{ls.effectiveTo | date:"dd MMM yyyy"}}
+                                </td>
+                                <td class="text-center">
+                                    <span [class]="ls.isActive ? 'label label-primary':'label label-danger'">
+                                        {{ls.isActive ? 'Yes':'No'}}
+                                    </span>
+                                </td>
+                                <!-- <td class="text-center">
+                                    <span
+                                        [class]="ls.stateStatus =='Entered'?'label label-success':'label label-primary'">
+                                        {{ls.stateStatus}}
+                                    </span>
+                                </td> -->
+                                <td class="text-center">
+                                    <button class="btn btn-xs" (click)="showModal(ls.leaveSettingId)"
+                                        title="Edit">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="list_loading_label == null" class="text-center">
+                                <td colspan="11">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                    Loading...
+                                </td>
+                            </tr>
+                            <tr *ngIf="list_loading_label != null && list.length == 0"
+                                class="text-center font-bold">
+                                <td colspan="15">No data found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showInsertUpdateModal == true">
+    <leave-module-leave-setting-insert-update-modal [id]="this.leaveTypeId" (closeModalEvent)="closeModal($event)">
+    </leave-module-leave-setting-insert-update-modal>
+</ng-container>

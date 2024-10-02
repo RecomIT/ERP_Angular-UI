@@ -1,0 +1,21 @@
+.status-chip {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 8px;
+    color: white;
+}
+
+.status-pending {
+    background-color: yellowgreen; 
+}
+
+.status-approved {
+    background-color: #0082ad; 
+}
+
+.status-rejected {
+    background-color: #c95656; 
+}
+.status-cancel {
+    background-color: #ca0000; 
+}

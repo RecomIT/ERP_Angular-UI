@@ -1,0 +1,76 @@
+<ng-template #deleteModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-users-alt-4 pr-1 fa-1x border-right"></i> Delete Proposal
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Close Click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="col-12 col-md-12 col-sm-12 font-bold">
+                <div class="activity-stream">
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-id-card"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    ID
+                                </a>
+                            </div>
+                            {{item?.employeeCode}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-user-alt-5"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    Employee Name
+                                </a>
+                            </div>
+                            {{item?.employeeName}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-ui-calendar"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    Head
+                                </a>
+                            </div>
+                            {{item?.head}}
+                        </div>
+                    </div>
+                    <div class="stream pb-0">
+                        <div class="stream-badge">
+                            <i class="icofont-worker"></i>
+                        </div>
+                        <div class="stream-panel">
+                            <div class="stream-info font-normal">
+                                <a class="text-info">
+                                    From > To
+                                </a>
+                            </div>
+                            {{item?.existingText}} To {{item?.proposalText}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer text-x-small">
+        <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" (click)="submit()">
+            <i class="fa fa-paper-plane"></i> | Delete
+        </button>
+        <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+            (click)="closeModal('Cancel click')"><i class="fa fa-times"></i> | Cancel</button>
+    </div>
+</ng-template>

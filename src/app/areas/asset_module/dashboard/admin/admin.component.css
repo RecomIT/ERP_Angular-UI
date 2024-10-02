@@ -1,0 +1,58 @@
+.icon {
+    font-size: 32px; 
+    margin-bottom: 10px;
+    color: rgb(130, 130, 252);
+}
+
+.icon-color {
+  color: inherit;
+}
+
+.value > div {
+    display: inline-block;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 5px; 
+    margin: 2px;
+}
+
+
+
+
+.dashboard-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    height: 80px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+
+  }
+  
+    .icon-container {
+      margin-right: 10px;
+    }
+  
+    .icon-container .fa {
+      font-size: 38px;
+      color: rgb(130, 130, 252);
+      /* Adjust the size as needed */
+    }
+
+  .text-container {
+    flex-grow: 1; 
+    text-align: center;
+  }
+  
+  .title {
+    margin-bottom: 5px; 
+  }
+  
+  .value {
+    font-weight: bold; 
+    padding-top: 5%;
+  }
+  
+

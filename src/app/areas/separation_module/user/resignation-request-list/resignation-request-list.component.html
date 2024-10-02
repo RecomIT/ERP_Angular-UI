@@ -1,0 +1,419 @@
+<div class="wrapper wrapper-content pt-3 animated fadeInDown" id="page-container">
+
+  <div class="row">
+    <div class="col-12 p-0">
+
+
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let res of resignationRequestList  | paginate: userResignationRequestPageConfig">
+        <mat-expansion-panel-header>
+            
+          <mat-panel-title>
+            <span>{{ res.fullName }}</span> 
+        </mat-panel-title>
+        
+        <mat-panel-description class="text-x-small">
+            <div>
+                <span>
+                    <strong>Status: </strong> 
+                    <span class="status-chip" [ngClass]="{
+                      'bg-warning': res.stateStatus === 'Pending',
+                      'bg-primary': res.stateStatus === 'Approved',
+                      'bg-danger': res.stateStatus === 'Rejected',
+                      'bg-secondary': res.stateStatus === 'Cancel'
+                        }">
+                        <strong>{{ res.stateStatus }}</strong> 
+                    </span>
+                </span>
+        
+                <span *ngIf="res.stateStatus !== 'Cancel'">
+                    <strong>Supervisor Status: </strong>
+                    <span class="status-chip" [ngClass]="{
+                        'bg-warning': res.supervisorStatus === 'Pending',
+                        'bg-primary': res.supervisorStatus === 'Approved',
+                        'bg-danger': res.supervisorStatus === 'Rejected',
+                        'bg-secondary': res.supervisorStatus === 'Cancel'
+                        }">
+                        <strong>{{ res.supervisorStatus }}</strong> 
+                    </span>
+                </span>
+
+
+                <span *ngIf="res.stateStatus !== 'Cancel'">
+                  <strong>Admin Status: </strong>
+                  <span class="status-chip" [ngClass]="{
+                    'bg-warning': res.hrStatus === 'Pending',
+                    'bg-primary': res.hrStatus === 'Approved',
+                    'bg-danger': res.hrStatus === 'Rejected',
+                    'bg-secondary': res.hrStatus === 'Cancel'
+                      }">
+                      <strong>{{ res.hrStatus }}</strong> 
+                  </span>
+              </span>
+
+
+            </div>
+        </mat-panel-description>
+        
+
+        </mat-expansion-panel-header>
+
+        <div class="p-3">
+          
+          <div class="form-row border-bottom">
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12">
+              <div class="form-row  p-1">
+                <div class="col-12 col-lg-2 col-md-2 col-sm-6">
+                  <div class="label"><strong>Category:</strong></div>
+                </div>
+                <div class="col-12 col-lg-10 col-md-10 col-sm-6">
+                  <div class="value">{{ res.categoryName }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12 p-0">
+              <div class="form-row  p-1">
+                <div class="col-12 col-lg-2 col-md-2 col-sm-6">
+                  <div class="label"><strong>Subcategory:</strong></div>
+                </div>
+                <div class="col-12 col-lg-10 col-md-10 col-sm-6">
+                  <div class="value">{{ res.subCategoryName }}</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        
+          
+          <div class="form-row p-1 pt-2">
+            
+            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+               
+                <div class="form-row">
+                    <div class="col-12 col-md-4 col-lg-4 col-sm-6">
+                        <div class="label"><strong>Notice Period:</strong></div>
+                      </div>
+                      <div class="col-12 col-md-8 col-lg-8 col-sm-6">
+                        <div class="value">{{ res.noticePeriod }} Days</div>
+                      </div>
+                </div>
+                
+            </div>
+            
+            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                <div class="form-row">
+                    <div class="col-12 col-md-4 col-lg-4 col-sm-6">
+                      <div class="label"><strong>Shortfall:</strong></div>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-8 col-sm-6">
+                      <div class="value">{{ res.createdShortfall }} Days</div>
+                    </div>
+                  </div>
+            </div>
+
+          </div>
+
+
+          <div class="form-row p-1">
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                <div class="form-row">
+                    <div class="col-12 col-md-4 col-lg-4 col-sm-6">
+                      <div class="label"><strong>Notice Date:</strong></div>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-8 col-sm-6">
+                      <div class="value">{{ res.noticeDate | date:'dd MMM, yyyy' }}</div>
+                    </div>
+                  </div>
+                
+            </div>
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                
+                <div class="form-row">
+                    <div class="col-12 col-md-4 col-lg-4 col-sm-6">
+                    <div class="label"><strong>Last Working Date:</strong></div>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-8 col-sm-6">
+                    <div class="value">{{ res.requestLastWorkingDate | date:'dd MMM, yyyy' }}</div>
+                    </div>
+                </div>
+            </div>
+
+          </div>
+
+
+
+          <div class="form-row p-1">
+            
+            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                <div class="form-row">
+                    <div class="col-12 col-md-4 col-lg-4 col-sm-6">
+                      <div class="label"><strong>Interview Date:</strong></div>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-8 col-sm-6">
+                      <div class="value">{{ res.employeeExitInterviewDate | date:'dd MMM, yyyy' }}</div>
+                    </div>
+                  </div>   
+            </div>
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                
+              
+            </div>
+
+          </div>
+               
+
+          <div class="form-row  p-1">
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12">
+                <div class="form-row">
+                    <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                      <div class="label"><strong>Is Resignation Letter Upload:</strong></div>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                  
+                      <div class="text-center align-middle">
+                        <span class="badge badge-pill {{ res.isResignationLetterUpload ? 'badge-success' : 'badge-danger' }}">
+                            {{ res.isResignationLetterUpload ? 'Yes' : 'No' }}
+                        </span>
+                      </div>
+                    </div>
+                    
+                  </div>
+                
+            </div>
+
+
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12" *ngIf="res.isResignationLetterUpload">
+                
+              <div class="form-row">
+                  <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                    <div class="label"><strong>File:</strong></div>
+                  </div>
+                  <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                    <div class="value">
+                      <a (click)="downloadFile(res.fileName, res.filePath)">
+                        <i class="fa fa-file-pdf-o text-danger" aria-hidden="true"></i><strong> Download PDF</strong>
+                      </a>
+                    </div>
+                  </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-row p-1">
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12">
+                <div class="form-row">
+                    <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                      <div class="label"><strong>Reschedule Interview Date By Supervisor:</strong></div>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                  
+                      <div class="text-center align-middle">
+                        <span class="badge badge-pill {{ res.IsResignationLetterUpload ? 'badge-success' : 'badge-danger' }}">
+                            {{ res.rescheduleExitInterviewBySupervisor ? 'Yes' : 'No' }}
+                        </span>
+                      </div>
+                    </div>
+                    
+                  </div>
+                
+            </div>
+
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12">
+                
+              <div class="form-row" *ngIf="res.RescheduleExitInterviewBySupervisor">
+                  <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                    <div class="label"><strong>Supervisor Interview Date</strong></div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                    <div class="value">{{ res.supervisorExitInterviewDate | date:'dd MMM, yyyy' }}</div>
+                  </div>
+                </div>
+            </div>
+
+          </div>
+
+
+
+          <div class="form-row p-1">
+
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12">
+              <div class="form-row">
+                <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                  <div class="label"><strong>Reschedule Interview Date By Admin:</strong></div>
+                </div>
+
+                <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+              
+                  <div class="text-center align-middle">
+                    <span class="badge badge-pill {{ res.IsResignationLetterUpload ? 'badge-success' : 'badge-danger' }}">
+                        {{ res.rescheduleExitInterviewByHR ? 'Yes' : 'No' }}
+                    </span>
+                  </div>
+                </div>
+                
+              </div>
+                
+            </div>
+
+            
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12">
+                
+              <div class="form-row" *ngIf="res.RescheduleExitInterviewBySupervisor">
+                  <div class="col-12 col-md-8 col-lg-8 col-sm-12">
+                    <div class="label"><strong>Admin Interview Date</strong></div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-4 col-sm-12">
+                    <div class="value">{{ res.hRExitInterviewDate | date:'dd MMM, yyyy' }}</div>
+                  </div>
+                </div>
+            </div>
+
+          </div>
+
+  
+
+          <div class="form-row p-1">
+            <div class="col-12 col-lg-2 col-md-2 col-sm-12">
+              <div class="label"><strong>Resignation Reason:</strong></div>
+            </div>
+            <div class="col-12 col-lg-10 col-md-10 col-sm-12">
+              <div class="value">{{ res.resignationReason }}</div>
+            </div>
+          </div>
+
+
+          <div class="form-row   p-1">
+            <div class="col-12 col-lg-2 col-md-2 col-sm-12">
+              <div class="label"><strong>Secondary Reason:</strong></div>
+            </div>
+            <div class="col-12 col-lg-10 col-md-10 col-sm-12">
+              <div class="value">{{ res.secondaryReason }}</div>
+            </div>
+          </div>
+
+          <div class="form-row  p-1">
+            <div class="col-12 col-lg-2 col-md-2 col-sm-6">
+              <div class="label"><strong>Comment:</strong></div>
+            </div>
+            <div class="col-12 col-lg-10 col-md-10 col-sm-6">
+              <div class="value">{{ res.employeeComment }}</div>
+            </div>
+          </div>
+  
+
+
+
+        <div class="d-flex justify-content-end mt-2">
+
+          <button *ngIf="res.stateStatus === 'Pending' && res.supervisorStatus === 'Pending'" class="btn btn-sm btn-outline-success mr-1" type="button" title="Edit" (click)="openEditResignationRequestModal(res)">
+              <i class="fa fa-pencil-square-o shadow"></i>
+          </button>
+
+          <button *ngIf="res.stateStatus !== 'Pending' && res.supervisorStatus !== 'Pending'" class="btn btn-sm btn-outline-success mr-1" type="button"
+          [disabled]="res.stateStatus !== 'Pending' && res.supervisorStatus !== 'Pending'">
+            <i class="fa fa-pencil-square-o shadow"></i>
+          </button>
+      
+          <button *ngIf="res.stateStatus === 'Pending' && res.supervisorStatus === 'Pending'" class="btn btn-sm btn-outline-danger" title="Cancel Request" type="button" (click)="openCancelResignationRequestModal(res?.resignationRequestId)">
+              <i class="fa fa-trash-o shadow"></i>
+          </button>
+
+          <button *ngIf="res.stateStatus !== 'Pending' && res.supervisorStatus !== 'Pending'" class="btn btn-sm btn-outline-danger"  type="button" 
+          [disabled]="res.stateStatus !== 'Pending' && res.supervisorStatus !== 'Pending'">
+            <i class="fa fa-trash-o shadow"></i>
+        </button>
+
+
+        </div>
+      
+    
+
+      
+        </div>
+        
+
+        </mat-expansion-panel>
+
+      </mat-accordion>
+       
+
+      <div class="form-row w-100" *ngIf="resignationRequestList.length > 0">
+        <div class="col-12 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-end align-items-center text-x-small ">
+          <pagination-controls (pageChange)="userResignationRequestPageChanged($event)" [responsive]="true" id="userResignationRequest">
+          </pagination-controls>
+        </div>
+      </div>
+     
+
+      <div *ngIf="resignationRequestList.length === 0">
+          <div class="text-center bg-light" style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">
+              <h5 style="color: #555; font-size: 24px; font-weight: bold;">No Request</h5>
+              <p style="color: #777; font-size: 16px;">There are no resignation requests at the moment.</p>
+          </div>
+        </div>
+  
+
+
+    </div>
+</div>
+  
+  
+  
+</div>
+
+
+
+
+
+
+
+<ng-container *ngIf="showCancelResignationRequestModal">
+    <app-cancel-resignation-request 
+    [resignationRequestId]="resignationRequestId" 
+    (closeModalEvent)="closeCancelResignationRequestModal($event)"
+    (statusChanged)="onStatusChanged($event)"
+    >
+    </app-cancel-resignation-request>
+</ng-container>
+
+
+
+<!-- 
+<ng-container *ngIf="showEditResignationRequestModal">
+    <app-add-resignation-request 
+    [resignationRequestId]="resignationRequestId" 
+    (closeModalEvent)="closeEditResignationRequestModal($event)"
+    (updateChanged)="onUpdateChanged($event)"
+    >
+    </app-add-resignation-request>
+</ng-container> -->
+
+
+
+
+
+<ng-container *ngIf="showEditResignationRequestModal">
+  <app-update-resignation-request 
+  [resignationRequestId]="resignationRequestId"
+  [resignationRequestForUpdate]="resignationRequestForUpdate"
+  (closeModalEvent)="closeEditResignationRequestModal($event)"
+  (updateChanged)="onUpdateChanged($event)"
+  >
+  </app-update-resignation-request>
+</ng-container>
+
+

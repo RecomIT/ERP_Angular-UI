@@ -1,0 +1,951 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-md-12 col-sm-12">
+        <h2 @slideInUp class="mt-2">Miscellaneous Setup</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Setup</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Miscellaneous</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div id="page-container" class="wrapper wrapper-content pt-2">
+    <div class="row m-t-sm text-x-small">
+        <div class="col-md-12 mb-md-4">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="#Bank" data-toggle="tab" class="nav-link active">
+                            <i class="fa fa-university" aria-hidden="true"></i> | Bank
+                        </a></li>
+                    <li><a href="#BankBranch" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-university" aria-hidden="true"></i> | Bank Branch
+                        </a></li>
+                    <li><a href="#BloodGroup" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-tint" aria-hidden="true"></i> | Blood Group
+                        </a></li>
+                    <li><a href="#EmployeeJobtype" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-list-alt" aria-hidden="true"></i> | Job Type
+                        </a></li>
+                    <li><a href="#Level" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-level-up" aria-hidden="true"></i> | Level
+                        </a></li>
+                    <li><a href="#JobStatus" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-random" aria-hidden="true"></i> | Status
+                        </a></li>
+                    <li><a href="#Religion" data-toggle="tab" class="nav-link">
+                            <i class="fa fa-moon-o" aria-hidden="true"></i> | Religion
+                        </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="Bank" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm 
+                                    font-bold" placeholder="Search By Anything" id="bankfilter"
+                                            onkeyup="tableFilter('#tblBank tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button"  class="btn btn-sm btn-rounded btn-success float-right" (click)="openBankModal()">
+                                        <i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblBank">
+                                <thead>
+                                    <tr>
+                                        <th>#SL</th>
+                                        <th>Bank Name &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Bank Code &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Status</th>
+                                        <th>Created Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let bank of bankList; let i =index">
+                                        <td class="font-bold">{{i+1}}</td>
+                                        <td>{{bank.bankName}}</td>
+                                        <td>{{bank.bankCode}}</td>
+                                        <td>
+                                            <span [class]="bank.isActive? 'label label-primary':'label label-danger'">
+                                                {{bank.isActive? "Active":"Inactive"}}</span>
+                                        </td>
+                                        <td>{{bank.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit" (click)="editBank(bank.bankId)">
+                                                <i class="fa fa-pencil-square-o"></i></button> &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="bankList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="bankList != null && bankList.length == 0" class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="BankBranch" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm  font-bold"
+                                            placeholder="Search By Anything" id="bankBranchfilter"
+                                            onkeyup="tableFilter('#tblBankBranch tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button"  class="btn btn-sm btn-rounded btn-success float-right" (click)="openBankBranchModal()">
+                                        <i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblBankBranch">
+                                <thead>
+                                    <tr>
+                                        <th>#SL</th>
+                                        <th>Branch Name &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Routing Number &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Bank Name &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Status</th>
+                                        <th>Created Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let bb of bankBranchList; let i =index">
+                                        <td class="font-bold">{{i+1}}</td>
+                                        <td>{{bb.bankBranchName}}</td>
+                                        <td>{{bb.routingNumber}}</td>
+                                        <td>{{bb.bankName}}</td>
+                                        <td>
+                                            <span [class]="bb.isActive? 'label label-primary':'label label-danger'">
+                                                {{bb.isActive? "Active":"Inactive"}}</span>
+                                        </td>
+                                        <td>{{bb.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit"
+                                                (click)="editBankBranch(bb.bankBranchId)">
+                                                <i class="fa fa-pencil-square-o"></i></button> &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="bankBranchList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="bankBranchList != null && bankBranchList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="BloodGroup" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm  font-bold"
+                                            placeholder="Search By Anything" id="bloodGroupfilter"
+                                            onkeyup="tableFilter('#tblBloodGroup tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button"  class="btn btn-sm btn-rounded btn-success float-right" (click)="openBloodGroupModal()">
+                                        <i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblBloodGroup">
+                                <thead>
+                                    <tr>
+                                        <th>#SL</th>
+                                        <th>Blood Group &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Created Date &nbsp;<i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let bg of bloodGroupList;let i = index">
+                                        <td class="font-bold">{{i+1}}</td>
+                                        <td>
+                                            <span class="label label-white text-white"><i
+                                                    class="fa fa-tint text-danger"></i> {{bg.bloodGroupName}}</span>
+                                        </td>
+                                        <td class="font-bold">{{bg.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit"
+                                                (click)="editBloodGroup(bg.bloodGroupId)">
+                                                <i class="fa fa-pencil-square-o"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="bloodGroupList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="bloodGroupList != null && bloodGroupList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="EmployeeJobtype" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm  font-bold"
+                                            placeholder="Search By Anything" id="jobTypefilter"
+                                            onkeyup="tableFilter('#tblJobType tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button"  class="btn btn-sm btn-rounded btn-success float-right" (click)="openJobTypeModal()">
+                                        <i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblJobType">
+                                <thead>
+                                    <tr>
+                                        <th>#SL</th>
+                                        <th>Job-Type &nbsp; <i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Duration &nbsp; <i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Remarks &nbsp; <i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Created Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let jt of jobtypeList; let i = index">
+                                        <td class="font-bold">{{i+1}}</td>
+                                        <td>{{jt.jobTypeName}}</td>
+                                        <td>{{jt.duration}}</td>
+                                        <td>{{jt.remarks}}</td>
+                                        <td class="font-bold">{{jt.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit" (click)="editJobType(jt.jobTypeId)">
+                                                <i class="fa fa-pencil-square-o"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="jobtypeList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="jobtypeList != null && jobtypeList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Level" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm  font-bold"
+                                            placeholder="Search By Anything" id="levelfilter"
+                                            onkeyup="tableFilter('#tblLevel tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button"  class="btn btn-sm btn-rounded btn-success float-right" (click)="openLevelModal()">
+                                        <i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblLevel">
+                                <thead>
+                                    <tr>
+                                        <th>#SL</th>
+                                        <th>Level&nbsp; <i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Remarks&nbsp; <i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Created Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of levelList;let i =index">
+                                        <td class="font-bold">{{i+1}}</td>
+                                        <td>{{item.levelName}}</td>
+                                        <td>{{item.remarks}}</td>
+                                        <td>{{item.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit" (click)="editLevel(item.levelId)">
+                                                <i class="fa fa-pencil-square-o"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="levelList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="levelList != null && levelList.length == 0" class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="JobStatus" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm  font-bold"
+                                            placeholder="Search By Anything" id="jobStatusfilter"
+                                            onkeyup="tableFilter('#tblJobStatus tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button"  class="btn btn-sm btn-rounded btn-success float-right" (click)="openJobStatusModal()">
+                                        <i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblJobStatus">
+                                <thead>
+                                    <tr>
+                                        <th>#SL</th>
+                                        <th>Job-Status&nbsp; <i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Remarks&nbsp; <i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Created Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of jobStatusList;let i =index">
+                                        <td class="font-bold">{{i+1}}</td>
+                                        <td>{{item.jobStatusName}}</td>
+                                        <td>{{item.remarks}}</td>
+                                        <td>{{item.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit" (click)="editJobStaus(item.statusId)">
+                                                <i class="fa fa-pencil-square-o"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="jobStatusList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="jobStatusList != null && jobStatusList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Religion" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm  font-bold"
+                                            placeholder="Search By Anything" id="religionfilter"
+                                            onkeyup="tableFilter('#tblReligion tbody tr',this)" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-addon"><i class="fa fa-search"></ i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button"  class="btn btn-sm btn-rounded btn-success float-right" (click)="openReligionModal()">
+                                        <i class="fa fa-plus"></i>|Create</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-sm table-striped table-hover table-responsive-lg" id="tblReligion">
+                                <thead>
+                                    <tr>
+                                        <th>#SL</th>
+                                        <th>Religion&nbsp; <i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Code&nbsp; <i class="fa fa-sort-amount-asc"></i></th>
+                                        <th>Created Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of religionList;let i =index">
+                                        <td class="font-bold">{{i+1}}</td>
+                                        <td>{{item.religionName}}</td>
+                                        <td>{{item.religionCode}}</td>
+                                        <td>{{item.createdDate | date:"dd-MMM-yyyy"}}</td>
+                                        <td>
+                                            <button class="btn btn-xs" title="Edit" (click)="editReligion(item.religionId)">
+                                                <i class="fa fa-pencil-square-o"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="religionList == null" class="text-center">
+                                        <td colspan="13">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="religionList != null && religionList.length == 0"
+                                        class="text-center font-bold">
+                                        <td colspan="13">No data found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #bankModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-success 
+    btn-circle fa fa-university"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+    click')"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #bankForm="ngForm" (submit)="submitBank()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-7">
+                        <label for="bankName" class="control-label">
+                            Bank Name<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-university"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="bankName" id="bankName" class="form-control form-control-sm"
+                                #bankName="ngModel" [(ngModel)]="bank.bankName" required minlength="3" maxlength="100">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon pr-0">
+                                    <div class="mb-0 form-check abc-checkbox abc-checkbox-success form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="isActive" name="isActive"
+                                            [value]="bank.isActive" [checked]="bank.isActive" #bankIsActive="ngModel"
+                                            [(ngModel)]="bank.isActive">
+                                        <strong>Is Active?</strong>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="bankName.invalid && bankName.touched">
+                                <span *ngIf="bankName.errors?.required">Name is required</span>
+                                <!-- bank.bankName.trim().length == 0 || -->
+                                <span *ngIf="bankName.errors?.minlength">Min length is 3</span>
+                            </div>
+                            <span>{{duplicateBankName}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="bankCode" class="control-label">
+                            Bank Code
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-compress" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="bankCode" id="bankCode" #bankCode="ngModel"
+                                [(ngModel)]="bank.bankCode" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit"  class="btn btn-sm btn-rounded btn-primary" [disabled]="bankForm.invalid || btnBank">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnBank"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button"  class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #bankBranchModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-success 
+    btn-circle fa fa-university"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+    click')"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #bankBranchForm="ngForm" (submit)="submitBankBranch()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-7">
+                        <label for="bankBranchName" class="control-label">
+                            Branch Name<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-university"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="bankBranchName" id="bankBranchName"
+                                class="form-control form-control-sm" #bankBranchName="ngModel"
+                                [(ngModel)]="bankBranch.bankBranchName" required minlength="3" maxlength="100">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon pr-0">
+                                    <div class="mb-0 form-check abc-checkbox abc-checkbox-success form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="isActive" name="isActive"
+                                            [value]="bankBranch.isActive" [checked]="bankBranch.isActive"
+                                            #bankBranchIsActive="ngModel" [(ngModel)]="bankBranch.isActive">
+                                        <strong>Is Active?</strong>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="bankBranchName.invalid && bankBranchName.touched">
+                                <span *ngIf="bankBranchName.errors?.required">Name is required</span>
+                                <span *ngIf="bankBranchName.errors?.minlength">Min length is 3</span>
+                            </div>
+                            <span>{{duplicateBankBranch}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="bankName" class="control-label">
+                            Bank<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-university" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <select type="text" name="bankName" id="bankName" #bankName="ngModel"
+                                [(ngModel)]="bankBranch.bankId" class="form-control form-control-sm font-bold">
+                                <option [value]="0" selected>---Select Bank---</option>
+                                <option [value]="b.bankId" *ngFor="let b of bankList">{{b.bankName}}</option>
+                            </select>
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="bankName.value =='0' && bankName.touched">
+                                <span>Bank is required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-7">
+                        <label for="routingNumber" class="control-label">
+                            Routing Number<span class="text-danger"></span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-wifi"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="routingNumber" id="routingNumber" #routingNumber="ngModel"
+                                [(ngModel)]="bankBranch.routingNumber" minlength="3" maxlength="100"
+                                class="form-control form-control-sm">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="routingNumber.value !='' && routingNumber.touched">
+                                <span *ngIf="routingNumber.errors?.minlength">Minlength is 3</span>
+                                <span *ngIf="routingNumber.errors?.maxlength">Maxlength is 100</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit"  class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="bankBranchForm.invalid || bankName.value =='0' || btnBankBranch">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnBankBranch"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button"  class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #bloodGroupModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-success 
+    btn-circle fa fa-tint"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+    click')"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #bloodGroupForm="ngForm" (submit)="submitBloodGroup()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="bloodGroupName" class="control-label">
+                            Blood Group <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-tint"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="bloodGroupName" id="bloodGroupName"
+                                class="form-control form-control-sm" #bloodGroupName="ngModel"
+                                [(ngModel)]="bloodGroup.bloodGroupName" required maxlength="10" minlength="2"
+                                (input)="[duplicateBloodGroup='',bloodGroup.bloodGroupName=bloodGroup.bloodGroupName.trim()]">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="bloodGroupName.invalid && bloodGroupName.touched">
+                                <span *ngIf="bloodGroupName.errors?.required">Blood Group is required</span>
+                                <span *ngIf="bloodGroupName.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="bloodGroupName.errors?.maxlength">Maxlength is 10</span>
+                            </div>
+                            <span>{{duplicateBloodGroup}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row"></div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit"  class="btn btn-sm btn-rounded btn-primary"
+                    [disabled]="bloodGroupForm.invalid || btnBloodGroup">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnBloodGroup"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button"  class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #jobTypeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-success btn-circle fa fa-briefcase"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+    click')"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #jobTypeForm="ngForm" (submit)="submitJobType()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="jobTypeName" class="control-label">Job-Type
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-briefcase"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="jobTypeName" id="jobTypeName" #jobTypeName="ngModel"
+                                class="form-control form-control-sm" [(ngModel)]="jobtype.jobTypeName" required
+                                minlength="2" maxlength="50"
+                                (input)="[duplicateJobType='', jobtype.jobTypeName=jobtype.jobTypeName.trim()]">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="jobTypeName.invalid && jobTypeName.touched">
+                                <span *ngIf="jobTypeName.errors?.required">Job Type is required</span>
+                                <span *ngIf="jobTypeName.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="jobTypeName.errors?.maxlength">Maxlength is 50</span>
+                            </div>
+                            <span>{{duplicateJobType}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="jobTypeDuration" class="control-label">Duration
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-briefcase"></i>
+                                </span>
+                            </div>
+                            <select name="jobTypeDuration" id="jobTypeDuration" #jobTypeDuration="ngModel"
+                                [(ngModel)]="jobtype.duration" class="form-control form-control-sm font-bold" required>
+                                <option value="" selected>---Select Duration---</option>
+                                <option value="Life Time">Life Time</option>
+                                <option value="1 Year">1 Year</option>
+                                <option value="Six Months">6 Months</option>
+                                <option value="4 Months">4 Months</option>
+                                <option value="Three Months">3 Months</option>
+                            </select>
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="jobTypeDuration.value =='' && jobTypeDuration.touched">
+                                <span>Duration is required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="jobTypeDuration" class="control-label">Remarks</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="jobTypeRemarks" id="jobTypeRemarks"
+                                class="form-control form-control-sm" #jobTypeRemarks="ngModel"
+                                [(ngModel)]="jobtype.remarks">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit"  class="btn btn-sm btn-rounded btn-primary" [disabled]="jobTypeForm.invalid || btnJobType">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnJobType"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button"  class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #levelModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-success btn-circle fa fa-level-up"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+    click')"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #levelForm="ngForm" (submit)="submitLevel()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="levelName" class="control-label">Level Name</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-level-up"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="levelName" id="levelName" #levelName="ngModel"
+                                [(ngModel)]="level.levelName" class="form-control form-control-sm" required
+                                minlength="2" maxlength="200"
+                                (input)="[duplicateLevel='',level.levelName=level.levelName.trim()]">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="levelName.invalid && levelName.touched">
+                                <span *ngIf="levelName.errors?.required">Level is required</span>
+                                <span *ngIf="levelName.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="levelName.errors?.maxlength">Maxlength is 200</span>
+                            </div>
+                            <span>{{duplicateLevel}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="levelRemarks" class="control-label">Remarks</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="levelRemarks" id="levelRemarks" #levelRemarks="ngModel"
+                                [(ngModel)]="level.remarks" class="form-control form-control-sm" maxlength="200">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit"  class="btn btn-sm btn-rounded btn-primary" [disabled]="levelForm.invalid || btnLevel">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnLevel"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button"  class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #jobStatusModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-success btn-circle fa fa-random"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+    click')"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #jobStatusForm="ngForm" (submit)="submitJobStatus()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="jobStatusName" class="control-label">
+                            Job Status <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-random"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="jobStatusName" id="jobStatusName" #jobStatusName="ngModel"
+                                [(ngModel)]="jobstatus.jobStatusName" class="form-control form-control-sm" required
+                                minlength="2" maxlength="100"
+                                (input)="[duplicateJobStatus='',jobstatus.jobStatusName=jobstatus.jobStatusName.trim()]">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="jobStatusName.invalid && jobStatusName.touched">
+                                <span *ngIf="jobStatusName.errors?.required">Job Status is required</span>
+                                <span *ngIf="jobStatusName.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="jobStatusName.errors?.maxlength">Maxlength is 100</span>
+                            </div>
+                            <span>{{duplicateLevel}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="jobStatusRemarks" class="control-label">
+                            Remarks
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="jobStatusRemarks" id="jobStatusRemarks" #jobStatusRemarks="ngModel"
+                                [(ngModel)]="jobstatus.remarks" class="form-control form-control-sm" maxlength="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit"  class="btn btn-sm btn-rounded btn-primary" [disabled]="jobStatusForm.invalid || btnJobStatus">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnJobStatus"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button"  class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<ng-template #religionModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="btn btn-sm btn-success btn-circle fa fa-moon-o"></i>
+            | {{modalTitle}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross 
+    click')"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold">
+        <form #religionForm="ngForm" (submit)="submitReligion()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="religionName" class="control-label">
+                           Religion <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-moon-o"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="religionName" id="religionName" #religionName="ngModel"
+                                [(ngModel)]="religion.religionName" class="form-control form-control-sm" required
+                                minlength="2" maxlength="50"
+                                (input)="[duplicateReligion='',religion.religionName=religion.religionName.trim()]">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="religionName.invalid && religionName.touched">
+                                <span *ngIf="religionName.errors?.required">Job Status is required</span>
+                                <span *ngIf="religionName.errors?.minlength">Minlength is 2</span>
+                                <span *ngIf="religionName.errors?.maxlength">Maxlength is 50</span>
+                            </div>
+                            <span>{{duplicateReligion}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="religionCode" class="control-label">
+                            Code
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </div>
+                            <input type="text" name="religionCode" id="religionCode" #religionCode="ngModel"
+                                [(ngModel)]="religion.religionCode" class="form-control form-control-sm" maxlength="20">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="submit"  class="btn btn-sm btn-rounded btn-primary" [disabled]="religionForm.invalid || btnReligion">
+                    <i class="fa fa-paper-plane"></i> | Submit <span [hidden]="!btnReligion"
+                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="button"  class="btn btn-sm btn-rounded btn-danger" (click)="modal.close('Cancel click')">
+                    <i class="fa fa-times"></i> | Cancel</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

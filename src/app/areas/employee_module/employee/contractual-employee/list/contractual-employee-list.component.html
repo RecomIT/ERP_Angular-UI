@@ -1,0 +1,186 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-8 col-md-8 col-sm-8">
+        <h2 @slideInUp class="mt-2">Employee Confirmation Proposal</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <strong>HR</strong>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Employee</strong>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Confirmation Proposal</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-4 col-md-4 col-sm-4">
+        <div class="title-action text-x-small">
+            <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded" (click)="openModal(0)"
+                title="Bonus Process"><i class="fa fa-plus"></i>| Renew Contruct</button>
+                &nbsp;
+                <button type="button" class="btn btn-sm btn-success btn-outline btn-rounded" (click)="openUploadModal()"
+                title="Bonus Process"><i class="fa fa-upload"></i>| Upload</button>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content pt-3">
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12">
+            <!-- Search Box -->
+            <form [formGroup]="searchForm">
+                <div class="ibox">
+                    <div class="ibox-content border-radius-5 pb-2 text-x-small font-bold">
+                        <div class="form-row">
+                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                <label for="employeeId" class="control-label">Search By Employee</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark">
+                                            <i class="fa fa-users"></i>
+                                        </span>
+                                    </div>
+                                    <div style="width: 80%;">
+                                        <ng-select2 [data]="ddlEmployees" name="employees" id="employees"
+                                            [placeholder]="'Select Employee...'" [options]="select2Options"
+                                            [allowClear]="true" formControlName="employeeId" required>
+                                        </ng-select2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                <label for="" class="control-label">Search By ContractDate Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="contractDate" id="contractDate"
+                                        formControlName="contractDate" class="form-control form-control-sm bg-white"
+                                        placeholder="Enter Date Range" bsDaterangepicker [bsConfig]="datePickerConfig"
+                                        readonly>
+                                    <div class="input-group-prepend cursor-pointer"
+                                        *ngIf="this.searchForm.get('contractDate').value != null"
+                                        (click)="this.searchForm.get('contractDate').setValue(null)">
+                                        <span class="input-group-addon text-dark text-danger">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-1 col-md-4 col-sm-12">
+                                <label for="stateStatus" class="control-label">Search By Status</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-addon text-dark text-white">
+                                            <i class="fa fa-dot-circle-o"></i>
+                                        </span>
+                                    </div>
+                                    <select name="stateStatus" id="stateStatus" class="form-control form-control-sm"
+                                        formControlName="stateStatus">
+                                        <option [value]="''" selected>---Select Status---</option>
+                                        <option [value]="item" *ngFor="let item of ddlStatus">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row m-t-sm mt-0">
+        <div class="col-md-12 mb-4">
+            <div class="ibox">
+                <div class="ibox-content border-radius-5 text-x-small">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped table-hover table-responsive-lg" id="tbl">
+                            <thead>
+                                <tr>
+                                    <th class="text-center font-bold">#SL</th>
+                                    <th>Employee ID</th>
+                                    <th>Employee Name</th>
+                                    <th class="text-center">Flag</th>
+                                    <th>Contract Start Date</th>
+                                    <th>Contract End Date</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list | paginate: pageConfig;let i =index">
+                                    <td class="text-center">{{i+1}}</td>
+                                    <td>{{item.employeeCode}}</td>
+                                    <td>{{item.employeeName}}</td>
+                                    <td class="text-center">
+                                        <span class="label label-warning-light" *ngIf="item.flag=='Joining'">
+                                            {{item.flag}}
+                                        </span>
+                                        <span class="label label-danger" *ngIf="item.flag=='Terminate'">
+                                            {{item.flag}}
+                                        </span>
+                                        <span class="label label-info" *ngIf="item.flag=='Renew'">
+                                            {{item.flag}}
+                                        </span>
+                                    </td>
+                                    <td>{{item.contractStartDate | date:"dd MMM yyyy"}}</td>
+                                    <td>{{item.contractEndDate | date:"dd MMM yyyy"}}</td>
+                                    <td class="text-center">
+                                        <span class="label label-warning"
+                                            *ngIf="item.stateStatus=='Pending'">{{item.stateStatus + '...'}}</span>
+                                        <span class="label label-primary" *ngIf="item.stateStatus=='Approved'"> <i
+                                                class="fa fa-check"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-danger" *ngIf="item.stateStatus=='Cancelled'"><i
+                                                class="fa fa-times"></i> {{item.stateStatus}}</span>
+                                        <span class="label label-info" *ngIf="item.stateStatus=='Recheck'"><i
+                                                class="fa fa-backward"></i> {{item.stateStatus}}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-xs" (click)="openModal(item.contractId)">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-xs" *ngIf="item.stateStatus=='Pending'"
+                                            (click)="openApprovalModal(item.contractId,item.employeeId, item.lastContractId)">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf=" list.length ==0 && listDTLabel == null">
+                                    <td colspan="15" class="text-center">list
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </td>
+                                </tr>
+                                <tr *ngIf=" list.length ==0 && listDTLabel != null">
+                                    <td colspan="15" class="text-center font-bold">
+                                        {{listDTLabel}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-end">
+                            <pagination-controls (pageChange)="list_pageChanged($event)" [responsive]="true"
+                                [autoHide]="true" id="data_list"></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="showInsertUpdateModal">
+    <employee-module-insert-update-contractual-employee
+        [contractId]="editedId" (closeModalEvent)="closeModal($event)"></employee-module-insert-update-contractual-employee>
+</ng-container>
+
+<ng-container *ngIf="showUploadModal">
+    <employee-module-upload-contract-info-modal (closeModalEvent)="closeUploadModal($event)"></employee-module-upload-contract-info-modal>
+</ng-container>
+<ng-container *ngIf="showApprovalModal">
+    <employee-module-contractual-employee-approval-modal [contractId]="this.contract_id_in_approval" [employeeId]="this.employee_id_in_approval" 
+    [lastContractId]="this.lastContractId_in_approval" [lastContractEndDate]="null" (closeModalEvent)="closeApprovalModal($event)">
+    </employee-module-contractual-employee-approval-modal>
+</ng-container>
+

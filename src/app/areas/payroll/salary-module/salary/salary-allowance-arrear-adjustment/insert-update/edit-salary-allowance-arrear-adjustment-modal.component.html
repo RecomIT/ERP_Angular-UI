@@ -1,0 +1,127 @@
+<ng-template #editSalaryAllowanceArrearAdjustmentModal let-modal>    
+    <div class="modal-header">
+        <h4 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-money pr-1 fa-1x border-right"></i> Update Arrear/Adj.
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <form [formGroup]="allowanceArrearAdjustmentEditForm" (ngSubmit)="updateAllowanceArrearAdjustment()">
+        <div class="modal-body text-x-small">
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12"> 
+                    <label for="employeeId" class="control-label font-bold">
+                        Employee Name
+                    </label>   
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-building"></i>
+                            </span>
+                        </div>
+                        <div style="width:85%">
+                            <ng-select2 [data]="ddlEmployees" name="employeeId" formControlName="employeeId"
+                                id="employeeId" [placeholder]="'Select Employee...'" [options]="select2Config"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12"> 
+                    <label for="allowanceNameId" class="control-label font-bold">
+                       Allowance Name
+                    </label>              
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-money"></i>
+                            </span>
+                        </div>
+                        <div style="width:85%">
+                            <ng-select2 [data]="ddlAllowances" name="allowanceNameId" formControlName="allowanceNameId"
+                                id="allowanceNameId" [placeholder]="'Select Allowance...'" [options]="select2Config"
+                                [allowClear]="true" required>
+                            </ng-select2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="salaryMonth" class="control-label font-bold">Salary Month</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                             <i class="fa fa-calendar-check-o"></i>
+                            </span>
+                        </div>
+                        <select name="salaryMonth" id="salaryMonth" class="form-control form-control-sm" formControlName="salaryMonth">
+                            <option [value]="item.monthNo" *ngFor="let item of ddlMonths">{{item.month}}</option>
+                        </select>  
+                    </div>                   
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="salaryYear" class="control-label font-bold">Salary Year</label>       
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                             <i class="fa fa-calendar-times-o"></i>
+                            </span>
+                        </div>
+                        <select name="salaryYear" id="salaryYear" class="form-control form-control-sm" formControlName="salaryYear">
+                            <option [value]="item" *ngFor="let item of ddlYears">{{item}}</option>
+                        </select>  
+                    </div>                
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="flag" class="control-label font-bold">
+                        Allowance Status
+                    </label><span class="text-danger"> * </span>                     
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i class="fa fa-check"></i>
+                            </span>
+                        </div>
+                        <select name="flag" id="flag"
+                            class="form-control form-control-sm" formControlName="flag">
+                            <option [value]="''" selected>---Select Flag---</option>
+                            <option [value]="'Arrear'">Arrear</option>
+                            <option [value]="'Adjustment'">Adjustment</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="amount" class="control-label font-bold">Amount</label><span class="text-danger"> * </span>    
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon text-dark">
+                                <i>&#2547;</i>
+                            </span>
+                        </div>
+                            <input type="number" class="form-control form-control-sm" id="amount"
+                                name="amount" formControlName="amount" >      
+                    </div>
+                </div>
+            </div>
+             
+
+        </div>
+        
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary" [disabled]="allowanceArrearAdjustmentEditForm.invalid || btnArrearAdjustment">
+                <i class="fa fa-paper-plane"></i> | Update
+                <span [hidden]="!btnArrearAdjustment" class="spinner-border spinner-border-sm" role="status"
+                aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger" (click)="closeModal('Cancel click')" [disabled]="btnArrearAdjustment"><i
+                    class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+
+
+
+</ng-template>

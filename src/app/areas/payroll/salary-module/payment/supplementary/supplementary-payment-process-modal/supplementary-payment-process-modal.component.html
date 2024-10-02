@@ -1,0 +1,251 @@
+<ng-template #supplementaryProcessModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-cogs" aria-hidden="true"></i>| Supplementary
+            Payment Process
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="font-bold text-dark">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="ibox">
+                        <div class="ibox">
+                            <h4 class="m-0">Select For Process</h4>
+                        </div>
+                        <div
+                            class="ibox-content shadow-sm bg-white text-x-small border-radius-5 pt-2 text-x-small font-bold text-dark">
+                            <form [formGroup]="process_form" (ngSubmit)="1==1">
+                                <div class="form-row">
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="allowanceNameId" class="control-label font-bold">
+                                            Allowance <span class="text-danger"> *
+                                            </span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-money"></i>
+                                                </span>
+                                            </div>
+                                            <div style="width:85%">
+                                                <ng-select2 [data]="ddlAllowances" name="allowanceNames"
+                                                    formControlName="allowanceNameId"
+                                                    [placeholder]="'Allowance Name...'" [options]="select2Config"
+                                                    [allowClear]="true" required>
+                                                </ng-select2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="currentMonth" class="control-label font-bold">Month &
+                                            Year <span class="text-danger"> *
+                                            </span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <select name="currentMonth" id="currentMonth"
+                                                class="form-control form-control-sm" formControlName="paymentMonth">
+                                                <option [value]="0" selected>--Month--</option>
+                                                <option [value]="item.monthNo" *ngFor="let item of months">
+                                                    {{item.month}}</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <select name="currentYear" id="currentYear"
+                                                    class="form-control form-control-sm" formControlName="paymentYear">
+                                                    <option [value]="0" selected>--Year--</option>
+                                                    <option [value]="item" *ngFor="let item of years">{{item}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="paymentMode" class="control-label">
+                                            Payment Mode<span class="text-danger"> * </span>
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon text-dark">
+                                                    <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <select name="paymentMode" id="paymentMode"
+                                                class="form-control form-control-sm" formControlName="paymentMode">
+                                                <option [value]="''">---Select Payment Mode---</option>
+                                                <option [value]="p" *ngFor="let p of ddlPaymentModes">{{p}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                                        <label for="processType" class="control-label font-bold">Process
+                                            Type</label><span class="text-danger"> * </span>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-cogs"></i>
+                                                </span>
+                                            </div>
+                                            <select name="processType" id="processType" formControlName="processType"
+                                                class="form-control form-control-sm">
+                                                <option [value]="'Out Of Salary'" selected>Out Of Salary</option>
+                                                <option [value]="'With Salary'">With Salary</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4 col-sm-12 font-bold mt-2"
+                                        [hidden]="this.process_form.get('processType').value !='With Salary'">
+                                        <label for="showInPayslip" class="control-label font-bold">Is Visible in
+                                            Payslip?</label>
+                                        <div class="input-group">
+                                            <input type="radio" name="showInPayslip" formControlName="showInPayslip"
+                                                id="showInPayslipYes" [value]="true"> &nbsp;&nbsp;&nbsp; Yes
+                                            &nbsp;&nbsp;
+                                            <input type="radio" name="showInPayslip" formControlName="showInPayslip"
+                                                id="showInPayslipNo" [value]="false"> &nbsp;&nbsp;&nbsp; No
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4 col-sm-12 font-bold mt-2"
+                                        [hidden]="this.process_form.get('processType').value !='With Salary'">
+                                        <label for="showInSalarySheet" class="control-label font-bold">Is Visible in
+                                            Salary Sheet?</label>
+                                        <div class="input-group">
+                                            <input type="radio" name="showInSalarySheet"
+                                                formControlName="showInSalarySheet" id="showInSalarySheetYes"
+                                                [value]="true"> &nbsp;&nbsp;&nbsp; Yes
+                                            &nbsp;&nbsp;
+                                            <input type="radio" name="showInSalarySheet"
+                                                formControlName="showInSalarySheet" id="showInSalarySheetNo"
+                                                [value]="false"> &nbsp;&nbsp;&nbsp; No
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4 col-sm-12 font-bold mt-2" *ngIf="this.process_form != null && 
+                                    this.process_form.get('paymentMode').value =='Mobile Banking'">
+                                        <label for="withCOC" class="control-label font-bold">With Cash Out
+                                            Charge?</label>
+                                        <div class="input-group">
+                                            <input type="radio" name="withCOC" formControlName="withCOC" id="withCOCYes"
+                                                [value]="true"> &nbsp;&nbsp;&nbsp; Yes
+                                            &nbsp;&nbsp;
+                                            <input type="radio" name="withCOC" formControlName="withCOC" id="withCOCNo"
+                                                [value]="false"> &nbsp;&nbsp;&nbsp; No
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-8 col-lg-8">
+                    <div class="ibox">
+                        <h4 class="m-0">Upload Supplementary Amounts</h4>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 text-x-small text-right">
+                                <div class="input-group">
+                                    <div class="input-group-addon bg-info cursor-pointer" (click)="downloadExcelFile()">
+                                        Download format
+                                    </div>
+                                    <div class="custom-file">
+                                        <input id="excelFileUpload" type="file" class="custom-file-input"
+                                            (change)="excelFileUpload($event)" accept=".xls,.xlsx">
+                                        <label class="custom-file-label text-left" for="excelFileUpload">
+                                            {{excelFileName}}
+                                        </label>
+                                    </div>
+                                    <div class="input-group-addon bg-muted cursor-pointer font-bold"
+                                        (click)="UploadExcelFile()">
+                                        Upload File
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox">
+                        <div
+                            class="ibox-content shadow-sm bg-white border-radius-5 pt-2 pb-md-1 text-x-small font-bold text-dark h-380">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover table-responsive-lg">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#SL</th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Designation</th>
+                                            <th>Amount</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngFor="let item of list_getSupplementaryAmount; let i = index">
+                                            <tr>
+                                                <td class="text-center">{{i + 1}}</td>
+                                                <td>{{item.employeeCode}}</td>
+                                                <td>{{item.employeeName}}</td>
+                                                <td>{{item.designation}}</td>
+                                                <td>
+                                                    <ng-container *ngIf="!item.isEdit">
+                                                        {{item.amount | number}}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="item.isEdit">
+                                                        <input type="number" [(ngModel)]="item.amount"
+                                                            (blur)="editChange(item)" />
+                                                    </ng-container>
+                                                </td>
+                                                <td class="text-center">
+                                                    <i class="fa fa-pencil cursor-pointer ml-2" (click)="editItem(item)"></i>
+                                                    <span style="margin-left: 10px;"></span>
+                                                    <i class="fa fa-trash text-danger cursor-pointer"
+                                                        (click)="removeItem(i)"></i>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-x-small pb-2">
+            <button class="btn btn-sm btn-primary btn-rounded btn-outline pull-right" type="submit"
+                [disabled]="this.process_form.invalid && this.search_form.invalid && this.excelFile == null"
+                (click)="submit()">
+                <i class="fa fa-cogs"></i> | Run Process
+                <span [hidden]="!btnProcess" class="spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-sm btn-danger btn-outline btn-rounded" type="button"
+                (click)="closeModal('Cancel click')" [disabled]="btnProcess">
+                <i class="fa fa-times"></i> | Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+<div class="spinner-div font-bold" *ngIf="btnProcess == true">
+    <div class="sk-spinner sk-spinner-cube-grid spinner text-success">
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+        <div class="sk-cube"></div>
+    </div>
+    <div class="col-md-12 col-sm-12 spinner-text">
+        <h4 class="text-center text-danger">Please don't close this tab.</h4>
+        <h5 class="text-info">{{process_message}}...</h5>
+    </div>
+</div>

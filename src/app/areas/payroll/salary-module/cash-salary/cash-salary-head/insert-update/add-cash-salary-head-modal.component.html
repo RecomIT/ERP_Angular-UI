@@ -1,0 +1,71 @@
+<ng-template #cashSalaryHeadModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title pl-2 mt-1" id="modal-basic-title">
+            <i class="icofont-users-alt-4 pr-1 fa-1x border-right"></i>{{modalTitle}}            
+        </h3>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cancel click')"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <form [formGroup]="cashSalaryHeadForm" (ngSubmit)="submitCashSalaryHead()">
+        <div class="modal-body text-x-small">          
+            <div class="form-row">             
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="cashSalaryHeadName" class="control-label font-bold">
+                        Head Name <span class="text-danger">*</span> <input type="checkbox" name="isActive" id="isActive" formControlName="isActive">
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-building"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="cashSalaryHeadName" id="cashSalaryHeadName" class="form-control form-control-sm"
+                            formControlName="cashSalaryHeadName" > 
+                    </div>
+                </div>                 
+            </div>
+           <div class="form-row">
+            <div class="form-group col-md-12 col-sm-12">
+                <label for="cashSalaryHeadNameInBengali" class="control-label font-bold">
+                    Head Name in Bengali
+                </label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-addon">
+                            <i class="fa fa-building"></i>
+                        </span>
+                    </div>
+                    <input type="text" name="cashSalaryHeadNameInBengali" id="cashSalaryHeadNameInBengali"
+                       class="form-control form-control-sm" formControlName="cashSalaryHeadNameInBengali" autocomplete="off">
+                </div>
+            </div>    
+           </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12 col-sm-12">
+                    <label for="cashSalaryHeadCode" class="control-label font-bold">
+                        Head Code <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-addon">
+                                <i class="fa fa-comment"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="cashSalaryHeadCode" id="cashSalaryHeadCode"
+                           class="form-control form-control-sm" formControlName="cashSalaryHeadCode" autocomplete="off">
+                    </div>
+                </div>    
+            </div>
+        </div>
+        <div class="modal-footer p-2  text-x-small">
+            <button type="submit" class="btn btn-sm btn-outline btn-rounded btn-primary"
+                [disabled]="!this.cashSalaryHeadForm.valid">
+                <i class="fa fa-paper-plane"></i> | Submit </button>
+            <button type="button" class="btn btn-sm btn-outline btn-rounded btn-danger"
+                (click)="closeModal('Cancel click')">
+                <i class="fa fa-times"></i> | Cancel</button>
+        </div>
+    </form>
+
+</ng-template>

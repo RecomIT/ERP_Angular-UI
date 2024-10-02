@@ -1,0 +1,86 @@
+<ng-template #uploadIncomeTaxChallanModal let-modal>
+    <div class="modal-header text-dark">
+        <h4 class="modal-title" id="modal-basic-title">
+            <i class="btn btn-sm btn-outline-secondary btn-circle fa fa-arrow-up" aria-hidden="true"></i>| Upload Challan
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal('Cross click')"
+            [disabled]="btnSubmit">
+            <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="text-x-small font-bold text-dark">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12 col-sm-12 text-center">
+                        <div class="border-section">
+                            <div class="border-label">Please first download the file & then upload</div>
+                            <button type="button" class="text-dark btn btn-warning btn-rounded font-bold" (click)="download()"><i
+                                    class="icofont-download"></i> | Download Format
+                            </button>
+                        </div>
+                    </div>            
+                    <div class="col-12 col-md-12 col-sm-12 font-bold mt-2">
+                        <label for="taxMonth" class="control-label font-bold">Tax Month & Year</label> 
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <select name="taxMonth" id="taxMonth"
+                                class="form-control form-control-sm" formControlName="taxMonth" [attr.disabled]="isTaxMonthDisabled ? true : false">
+                                <option [value]="0" >--Month--</option>
+                                <option [value]="item.monthNo" selected *ngFor="let item of months">
+                                    {{item.month}}</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <select name="taxYear" id="taxYear"
+                                    class="form-control form-control-sm" formControlName="taxYear" [attr.disabled]="isTaxYearDisabled ? true : false">
+                                    <option [value]="0" >--Year--</option>
+                                    <option [value]="item" selected *ngFor="let item of years">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12 mt-2">
+                        <label for="fiscalYearId" class="control-label font-bold">Fiscal Year</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar-minus-o"></i>
+                                </span>
+                            </div>
+                            <select name="fiscalYearId" id="fiscalYearId" class="form-control form-control-sm" formControlName="fiscalYearId" [attr.disabled]="isFiscalYearDisabled ? true : false">
+                                <option [value]="0">---Select Fiscal Year---</option>
+                                <option [value]="item.id" selected *ngFor="let item of ddlFiscalYearDropdown">{{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12 mt-2">
+                        <label for="excelFileUpload" class="control-label font-bold mt-0 text-uppercase" style="visibility: hidden;">Excel File Only</label>
+                        <div class="input-group">
+                            <div class="custom-file font-bold">
+                                <input id="excelFileUpload" type="file" class="custom-file-input"
+                                    (change)="file_selected($event)" accept=".xls,.xlsx">
+                                <label class="custom-file-label" for="excelFileUpload">
+                                    {{excelFileName}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-rounded" type="submit" [disabled]="btnSubmit || form.invalid">
+                    <i class="fa fa-arrow-circle-o-up"></i> | Upload File
+                    <span [hidden]="!btnSubmit" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-sm btn-danger btn-rounded" type="button" (click)="closeModal('Cancel click')"
+                    [disabled]="btnSubmit">
+                    <i class="fa fa-times"></i> | Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

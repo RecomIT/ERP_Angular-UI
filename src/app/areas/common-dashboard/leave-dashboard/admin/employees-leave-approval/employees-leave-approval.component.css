@@ -1,0 +1,83 @@
+
+.employee-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .employee-info h3 {
+    margin: 0;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .employee-info p {
+    margin: 0;
+    font-size: 1em;
+    color: #666;
+  }
+
+
+.employee-card {
+    width: 100%;
+    max-width: 280px; 
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    padding: 5px;
+  }
+  
+  .employee-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .employee-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+
+  
+  .leave-details-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+  }
+  
+
+  .leave-chip {
+    margin: 2px;
+  }
+  
+  .leave-chip-with-color {
+    background-color: #618e94; 
+    color: #fff; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    border-radius: 4px;
+    padding: 2px;
+  }
+  
+
+  .date-chip {
+    display: inline-block;
+    margin: 2px;
+    padding: 0px 1px;
+    background-color: #ffffff; 
+    border-radius: 4px;
+    color: #636363; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  }
+  
+  
+  .custom-scroll {
+    max-height: 236px;
+    overflow-y: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+      .custom-scroll {
+          max-height: 210px;
+      }
+  }
